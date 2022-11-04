@@ -3,10 +3,10 @@ using System.Reflection;
 
 namespace InteropExperiment
 {
-    internal class Program
+    internal static class Program
     {
         [DllImport("OtdrMeasEngine/iit_otdr.so")]
-        public static extern void DllInit(string path, IntPtr logFile, IntPtr lenUnit);
+        private static extern void DllInit(string path, IntPtr logFile, IntPtr lenUnit);
 
         public static void Main() 
         {
@@ -15,12 +15,12 @@ namespace InteropExperiment
             var iitFolder = mainFolder + "/OtdrMeasEngine";
             Console.WriteLine($"IIT folder is {iitFolder}"); 
 
-            var result = InitDll(iitFolder); // requires absolute path under vscode
+            var result = InitDll(iitFolder); // requires absolute path under VSCode
             if (result)
                 Console.WriteLine("Dlls are initialized successfully!");
         }
 
-        public static bool InitDll(string folder)
+        private static bool InitDll(string folder)
         {
             string path = folder;
             IntPtr logFile = IntPtr.Zero;
