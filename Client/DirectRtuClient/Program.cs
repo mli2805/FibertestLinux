@@ -1,22 +1,25 @@
 ﻿using Fibertest.Dto;
+using Fibertest.Rtu;
 using Grpc.Net.Client;
-using Rtu;
+using Newtonsoft.Json;
 
 namespace Fibertest.DirectRtuClient
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             var serverAddress = "localhost";
-            // var serverAddress = "192.168.96.111";
+            // var serverAddress = "192.168.96.56";
             var uri = $"http://{serverAddress}:{(int)TcpPorts.RtuListenTo}";
-            using var channel1 = GrpcChannel.ForAddress(uri);
-            var grpcClient = new Greeter.GreeterClient(channel1);
+            using var grpcChannel = GrpcChannel.ForAddress(uri);
+            var grpcClient = new RtuManager.RtuManagerClient(grpcChannel);
 
-            var helloRequest = new HelloRequest();
-            HelloReply? response = await grpcClient.SayHelloAsync(helloRequest);
-            Console.WriteLine(response?.Message ?? "response is null"); 
+            var dto = new InitializeRtuDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
+            var command = new RtuGrpcCommand() { Json = JsonConvert.SerializeObject(dto) };
+            RtuGrpcResponse response = await grpcClient.SendCommandAsync(command);
+            var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
+            Console.WriteLine(result == null ? "response is null" : $"response is {result.IsInitialized}");
         }
     }
 }

@@ -15,6 +15,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -22,6 +23,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="../../Rtu/Rtu/Protos/greet.proto" GrpcServices="Client" />
+		<Protobuf Include="../../Rtu/Rtu/Protos/rtumanage.proto" GrpcServices="Client" />
 	</ItemGroup>
 </Project>

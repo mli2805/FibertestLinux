@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Fibertest.Rtu";
+
+package rtumanage;
+
+service RtuManager {
+	rpc SendCommand (RtuGrpcCommand) returns (RtuGrpcResponse);
+}
+
+message RtuGrpcCommand {
+	string json = 1;
+}
+
+message RtuGrpcResponse {
+	string json = 1;
+}
