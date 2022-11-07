@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Fibertest.DataCenter";
+
+package servermanage;
+
+service Server {
+	rpc SendCommand (DcGrpcCommand) returns (DcGrpcResponse);
+}
+
+message DcGrpcCommand {
+	string json = 1;
+}
+
+message DcGrpcResponse {
+	string json = 1;
+}

@@ -29,7 +29,7 @@ public static class LogsExt
 /// </summary>
 public static class LoggerConfigurationFactory
 {
-    public static LoggerConfiguration Create()
+    public static LoggerConfiguration Configure()
     {
         var template = "[{Timestamp:HH:mm:ss} {CorrelationId} {Level:u3}] {Username} {Message:lj}{NewLine}{Exception}";
         var loggerConfiguration = new LoggerConfiguration()

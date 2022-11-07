@@ -15,7 +15,7 @@ namespace Fibertest.Rtu
         }
 
         private static readonly JsonSerializerSettings JsonSerializerSettings =
-            new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+            new() { TypeNameHandling = TypeNameHandling.All };
 
         public override async Task<RtuGrpcResponse> SendCommand(RtuGrpcCommand rtuGrpcCommand, ServerCallContext context)
         {
@@ -31,7 +31,6 @@ namespace Fibertest.Rtu
                 case FreeOtdrDto dto: r = await FreeOtdr(dto); break;
                 default: r = new BaseRtuReply(); break;
             }
-
 
             return new RtuGrpcResponse() { Json = JsonConvert.SerializeObject(r) };
         }

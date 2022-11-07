@@ -19,7 +19,7 @@ namespace Fibertest.Rtu
             // Add services to the container.
             builder.Services.AddGrpc();
 
-            var logger = LoggerConfigurationFactory.Create().CreateLogger();
+            var logger = LoggerConfigurationFactory.Configure().CreateLogger();
 
             builder.Logging.ClearProviders();
             builder.Logging.AddSerilog(logger);
