@@ -1,0 +1,17 @@
+﻿[Unit]
+Description=my first GRPC service running on Ubuntu
+    
+[Service]
+WorkingDirectory=/var/fibertest/datacenter
+ExecStart=/var/fibertest/datacenter/DataCenter
+Restart=no
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=dotnet-example
+User=leanid
+Environment=ASPNETCORE_ENVIRONMENT=
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
