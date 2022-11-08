@@ -5,13 +5,13 @@ option csharp_namespace = "Fibertest.DataCenter";
 package servermanage;
 
 service Server {
-	rpc SendCommand (DcGrpcCommand) returns (DcGrpcResponse);
+	rpc SendCommand (C2DGrpcCommand) returns (C2DGrpcResponse);
 }
 
-message DcGrpcCommand {
+message C2DGrpcCommand {
 	string json = 1;
 }
 
-message DcGrpcResponse {
+message C2DGrpcResponse {
 	string json = 1;
 }

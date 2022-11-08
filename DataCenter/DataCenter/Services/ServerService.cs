@@ -1,6 +1,8 @@
 using Fibertest.Dto;
+using Fibertest.Rtu;
 using Fibertest.Utils;
 using Grpc.Core;
+using Grpc.Net.Client;
 using Newtonsoft.Json;
 
 namespace Fibertest.DataCenter;
@@ -17,7 +19,7 @@ public class ServerService : Server.ServerBase
     private static readonly JsonSerializerSettings JsonSerializerSettings =
         new() { TypeNameHandling = TypeNameHandling.All };
 
-    public override async Task<DcGrpcResponse> SendCommand(DcGrpcCommand rtuGrpcCommand, ServerCallContext context)
+    public override async Task<C2DGrpcResponse> SendCommand(C2DGrpcCommand rtuGrpcCommand, ServerCallContext context)
     {
         _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "we are in here");
         object? o = JsonConvert.DeserializeObject(rtuGrpcCommand.Json, JsonSerializerSettings);
@@ -32,14 +34,34 @@ public class ServerService : Server.ServerBase
             default: r = new BaseRtuReply(); break;
         }
 
-        return new DcGrpcResponse() { Json = JsonConvert.SerializeObject(r) };
+        return new C2DGrpcResponse() { Json = JsonConvert.SerializeObject(r, JsonSerializerSettings) };
     }
 
     private async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto dto)
     {
         await Task.Delay(1);
         _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "InitializeRtu serverGrpcCommand received");
-        return new RtuInitializedDto();
+
+        var rtuAddress = "localhost";
+        // var rtuAddress = "192.168.96.56";
+        var rtuUri = $"http://{rtuAddress}:{(int)TcpPorts.RtuListenTo}";
+        using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
+        var grpcClientRtu = new RtuManager.RtuManagerClient(grpcChannelRtu);
+
+        var command = new RtuGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
+        try
+        {
+            RtuGrpcResponse response = await grpcClientRtu.SendCommandAsync(command);
+            var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
+                result == null ? "RTU response is null" : $"RTU response is {result.IsInitialized}");
+            return result ?? new RtuInitializedDto();
+        }
+        catch (Exception e)
+        {
+            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "InitializeRtu: " + e.Message);
+            return new RtuInitializedDto() { ReturnCode = ReturnCode.D2RWcfOperationError };
+        }
     }
 
     private async Task<BaseRtuReply> StopMonitoring()
