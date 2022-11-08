@@ -38,14 +38,26 @@ namespace Fibertest.Rtu
         private async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto dto)
         {
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu rtuGrpcCommand received");
-            await Task.Delay(5000);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!");
+            var result = Interop.InitDll(_logger);
 
-            return new RtuInitializedDto()
+            if (result)
             {
-                ReturnCode = ReturnCode.RtuInitializedSuccessfully,
-                RtuId = dto.RtuId,
-            };
+                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!");
+                return new RtuInitializedDto()
+                {
+                    ReturnCode = ReturnCode.RtuInitializedSuccessfully,
+                    RtuId = dto.RtuId,
+                };
+            }
+            else
+            {
+                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "Failed initialize RTU!");
+                return new RtuInitializedDto()
+                {
+                    ReturnCode = ReturnCode.RtuInitializationError,
+                    RtuId = dto.RtuId,
+                };
+            }
         }
 
         private async Task<BaseRtuReply> StopMonitoring()
