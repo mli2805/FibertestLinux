@@ -2,27 +2,32 @@
 
 sudo dotnet publish --configuration Release
 
-rm -rf /home/leanid/FibertestLinux/Deploy/Files
-mkdir -p /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine
-mkdir -p /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine/etc_default
-mkdir -p /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine/etc
-mkdir -p /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine/share
+echo ""
+echo "запускать из каталога солюшена"
+
+rm -rf /home/leanid/FibertestLinux/Deploy/fibertest
+mkdir -p /home/leanid/FibertestLinux/Deploy/fibertest/rtu
+cp /home/leanid/FibertestLinux/Rtu/Rtu/bin/Release/net6.0/publish/* /home/leanid/FibertestLinux/Deploy/fibertest/rtu
 
 echo ""
 echo ""
 echo "не забудь выкачать свежие исходники и сбилдить iit_otdr & Co "
+echo "    инструкция в спредшите Fibertest 3.0 features -> компиляция iit_otdr"
 
-# мой код c# без подкаталогов, чтобы не взять что-то измененное 
-cp /home/leanid/FibertestLinux/Client/InteropExperiment/bin/Debug/net6.0/* /home/leanid/FibertestLinux/Deploy/Files/ 2>/dev/null
+mkdir -p /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine
+mkdir -p /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine/etc_default
+mkdir -p /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine/etc
+mkdir -p /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine/share
+
 # сами либки сбилженные на этой машине
-cp -a /home/leanid/Sources/OtdrMeasEngine/__Lin64Out/* /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine/
+cp -a /home/leanid/Sources/OtdrMeasEngine/__Lin64Out/* /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine/
 # остальные файлы без изменений из репозитория
-cp /home/leanid/Sources/OtdrMeasEngine/__WinOut/ETC_default/* /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine/etc_default/
-cp /home/leanid/Sources/OtdrMeasEngine/__WinOut/ETC_default/* /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine/etc/
-cp /home/leanid/Sources/OtdrMeasEngine/__WinOut/SHARE/* /home/leanid/FibertestLinux/Deploy/Files/OtdrMeasEngine/share/
+cp /home/leanid/Sources/OtdrMeasEngine/__WinOut/ETC_default/* /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine/etc_default/
+cp /home/leanid/Sources/OtdrMeasEngine/__WinOut/ETC_default/* /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine/etc/
+cp /home/leanid/Sources/OtdrMeasEngine/__WinOut/SHARE/* /home/leanid/FibertestLinux/Deploy/fibertest/rtu/OtdrMeasEngine/share/
 
-cd Deploy
-tar -czf rtuarch.tar.gz Files
+cd Deploy/fibertest
+tar -czf fibertest-rtu.tar.gz rtu
 
-echo "Результат в архиве rtuarch.tar.gz"
+echo "Результат в архиве fibertest-rtu.tar.gz"
 
