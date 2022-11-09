@@ -2,7 +2,7 @@ using Fibertest.Utils;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
-namespace Fibertest.DataCenter.Start;
+namespace Fibertest.DataCenter;
 
 public class ServerLoggerInterceptor : Interceptor
 {

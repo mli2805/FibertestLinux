@@ -1,4 +1,4 @@
-namespace Fibertest.DataCenter.Start;
+namespace Fibertest.DataCenter;
 
 public static class DependencyInjectionExtensions
 {

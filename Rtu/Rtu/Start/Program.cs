@@ -16,7 +16,10 @@ namespace Fibertest.Rtu
                 });
 
             // Add services to the container.
-            builder.Services.AddGrpc();
+            builder.Services.AddGrpc(o =>
+            {
+                o.Interceptors.Add<RtuLoggerInterceptor>();
+            });
 
             var logger = LoggerConfigurationFactory.Configure().CreateLogger();
 

@@ -3,7 +3,7 @@ using Fibertest.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 
-namespace Fibertest.DataCenter.Start
+namespace Fibertest.DataCenter
 {
     public class Program
     {
