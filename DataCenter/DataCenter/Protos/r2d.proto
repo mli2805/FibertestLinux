@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "Fibertest.DataCenter";
 
-package r2dgrpc;
+package r2d;
 
 service R2D {
 	rpc SendCommand(R2DGrpcCommand) returns (R2DGrpcResponse);

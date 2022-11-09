@@ -1,5 +1,4 @@
-﻿using Fibertest.Dto;
-using Fibertest.Utils;
+﻿using Fibertest.Utils;
 
 namespace Fibertest.DataCenter
 {
@@ -12,16 +11,24 @@ namespace Fibertest.DataCenter
             _logger = logger;
         }
 
-        public DoubleAddress? GetRtuAddresses(Guid rtuId)
+        /// <summary>
+        /// DB stores RTU channels availability, so:
+        /// 
+        /// returns first available RTU address: main or reserve
+        /// if neither - returns null
+        /// </summary>
+        /// <param name="rtuId"></param>
+        /// <returns></returns>
+        public string? GetRtuAvailableAddress(Guid rtuId)
         {
             try
             {
-                // return new DoubleAddress() { Main = new NetAddress("localhost", 11942) };
-                return new DoubleAddress() { Main = new NetAddress("192.168.96.56", 11942) };
+                // return "localhost:11942";
+                return "192.168.96.56:11942";
             }
             catch (Exception e)
             {
-                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), $"GetRtuAddresses: {rtuId}" + e.Message);
+                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), $"GetRtuAvailableAddress: {rtuId}" + e.Message);
                 return null;
             }
         }

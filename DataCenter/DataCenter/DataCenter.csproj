@@ -8,13 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\c2rtransfer.proto" GrpcServices="Server" />
-    <Protobuf Include="Protos\r2dgrpc.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\c2r.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\r2d.proto" GrpcServices="Server" />
     <Protobuf Include="../../Rtu/Rtu/Protos/rtumanage.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
   </ItemGroup>

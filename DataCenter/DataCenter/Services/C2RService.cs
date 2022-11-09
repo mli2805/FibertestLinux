@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 
 namespace Fibertest.DataCenter;
 
-public class ServerService : Server.ServerBase
+public class C2RService : c2r.c2rBase
 {
-    private readonly ILogger<ServerService> _logger;
+    private readonly ILogger<C2RService> _logger;
     private RtuRepo _rtuRepo;
 
-    public ServerService(ILogger<ServerService> logger, RtuRepo rtuRepo)
+    public C2RService(ILogger<C2RService> logger, RtuRepo rtuRepo)
     {
         _logger = logger;
         _rtuRepo = rtuRepo;
@@ -22,20 +22,28 @@ public class ServerService : Server.ServerBase
         new() { TypeNameHandling = TypeNameHandling.All };
 
 
-    public override async Task<C2RTransferResponse> SendCommand(C2RTransferCommand command, ServerCallContext context)
+    public override async Task<c2rResponse> SendCommand(c2rCommand command, ServerCallContext context)
     {
-        var response = await TransferCommand(command);
-        return new C2RTransferResponse() { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
+        try
+        {
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Transfer command received");
+            var response = await TransferCommand(command);
+            return new c2rResponse() { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
-    private async Task<BaseRtuReply> TransferCommand(C2RTransferCommand command)
+    private async Task<BaseRtuReply> TransferCommand(c2rCommand command)
     {
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Transfer command received");
-        var rtuAddress = _rtuRepo.GetRtuAddresses(Guid.Parse(command.RtuGuid));
+        var rtuAddress = _rtuRepo.GetRtuAvailableAddress(Guid.Parse(command.RtuGuid));
         if (rtuAddress == null)
             return new BaseRtuReply() { ReturnCode = ReturnCode.NoSuchRtu };
 
-        var rtuUri = $"http://{rtuAddress}:{(int)TcpPorts.RtuListenTo}";
+        var rtuUri = $"http://{rtuAddress}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
         var grpcClientRtu = new RtuManager.RtuManagerClient(grpcChannelRtu);
         var rtuCommand = new RtuGrpcCommand() { Json = command.Json };

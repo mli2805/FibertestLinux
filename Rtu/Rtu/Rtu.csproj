@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\rtumanage.proto" GrpcServices="Server" />
+    <Protobuf Include="../../DataCenter/DataCenter/Protos/r2d.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>
