@@ -36,14 +36,14 @@ namespace Fibertest.DataCenter
         private async Task<BaseReply> RegisterHeartbeat(RtuChecksChannelDto dto)
         {
             await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "RegisterHeartbeat r2DGrpcCommand received");
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Command Register Heartbeat from RTU {dto.RtuId} received");
             return new BaseReply();
         }
 
         private async Task<BaseReply> ProcessMonitoringResult(MonitoringResultDto dto)
         {
             await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "ProcessMonitoringResult r2DGrpcCommand received");
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Monitoring Result from RTU {dto.RtuId} received");
             return new BaseReply();
         }
     }
