@@ -37,6 +37,7 @@ namespace Fibertest.Rtu
 
         private async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto dto)
         {
+            await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu rtuGrpcCommand received");
             var result = Interop.InitDll(_logger);
 

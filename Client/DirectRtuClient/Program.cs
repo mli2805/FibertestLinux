@@ -11,7 +11,6 @@ namespace Fibertest.DirectRtuClient
         static async Task Main()
         {
             JsonSerializerSettings jsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
-         
             
             var serverAddress = "localhost";
             // var serverAddress = "192.168.96.56";

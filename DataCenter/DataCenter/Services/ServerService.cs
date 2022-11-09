@@ -42,8 +42,8 @@ public class ServerService : Server.ServerBase
         await Task.Delay(1);
         _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "InitializeRtu serverGrpcCommand received");
 
-        var rtuAddress = "localhost";
-        // var rtuAddress = "192.168.96.56";
+        // var rtuAddress = "localhost";
+        var rtuAddress = "192.168.96.56";
         var rtuUri = $"http://{rtuAddress}:{(int)TcpPorts.RtuListenTo}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
         var grpcClientRtu = new RtuManager.RtuManagerClient(grpcChannelRtu);

@@ -3,7 +3,9 @@
 echo ""
 echo "запускать из каталога солюшена"
 echo ""
+
 sudo dotnet publish --configuration Release
+if [ "$?" -ne 0 ]; then read -p "нажми Enter для выхода" ; exit 1; fi
 
 rm -rf /home/leanid/FibertestLinux/Deploy
 mkdir -p /home/leanid/FibertestLinux/Deploy/rtu
@@ -30,4 +32,6 @@ cd Deploy
 tar -czf rtu.tar.gz rtu
 
 echo "Результат в архиве Deploy/rtu.tar.gz"
+echo ""
 
+read -p "Готово! Нажми Enter для продолжения."
