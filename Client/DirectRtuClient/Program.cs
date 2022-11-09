@@ -19,8 +19,8 @@ namespace Fibertest.DirectRtuClient
             var grpcClient = new Server.ServerClient(grpcChannel);
             
             var dto = new InitializeRtuDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
-            var command = new C2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, jsonSerializerSettings) };
-            C2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
+            var command = new C2RTransferCommand() { Json = JsonConvert.SerializeObject(dto, jsonSerializerSettings) };
+            C2RTransferResponse response = await grpcClient.SendCommandAsync(command);
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
             Console.WriteLine("DllInit result is " + (result == null ? "null" : $"{result.IsInitialized}")); 
             
