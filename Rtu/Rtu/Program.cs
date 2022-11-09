@@ -1,6 +1,7 @@
 using System.Net;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 
 namespace Fibertest.Rtu
@@ -12,9 +13,8 @@ namespace Fibertest.Rtu
             var builder = WebApplication.CreateBuilder(args);
             builder.WebHost.ConfigureKestrel(o =>
                 {
-                    // o.ListenAnyIP((int)TcpPorts.RtuListenTo,
-                    // p => p.Protocols = HttpProtocols.Http2);
-                    o.Listen(IPAddress.Any, (int)TcpPorts.RtuListenTo);
+                    o.ListenAnyIP((int)TcpPorts.RtuListenTo,
+                        p => p.Protocols = HttpProtocols.Http2);
                 });
 
             // Add services to the container.
