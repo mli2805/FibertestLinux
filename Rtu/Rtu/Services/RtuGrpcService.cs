@@ -39,7 +39,7 @@ namespace Fibertest.Rtu
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu rtuGrpcCommand received");
-            var result = Interop.InitDll(_logger);
+            var result = Interop.InitDll(_logger) && Interop.InitOtdr(ConnectionTypes.Tcp, "192.168.88.101", 1500, _logger);
 
             if (result)
             {

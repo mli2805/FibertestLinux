@@ -22,7 +22,7 @@ namespace Fibertest.DirectRtuClient
             var command = new C2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, jsonSerializerSettings) };
             C2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
-            Console.WriteLine(result == null ? "response is null" : $"response is {result.IsInitialized}"); 
+            Console.WriteLine("DllInit result is " + (result == null ? "null" : $"{result.IsInitialized}")); 
             
             // var rtuAddress = "localhost";
             // // var rtuAddress = "192.168.96.56";
