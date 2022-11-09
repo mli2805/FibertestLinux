@@ -8,10 +8,12 @@ namespace Fibertest.Rtu
     public class RtuGrpcService : RtuManager.RtuManagerBase
     {
         private readonly ILogger<RtuGrpcService> _logger;
+        private readonly OtdrManager _otdrManager;
 
-        public RtuGrpcService(ILogger<RtuGrpcService> logger)
+        public RtuGrpcService(ILogger<RtuGrpcService> logger, OtdrManager otdrManager)
         {
             _logger = logger;
+            _otdrManager = otdrManager;
         }
 
         private static readonly JsonSerializerSettings JsonSerializerSettings =
@@ -28,7 +30,7 @@ namespace Fibertest.Rtu
                 case InitializeRtuDto dto: r = await InitializeRtu(dto); break;
                 case StopMonitoringDto _: r = await StopMonitoring(); break;
                 case AttachOtauDto dto: r = await AttachOtau(dto); break;
-                case FreeOtdrDto dto: r = await FreeOtdr(dto); break;
+                case FreeOtdrDto _: r = await FreeOtdr(); break;
                 default: r = new BaseRtuReply(); break;
             }
 
@@ -39,7 +41,7 @@ namespace Fibertest.Rtu
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu rtuGrpcCommand received");
-            var result = Interop.InitDll(_logger) && Interop.InitOtdr(ConnectionTypes.Tcp, "192.168.88.101", 1500, _logger);
+            var result = Interop.InitDll(_logger) && _otdrManager.ConnectOtdr("192.168.88.101");
 
             if (result)
             {
@@ -48,6 +50,7 @@ namespace Fibertest.Rtu
                 {
                     ReturnCode = ReturnCode.RtuInitializedSuccessfully,
                     RtuId = dto.RtuId,
+                    Serial = "13579"
                 };
             }
             else
@@ -71,14 +74,16 @@ namespace Fibertest.Rtu
         private async Task<OtauAttachedDto> AttachOtau(AttachOtauDto dto)
         {
             await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "AttachOtau rtuGrpcCommand received");
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), 
+                $"Command to attach OTAU {dto.NetAddress?.ToStringASpace ?? "no address!"} received");
             return new OtauAttachedDto();
         }
 
-        private async Task<BaseRtuReply> FreeOtdr(FreeOtdrDto dto)
+        private async Task<BaseRtuReply> FreeOtdr()
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "FreeOtdr rtuGrpcCommand received");
+            _otdrManager.DisconnectOtdr("192.168.88.101");
             return new BaseRtuReply();
         }
     }
