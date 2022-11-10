@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Fibertest.Rtu
 {
-    public class RtuGrpcService : RtuManager.RtuManagerBase
+    public class RtuGrpcService : d2r.d2rBase
     {
         private readonly ILogger<RtuGrpcService> _logger;
         private readonly OtdrManager _otdrManager;
@@ -19,10 +19,10 @@ namespace Fibertest.Rtu
         private static readonly JsonSerializerSettings JsonSerializerSettings =
             new() { TypeNameHandling = TypeNameHandling.All };
 
-        public override async Task<RtuGrpcResponse> SendCommand(RtuGrpcCommand rtuGrpcCommand, ServerCallContext context)
+        public override async Task<d2rResponse> SendCommand(d2rCommand d2RCommand, ServerCallContext context)
         {
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), "we are in here");
-            object? o = JsonConvert.DeserializeObject(rtuGrpcCommand.Json, JsonSerializerSettings);
+            object? o = JsonConvert.DeserializeObject(d2RCommand.Json, JsonSerializerSettings);
 
             object r;
             switch (o)
@@ -34,13 +34,13 @@ namespace Fibertest.Rtu
                 default: r = new BaseRtuReply(); break;
             }
 
-            return new RtuGrpcResponse() { Json = JsonConvert.SerializeObject(r) };
+            return new d2rResponse() { Json = JsonConvert.SerializeObject(r) };
         }
 
         private async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto dto)
         {
             await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu rtuGrpcCommand received");
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu d2RCommand received");
             var result = _otdrManager.InitDll() && _otdrManager.ConnectOtdr("192.168.88.101");
 
             if (result)
@@ -67,7 +67,7 @@ namespace Fibertest.Rtu
         private async Task<BaseRtuReply> StopMonitoring()
         {
             await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "StopMonitoring rtuGrpcCommand received");
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "StopMonitoring d2RCommand received");
             return new BaseRtuReply();
         }
 
@@ -82,7 +82,7 @@ namespace Fibertest.Rtu
         private async Task<BaseRtuReply> FreeOtdr()
         {
             await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "FreeOtdr rtuGrpcCommand received");
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "FreeOtdr d2RCommand received");
             var result = _otdrManager.DisconnectOtdr("192.168.88.101");
             return new BaseRtuReply() { ReturnCode = result ? ReturnCode.Ok : ReturnCode.Error };
         }

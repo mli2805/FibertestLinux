@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Fibertest.Rtu";
+
+package d2rPackage;
+
+service d2r {
+	rpc SendCommand (d2rCommand) returns (d2rResponse);
+}
+
+message d2rCommand {
+	string json = 1;
+}
+
+message d2rResponse {
+	string json = 1;
+}

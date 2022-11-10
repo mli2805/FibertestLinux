@@ -93,12 +93,12 @@ public class C2RService : c2r.c2rBase
     {
         var rtuUri = $"http://{rtuAddress}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
-        var grpcClientRtu = new RtuManager.RtuManagerClient(grpcChannelRtu);
-        var rtuCommand = new RtuGrpcCommand() { Json = commandContent };
+        var grpcClientRtu = new d2r.d2rClient(grpcChannelRtu);
+        var rtuCommand = new d2rCommand() { Json = commandContent };
 
         try
         {
-            RtuGrpcResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
+            d2rResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
                 result == null ? "RTU response is null" : $"RTU response is {result.ReturnCode}");

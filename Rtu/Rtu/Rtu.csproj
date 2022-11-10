@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\rtumanage.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\d2rPackage.proto" GrpcServices="Server" />
     <Protobuf Include="../../DataCenter/DataCenter/Protos/r2d.proto" GrpcServices="Client" />
   </ItemGroup>
 
@@ -21,6 +21,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Dto\Dto.csproj" />
     <ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="RtuMng\" />
   </ItemGroup>
 
 </Project>
