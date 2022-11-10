@@ -14,17 +14,30 @@ namespace ClientConsole
             using var grpcChannel = GrpcChannel.ForAddress(uri);
             var grpcClient = new c2r.c2rClient(grpcChannel);
 
+            while (true)
+            {
+                Console.WriteLine("");
+                Console.WriteLine("");
+                if (!await Menu(grpcClient)) 
+                    return;
+            }
+        }
+
+        private static async Task<bool> Menu(c2r.c2rClient grpcClient)
+        {
             Console.WriteLine("1 - InitDllsAndConnectOtdr");
             Console.WriteLine("2 - DisconnectOtdr");
+            Console.WriteLine("");
+            Console.WriteLine("0 - Exit");
             Console.WriteLine("");
             Console.WriteLine("Выберите действие - ");
             var l = Console.ReadLine();
             if (int.TryParse(l, out int action))
             {
-               await Actions.Do(action, grpcClient);
+                if (action == 0) return false;
+                await Actions.Do(action, grpcClient);
             }
-
-            Console.ReadKey();
+            return true;
         }
     }
 }

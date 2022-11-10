@@ -22,6 +22,7 @@ public static class Actions
         var dto = new InitializeRtuDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
         var command = new c2rCommand()
             { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings), RtuGuid = dto.RtuId.ToString() };
+        Console.WriteLine("длительная операция, пожалуйста подождите...");
 
         try
         {
@@ -30,7 +31,6 @@ public static class Actions
             Console.WriteLine("DllInit result is " + (result == null ? "null" : $"{result.IsInitialized}"));
             if (result != null)
                 Console.WriteLine("Serial is: " + result.Serial);
-
         }
         catch (Exception e)
         {
