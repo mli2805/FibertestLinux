@@ -8,8 +8,10 @@ echo "сервис остановлен"
 sleep 1s
 
 cp * /var/fibertest/datacenter/
+echo "файлы скопированы"
 
 sudo systemctl start DataCenter.service
+echo "сервис запущен"
 sleep 2s
 sudo systemctl status DataCenter.service
 

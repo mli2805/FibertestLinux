@@ -32,7 +32,7 @@ public class C2RService : c2r.c2rBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), e.Message);
             throw;
         }
     }
