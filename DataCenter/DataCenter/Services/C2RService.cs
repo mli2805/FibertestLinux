@@ -53,8 +53,8 @@ public class C2RService : c2r.c2rBase
             RtuGrpcResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
-                result == null ? "RTU response is null" : $"RTU response is {result.IsInitialized}");
-            return result ?? new BaseRtuReply();
+                result == null ? "RTU response is null" : $"RTU response is {result.ReturnCode}");
+            return result ?? new BaseRtuReply() { ReturnCode = ReturnCode.Error, ErrorMessage = "response is null" };
         }
         catch (Exception e)
         {

@@ -29,13 +29,14 @@ namespace Fibertest.Rtu
             return isOtdrConnected;
         }
 
-        public void DisconnectOtdr(string ipAddress)
+        public bool DisconnectOtdr(string ipAddress)
         {
             var tcpPort = 1500; // read from ini
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Disconnecting OTDR {ipAddress}...");
             var result = _interop.InitOtdr(ConnectionTypes.FreePort, ipAddress, tcpPort);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), 
                 result ? "OTDR disconnected successfully!" : "Failed to disconnect OTDR!");
+            return result;
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Fibertest.Rtu
         private async Task<OtauAttachedDto> AttachOtau(AttachOtauDto dto)
         {
             await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), 
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),
                 $"Command to attach OTAU {dto.NetAddress?.ToStringASpace ?? "no address!"} received");
             return new OtauAttachedDto();
         }
@@ -83,8 +83,8 @@ namespace Fibertest.Rtu
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "FreeOtdr rtuGrpcCommand received");
-            _otdrManager.DisconnectOtdr("192.168.88.101");
-            return new BaseRtuReply();
+            var result = _otdrManager.DisconnectOtdr("192.168.88.101");
+            return new BaseRtuReply() { ReturnCode = result ? ReturnCode.Ok : ReturnCode.Error };
         }
     }
 }
