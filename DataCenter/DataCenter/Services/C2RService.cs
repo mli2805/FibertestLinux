@@ -10,12 +10,16 @@ namespace Fibertest.DataCenter;
 public class C2RService : c2r.c2rBase
 {
     private readonly ILogger<C2RService> _logger;
-    private RtuRepo _rtuRepo;
+    private readonly ClientCollection _clientCollection;
+    private readonly RtuRepo _rtuRepo;
+    private readonly RtuOccupations _rtuOccupations;
 
-    public C2RService(ILogger<C2RService> logger, RtuRepo rtuRepo)
+    public C2RService(ILogger<C2RService> logger, ClientCollection clientCollection, RtuRepo rtuRepo, RtuOccupations rtuOccupations)
     {
         _logger = logger;
+        _clientCollection = clientCollection;
         _rtuRepo = rtuRepo;
+        _rtuOccupations = rtuOccupations;
     }
 
     private static readonly JsonSerializerSettings JsonSerializerSettings =
@@ -27,26 +31,57 @@ public class C2RService : c2r.c2rBase
         try
         {
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Transfer command received");
-            var response = await TransferCommand(command);
-            return new c2rResponse() { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
+            var request = JsonConvert.DeserializeObject<BaseRtuRequest>(command.Json);
+            if (request == null)
+                return CreateBadResponse(ReturnCode.FailedDeserializeJson);
+
+            var client = _clientCollection.Get(request.ConnectionId);
+            if (client == null)
+                return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
+
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
+                $"Client {client} sent {request.What} RTU {request.RtuId.First6()} request");
+
+            if (!_rtuOccupations.TrySetOccupation(
+                    request.RtuId, request.Why(), client.UserName, out RtuOccupationState? currentState))
+                return CreateBadResponse(ReturnCode.RtuIsBusy, currentState);
+
+            var rtuStation = _rtuRepo.Get(request.RtuId);
+            if (rtuStation == null)
+                return CreateBadResponse(ReturnCode.RtuNotFound);
+
+            var rtuAddress = rtuStation.GetRtuAvailableAddress();
+            if (rtuAddress == null)
+                return CreateBadResponse(ReturnCode.RtuNotAvailable);
+
+            var response = request.RtuMaker == RtuMaker.IIT
+                ? await TransferCommand(rtuAddress, command.Json)
+                : new BaseRtuReply() { ReturnCode = ReturnCode.Ok };
+            return new c2rResponse() 
+                { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
         }
         catch (Exception e)
         {
             _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), e.Message);
-            throw;
+            return CreateBadResponse(ReturnCode.D2RGrpcOperationError);
         }
     }
 
-    private async Task<BaseRtuReply> TransferCommand(c2rCommand command)
+    private c2rResponse CreateBadResponse(ReturnCode returnCode, RtuOccupationState? currentState = null)
     {
-        var rtuAddress = _rtuRepo.GetRtuAvailableAddress(Guid.Parse(command.RtuGuid));
-        if (rtuAddress == null)
-            return new BaseRtuReply() { ReturnCode = ReturnCode.NoSuchRtu };
+        return new c2rResponse
+        {
+            Json = JsonConvert.SerializeObject(new BaseRtuReply
+            { ReturnCode = returnCode, RtuOccupationState = currentState }, JsonSerializerSettings)
+        };
+    }
 
+    private async Task<BaseRtuReply> TransferCommand(string rtuAddress, string commandContent)
+    {
         var rtuUri = $"http://{rtuAddress}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
         var grpcClientRtu = new RtuManager.RtuManagerClient(grpcChannelRtu);
-        var rtuCommand = new RtuGrpcCommand() { Json = command.Json };
+        var rtuCommand = new RtuGrpcCommand() { Json = commandContent };
 
         try
         {
@@ -59,7 +94,7 @@ public class C2RService : c2r.c2rBase
         catch (Exception e)
         {
             _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "TransferCommand: " + e.Message);
-            return new RtuInitializedDto() { ReturnCode = ReturnCode.D2RWcfOperationError };
+            return new RtuInitializedDto() { ReturnCode = ReturnCode.D2RGrpcOperationError };
         }
     }
 }

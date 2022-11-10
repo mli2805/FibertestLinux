@@ -5,6 +5,6 @@
         public ReturnCode ReturnCode;
         public string? ErrorMessage;
 
-        public RtuOccupationState RtuOccupationState = new RtuOccupationState();
+        public RtuOccupationState? RtuOccupationState;
     }
 }

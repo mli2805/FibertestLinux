@@ -21,7 +21,7 @@ public static class Actions
     {
         var dto = new InitializeRtuDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
         var command = new c2rCommand()
-            { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings), RtuGuid = dto.RtuId.ToString() };
+            { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
         Console.WriteLine("длительная операция, пожалуйста подождите...");
 
         try
@@ -42,7 +42,7 @@ public static class Actions
     private static async Task DisconnectOtdr(c2r.c2rClient grpcClient)
     {
         var dto = new FreeOtdrDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
-        var command = new c2rCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings), RtuGuid = dto.RtuId.ToString() };
+        var command = new c2rCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
         try
         {

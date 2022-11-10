@@ -7,8 +7,8 @@ public static class DependencyInjectionExtensions
     public static IServiceCollection AddDbRepositories(this IServiceCollection services)
     {
         services.AddScoped<RtuRepo>(); // для каждого реквеста новый
-        // services.AddScoped<class2>();
-        // services.AddScoped<class3>();
+        services.AddSingleton<ClientCollection>(); 
+        services.AddSingleton<RtuOccupations>(); 
 
         return services;
     }

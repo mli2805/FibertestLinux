@@ -2,10 +2,10 @@
 {
     public enum RtuOccupation
     {
-        None, 
+        None, Xxx,
         RemoveRtu, CleanOrRemoveTrace, AttachOrDetachOtau, AttachTrace,
-        AutoBaseMeasurement, MeasurementClient, PreciseMeasurementOutOfTurn,  
-        Initialization, MonitoringSettings, DetachTraces, AssignBaseRefs,
+        DoAutoBaseMeasurement, DoMeasurementClient, DoPreciseMeasurementOutOfTurn,  
+        InitializeRtu, ApplyMonitoringSettings, DetachTraces, AssignBaseRefs,
     }
 
     public class RtuOccupationState

@@ -1,37 +1,19 @@
-﻿using Fibertest.Utils;
-
-namespace Fibertest.DataCenter
+﻿namespace Fibertest.DataCenter
 {
     public class RtuRepo
     {
-        private readonly ILogger<RtuRepo> _logger;
-
-        public RtuRepo(ILogger<RtuRepo> logger)
+        // Read it from DB
+        public RtuStation? Get(Guid rtuId)
         {
-            _logger = logger;
+            if (rtuId == Guid.Empty) return null;
+            return new RtuStation()
+            {
+                RtuGuid = rtuId,
+                MainAddress = "192.168.96.56",
+                MainAddressPort = 11942,
+                IsMainAddressOkDuePreviousCheck = true,
+            };
         }
 
-        /// <summary>
-        /// DB stores RTU channels availability, so:
-        /// 
-        /// returns first available RTU address: main or reserve
-        /// if neither - returns null
-        /// </summary>
-        /// <param name="rtuId"></param>
-        /// <returns></returns>
-        public string? GetRtuAvailableAddress(Guid rtuId)
-        {
-            try
-            {
-                // return "localhost:11942";
-                return "192.168.96.56:11942";
-            }
-            catch (Exception e)
-            {
-                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), $"GetRtuAvailableAddress: {rtuId}" + e.Message);
-                return null;
-            }
-        }
- 
     }
 }

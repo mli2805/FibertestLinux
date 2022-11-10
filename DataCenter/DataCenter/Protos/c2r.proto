@@ -7,8 +7,7 @@ service c2r {
 }
 
 message c2rCommand {
-	string rtuGuid = 1;
-	string json = 2;
+	string json = 1;
 }
 
 message c2rResponse {

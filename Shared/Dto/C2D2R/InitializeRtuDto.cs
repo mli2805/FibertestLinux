@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
-public class InitializeRtuDto : RtuRequestHeader
+public class InitializeRtuDto : BaseRtuRequest
 {
     public InitializeRtuDto(string connectionId, Guid rtuId, RtuMaker rtuMaker) : base(connectionId, rtuId, rtuMaker)
     {
@@ -16,4 +16,7 @@ public class InitializeRtuDto : RtuRequestHeader
     public string? Serial;
     public int OwnPortCount;
     public Dictionary<int, OtauDto>? Children;
+
+    public override string What => "InitializeRtu";
+    public override RtuOccupation Why() => RtuOccupation.InitializeRtu;
 }

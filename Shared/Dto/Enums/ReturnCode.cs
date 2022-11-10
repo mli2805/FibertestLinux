@@ -39,12 +39,14 @@
         MeasurementTimeoutExpired,
 
         TcpConnectionError = 2000,
-        C2DWcfConnectionError = 2001,
-        C2DWcfOperationError = 2002,
-        D2RWcfConnectionError = 2011,
-        D2RWcfOperationError = 2012,
-        C2RWcfConnectionError = 2021,
-        C2RWcfOperationError  = 2022,
+        C2DGrpcOperationError = 2004,
+        D2RGrpcOperationError = 2014,
+        C2RGrpcOperationError  = 2024,
+        
+        FailedDeserializeJson = 2101,
+        UnAuthorizedAccess = 2111, // NoSuchClientStation
+        RtuNotFound = 2121,
+        RtuNotAvailable = 2122,
 
         DbError = 3000,
         DbInitializedSuccessfully = 3001,
@@ -60,8 +62,6 @@
         ClientRegisteredSuccessfully = 9000,
         NoSuchUserOrWrongPassword = 9001,
         ThisUserRegisteredFromAnotherDevice = 9002,
-        NoSuchClientStation = 9003,
-        NoSuchRtu = 9004,
         ClientsCountExceeded = 9005,
         ClientsCountLicenseExpired = 9006,
         WebClientsCountExceeded,

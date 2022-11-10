@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
-public class AttachOtauDto : RtuRequestHeader
+public class AttachOtauDto : BaseRtuRequest
 {
     public AttachOtauDto(string connectionId, Guid rtuId, RtuMaker rtuMaker) : base(connectionId, rtuId, rtuMaker)
     {
@@ -9,4 +9,7 @@ public class AttachOtauDto : RtuRequestHeader
     public Guid OtauId;
     public NetAddress? NetAddress;
     public int OpticalPort;
+
+    public override string What => "AttachOtau";
+    public override RtuOccupation Why() => RtuOccupation.AttachOrDetachOtau;
 }
