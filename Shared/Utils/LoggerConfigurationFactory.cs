@@ -36,22 +36,24 @@ public static class LoggerConfigurationFactory
             .MinimumLevel.Debug()
             .Enrich.FromLogContext()
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(
-                    WithEventId(Logs.DataCenter.ToInt()))
+                .Filter.ByIncludingOnly(WithEventId(Logs.Client.ToInt()))
                 .WriteTo
-                .File("../log-datacenter/datacenter-.log", outputTemplate: template,
-                    rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
-             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(
-                    WithEventId(Logs.RtuService.ToInt()))
-                .WriteTo
-                .File("../log-rtu-service/rtu-service-.log", outputTemplate: template,
+                .File("../log/cl-.log", outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(
-                    WithEventId(Logs.RtuManager.ToInt()))
+                .Filter.ByIncludingOnly(WithEventId(Logs.DataCenter.ToInt()))
                 .WriteTo
-                .File("../log-rtu-manager/rtu-manager-.log", outputTemplate: template,
+                .File("../log/dc-.log", outputTemplate: template,
+                    rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
+            .WriteTo.Logger(cc => cc
+                .Filter.ByIncludingOnly(WithEventId(Logs.RtuService.ToInt()))
+                .WriteTo
+                .File("../log/srv-.log", outputTemplate: template,
+                    rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
+            .WriteTo.Logger(cc => cc
+                .Filter.ByIncludingOnly(WithEventId(Logs.RtuManager.ToInt()))
+                .WriteTo
+                .File("../log/mng-.log", outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             ;
 

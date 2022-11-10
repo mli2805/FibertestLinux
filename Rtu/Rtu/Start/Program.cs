@@ -21,6 +21,9 @@ namespace Fibertest.Rtu
                 o.Interceptors.Add<RtuLoggerInterceptor>();
             });
 
+            builder.Services
+                .AddDependencyGroup();
+
             var logger = LoggerConfigurationFactory.Configure().CreateLogger();
 
             builder.Logging.ClearProviders();

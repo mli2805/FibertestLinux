@@ -12,7 +12,6 @@ namespace ClientConsole
             JsonSerializerSettings jsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
             
             var serverAddress = "localhost";
-            // var serverAddress = "192.168.96.56";
             var uri = $"http://{serverAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
 
             using var grpcChannel = GrpcChannel.ForAddress(uri);
