@@ -7,6 +7,6 @@
         }
 
         public override string What => "FreeOtdr";
-        public override RtuOccupation Why() => RtuOccupation.None;
+        public override RtuOccupation Why => RtuOccupation.None;
     }
 }

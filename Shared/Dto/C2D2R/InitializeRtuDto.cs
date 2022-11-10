@@ -18,5 +18,5 @@ public class InitializeRtuDto : BaseRtuRequest
     public Dictionary<int, OtauDto>? Children;
 
     public override string What => "InitializeRtu";
-    public override RtuOccupation Why() => RtuOccupation.InitializeRtu;
+    public override RtuOccupation Why => RtuOccupation.InitializeRtu;
 }

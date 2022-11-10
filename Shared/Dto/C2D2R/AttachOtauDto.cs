@@ -11,5 +11,5 @@ public class AttachOtauDto : BaseRtuRequest
     public int OpticalPort;
 
     public override string What => "AttachOtau";
-    public override RtuOccupation Why() => RtuOccupation.AttachOrDetachOtau;
+    public override RtuOccupation Why => RtuOccupation.AttachOrDetachOtau;
 }

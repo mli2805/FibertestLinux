@@ -18,6 +18,7 @@ public class C2RService : c2r.c2rBase
     {
         _logger = logger;
         _clientCollection = clientCollection;
+        _clientCollection.RegisterClientAsync(new RegisterClientDto("client-connection-id") { UserName = "test user", ClientIp = "localhost" }).Wait();
         _rtuRepo = rtuRepo;
         _rtuOccupations = rtuOccupations;
     }
@@ -31,7 +32,7 @@ public class C2RService : c2r.c2rBase
         try
         {
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Transfer command received");
-            var request = JsonConvert.DeserializeObject<BaseRtuRequest>(command.Json);
+            var request = Deserialize(command.Json);
             if (request == null)
                 return CreateBadResponse(ReturnCode.FailedDeserializeJson);
 
@@ -43,7 +44,7 @@ public class C2RService : c2r.c2rBase
                 $"Client {client} sent {request.What} RTU {request.RtuId.First6()} request");
 
             if (!_rtuOccupations.TrySetOccupation(
-                    request.RtuId, request.Why(), client.UserName, out RtuOccupationState? currentState))
+                    request.RtuId, request.Why, client.UserName, out RtuOccupationState? currentState))
                 return CreateBadResponse(ReturnCode.RtuIsBusy, currentState);
 
             var rtuStation = _rtuRepo.Get(request.RtuId);
@@ -57,7 +58,7 @@ public class C2RService : c2r.c2rBase
             var response = request.RtuMaker == RtuMaker.IIT
                 ? await TransferCommand(rtuAddress, command.Json)
                 : new BaseRtuReply() { ReturnCode = ReturnCode.Ok };
-            return new c2rResponse() 
+            return new c2rResponse()
                 { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
         }
         catch (Exception e)
@@ -65,6 +66,18 @@ public class C2RService : c2r.c2rBase
             _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), e.Message);
             return CreateBadResponse(ReturnCode.D2RGrpcOperationError);
         }
+    }
+
+    private BaseRtuRequest? Deserialize(string json)
+    {
+        return JsonConvert.DeserializeObject(json, JsonSerializerSettings) switch
+        {
+            InitializeRtuDto dto => dto,
+            StopMonitoringDto dto => dto,
+            AttachOtauDto dto => dto,
+            FreeOtdrDto dto => dto,
+            _ => null
+        };
     }
 
     private c2rResponse CreateBadResponse(ReturnCode returnCode, RtuOccupationState? currentState = null)

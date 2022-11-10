@@ -14,5 +14,5 @@ public class BaseRtuRequest
     }
 
     public virtual string What => "BaseRtuRequest";
-    public virtual RtuOccupation Why() => RtuOccupation.Xxx;
+    public virtual RtuOccupation Why => RtuOccupation.Xxx;
 }

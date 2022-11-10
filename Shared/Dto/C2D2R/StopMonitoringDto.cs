@@ -7,5 +7,5 @@ public class StopMonitoringDto : BaseRtuRequest
     }
 
     public override string What => "StopMonitoring";
-    public override RtuOccupation Why() => RtuOccupation.None;
+    public override RtuOccupation Why => RtuOccupation.None;
 }
