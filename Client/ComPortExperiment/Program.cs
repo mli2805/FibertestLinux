@@ -1,4 +1,5 @@
 ﻿using System.IO.Ports;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -19,7 +20,8 @@ namespace ComPortExperiment
         private static void TcpExp()
         {
             var cmd = "get_rtu_number\r\n";
-            var client = new TcpClient();
+            var client = new TcpClient(AddressFamily.InterNetwork);
+            client.Client.DualMode = false;
             client.Connect("192.168.88.101", 23);
             var nwStream = client.GetStream();
             byte[] bytesToSend = Encoding.ASCII.GetBytes(cmd);
