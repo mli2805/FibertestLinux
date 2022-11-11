@@ -1,28 +1,33 @@
 ﻿using System.IO.Ports;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
-
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 namespace ComPortExperiment
 {
     internal class Program
     {
-        static void Main()
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            using IHost host = Host.CreateDefaultBuilder(args).Build();
+            IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
-            //SerialPort();
+            string comPort = config.GetValue<string>("Settings:ComPortName") ?? "parameter not found";
+            Console.WriteLine($"Hello, World! Com port is {comPort}");
+
             TcpExp();
+            SerialPort(comPort);
 
-            Console.ReadKey();
+
+            await host.RunAsync();
         }
 
         private static void TcpExp()
         {
             var cmd = "get_rtu_number\r\n";
-            var client = new TcpClient(AddressFamily.InterNetwork);
-            client.Client.DualMode = false;
-            client.Connect("192.168.88.101", 23);
+            var client = new TcpClient(AddressFamily.InterNetwork); // можно без параметра, тогда использует ipv6 под Ubuntu Server, но работает
+            client.Connect("192.168.88.101", 23); 
             var nwStream = client.GetStream();
             byte[] bytesToSend = Encoding.ASCII.GetBytes(cmd);
             nwStream.Write(bytesToSend, 0, bytesToSend.Length);
@@ -34,9 +39,10 @@ namespace ComPortExperiment
             Console.WriteLine(answer);
         }
 
-        private static void SerialPort()
+        private static void SerialPort(string comport)
         {
-            var serialPort = new SerialPort("COM2", 115200);
+            var serialPort = new SerialPort(comport, 115200);
+
             try
             {
                 serialPort.Open();
