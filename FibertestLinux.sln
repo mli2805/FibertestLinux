@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientConsole", "Client\Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Shared\Graph\Graph.csproj", "{E5550F37-E614-4C43-B145-63E5B08AF726}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComPortExperiment", "Client\ComPortExperiment\ComPortExperiment.csproj", "{6B923700-6A09-4658-96EA-83DD4B3C6995}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{E5550F37-E614-4C43-B145-63E5B08AF726}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5550F37-E614-4C43-B145-63E5B08AF726}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5550F37-E614-4C43-B145-63E5B08AF726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B923700-6A09-4658-96EA-83DD4B3C6995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B923700-6A09-4658-96EA-83DD4B3C6995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B923700-6A09-4658-96EA-83DD4B3C6995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B923700-6A09-4658-96EA-83DD4B3C6995}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{3BAE7770-224F-4B26-B021-4FAAAC443150} = {3A54ABF1-D57E-4DD1-AE3F-A202999C35B8}
 		{163E0457-02B4-41E6-A1FA-16AE54088F81} = {50FF631B-F8A2-4ED3-828D-D0DC6A99D280}
 		{E5550F37-E614-4C43-B145-63E5B08AF726} = {0F835E05-95F1-4F6E-BF58-5CF330685A61}
+		{6B923700-6A09-4658-96EA-83DD4B3C6995} = {50FF631B-F8A2-4ED3-828D-D0DC6A99D280}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {60961ADF-6976-4067-B12B-30EA94B22DD7}
