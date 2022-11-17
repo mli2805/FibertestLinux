@@ -5,6 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Fibertest.DataCenter</RootNamespace>
+    <Title>Data Center Service</Title>
+    <Product>Data Center Service</Product>
+    <Description>Data Center Service Description</Description>
+    <Version>3.0.0.0</Version>
+    <Company>IIT</Company>
+    <Copyright>Copyright © IIT Minsk 2017-2022</Copyright>
+    <Authors>Leanid Marholin</Authors>
   </PropertyGroup>
 
   <ItemGroup>

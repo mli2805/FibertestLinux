@@ -5,6 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Fibertest.Rtu</RootNamespace>
+	<Title>RTU Service</Title>
+    <Company>IIT</Company>
+    <Product>RTU Service</Product>
+    <Description>RTU Service Description</Description>
+    <Version>3.0.0.0</Version>
+    <Copyright>Copyright © IIT Minsk 2017-2022</Copyright>
+    <Authors>Leanid Marholin</Authors>
   </PropertyGroup>
 
   <ItemGroup>
