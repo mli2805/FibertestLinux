@@ -4,11 +4,11 @@ using Grpc.Core.Interceptors;
 
 namespace Fibertest.DataCenter;
 
-public class ServerLoggerInterceptor : Interceptor
+public class DcLoggerInterceptor : Interceptor
 {
-    private readonly ILogger<ServerLoggerInterceptor> _logger;
+    private readonly ILogger<DcLoggerInterceptor> _logger;
 
-    public ServerLoggerInterceptor(ILogger<ServerLoggerInterceptor> logger)
+    public DcLoggerInterceptor(ILogger<DcLoggerInterceptor> logger)
     {
         _logger = logger;
     }

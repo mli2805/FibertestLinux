@@ -10,23 +10,29 @@ namespace Fibertest.DataCenter
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.WebHost.ConfigureKestrel(options =>
-            {
-                // grpc
-                options.ListenAnyIP((int)TcpPorts.ServerListenToCommonClient, o => o.Protocols = HttpProtocols.Http2);
-                // http
-                options.ListenAnyIP((int)TcpPorts.WebApiListenTo, o => o.Protocols = HttpProtocols.Http1);
-            });
+            builder.WebHost
+                .ConfigureKestrel(options =>
+                {
+                    // grpc
+                    options.ListenAnyIP((int)TcpPorts.ServerListenToCommonClient, o => o.Protocols = HttpProtocols.Http2);
+                    // http
+                    options.ListenAnyIP((int)TcpPorts.WebApiListenTo, o => o.Protocols = HttpProtocols.Http1);
+                })
+                .ConfigureAppConfiguration((_, config) =>
+                {
+                    config.AddJsonFile("dcconfig.json", false, true);
+                });
 
             // Add services to the container.
             builder.Services.AddGrpc(o =>
             {
-                o.Interceptors.Add<ServerLoggerInterceptor>();
+                o.Interceptors.Add<DcLoggerInterceptor>();
             });
             builder.Services.AddControllers();
 
             // my Dependency Injection
             builder.Services
+                .AddConfig(builder.Configuration)
                 .AddDbRepositories();
 
             var logger = LoggerConfigurationFactory

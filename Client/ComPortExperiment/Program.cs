@@ -13,9 +13,14 @@ namespace ComPortExperiment
             using IHost host = Host.CreateDefaultBuilder(args).Build();
             IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
-            string comPort = config.GetValue<string>("Settings:ComPortName") ?? "parameter not found";
-            Console.WriteLine($"Hello, World! Com port is {comPort}");
+            var ch = config.GetValue("Settings:Number", 666);
+            Console.WriteLine(ch);
+            config["Settings:Number"] = 123.ToString();
 
+
+            string comPort = config.GetValue<string>("Settings:ComPortName", "/dev/ttyS1") ?? "parameter not found";
+            Console.WriteLine($"Hello, World! Com port is {comPort}");
+            
             TcpExp();
             SerialPort(comPort);
 

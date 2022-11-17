@@ -1,0 +1,11 @@
+{
+    "RtuConfig": {
+      "RtuHeartbeatRate": 30,
+      "RtuPauseAfterReboot": 20,
+      "RtuUpTimeForAdditionalPause": 100
+    },
+    "CharonConfig": {
+      "ComPortName": "/dev/ttyS1",
+      "ComPortSpeed": 115200
+    }
+}

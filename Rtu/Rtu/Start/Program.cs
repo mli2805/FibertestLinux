@@ -10,9 +10,14 @@ namespace Fibertest.Rtu
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.WebHost.ConfigureKestrel(o =>
+            builder.WebHost
+                .ConfigureKestrel(o =>
                 {
                     o.Listen(IPAddress.Any, (int)TcpPorts.RtuListenTo);
+                })
+                .ConfigureAppConfiguration((_, config) =>
+                {
+                    config.AddJsonFile("rtuconfig.json", false, true);
                 });
 
             // Add services to the container.
@@ -22,6 +27,7 @@ namespace Fibertest.Rtu
             });
 
             builder.Services
+                .AddConfig(builder.Configuration)
                 .AddDependencyGroup();
 
             var logger = LoggerConfigurationFactory.Configure().CreateLogger();
@@ -38,4 +44,6 @@ namespace Fibertest.Rtu
             app.Run();
         }
     }
+
+
 }
