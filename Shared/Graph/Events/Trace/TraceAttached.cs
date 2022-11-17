@@ -1,6 +1,6 @@
 ﻿using Fibertest.Dto;
 
-namespace Graph
+namespace Fibertest.Graph
 {
     
     public class TraceAttached

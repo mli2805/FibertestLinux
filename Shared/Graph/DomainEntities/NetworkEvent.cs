@@ -2,7 +2,7 @@
 
 // ReSharper disable InconsistentNaming
 
-namespace Graph
+namespace Fibertest.Graph
 {
     
     public class NetworkEvent

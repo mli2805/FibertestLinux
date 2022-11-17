@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Fibertest.Dto;
-using Graph;
+using Fibertest.Graph;
 
 namespace Fibertest.DataCenter
 {

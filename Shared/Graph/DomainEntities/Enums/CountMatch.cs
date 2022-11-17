@@ -1,4 +1,4 @@
-﻿namespace Graph
+﻿namespace Fibertest.Graph
 {
     public enum CountMatch
     {

@@ -1,7 +1,8 @@
 ﻿using Fibertest.Dto;
+
 // using Brush = System.Windows.Media.Brush;
 
-namespace Graph
+namespace Fibertest.Graph
 {
     public static class FiberStateExt
     {

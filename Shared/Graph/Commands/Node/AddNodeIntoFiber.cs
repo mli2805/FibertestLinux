@@ -1,6 +1,6 @@
 ﻿using Fibertest.Dto;
 
-namespace Graph
+namespace Fibertest.Graph
 {
     /// <summary>
     /// Attention! Mind the difference with Fibertest 1.5
