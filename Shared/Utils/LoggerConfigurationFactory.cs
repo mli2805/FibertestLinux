@@ -46,6 +46,11 @@ public static class LoggerConfigurationFactory
                 .File("../log/dc-.log", outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
+                .Filter.ByIncludingOnly(WithEventId(Logs.SnmpTraps.ToInt()))
+                .WriteTo
+                .File("../log/trap-.log", outputTemplate: template,
+                    rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
+            .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.RtuService.ToInt()))
                 .WriteTo
                 .File("../log/srv-.log", outputTemplate: template,

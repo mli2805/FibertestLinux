@@ -30,10 +30,9 @@ namespace Fibertest.DataCenter
             });
             builder.Services.AddControllers();
 
-            // my Dependency Injection
             builder.Services
                 .AddConfig(builder.Configuration)
-                .AddDbRepositories();
+                .AddDependencies();
 
             var logger = LoggerConfigurationFactory
                 .Configure() // here is my configuration of log files
@@ -49,7 +48,7 @@ namespace Fibertest.DataCenter
             {
                 endpoints.MapGrpcService<C2RService>();
                 endpoints.MapGrpcService<R2DService>();
-                endpoints.MapControllers();
+                endpoints.MapControllers(); // check it: http://localhost:11080/misc/checkapi
             });
 
             app.Run();
