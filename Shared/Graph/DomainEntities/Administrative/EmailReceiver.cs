@@ -3,5 +3,5 @@
 public class EmailReceiver
 {
     public string? Address;
-    public bool IsActivated { get;set; }
+    public bool IsActivated;
 }

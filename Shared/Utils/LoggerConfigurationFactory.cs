@@ -25,6 +25,7 @@ public static class LogsExt
 }
 
 /// <summary>
+///  https://stackoverflow.com/questions/51213779/can-i-log-to-separate-files-using-serilog
 ///  provides way to persist messages from one project into several files according to EventId
 /// </summary>
 public static class LoggerConfigurationFactory

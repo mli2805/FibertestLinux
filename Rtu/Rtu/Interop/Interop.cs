@@ -29,7 +29,9 @@ namespace Fibertest.Rtu
 
             try
             {
-                DllInit(iitFolder, logFile, lenUnit); // requires absolute path under VSCode
+                // возможно прокатило бы ./OtdrMeasEngine
+
+                DllInit("./OtdrMeasEngine", logFile, lenUnit); // requires absolute path under VSCode
                 _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "Dlls are loaded successfully.");
             }
             catch (Exception e)
