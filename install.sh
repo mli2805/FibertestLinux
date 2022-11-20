@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo systemctl stop Rtu.service
-echo "сервис остановлен"
+echo "сервис RTU остановлен"
 sleep 1s
 
 tar -xzf rtu.tar.gz -C /var/fibertest

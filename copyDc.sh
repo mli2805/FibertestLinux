@@ -8,6 +8,8 @@ echo "сервис остановлен"
 sleep 1s
 
 cp * /var/fibertest/datacenter/
+cd /var/fibertest/datacenter
+sudo chmod a+rw dcconfig.json
 echo "файлы скопированы"
 
 sudo systemctl start DataCenter.service
