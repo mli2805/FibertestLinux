@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Fibertest.Dto</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Fibertest.Dto</RootNamespace>
+		<Version>3.0.0.0</Version>
+		<Company>IIT</Company>
+		<Copyright>Copyright © IIT Minsk 2017-2022</Copyright>
+		<Authors>Leanid Marholin</Authors>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="EnumsIitOtdr\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="EnumsIitOtdr\" />
+	</ItemGroup>
 
 </Project>
