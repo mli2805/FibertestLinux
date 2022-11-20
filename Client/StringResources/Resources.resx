@@ -147,4 +147,7 @@
 	<data name="SID_FreeOtdr_returned_" xml:space="preserve">
 		<value>FreeOtdr returned </value>
 	</data>
+	<data name="SID_long_operation__please_wait___" xml:space="preserve">
+		<value>long operation, please wait...</value>
+	</data>
 </root>
