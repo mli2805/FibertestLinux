@@ -1,6 +1,8 @@
-﻿using Fibertest.DataCenter;
+﻿using System.Globalization;
+using Fibertest.DataCenter;
 using Fibertest.Dto;
 using Grpc.Net.Client;
+using StringResources;
 
 namespace ClientConsole
 {
@@ -8,6 +10,9 @@ namespace ClientConsole
     {
         static async Task Main()
         {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
+
             var serverAddress = "localhost";
             var uri = $"http://{serverAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
 
@@ -16,7 +21,7 @@ namespace ClientConsole
 
             while (true)
             {
-                Console.WriteLine("");
+                Console.WriteLine(Resources.SID_Example);
                 Console.WriteLine("");
                 if (!await Menu(grpcClient)) 
                     return;
@@ -25,12 +30,12 @@ namespace ClientConsole
 
         private static async Task<bool> Menu(c2r.c2rClient grpcClient)
         {
-            Console.WriteLine("1 - InitDllsAndConnectOtdr");
-            Console.WriteLine("2 - DisconnectOtdr");
+            Console.WriteLine(Resources.SID__1___InitDllsAndConnectOtdr);
+            Console.WriteLine(Resources.SID__2___DisconnectOtdr);
             Console.WriteLine("");
-            Console.WriteLine("0 - Exit");
+            Console.WriteLine(Resources.SID__0___Exit);
             Console.WriteLine("");
-            Console.WriteLine("Выберите действие - ");
+            Console.WriteLine(Resources.SID_Choose_action___);
             var l = Console.ReadLine();
             if (int.TryParse(l, out int action))
             {

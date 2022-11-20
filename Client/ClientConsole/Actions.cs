@@ -1,6 +1,7 @@
 ﻿using Fibertest.DataCenter;
 using Fibertest.Dto;
 using Newtonsoft.Json;
+using StringResources;
 
 namespace ClientConsole;
 
@@ -22,15 +23,15 @@ public static class Actions
         var dto = new InitializeRtuDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
         var command = new c2rCommand()
             { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
-        Console.WriteLine("длительная операция, пожалуйста подождите...");
+        Console.WriteLine(Resources.SID_long_operation_please_wait);
 
         try
         {
             var response = await grpcClient.SendCommandAsync(command);
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
-            Console.WriteLine("DllInit result is " + (result == null ? "null" : $"{result.IsInitialized}"));
+            Console.WriteLine(Resources.SID_DllInit_result_is_ + (result == null ? "null" : $"{result.IsInitialized}"));
             if (result != null)
-                Console.WriteLine("Serial is: " + result.Serial);
+                Console.WriteLine(Resources.SID_Serial_is__ + result.Serial);
         }
         catch (Exception e)
         {
@@ -48,9 +49,9 @@ public static class Actions
         {
             var response = await grpcClient.SendCommandAsync(command);
             var result = JsonConvert.DeserializeObject<BaseRtuReply>(response.Json);
-            Console.WriteLine("FreeOtdr result is " + (result == null ? "null" : $"{result.ReturnCode == ReturnCode.Ok}"));
+            Console.WriteLine(Resources.SID_FreeOtdr_result_is_ + (result == null ? "null" : $"{result.ReturnCode == ReturnCode.Ok}"));
             if (result != null)
-                Console.WriteLine("FreeOtdr returned " + result.ReturnCode);
+                Console.WriteLine(Resources.SID_FreeOtdr_returned_ + result.ReturnCode);
         }
         catch (Exception e)
         {
