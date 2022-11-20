@@ -22,7 +22,7 @@ public static class Actions
         var dto = new InitializeRtuDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
         var command = new c2rCommand()
             { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
-        Console.WriteLine("Длительная операция, пожалуйста подождите...");
+        Console.WriteLine("длительная операция, пожалуйста подождите...");
 
         try
         {
