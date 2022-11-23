@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComPortExperiment", "Client
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StringResources", "Client\StringResources\StringResources.csproj", "{F89601AF-2DEA-4004-9323-FB747B9A9051}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClient", "Client\WpfClient\WpfClient.csproj", "{53F6DA06-2D94-401E-A65C-E7FF66241E6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfClient", "Client\WpfClient\WpfClient.csproj", "{53F6DA06-2D94-401E-A65C-E7FF66241E6D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RtuWpfClient", "Client\RtuWpfClient\RtuWpfClient.csproj", "{6D10C82B-CE1E-4509-81A0-EA84473295BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{53F6DA06-2D94-401E-A65C-E7FF66241E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53F6DA06-2D94-401E-A65C-E7FF66241E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53F6DA06-2D94-401E-A65C-E7FF66241E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D10C82B-CE1E-4509-81A0-EA84473295BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D10C82B-CE1E-4509-81A0-EA84473295BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D10C82B-CE1E-4509-81A0-EA84473295BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D10C82B-CE1E-4509-81A0-EA84473295BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{6B923700-6A09-4658-96EA-83DD4B3C6995} = {50FF631B-F8A2-4ED3-828D-D0DC6A99D280}
 		{F89601AF-2DEA-4004-9323-FB747B9A9051} = {50FF631B-F8A2-4ED3-828D-D0DC6A99D280}
 		{53F6DA06-2D94-401E-A65C-E7FF66241E6D} = {50FF631B-F8A2-4ED3-828D-D0DC6A99D280}
+		{6D10C82B-CE1E-4509-81A0-EA84473295BD} = {50FF631B-F8A2-4ED3-828D-D0DC6A99D280}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {60961ADF-6976-4067-B12B-30EA94B22DD7}
