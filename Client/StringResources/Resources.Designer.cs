@@ -135,15 +135,6 @@ namespace StringResources {
         /// <summary>
         ///   Looks up a localized string similar to long operation, please wait....
         /// </summary>
-        public static string SID_long_operation__please_wait___ {
-            get {
-                return ResourceManager.GetString("SID_long_operation__please_wait___", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to long operation, please wait....
-        /// </summary>
         public static string SID_long_operation_please_wait {
             get {
                 return ResourceManager.GetString("SID_long_operation_please_wait", resourceCulture);
