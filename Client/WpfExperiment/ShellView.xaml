@@ -1,4 +1,4 @@
-﻿<Window x:Class="RtuWpfClient.ShellView"
+﻿<Window x:Class="WpfExperiment.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,11 +10,11 @@
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="32" Margin="5">
                     <TextBlock Margin="5,7,5,5" Width="110" Text="DataCenter address" />
-                    <TextBox Margin="5" Width="100" Text="192.168.96.111"/>
+                    <TextBox Margin="5" Width="100" Text="{Binding DcAddress, Mode=TwoWay}"/>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="32" Margin="5">
                     <TextBlock Margin="5,7,5,5" Width="110" Text="RTU address" />
-                    <TextBox Margin="5" Width="100" Text="192.168.96.56"/>
+                    <TextBox Margin="5" Width="100" Text="{Binding RtuAddress, Mode=TwoWay}"/>
                 </StackPanel>
                 <StackPanel></StackPanel>
             </DockPanel>

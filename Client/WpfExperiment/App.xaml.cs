@@ -1,4 +1,4 @@
-﻿namespace RtuWpfClient
+﻿namespace WpfExperiment
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -7,7 +7,7 @@
     {
         public App()
         {
-            InitializeComponent();
+             InitializeComponent();
         }
     }
 }

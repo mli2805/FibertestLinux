@@ -2,6 +2,7 @@ using Fibertest.Dto;
 using Fibertest.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
+using Serilog.Core;
 
 namespace Fibertest.DataCenter
 {
@@ -34,7 +35,7 @@ namespace Fibertest.DataCenter
                 .AddConfig(builder.Configuration)
                 .AddDependencies();
 
-            var logger = LoggerConfigurationFactory
+            Logger logger = LoggerConfigurationFactory
                 .Configure() // here is my configuration of log files
                 .CreateLogger();
 

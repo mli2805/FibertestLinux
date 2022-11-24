@@ -1,12 +1,12 @@
-﻿<Application x:Class="RtuWpfClient.App"
+﻿<Application x:Class="WpfExperiment.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:rtuWpfClient="clr-namespace:RtuWpfClient">
+             xmlns:wpfExperiment="clr-namespace:WpfExperiment">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <rtuWpfClient:AppBootstrapper x:Key="Bootstrapper" />
+                    <wpfExperiment:AppBootstrapper x:Key="Bootstrapper" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

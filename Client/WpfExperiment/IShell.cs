@@ -1,4 +1,4 @@
-﻿namespace RtuWpfClient
+﻿namespace WpfExperiment
 {
     internal interface IShell
     {

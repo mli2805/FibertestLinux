@@ -1,4 +1,4 @@
-﻿namespace RtuWpfClient
+﻿namespace WpfExperiment
 {
     /// <summary>
     /// Interaction logic for ShellView.xaml
