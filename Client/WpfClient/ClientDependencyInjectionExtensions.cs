@@ -4,7 +4,7 @@ using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace WpfExperiment;
+namespace WpfClient;
 
 public static class ClientDependencyInjectionExtensions
 {
@@ -27,12 +27,8 @@ public static class ClientDependencyInjectionExtensions
 
     private static SimpleContainer AddOneGroup(this SimpleContainer container, ILoggerFactory lf)
     {
-        container.RegisterInstance(typeof(ILogger<ShellViewModel>), "", lf.CreateLogger<ShellViewModel>());
-
-        container.Singleton<GrpcClientRequests>()
-            .RegisterInstance(typeof(ILogger<GrpcClientRequests>), "", lf.CreateLogger<GrpcClientRequests>());
-        container.Singleton<Class2>()
-            .RegisterInstance(typeof(ILogger<Class2>), "", lf.CreateLogger<Class2>());
+        container.Singleton<GrpcClientRequests>().RegisterInstance(typeof(ILogger<GrpcClientRequests>), "", lf.CreateLogger<GrpcClientRequests>());
+        container.Singleton<Class2>().RegisterInstance(typeof(ILogger<Class2>), "", lf.CreateLogger<Class2>());
 
         return container;
     }

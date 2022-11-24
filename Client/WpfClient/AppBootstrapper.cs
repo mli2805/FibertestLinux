@@ -20,6 +20,8 @@ namespace WpfClient
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.PerRequest<IShell, ShellViewModel>();
+
+            _container.AddMyDependencies();
         }
 
         protected override object GetInstance(Type service, string key) {
