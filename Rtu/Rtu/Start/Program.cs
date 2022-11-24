@@ -17,7 +17,7 @@ namespace Fibertest.Rtu
                 })
                 .ConfigureAppConfiguration((_, config) =>
                 {
-                    config.AddJsonFile("rtuconfig.json", false, true);
+                    config.AddJsonFile("../config/rtu.json", false, true);
                 });
 
             // Add services to the container.

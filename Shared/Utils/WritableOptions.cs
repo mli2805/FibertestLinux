@@ -1,11 +1,13 @@
 ﻿// https://learn.microsoft.com/en-us/answers/questions/609232/how-to-save-the-updates-i-made-to-appsettings-conf.html?childToView=1092152#comment-1092152
 
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Fibertest.DataCenter
+namespace Fibertest.Utils
 {
     public interface IWritableOptions<out T> : IOptions<T> where T : class, new()
     {

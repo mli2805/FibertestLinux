@@ -21,7 +21,7 @@ namespace Fibertest.DataCenter
                 })
                 .ConfigureAppConfiguration((_, config) =>
                 {
-                    config.AddJsonFile("dcconfig.json", false, true);
+                    config.AddJsonFile("../config/dc.json", false, true);
                 });
 
             // Add services to the container.
