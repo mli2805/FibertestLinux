@@ -57,7 +57,7 @@ public class SnmpTrapListenerService : BackgroundService
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.SnmpTraps.ToInt(), $"Failed to start listen to port 162. {e.Message}");
+            _logger.Log(LogLevel.Error, Logs.SnmpTraps.ToInt(), $"socket.SetSocketOption: Exception: {e.Message}");
         }
     }
 }
