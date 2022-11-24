@@ -16,7 +16,7 @@ namespace WpfExperiment
         public string DcAddress { get; set; } = "192.168.96.109"; // virtualBox Ubuntu 20.04
         public string RtuAddress { get; set; } = "192.168.96.56"; // MAK 0068613
 
-        private readonly string _clientId = "client-connection-Id";
+        private readonly string _clientId = "client-connection-id";
 
         public ShellViewModel(ILogger<ShellViewModel> logger, GrpcClientRequests grpcClientRequests)
         {

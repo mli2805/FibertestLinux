@@ -6,7 +6,6 @@ namespace Fibertest.DataCenter;
 public class MessageQueueService : BackgroundService
 {
     private readonly ILogger<MessageQueueService> _logger;
-    private int _counter;
 
     public MessageQueueService(ILogger<MessageQueueService> logger)
     {
@@ -17,7 +16,7 @@ public class MessageQueueService : BackgroundService
     {
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Message queue service started. Process {pid}, thread {tid}");
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Rabbit Message queue service started. Process {pid}, thread {tid}");
         await DoWork(stoppingToken);
     }
 
@@ -25,8 +24,6 @@ public class MessageQueueService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            _counter++;
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"MessageQueueService {_counter}");
             await Task.Delay(3000, stoppingToken);
         }
     }
