@@ -1,4 +1,5 @@
 using System.Net;
+using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Serilog;
@@ -17,7 +18,10 @@ namespace Fibertest.Rtu
                 })
                 .ConfigureAppConfiguration((_, config) =>
                 {
-                    config.AddJsonFile("../config/rtu.json", false, true);
+                    var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                    var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
+                    var configFile = Path.Combine(basePath, @"../config/dc.json");
+                    config.AddJsonFile(configFile, false, true);
                 });
 
             // Add services to the container.

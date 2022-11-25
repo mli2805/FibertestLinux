@@ -1,8 +1,10 @@
 ﻿using Caliburn.Micro;
 using Fibertest.Utils;
 using GrpsClientLib;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System.IO;
 
 namespace WpfExperiment;
 
@@ -19,6 +21,15 @@ public static class ClientDependencyInjectionExtensions
                 .Configure() // here is my configuration of log files
                 .CreateLogger());
         });
+
+        var basePath = Directory.GetCurrentDirectory();
+        var configPath = Path.Combine(basePath, @"..\config\wpfExp.json");
+
+        var configBuilder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(configPath, false, true);
+        IConfiguration config = configBuilder.Build();
+        container.RegisterInstance(typeof(IConfiguration), "", config);
 
         container
             .AddOneGroup(loggerFactory)

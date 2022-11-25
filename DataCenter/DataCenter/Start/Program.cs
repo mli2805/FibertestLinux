@@ -3,6 +3,7 @@ using Fibertest.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Core;
+using System.Reflection;
 
 namespace Fibertest.DataCenter
 {
@@ -21,7 +22,10 @@ namespace Fibertest.DataCenter
                 })
                 .ConfigureAppConfiguration((_, config) =>
                 {
-                    config.AddJsonFile("../config/dc.json", false, true);
+                    var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                    var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
+                    var configFile = Path.Combine(basePath, @"../config/dc.json");
+                    config.AddJsonFile(configFile, false, true);
                 });
 
             // Add services to the container.

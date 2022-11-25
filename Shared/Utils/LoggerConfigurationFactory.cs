@@ -1,6 +1,7 @@
 ﻿using Serilog.Events;
 using Serilog;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Fibertest.Utils;
 
@@ -32,6 +33,10 @@ public static class LoggerConfigurationFactory
 {
     public static LoggerConfiguration Configure()
     {
+        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+        var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
+        var logFolder = Path.Combine(basePath, @"../log");
+        
         var template = "[{Timestamp:HH:mm:ss} {CorrelationId} {Level:u3}] {Username} {Message:lj}{NewLine}{Exception}";
         var loggerConfiguration = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -39,27 +44,27 @@ public static class LoggerConfigurationFactory
             .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.Client.ToInt()))
                 .WriteTo
-                .File("../log/cl-.log", outputTemplate: template,
+                .File(Path.Combine(logFolder, "cl-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.DataCenter.ToInt()))
                 .WriteTo
-                .File("../log/dc-.log", outputTemplate: template,
+                .File(Path.Combine(logFolder, "dc-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.SnmpTraps.ToInt()))
                 .WriteTo
-                .File("../log/trap-.log", outputTemplate: template,
+                .File(Path.Combine(logFolder, "trap-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.RtuService.ToInt()))
                 .WriteTo
-                .File("../log/srv-.log", outputTemplate: template,
+                .File(Path.Combine(logFolder, "srv-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.RtuManager.ToInt()))
                 .WriteTo
-                .File("../log/mng-.log", outputTemplate: template,
+                .File(Path.Combine(logFolder, "mng-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             ;
 

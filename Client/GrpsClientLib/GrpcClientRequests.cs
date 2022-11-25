@@ -1,7 +1,9 @@
-﻿using Fibertest.DataCenter;
+﻿using System.Diagnostics;
+using Fibertest.DataCenter;
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Grpc.Net.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -14,9 +16,11 @@ namespace GrpsClientLib
 
         private string? _uri;
 
-        public GrpcClientRequests(ILogger<GrpcClientRequests> logger)
+        public GrpcClientRequests(IConfiguration config, ILogger<GrpcClientRequests> logger)
         {
             _logger = logger;
+            var d = config.GetSection("General")["Zoom"];
+            Debug.WriteLine(d);
         }
 
         public void Initialize(string dcAddress)
