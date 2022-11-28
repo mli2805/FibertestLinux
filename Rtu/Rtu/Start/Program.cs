@@ -20,7 +20,7 @@ namespace Fibertest.Rtu
                 {
                     var assemblyLocation = Assembly.GetExecutingAssembly().Location;
                     var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-                    var configFile = Path.Combine(basePath, @"../config/dc.json");
+                    var configFile = Path.Combine(basePath, @"../config/rtu.json");
                     config.AddJsonFile(configFile, false, true);
                 });
 

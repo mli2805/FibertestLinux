@@ -1,0 +1,11 @@
+{
+	"General" : {
+		"RtuHeartbeatRate" : 30,
+		"RtuPauseAfterReboot" : 5,
+		"RtuUpTimeForAdditionalPause" : 0
+	},
+	"Charon" : {
+		"ComPortName" : "/dev/ttyS1",
+		"ComPortSpeed" : 115200
+	}
+}
