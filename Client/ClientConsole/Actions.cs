@@ -8,13 +8,37 @@ namespace ClientConsole;
 public static class Actions
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
+    private static readonly string _clientId = "client-connection-id";
+    private static readonly string _username = "Vasya Pugovkin";
+    private static readonly string _clientIP = "<<wpf address IP>>";
 
-    public static async Task Do(int action, c2r.c2rClient grpcClient)
+    public static async Task Do(int action, c2r.c2rClient grpcClient, c2d.c2dClient c2dClient)
     {
         switch (action)
         {
             case 1: await InitDllsAndConnectOtdr(grpcClient); break;
             case 2: await DisconnectOtdr(grpcClient); break;
+            case 3: await RegisterClient(c2dClient); break;
+        }
+    }
+
+    private static async Task<ClientRegisteredDto?> RegisterClient(c2d.c2dClient grpcClient)
+    {
+        var dto = new RegisterClientDto(_clientId) { UserName = _username, ClientIp = _clientIP };
+        var command = new c2dCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
+        try
+        {
+            var response = await grpcClient.SendCommandAsync(command);
+            var result = JsonConvert.DeserializeObject<ClientRegisteredDto>(response.Json);
+            Console.WriteLine(response.Json);
+            if (result != null)
+                Console.WriteLine(result.ReturnCode);
+            return result;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 

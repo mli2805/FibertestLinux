@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Protobuf Include="../../DataCenter/DataCenter/Protos/c2d.proto" GrpcServices="Client" />
 		<Protobuf Include="../../DataCenter/DataCenter/Protos/c2r.proto" GrpcServices="Client" />
 	</ItemGroup>
 </Project>

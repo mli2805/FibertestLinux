@@ -1,3 +1,4 @@
+using System.Net;
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -16,8 +17,7 @@ namespace Fibertest.DataCenter
                 .ConfigureKestrel(options =>
                 {
                     // grpc
-                    options.ListenAnyIP((int)TcpPorts.ServerListenToCommonClient, o => o.Protocols = HttpProtocols.Http2);
-                    options.ListenAnyIP((int)TcpPorts.ServerListenToRtu, o => o.Protocols = HttpProtocols.Http2);
+                    options.Listen(IPAddress.Any, (int)TcpPorts.ServerListenToCommonClient);
                     // http
                     options.ListenAnyIP((int)TcpPorts.WebApiListenTo, o => o.Protocols = HttpProtocols.Http1);
                 })
