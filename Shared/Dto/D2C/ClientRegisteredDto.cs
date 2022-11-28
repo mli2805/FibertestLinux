@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto
 {
-    public class ClientRegisteredDto : BaseReply
+    public class ClientRegisteredDto : RequestAnswer
     {
         public string? ConnectionId;
 
@@ -18,5 +18,9 @@
         public SmtpSettingsDto? Smtp;
         public int GsmModemComPort;
         public SnmpSettingsDto? Snmp;
+
+        public ClientRegisteredDto(ReturnCode returnCode) : base(returnCode)
+        {
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace Fibertest.DataCenter
                 {
                     // grpc
                     options.ListenAnyIP((int)TcpPorts.ServerListenToCommonClient, o => o.Protocols = HttpProtocols.Http2);
+                    options.ListenAnyIP((int)TcpPorts.ServerListenToRtu, o => o.Protocols = HttpProtocols.Http2);
                     // http
                     options.ListenAnyIP((int)TcpPorts.WebApiListenTo, o => o.Protocols = HttpProtocols.Http1);
                 })
@@ -51,6 +52,7 @@ namespace Fibertest.DataCenter
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<C2DService>();
                 endpoints.MapGrpcService<C2RService>();
                 endpoints.MapGrpcService<R2DService>();
                 endpoints.MapControllers(); // check it: http://localhost:11080/misc/checkapi

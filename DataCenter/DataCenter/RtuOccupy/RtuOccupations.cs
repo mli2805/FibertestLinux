@@ -16,6 +16,24 @@ public class RtuOccupations
         _logger = logger;
     }
 
+    public async Task<RequestAnswer> SetRtuOccupationState(SetRtuOccupationDto dto)
+    {
+        await Task.Delay(1);
+        if (dto.State == null || dto.State.UserName == null)
+            return new RequestAnswer(ReturnCode.InvalidDto);
+
+        if (!TrySetOccupation(dto.RtuId, dto.State.RtuOccupation, dto.State.UserName, out RtuOccupationState? currentState))
+        {
+            return new RequestAnswer(ReturnCode.RtuIsBusy)
+            {
+                RtuOccupationState = currentState,
+                ErrorMessage = "",
+            };
+        }
+
+        return new RequestAnswer(ReturnCode.Ok);
+    }
+
     // checks and if possible set occupation
     public bool TrySetOccupation(Guid rtuId, RtuOccupation newRtuOccupation, string userName, out RtuOccupationState? state)
     {

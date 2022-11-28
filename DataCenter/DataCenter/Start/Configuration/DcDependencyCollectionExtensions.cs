@@ -34,6 +34,7 @@ public static class DcDependencyCollectionExtensions
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
         services.AddSingleton<TrapDataProcessor>();
+        services.AddSingleton<ClientGrpcRequestExecutor>();
 
         return services;
     }

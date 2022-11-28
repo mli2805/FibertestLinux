@@ -22,19 +22,18 @@ public static class ClientDependencyInjectionExtensions
 
         container
             .AddOneGroup(loggerFactory)
-            .AddLastGroup();
+            .AddLastGroup(loggerFactory);
     }
 
     private static SimpleContainer AddOneGroup(this SimpleContainer container, ILoggerFactory lf)
     {
-        container.Singleton<GrpcClientRequests>().RegisterInstance(typeof(ILogger<GrpcClientRequests>), "", lf.CreateLogger<GrpcClientRequests>());
-        container.Singleton<Class2>().RegisterInstance(typeof(ILogger<Class2>), "", lf.CreateLogger<Class2>());
+        container.Singleton<GrpcC2RRequests>().RegisterInstance(typeof(ILogger<GrpcC2RRequests>), "", lf.CreateLogger<GrpcC2RRequests>());
 
         return container;
     }
 
-    private static void AddLastGroup(this SimpleContainer container)
+    private static void AddLastGroup(this SimpleContainer container, ILoggerFactory lf)
     {
-        container.Singleton<Class3>();
+        container.Singleton<GrpcC2DRequests>().RegisterInstance(typeof(ILogger<GrpcC2DRequests>), "", lf.CreateLogger<GrpcC2DRequests>());
     }
 }

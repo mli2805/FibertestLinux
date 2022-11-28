@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "Fibertest.DataCenter";
+
+service c2d {
+	rpc SendCommand(.c2dCommand) returns (.c2dResponse);
+}
+
+message c2dCommand {
+	string json = 1;
+}
+
+message c2dResponse {
+	string json = 1;
+}

@@ -7,8 +7,7 @@ namespace Fibertest.DataCenter
     {
         public static ClientRegisteredDto FillInSuccessfulResult(this ClientCollection collection, RegisterClientDto dto, User user)
         {
-            var result = new ClientRegisteredDto();
-            result.ReturnCode = ReturnCode.ClientRegisteredSuccessfully;
+            var result = new ClientRegisteredDto(ReturnCode.ClientRegisteredSuccessfully);
 
             result.ConnectionId = dto.ConnectionId;
 

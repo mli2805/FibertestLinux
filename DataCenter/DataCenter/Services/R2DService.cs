@@ -27,24 +27,24 @@ namespace Fibertest.DataCenter
             {
                 case RtuChecksChannelDto dto: r = await RegisterHeartbeat(dto); break;
                 case MonitoringResultDto dto: r = await ProcessMonitoringResult(dto); break;
-                default: r = new BaseReply(); break;
+                default: r = new RequestAnswer(ReturnCode.Error); break;
             }
 
             return new R2DGrpcResponse() { Json = JsonConvert.SerializeObject(r) };
         }
 
-        private async Task<BaseReply> RegisterHeartbeat(RtuChecksChannelDto dto)
+        private async Task<RequestAnswer> RegisterHeartbeat(RtuChecksChannelDto dto)
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Command Register Heartbeat from RTU {dto.RtuId} received");
-            return new BaseReply();
+            return new RequestAnswer(ReturnCode.Ok);
         }
 
-        private async Task<BaseReply> ProcessMonitoringResult(MonitoringResultDto dto)
+        private async Task<RequestAnswer> ProcessMonitoringResult(MonitoringResultDto dto)
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Monitoring Result from RTU {dto.RtuId} received");
-            return new BaseReply();
+            return new RequestAnswer(ReturnCode.Ok);
         }
     }
 }

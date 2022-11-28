@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StringResources", "Client\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfClient", "Client\WpfClient\WpfClient.csproj", "{53F6DA06-2D94-401E-A65C-E7FF66241E6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpsClientLib", "Client\GrpsClientLib\GrpsClientLib.csproj", "{96148C79-902C-4D2C-87A9-72EE8EF76163}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpsClientLib", "Client\GrpsClientLib\GrpsClientLib.csproj", "{96148C79-902C-4D2C-87A9-72EE8EF76163}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfExperiment", "Client\WpfExperiment\WpfExperiment.csproj", "{98101DB9-44A2-4A0E-8F40-695D2F7B99D1}"
 EndProject

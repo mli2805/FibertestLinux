@@ -48,7 +48,7 @@ public static class Actions
         try
         {
             var response = await grpcClient.SendCommandAsync(command);
-            var result = JsonConvert.DeserializeObject<BaseRtuReply>(response.Json);
+            var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json);
             Console.WriteLine(Resources.SID_FreeOtdr_result_is_ + (result == null ? "null" : $"{result.ReturnCode == ReturnCode.Ok}"));
             if (result != null)
                 Console.WriteLine(Resources.SID_FreeOtdr_returned_ + result.ReturnCode);

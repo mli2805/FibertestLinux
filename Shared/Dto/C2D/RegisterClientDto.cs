@@ -1,8 +1,7 @@
 ﻿namespace Fibertest.Dto
 {
-    public class RegisterClientDto
+    public class RegisterClientDto : BaseRequest
     {
-        public string ConnectionId;
         public string? ClientIp;
         public DoubleAddress? Addresses;
         public string? UserName;
@@ -12,9 +11,21 @@
         public bool IsUnderSuperClient;
         public bool IsWebClient;
 
-        public RegisterClientDto(string connectionId)
+        public RegisterClientDto(string connectionId) : base(connectionId)
         {
-            ConnectionId = connectionId;
         }
+
+        public override string What => "RegisterClient";
+
+    }
+
+    public class UnRegisterClientDto : BaseRequest
+    {
+        public UnRegisterClientDto(string connectionId, string userName) : base(connectionId)
+        {
+            UserName = userName;
+        }
+
+        public string UserName;
     }
 }

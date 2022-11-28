@@ -31,7 +31,7 @@ namespace Fibertest.Rtu
                 case StopMonitoringDto _: r = await StopMonitoring(); break;
                 case AttachOtauDto dto: r = await AttachOtau(dto); break;
                 case FreeOtdrDto _: r = await FreeOtdr(); break;
-                default: r = new BaseRtuReply(); break;
+                default: r = new RequestAnswer(ReturnCode.Error); break;
             }
 
             return new d2rResponse() { Json = JsonConvert.SerializeObject(r) };
@@ -46,9 +46,8 @@ namespace Fibertest.Rtu
             if (result)
             {
                 _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!");
-                return new RtuInitializedDto()
+                return new RtuInitializedDto(ReturnCode.RtuInitializedSuccessfully)
                 {
-                    ReturnCode = ReturnCode.RtuInitializedSuccessfully,
                     RtuId = dto.RtuId,
                     Serial = "13579"
                 };
@@ -56,19 +55,18 @@ namespace Fibertest.Rtu
             else
             {
                 _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "Failed initialize RTU!");
-                return new RtuInitializedDto()
+                return new RtuInitializedDto(ReturnCode.RtuInitializationError)
                 {
-                    ReturnCode = ReturnCode.RtuInitializationError,
                     RtuId = dto.RtuId,
                 };
             }
         }
 
-        private async Task<BaseRtuReply> StopMonitoring()
+        private async Task<RequestAnswer> StopMonitoring()
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "StopMonitoring d2RCommand received");
-            return new BaseRtuReply();
+            return new RequestAnswer(ReturnCode.Ok);
         }
 
         private async Task<OtauAttachedDto> AttachOtau(AttachOtauDto dto)
@@ -76,15 +74,15 @@ namespace Fibertest.Rtu
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),
                 $"Command to attach OTAU {dto.NetAddress?.ToStringASpace ?? "no address!"} received");
-            return new OtauAttachedDto();
+            return new OtauAttachedDto(ReturnCode.Ok);
         }
 
-        private async Task<BaseRtuReply> FreeOtdr()
+        private async Task<RequestAnswer> FreeOtdr()
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "FreeOtdr d2RCommand received");
             var result = _otdrManager.DisconnectOtdr("192.168.88.101");
-            return new BaseRtuReply() { ReturnCode = result ? ReturnCode.Ok : ReturnCode.Error };
+            return new RequestAnswer(result ? ReturnCode.Ok : ReturnCode.Error);
         }
     }
 }

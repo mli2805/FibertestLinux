@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\c2d.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\c2r.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\r2d.proto" GrpcServices="Server" />
     <Protobuf Include="../../Rtu/Rtu/Protos/d2rPackage.proto" GrpcServices="Client" />

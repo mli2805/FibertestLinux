@@ -18,7 +18,6 @@ public class C2RService : c2r.c2rBase
     {
         _logger = logger;
         _clientCollection = clientCollection;
-        _clientCollection.RegisterClientAsync(new RegisterClientDto("client-connection-id") { UserName = "test user", ClientIp = "localhost" }).Wait();
         _rtuRepo = rtuRepo;
         _rtuOccupations = rtuOccupations;
     }
@@ -57,7 +56,7 @@ public class C2RService : c2r.c2rBase
 
             var response = request.RtuMaker == RtuMaker.IIT
                 ? await TransferCommand(rtuAddress, command.Json)
-                : new BaseRtuReply() { ReturnCode = ReturnCode.Ok };
+                : new RequestAnswer(ReturnCode.Ok);
             return new c2rResponse()
                 { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
         }
@@ -84,12 +83,12 @@ public class C2RService : c2r.c2rBase
     {
         return new c2rResponse
         {
-            Json = JsonConvert.SerializeObject(new BaseRtuReply
-            { ReturnCode = returnCode, RtuOccupationState = currentState }, JsonSerializerSettings)
+            Json = JsonConvert.SerializeObject(new RequestAnswer(returnCode)
+            { RtuOccupationState = currentState }, JsonSerializerSettings)
         };
     }
 
-    private async Task<BaseRtuReply> TransferCommand(string rtuAddress, string commandContent)
+    private async Task<RequestAnswer> TransferCommand(string rtuAddress, string commandContent)
     {
         var rtuUri = $"http://{rtuAddress}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
@@ -102,12 +101,12 @@ public class C2RService : c2r.c2rBase
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
                 result == null ? "RTU response is null" : $"RTU response is {result.ReturnCode}");
-            return result ?? new BaseRtuReply() { ReturnCode = ReturnCode.Error, ErrorMessage = "response is null" };
+            return result ?? new RequestAnswer(ReturnCode.Error) { ErrorMessage = "response is null" };
         }
         catch (Exception e)
         {
             _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "TransferCommand: " + e.Message);
-            return new RtuInitializedDto() { ReturnCode = ReturnCode.D2RGrpcOperationError };
+            return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError);
         }
     }
 }

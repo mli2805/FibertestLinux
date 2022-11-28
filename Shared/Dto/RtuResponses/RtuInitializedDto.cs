@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
-public class RtuInitializedDto : BaseRtuReply
+public class RtuInitializedDto : RequestAnswer
 {
     public Guid RtuId;
     public RtuMaker Maker;
@@ -30,4 +30,8 @@ public class RtuInitializedDto : BaseRtuReply
     public bool IsMonitoringOn;
         
     public TreeOfAcceptableMeasParams? AcceptableMeasParams;
+
+    public RtuInitializedDto(ReturnCode returnCode) : base(returnCode)
+    {
+    }
 }

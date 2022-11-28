@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 
 namespace GrpsClientLib
 {
-    public class GrpcClientRequests
+    public class GrpcC2RRequests
     {
-        private readonly ILogger<GrpcClientRequests> _logger;
+        private readonly ILogger<GrpcC2RRequests> _logger;
         private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
 
         private string? _uri;
 
-        public GrpcClientRequests(IConfiguration config, ILogger<GrpcClientRequests> logger)
+        public GrpcC2RRequests(IConfiguration config, ILogger<GrpcC2RRequests> logger)
         {
             _logger = logger;
             var d = config.GetSection("General")["Zoom"];
@@ -31,7 +31,7 @@ namespace GrpsClientLib
         public async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto dto)
         {
             if (_uri == null)
-                return new RtuInitializedDto() { ReturnCode = ReturnCode.C2RGrpcOperationError, ErrorMessage = "Data-center address not set" };
+                return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError) { ErrorMessage = "Data-center address not set" };
 
             using var grpcChannel = GrpcChannel.ForAddress(_uri);
             var grpcClient = new c2r.c2rClient(grpcChannel);
@@ -43,18 +43,18 @@ namespace GrpsClientLib
             {
                 var response = await grpcClient.SendCommandAsync(command);
                 if (response == null)
-                    return new RtuInitializedDto() { ReturnCode = ReturnCode.C2RGrpcOperationError, ErrorMessage = "empty response" };
+                    return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError) { ErrorMessage = "empty response" };
 
                 var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
                 if (result == null)
-                    return new RtuInitializedDto() { ReturnCode = ReturnCode.C2RGrpcOperationError, ErrorMessage = "json deserialization error" };
+                    return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError) { ErrorMessage = "json deserialization error" };
 
                 return result;
             }
             catch (Exception e)
             {
                 _logger.Log(LogLevel.Error, Logs.Client.ToInt(), e.Message);
-                return new RtuInitializedDto() { ReturnCode = ReturnCode.C2RGrpcOperationError, ErrorMessage = e.Message };
+                return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError) { ErrorMessage = e.Message };
             }
         }
 

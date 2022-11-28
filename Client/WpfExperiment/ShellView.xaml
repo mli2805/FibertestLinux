@@ -21,6 +21,7 @@
         </TabItem>
         <TabItem Header="OTDR" Width="100">
             <DockPanel>
+                <Button DockPanel.Dock="Top" Name="RegisterClient" Margin="5" Width="120" Height="22" Content="Register client"/>
                 <Button DockPanel.Dock="Top" Name="InitializeOtdr" Margin="5" Width="120" Height="22" Content="Initialize OTDR"/>
                 <StackPanel></StackPanel>
             </DockPanel>

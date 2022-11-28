@@ -6,6 +6,7 @@
         Ok = 1,
 
         ClientCleanedAsDead = 10,
+        InvalidDto = 11,
 
         RtuInitializationError = 1000,
         RtuInitializedSuccessfully = 1001,
