@@ -29,6 +29,7 @@ public static class ClientDependencyInjectionExtensions
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile(configPath, false, true);
         IConfiguration config = configBuilder.Build();
+        var cfg = config.GetSection("General");
         container.RegisterInstance(typeof(IConfiguration), "", config);
 
         container
