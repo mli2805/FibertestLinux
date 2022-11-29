@@ -13,7 +13,7 @@ public sealed class Boot : IHostedService
         _logger = logger;
     }
 
-    // Here is all that should be done before start listening to gRPC & Http requests, background workers, etc.
+    // Place here all that should be done before start listening to gRPC & Http requests, background workers, etc.
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), Environment.NewLine + Environment.NewLine + new string('-', 80));
