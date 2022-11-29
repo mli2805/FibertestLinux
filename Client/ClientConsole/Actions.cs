@@ -44,7 +44,7 @@ public static class Actions
 
     private static async Task InitDllsAndConnectOtdr(c2r.c2rClient grpcClient)
     {
-        var dto = new InitializeRtuDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
+        var dto = new InitializeRtuDto(_clientId, Guid.NewGuid(), RtuMaker.IIT);
         var command = new c2rCommand()
         { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
         Console.WriteLine(Resources.SID_long_operation_please_wait);

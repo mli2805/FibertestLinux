@@ -25,19 +25,19 @@ namespace WpfExperiment
         {
             _logger = logger;
             _grpcC2DRequests = grpcC2DRequests;
-            _grpcC2DRequests.ChangeAddress(DcAddress);
             _grpcC2RRequests = grpcC2RRequests;
-            _grpcC2RRequests.Initialize(DcAddress);
         }
 
         public async void RegisterClient()
         {
+            _grpcC2DRequests.ChangeAddress(DcAddress);
             var res = await _grpcC2DRequests.RegisterClient(new RegisterClientDto(_clientId) { UserName = _username, ClientIp = _clientIP });
             _logger.Log(LogLevel.Information, Logs.Client.ToInt(), $"Client registered {res.ReturnCode == ReturnCode.ClientRegisteredSuccessfully}");
         }
 
         public async void InitializeOtdr()
         {
+            _grpcC2RRequests.Initialize(DcAddress);
             _logger.Log(LogLevel.Information, Logs.Client.ToInt(), Resources.SID_long_operation_please_wait);
             var rtu = new Rtu() { Id = Guid.NewGuid(), RtuMaker = RtuMaker.IIT, MainChannel = new NetAddress(RtuAddress, TcpPorts.RtuListenTo) };
             var dto = new InitializeRtuDto(_clientId, rtu.Id, rtu.RtuMaker);

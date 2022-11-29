@@ -49,10 +49,11 @@ public class C2RService : c2r.c2rBase
             var rtuStation = _rtuRepo.Get(request.RtuId);
             if (rtuStation == null)
                 return CreateBadResponse(ReturnCode.RtuNotFound);
-
+            
             var rtuAddress = rtuStation.GetRtuAvailableAddress();
             if (rtuAddress == null)
                 return CreateBadResponse(ReturnCode.RtuNotAvailable);
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"rtuAddress {rtuAddress}");
 
             var response = request.RtuMaker == RtuMaker.IIT
                 ? await TransferCommand(rtuAddress, command.Json)
