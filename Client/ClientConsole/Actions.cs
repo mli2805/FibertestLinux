@@ -18,7 +18,7 @@ public static class Actions
         {
             case 1: await InitDllsAndConnectOtdr(grpcClient); break;
             case 2: await DisconnectOtdr(grpcClient); break;
-            case 3: await RegisterClient(c2dClient); break;
+            case 3: var unused = await RegisterClient(c2dClient); break;
         }
     }
 

@@ -4,7 +4,7 @@ sudo systemctl stop Rtu.service
 echo "сервис RTU остановлен"
 sleep 1s
 
-tar -xzf rtu.tar.gz -C /var/fibertest
+sudo tar -xzf rtu.tar.gz -C /var/fibertest
 echo "файлы распакованы"
 
 sudo systemctl start Rtu.service

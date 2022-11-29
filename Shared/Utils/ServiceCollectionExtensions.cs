@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -18,10 +17,9 @@ public static class ServiceCollectionExtensions
 #pragma warning disable CS8600
             var configuration = (IConfigurationRoot)provider.GetService<IConfiguration>();
 #pragma warning restore CS8600
-            var environment = provider.GetService<IWebHostEnvironment>();
             var options = provider.GetService<IOptionsMonitor<T>>();
 #pragma warning disable CS8604
-            return new WritableOptions<T>(environment, options, configuration, section.Key, file);
+            return new WritableOptions<T>(options, configuration, section.Key, file);
 #pragma warning restore CS8604
         });
     }

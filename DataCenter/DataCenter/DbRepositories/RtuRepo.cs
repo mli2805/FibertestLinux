@@ -16,7 +16,7 @@ namespace Fibertest.DataCenter
         public RtuStation? Get(Guid rtuId)
         {
             var tcpPort = _config.Value.TcpPort;
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"TCP port in datacenter.json is {tcpPort}");
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"TCP port in dc.json is {tcpPort}");
             _config.Update(o => o.TcpPort = 3306);
 
             var newTcpPort = _config.Value.TcpPort;

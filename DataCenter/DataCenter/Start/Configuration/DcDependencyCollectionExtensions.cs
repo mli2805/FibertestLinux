@@ -16,8 +16,6 @@ public static class DcDependencyCollectionExtensions
         services.AddHostedService(x => x.GetService<Boot>());
         services.AddSingleton<MessageQueueService>();
         services.AddHostedService(x => x.GetService<MessageQueueService>());
-        services.AddSingleton<SnmpTrapListenerService>();
-        services.AddHostedService(x => x.GetService<SnmpTrapListenerService>());
 
         return services;
     }
@@ -33,7 +31,6 @@ public static class DcDependencyCollectionExtensions
 
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
-        services.AddSingleton<TrapDataProcessor>();
         services.AddSingleton<ClientGrpcRequestExecutor>();
 
         return services;
