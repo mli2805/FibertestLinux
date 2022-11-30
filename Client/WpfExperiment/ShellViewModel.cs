@@ -35,7 +35,7 @@ namespace WpfExperiment
             _logger.Log(LogLevel.Information, Logs.Client.ToInt(), $"Client registered {res.ReturnCode == ReturnCode.ClientRegisteredSuccessfully}");
         }
 
-        public async void InitializeOtdr()
+        public async void InitializeRtu()
         {
             _grpcC2RRequests.Initialize(DcAddress);
             _logger.Log(LogLevel.Information, Logs.Client.ToInt(), Resources.SID_long_operation_please_wait);

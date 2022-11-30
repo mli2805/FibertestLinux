@@ -5,7 +5,7 @@ using Fibertest.Utils;
 
 namespace Fibertest.Rtu
 {
-    public class Interop
+    public partial class Interop
     {
         private readonly ILogger<Interop> _logger;
 

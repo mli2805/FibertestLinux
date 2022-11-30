@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Charon\" />
-    <Folder Include="RtuMng\" />
   </ItemGroup>
 
 </Project>

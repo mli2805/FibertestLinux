@@ -6,6 +6,7 @@
 	},
 	"Charon" : {
 		"ComPortName" : "/dev/ttyS1",
-		"ComPortSpeed" : 115200
+		"ComPortSpeed": 115200,
+		"PauseAfterReset" :  5
 	}
 }

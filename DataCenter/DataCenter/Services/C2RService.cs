@@ -99,7 +99,7 @@ public class C2RService : c2r.c2rBase
         try
         {
             d2rResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
-            var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
+            var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
                 result == null ? "RTU response is null" : $"RTU response is {result.ReturnCode}");
             return result ?? new RequestAnswer(ReturnCode.Error) { ErrorMessage = "response is null" };
@@ -107,7 +107,7 @@ public class C2RService : c2r.c2rBase
         catch (Exception e)
         {
             _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "TransferCommand: " + e.Message);
-            return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError);
+            return new RequestAnswer(ReturnCode.C2RGrpcOperationError);
         }
     }
 }

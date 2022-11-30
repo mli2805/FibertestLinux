@@ -4,5 +4,7 @@
     {
         public string? ComPortName { get; set; }
         public int ComPortSpeed { get; set; }
+
+        public int PauseAfterReset { get; set; }
     }
 }

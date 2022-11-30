@@ -6,6 +6,7 @@ public static class RtuDependencyCollectionExtension
     {
         services.AddScoped<Interop>(); // для каждого реквеста новый
         services.AddScoped<OtdrManager>(); 
+        services.AddScoped<RtuManager>(); 
         return services;
     }
 }

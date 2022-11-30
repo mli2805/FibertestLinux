@@ -8,12 +8,12 @@ namespace Fibertest.Rtu
     public class RtuGrpcService : d2r.d2rBase
     {
         private readonly ILogger<RtuGrpcService> _logger;
-        private readonly OtdrManager _otdrManager;
+        private readonly RtuManager _rtuManager;
 
-        public RtuGrpcService(ILogger<RtuGrpcService> logger, OtdrManager otdrManager)
+        public RtuGrpcService(ILogger<RtuGrpcService> logger, RtuManager rtuManager)
         {
             _logger = logger;
-            _otdrManager = otdrManager;
+            _rtuManager = rtuManager;
         }
 
         private static readonly JsonSerializerSettings JsonSerializerSettings =
@@ -41,15 +41,14 @@ namespace Fibertest.Rtu
         {
             await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu d2RCommand received");
-            var result = _otdrManager.InitDll() && _otdrManager.ConnectOtdr("192.168.88.101");
+            var result = await _rtuManager.InitializeRtu();
 
-            if (result)
+            if (result.IsInitialized)
             {
                 _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!");
                 return new RtuInitializedDto(ReturnCode.RtuInitializedSuccessfully)
                 {
                     RtuId = dto.RtuId,
-                    Serial = "13579"
                 };
             }
             else
@@ -79,10 +78,8 @@ namespace Fibertest.Rtu
 
         private async Task<RequestAnswer> FreeOtdr()
         {
-            await Task.Delay(1);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "FreeOtdr d2RCommand received");
-            var result = _otdrManager.DisconnectOtdr("192.168.88.101");
-            return new RequestAnswer(result ? ReturnCode.Ok : ReturnCode.Error);
+            return await _rtuManager.FreeOtdr();
         }
     }
 }
