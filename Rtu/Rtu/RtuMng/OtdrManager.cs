@@ -1,19 +1,26 @@
 ﻿using Fibertest.Dto;
 using Fibertest.Utils;
+using Microsoft.Extensions.Options;
 
 namespace Fibertest.Rtu
 {
     public class OtdrManager
     {
+        private readonly IOptions<CharonConfig> _config;
         private readonly ILogger<OtdrManager> _logger;
         private readonly Interop _interop;
         private readonly SerialPortManager _serialPort;
 
-        public OtdrManager(ILogger<OtdrManager> logger, Interop interop, SerialPortManager serialPort)
+        private readonly int _charonTcpPort;
+
+        public OtdrManager(IOptions<CharonConfig> config, ILogger<OtdrManager> logger, Interop interop, SerialPortManager serialPort)
         {
+            _config = config;
             _logger = logger;
             _interop = interop;
             _serialPort = serialPort;
+
+            _charonTcpPort = config.Value.TcpPort != 0 ? config.Value.TcpPort : 1500;
         }
 
         public async Task<RtuInitializedDto> InitializeOtdr(string otdrIp)
@@ -50,18 +57,29 @@ namespace Fibertest.Rtu
             return isOtdrConnected;
         }
 
-        public async Task<RtuInitializedDto> InitializeOtau(RtuInitializedDto result)
+        public async Task<RtuInitializedDto> InitializeOtau(RtuInitializedDto result, string otauIpAddress)
         {
             await Task.Delay(1);
+            var mainCharon = new Charon(new NetAddress(otauIpAddress, 23), true, _config, _logger, _serialPort);
+            var res = mainCharon.InitializeOtauRecursively();
+            if (res == mainCharon.NetAddress)
+                return new RtuInitializedDto(ReturnCode.OtauInitializationError);
+
+            result.Serial = mainCharon.Serial;
+            result.OwnPortCount = mainCharon.OwnPortCount;
+            result.FullPortCount = mainCharon.FullPortCount;
+            result.Children = mainCharon.GetChildrenDto();
+
+            result.ReturnCode = ReturnCode.RtuInitializedSuccessfully;
+
             return result;
         }
 
         public async Task<bool> DisconnectOtdr(string ipAddress)
         {
             await Task.Delay(1);
-            var tcpPort = 1500; // read from ini
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Disconnecting OTDR {ipAddress}...");
-            var result = _interop.InitOtdr(ConnectionTypes.FreePort, ipAddress, tcpPort);
+            var result = _interop.InitOtdr(ConnectionTypes.FreePort, ipAddress, _charonTcpPort);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), 
                 result ? "OTDR disconnected successfully!" : "Failed to disconnect OTDR!");
             return result;

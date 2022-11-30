@@ -11,6 +11,7 @@ namespace Fibertest.Rtu
         private readonly OtdrManager _otdrManager;
 
         private readonly string _otdrIp;
+        private readonly string _otauIp;
 
         public RtuManager(IOptions<RtuConfig> config, ILogger<RtuManager> logger,
             SerialPortManager serialPortManager, OtdrManager otdrManager)
@@ -20,6 +21,7 @@ namespace Fibertest.Rtu
             _otdrManager = otdrManager;
 
             _otdrIp = config.Value.OtdrIp ?? "192.168.88.101";
+            _otauIp = config.Value.OtauIp ?? "192.168.88.101";
         }
 
         public async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto? dto = null)
@@ -35,7 +37,7 @@ namespace Fibertest.Rtu
             if (result.ReturnCode != ReturnCode.Ok)
                 return result;
 
-            return await _otdrManager.InitializeOtau(result);
+            return await _otdrManager.InitializeOtau(result, _otauIp);
         }
 
         public async Task<RequestAnswer> FreeOtdr()

@@ -5,11 +5,13 @@
         public string? ComPortName { get; set; }
         public int ComPortSpeed { get; set; }
 
-        private int _pauseAfterReset;
-        public int PauseAfterReset
-        {
-            get { return _pauseAfterReset == 0 ? 5 : _pauseAfterReset; }
-            set => _pauseAfterReset = value;
-        }
+        public int PauseAfterReset { get; set; }
+
+        public int TcpPort { get; set; }
+
+        public int ConnectionTimeout { get; set; }
+        public int ReadTimeout { get; set; }
+        public int WriteTimeout { get; set; }
+        public int PauseBetweenCommandsMs { get; set; }
     }
 }

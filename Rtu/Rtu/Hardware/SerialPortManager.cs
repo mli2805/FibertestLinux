@@ -28,7 +28,7 @@ public class SerialPortManager
         _logger = logger;
         _comPortName = config.Value.ComPortName ?? "/dev/ttyS1";
         _comPortSpeed = config.Value.ComPortSpeed;
-        _pauseAfterReset = config.Value.PauseAfterReset;
+        _pauseAfterReset = config.Value.PauseAfterReset != 0 ? config.Value.PauseAfterReset : 5;
     }
 
     public ReturnCode ResetCharon()
@@ -68,7 +68,7 @@ public class SerialPortManager
         try
         {
             serialPort.Open();
-            Thread.Sleep(100);
+            Thread.Sleep(500);
 
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} opened successfully.");
         }
@@ -82,7 +82,7 @@ public class SerialPortManager
         try
         {
             serialPort.Write(buffer, 0, 1);
-            Thread.Sleep(100);
+            Thread.Sleep(500);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{(byte)code} sent successfully.");
             serialPort.Close();
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} closed successfully.");
@@ -91,6 +91,6 @@ public class SerialPortManager
         {
             _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't send to {_comPortName}.  {e.Message}");
         }
-        Thread.Sleep(500);
+        Thread.Sleep(300);
     }
 }
