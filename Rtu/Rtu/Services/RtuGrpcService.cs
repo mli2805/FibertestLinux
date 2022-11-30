@@ -24,17 +24,17 @@ namespace Fibertest.Rtu
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), "we are in here");
             object? o = JsonConvert.DeserializeObject(d2RCommand.Json, JsonSerializerSettings);
 
-            object r;
+            object result;
             switch (o)
             {
-                case InitializeRtuDto dto: r = await _rtuManager.InitializeRtu(dto); break;
-                case StopMonitoringDto _: r = await StopMonitoring(); break;
-                case AttachOtauDto dto: r = await AttachOtau(dto); break;
-                case FreeOtdrDto _: r = await _rtuManager.FreeOtdr(); break;
-                default: r = new RequestAnswer(ReturnCode.Error); break;
+                case InitializeRtuDto dto: result = await _rtuManager.InitializeRtu(dto); break;
+                case StopMonitoringDto _: result = await StopMonitoring(); break;
+                case AttachOtauDto dto: result = await AttachOtau(dto); break;
+                case FreeOtdrDto _: result = await _rtuManager.FreeOtdr(); break;
+                default: result = new RequestAnswer(ReturnCode.Error); break;
             }
 
-            return new d2rResponse() { Json = JsonConvert.SerializeObject(r) };
+            return new d2rResponse() { Json = JsonConvert.SerializeObject(result) };
         }
 
         private async Task<RequestAnswer> StopMonitoring()

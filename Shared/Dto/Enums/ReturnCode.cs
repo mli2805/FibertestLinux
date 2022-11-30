@@ -7,6 +7,7 @@
 
         ClientCleanedAsDead = 10,
         InvalidDto = 11,
+        NotImplementedYet = 12,
 
         RtuInitializationError = 1000,
         RtuInitializedSuccessfully = 1001,

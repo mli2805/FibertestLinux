@@ -6,6 +6,7 @@ using Fibertest.Graph;
 using Fibertest.Utils;
 using GrpsClientLib;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using StringResources;
 
 namespace WpfExperiment
@@ -48,7 +49,8 @@ namespace WpfExperiment
             if (res.ReturnCode == ReturnCode.RtuInitializedSuccessfully)
             {
                 Lines.Add("RTU initialized successfully!");
-                Lines.Add($"Serial: {res.Serial}");
+                var json = JsonConvert.SerializeObject(dto);
+                Lines.Add(json);
             }
             else
             {

@@ -37,12 +37,12 @@ namespace Fibertest.Rtu
             if (result.ReturnCode != ReturnCode.Ok)
                 return result;
 
-            result = await _otdrManager.InitializeOtau(result, _otauIp);
-            if (result.IsInitialized)
+            var result2 = await _otdrManager.InitializeOtau(result, _otauIp);
+            if (result2.IsInitialized)
                 _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!");
             else
                 _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "Failed initialize RTU!");
-            return result;
+            return result2;
         }
 
         public async Task<RequestAnswer> FreeOtdr()
