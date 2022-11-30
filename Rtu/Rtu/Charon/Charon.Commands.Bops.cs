@@ -18,7 +18,7 @@ namespace Fibertest.Rtu
             if (!extPorts.ContainsKey(fromOpticalPort))
             {
                 LastErrorMessage = "There is no such extended port. Nothing to do.";
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
                 return true;
             }
 
@@ -58,7 +58,7 @@ namespace Fibertest.Rtu
             if (extPorts.ContainsKey(toOpticalPort))
             {
                 LastErrorMessage = "This is extended port already. Denied.";
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
                 return null;
             }
 
@@ -87,7 +87,7 @@ namespace Fibertest.Rtu
             if (toOpticalPort < 1 || toOpticalPort > OwnPortCount)
             {
                 LastErrorMessage = $"Optical port number should be from 1 to {OwnPortCount}";
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
                 IsLastCommandSuccessful = false;
                 return false;
             }
@@ -95,7 +95,7 @@ namespace Fibertest.Rtu
             if (!additionalOtauAddress.HasValidTcpPort())
             {
                 LastErrorMessage = "Tcp port number should be from 1 to 65355";
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
                 IsLastCommandSuccessful = false;
                 return false;
             }
@@ -103,7 +103,7 @@ namespace Fibertest.Rtu
             if (!additionalOtauAddress.HasValidIp4Address())
             {
                 LastErrorMessage = "Invalid ip address";
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
                 IsLastCommandSuccessful = false;
                 return false;
             }

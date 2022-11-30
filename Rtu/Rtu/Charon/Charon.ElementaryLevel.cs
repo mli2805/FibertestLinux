@@ -60,7 +60,7 @@ namespace Fibertest.Rtu
 
                 var lines = LastAnswer.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 CharonIniSize = int.Parse(lines[0]);
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Charon ini size is {CharonIniSize}", 2);
+                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Charon ini size is {CharonIniSize}");
                 return CharonIniSize;
             }
             catch (Exception e)
@@ -69,7 +69,7 @@ namespace Fibertest.Rtu
                 {
                     IsLastCommandSuccessful = false;
                     LastErrorMessage = $"{e.Message} in GetIniSize!";
-                    _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage);
+                    _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
                 }
 
                 return 0;
@@ -85,14 +85,14 @@ namespace Fibertest.Rtu
                 {
                     // read iniFile error
                     LastErrorMessage = $"Get extended ports error {LastErrorMessage}";
-                    _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+                    _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage);
                     return null; 
                 }
 
                 if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND\r\n")
                 {
                     // charon too old, knows nothing about extensions
-                    _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "Charon too old, knows nothing about extensions");
+                    _logger.Log(LogLevel.Warning, Logs.RtuManager.ToInt(), "Charon too old, knows nothing about extensions");
                     return new Dictionary<int, NetAddress>(); 
                 }
 

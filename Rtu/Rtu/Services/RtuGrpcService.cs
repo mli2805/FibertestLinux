@@ -27,38 +27,14 @@ namespace Fibertest.Rtu
             object r;
             switch (o)
             {
-                case InitializeRtuDto dto: r = await InitializeRtu(dto); break;
+                case InitializeRtuDto dto: r = await _rtuManager.InitializeRtu(dto); break;
                 case StopMonitoringDto _: r = await StopMonitoring(); break;
                 case AttachOtauDto dto: r = await AttachOtau(dto); break;
-                case FreeOtdrDto _: r = await FreeOtdr(); break;
+                case FreeOtdrDto _: r = await _rtuManager.FreeOtdr(); break;
                 default: r = new RequestAnswer(ReturnCode.Error); break;
             }
 
             return new d2rResponse() { Json = JsonConvert.SerializeObject(r) };
-        }
-
-        private async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto dto)
-        {
-            await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "InitializeRtu d2RCommand received");
-            var result = await _rtuManager.InitializeRtu();
-
-            if (result.IsInitialized)
-            {
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!");
-                return new RtuInitializedDto(ReturnCode.RtuInitializedSuccessfully)
-                {
-                    RtuId = dto.RtuId,
-                };
-            }
-            else
-            {
-                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "Failed initialize RTU!");
-                return new RtuInitializedDto(ReturnCode.RtuInitializationError)
-                {
-                    RtuId = dto.RtuId,
-                };
-            }
         }
 
         private async Task<RequestAnswer> StopMonitoring()
@@ -74,12 +50,6 @@ namespace Fibertest.Rtu
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),
                 $"Command to attach OTAU {dto.NetAddress?.ToStringASpace ?? "no address!"} received");
             return new OtauAttachedDto(ReturnCode.Ok);
-        }
-
-        private async Task<RequestAnswer> FreeOtdr()
-        {
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "FreeOtdr d2RCommand received");
-            return await _rtuManager.FreeOtdr();
         }
     }
 }

@@ -47,7 +47,6 @@ namespace Fibertest.Rtu
             int initOtdr;
             try
             {
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Call c++ function InitOTDR with parameters type {type}, ip {ip}, port {port}");
                 initOtdr = InitOTDR((int)type, ip, port);
                 //         SetEqualStepsOfMeasurement();
 

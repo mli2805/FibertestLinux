@@ -59,7 +59,7 @@ namespace Fibertest.Rtu
                 return CharonOperationResult.Ok;
 
             LastErrorMessage = $"Can't toggle switch into {port} port";
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
             return CharonOperationResult.MainOtauError;
         }
 
@@ -70,7 +70,7 @@ namespace Fibertest.Rtu
             if (charon == null)
             {
                 LastErrorMessage = "There is no such optical switch";
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
             }
             return charon;
         }
@@ -94,7 +94,7 @@ namespace Fibertest.Rtu
 
             LastErrorMessage = charon.LastErrorMessage;
             IsLastCommandSuccessful = charon.IsLastCommandSuccessful;
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage, 2);
+            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
             return CharonOperationResult.AdditionalOtauError;
         }
     }
