@@ -62,15 +62,15 @@ public class SerialPortManager
 
     public void ShowOnLedDisplay(LedDisplayCode code)
     {
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Write <{code}> on led display");
+        _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(), $"Write <{code}> on led display");
 
         var serialPort = new SerialPort(_comPortName, _comPortSpeed);
         try
         {
             serialPort.Open();
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
 
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} opened successfully.");
+            _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(), $"{_comPortName} opened successfully.");
         }
         catch (Exception e)
         {
@@ -82,15 +82,15 @@ public class SerialPortManager
         try
         {
             serialPort.Write(buffer, 0, 1);
-            Thread.Sleep(500);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{(byte)code} sent successfully.");
+            Thread.Sleep(1000);
+            _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(), $"{(byte)code:X} sent successfully.");
             serialPort.Close();
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} closed successfully.");
+            _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(), $"{_comPortName} closed successfully.");
         }
         catch (Exception e)
         {
             _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't send to {_comPortName}.  {e.Message}");
         }
-        Thread.Sleep(300);
+        Thread.Sleep(1000);
     }
 }

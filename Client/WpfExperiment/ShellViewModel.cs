@@ -49,7 +49,7 @@ namespace WpfExperiment
             if (res.ReturnCode == ReturnCode.RtuInitializedSuccessfully)
             {
                 Lines.Add("RTU initialized successfully!");
-                var json = JsonConvert.SerializeObject(dto);
+                var json = JsonConvert.SerializeObject(res);
                 Lines.Add(json);
             }
             else
