@@ -27,7 +27,6 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "C2D command received");
                 var request = Deserialize(command.Json);
                 if (request == null)
                     return CreateBadResponse(ReturnCode.FailedDeserializeJson);
@@ -41,8 +40,7 @@ namespace Fibertest.DataCenter
                 _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Client sent {request.What} request");
               
                 var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);
-                return new c2dResponse()
-                { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
+                return new c2dResponse { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
             }
             catch (Exception e)
             {

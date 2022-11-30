@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
@@ -14,12 +15,14 @@ namespace WpfExperiment
         private readonly ILogger<ShellViewModel> _logger;
         private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly GrpcC2RRequests _grpcC2RRequests;
-        public string DcAddress { get; set; } = "192.168.96.21"; // virtualBox Ubuntu 20.04
+        public string DcAddress { get; set; } = "192.168.96.184"; // virtualBox Ubuntu 20.04
         public string RtuAddress { get; set; } = "192.168.96.56"; // MAK 0068613
 
         private readonly string _clientId = "client-connection-id";
         private readonly string _username = "Vasya Pugovkin";
         private readonly string _clientIP = "<<wpf address IP>>";
+
+        public ObservableCollection<string> Lines { get; set; } = new() {" Here will be log "};
 
         public ShellViewModel(ILogger<ShellViewModel> logger, GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests)
         {
@@ -32,7 +35,7 @@ namespace WpfExperiment
         {
             _grpcC2DRequests.ChangeAddress(DcAddress);
             var res = await _grpcC2DRequests.RegisterClient(new RegisterClientDto(_clientId) { UserName = _username, ClientIp = _clientIP });
-            _logger.Log(LogLevel.Information, Logs.Client.ToInt(), $"Client registered {res.ReturnCode == ReturnCode.ClientRegisteredSuccessfully}");
+            Lines.Add($"Client registered {res.ReturnCode == ReturnCode.ClientRegisteredSuccessfully}");
         }
 
         public async void InitializeRtu()
@@ -44,12 +47,12 @@ namespace WpfExperiment
             var res = await _grpcC2RRequests.InitializeRtu(dto);
             if (res.ReturnCode == ReturnCode.RtuInitializedSuccessfully)
             {
-                _logger.Log(LogLevel.Information, Logs.Client.ToInt(), "RTU initialized successfully!");
-                _logger.Log(LogLevel.Information, Logs.Client.ToInt(), $"Serial: {res.Serial}");
+                Lines.Add("RTU initialized successfully!");
+                Lines.Add($"Serial: {res.Serial}");
             }
             else
             {
-                _logger.Log(LogLevel.Error, Logs.Client.ToInt(), $"Failed to initialize RTU. {res.ReturnCode} {res.ErrorMessage}");
+                Lines.Add($"Failed to initialize RTU. {res.ReturnCode} {res.ErrorMessage}");
             }
         }
 

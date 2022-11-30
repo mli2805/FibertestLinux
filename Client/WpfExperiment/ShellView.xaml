@@ -21,6 +21,7 @@
         </TabItem>
         <TabItem Header="OTDR" Width="100">
             <DockPanel>
+                <ListBox DockPanel.Dock="Right" Width="600" ItemsSource="{Binding Lines}"></ListBox>
                 <Button DockPanel.Dock="Top" Name="RegisterClient" Margin="5" Width="120" Height="22" Content="Register client"/>
                 <Button DockPanel.Dock="Top" Name="InitializeRtu" Margin="5" Width="120" Height="22" Content="Initialize RTU"/>
                 <StackPanel></StackPanel>
