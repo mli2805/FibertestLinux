@@ -30,7 +30,6 @@ public class C2RService : c2r.c2rBase
     {
         try
         {
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Transfer command received");
             var request = Deserialize(command.Json);
             if (request == null)
                 return CreateBadResponse(ReturnCode.FailedDeserializeJson);
@@ -93,12 +92,16 @@ public class C2RService : c2r.c2rBase
     {
         var rtuUri = $"http://{rtuAddress}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
+        _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), $"GrpcChannel for {rtuUri}");
         var grpcClientRtu = new d2r.d2rClient(grpcChannelRtu);
+        _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), $"Command content {commandContent}");
+
         var rtuCommand = new d2rCommand() { Json = commandContent };
 
         try
         {
             d2rResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
+            _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), "Got gRPC response");
             var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
                 result == null ? "RTU response is null" : $"RTU response is {result.ReturnCode}");
@@ -107,6 +110,9 @@ public class C2RService : c2r.c2rBase
         catch (Exception e)
         {
             _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "TransferCommand: " + e.Message);
+            if (e.InnerException != null)
+                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "InnerException: " + e.InnerException.Message);
+
             return new RequestAnswer(ReturnCode.C2RGrpcOperationError);
         }
     }
