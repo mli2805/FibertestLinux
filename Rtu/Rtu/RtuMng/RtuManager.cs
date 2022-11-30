@@ -29,7 +29,7 @@ namespace Fibertest.Rtu
             if (res != ReturnCode.Ok)
                 return new RtuInitializedDto(res);
 
-            _serialPortManager.ShowOnLedDisplay(LedDisplayCode.Connecting);
+            //    _serialPortManager.ShowOnLedDisplay(LedDisplayCode.Connecting); // "Connecting..."
 
             var result = await _otdrManager.InitializeOtdr(_otdrIp);
             if (result.ReturnCode != ReturnCode.Ok)
