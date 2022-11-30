@@ -36,18 +36,17 @@ public class SerialPortManager
         try
         {
             var serialPort = new SerialPort(_comPortName, _comPortSpeed);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Com port {_comPortName}  speed {_comPortSpeed}");
             serialPort.Open();
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} port opened successfully");
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"port {_comPortName} opened successfully");
 
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),$"Now RTS is {serialPort.RtsEnable}");
             serialPort.RtsEnable = !serialPort.RtsEnable;
             Thread.Sleep(10);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),$"Now RTS is {serialPort.RtsEnable}");
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Now RTS is toggled to {serialPort.RtsEnable}");
             serialPort.RtsEnable = !serialPort.RtsEnable;
             Thread.Sleep(10);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),$"Now RTS is {serialPort.RtsEnable}");
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Now RTS is toggled to {serialPort.RtsEnable}");
             serialPort.Close();
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"port {_comPortName} closed successfully");
 
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Pause after charon reset {_pauseAfterReset} seconds...");
             Thread.Sleep(TimeSpan.FromSeconds(_pauseAfterReset));
@@ -63,25 +62,27 @@ public class SerialPortManager
 
     public void ShowOnLedDisplay(LedDisplayCode code)
     {
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),$"Write <{code}> on led display", 3);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Write <{code}> on led display");
 
         var serialPort = new SerialPort(_comPortName, _comPortSpeed);
         try
         {
             serialPort.Open();
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} opened successfully.");
         }
         catch (Exception e)
         {
             _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't open {_comPortName}.  {e.Message}");
             return;
         }
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),$"{_comPortName} opened successfully.", 0, 3);
 
         byte[] buffer = { (byte)code };
         try
         {
             serialPort.Write(buffer, 0, 1);
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{(byte)code} sent successfully.");
             serialPort.Close();
+            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} closed successfully.");
         }
         catch (Exception e)
         {

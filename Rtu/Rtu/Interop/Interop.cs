@@ -20,7 +20,6 @@ namespace Fibertest.Rtu
         public bool InitDll()
         {
             var mainFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Main folder is {mainFolder}");
             var iitFolder = mainFolder + "/OtdrMeasEngine";
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"IIT folder is {iitFolder}");
 
