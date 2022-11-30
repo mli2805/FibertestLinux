@@ -68,6 +68,8 @@ public class SerialPortManager
         try
         {
             serialPort.Open();
+            Thread.Sleep(10);
+
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} opened successfully.");
         }
         catch (Exception e)
@@ -80,6 +82,7 @@ public class SerialPortManager
         try
         {
             serialPort.Write(buffer, 0, 1);
+            Thread.Sleep(10);
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{(byte)code} sent successfully.");
             serialPort.Close();
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"{_comPortName} closed successfully.");
@@ -88,5 +91,6 @@ public class SerialPortManager
         {
             _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't send to {_comPortName}.  {e.Message}");
         }
+        Thread.Sleep(1000);
     }
 }
