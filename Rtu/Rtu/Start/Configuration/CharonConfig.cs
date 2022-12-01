@@ -7,8 +7,6 @@
 
         public int PauseAfterReset { get; set; }
 
-        public int TcpPort { get; set; }
-
         public int ConnectionTimeout { get; set; }
         public int ReadTimeout { get; set; }
         public int WriteTimeout { get; set; }

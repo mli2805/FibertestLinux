@@ -26,6 +26,6 @@
             UserName = userName;
         }
 
-        public string UserName;
+        public string? UserName;
     }
 }

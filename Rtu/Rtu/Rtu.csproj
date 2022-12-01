@@ -31,7 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Charon\" />
+    <Reference Include="Optixsoft.OtdrDataFormat">
+      <HintPath>..\..\Optixsoft.OtdrDataFormat\Optixsoft.OtdrDataFormat.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

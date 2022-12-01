@@ -31,7 +31,7 @@
 
     public class OccupyRtuDto
     {
-        public string ConnectionId;
+        public string? ConnectionId;
         public Guid RtuId;
         public RtuOccupationState State;
 
