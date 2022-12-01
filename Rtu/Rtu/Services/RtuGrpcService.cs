@@ -21,8 +21,12 @@ public class RtuGrpcService : d2r.d2rBase
 
     public override async Task<d2rResponse> SendCommand(d2rCommand d2RCommand, ServerCallContext context)
     {
-        _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), "we are in here");
         object? o = JsonConvert.DeserializeObject(d2RCommand.Json, JsonSerializerSettings);
+        if (o == null)
+            return new d2rResponse()
+                { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.FailedDeserializeJson)) };
+        var request = (BaseRtuRequest)o;
+        _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"Request {request.What}");
 
         object result;
         switch (o)
