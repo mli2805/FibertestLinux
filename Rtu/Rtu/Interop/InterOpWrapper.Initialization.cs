@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using Fibertest.Dto;
 using Fibertest.Utils;
@@ -20,10 +19,6 @@ namespace Fibertest.Rtu
 
         public bool InitDll()
         {
-            var mainFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
-            var iitFolder = mainFolder + "/OtdrMeasEngine";
-            _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(), $"IIT folder is {iitFolder}");
-
             IntPtr logFile = IntPtr.Zero;
             IntPtr lenUnit = IntPtr.Zero;
 
@@ -36,7 +31,7 @@ namespace Fibertest.Rtu
                 var creationTime = File.GetLastWriteTime(iitOtdrLib);
                 var version = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
 
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Iit_otdr.so {version}. Libraries are loaded successfully.");
+                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Iit_otdr.so {version} loaded successfully.");
             }
             catch (Exception e)
             {
