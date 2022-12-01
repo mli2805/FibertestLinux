@@ -1,7 +1,5 @@
-﻿using Optixsoft.SharedCommons.SorSerialization;
-using Optixsoft.SorExaminer.OtdrDataFormat;
-using Optixsoft.SorExaminer.OtdrDataFormat.IO;
-using Optixsoft.SorExaminer.OtdrDataFormat.Structures;
+﻿using Fibertest.OtdrDataFormat;
+using Fibertest.OtdrDataFormat.IO;
 using BinaryReader = System.IO.BinaryReader;
 
 namespace Fibertest.Utils
@@ -125,7 +123,7 @@ namespace Fibertest.Utils
                 var embData = sorData.EmbeddedData.EmbeddedDataBlocks[i];
                 var stream = new MemoryStream(embData.Data, 0, embData.DataSize);
                 var reader = new BinaryReader(stream);
-                var opxReader = new Optixsoft.SharedCommons.SorSerialization.BinaryReader(reader);
+                var opxReader = new Fibertest.OtdrDataFormat.IO.BinaryReader(reader);
                 var revNumber = opxReader.ReadUInt16();
 
                 var deserializer = new OpxDeserializer(opxReader, revNumber);

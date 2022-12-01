@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Optixsoft.OtdrDataFormat">
-      <HintPath>..\..\Optixsoft.OtdrDataFormat\Optixsoft.OtdrDataFormat.dll</HintPath>
+    <Reference Include="Fibertest.OtdrDataFormat">
+      <HintPath>..\..\OtdrDataFormat\Fibertest.OtdrDataFormat.dll</HintPath>
     </Reference>
   </ItemGroup>
 

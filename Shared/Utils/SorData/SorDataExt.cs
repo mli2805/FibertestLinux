@@ -1,5 +1,4 @@
-﻿using Optixsoft.SorExaminer.OtdrDataFormat;
-using Optixsoft.SorExaminer.OtdrDataFormat.Structures;
+﻿using Fibertest.OtdrDataFormat;
 
 namespace Fibertest.Utils
 {
@@ -42,6 +41,7 @@ namespace Fibertest.Utils
         public static void EmbedBaseRef(this OtdrDataKnownBlocks measSorData, byte[] baseBytes)
         {
           
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (measSorData.EmbeddedData.EmbeddedDataBlocks != null)
             {
                 var embeddedData = measSorData.EmbeddedData.EmbeddedDataBlocks.ToList();

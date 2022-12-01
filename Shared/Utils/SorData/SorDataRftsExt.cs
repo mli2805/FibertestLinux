@@ -1,7 +1,5 @@
-﻿using Optixsoft.SharedCommons.SorSerialization;
-using Optixsoft.SorExaminer.OtdrDataFormat;
-using Optixsoft.SorExaminer.OtdrDataFormat.IO;
-using Optixsoft.SorExaminer.OtdrDataFormat.Structures;
+﻿using Fibertest.OtdrDataFormat;
+using Fibertest.OtdrDataFormat.IO;
 using BinaryWriter = System.IO.BinaryWriter;
 
 namespace Fibertest.Utils
@@ -27,7 +25,7 @@ namespace Fibertest.Utils
             {
                 BinaryWriter w = new BinaryWriter(ms);
                 OpxSerializer opxSerializer = new OpxSerializer(
-                    new Optixsoft.SharedCommons.SorSerialization.BinaryWriter(
+                    new Fibertest.OtdrDataFormat.IO.BinaryWriter(
                         w, sorData.GeneralParameters.Language.GetEncoding()), 
                     new FixDistancesContext(sorData.FixedParameters));
 

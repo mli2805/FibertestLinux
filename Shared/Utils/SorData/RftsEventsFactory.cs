@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Fibertest.Dto;
-using Optixsoft.SorExaminer.OtdrDataFormat;
-using Optixsoft.SorExaminer.OtdrDataFormat.Structures;
+using Fibertest.OtdrDataFormat;
 
 namespace Fibertest.Utils
 {

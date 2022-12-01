@@ -1,5 +1,5 @@
 ﻿using Fibertest.Dto;
-using Optixsoft.SorExaminer.OtdrDataFormat;
+using Fibertest.OtdrDataFormat;
 
 namespace Fibertest.Utils
 {
