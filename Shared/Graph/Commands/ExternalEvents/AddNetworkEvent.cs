@@ -5,13 +5,12 @@
 
 using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class AddNetworkEvent
 {
-    public class AddNetworkEvent
-    {
-        public DateTime EventTimestamp;
-        public Guid RtuId;
-        public ChannelEvent OnMainChannel;
-        public ChannelEvent OnReserveChannel;
-    }
+    public DateTime EventTimestamp;
+    public Guid RtuId;
+    public ChannelEvent OnMainChannel;
+    public ChannelEvent OnReserveChannel;
 }

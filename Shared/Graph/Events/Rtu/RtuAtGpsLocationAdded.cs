@@ -1,15 +1,13 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class RtuAtGpsLocationAdded
 {
-    
-    public class RtuAtGpsLocationAdded
-    {
-        public Guid Id;
-        public Guid NodeId;
-        public double Latitude;
-        public double Longitude;
+    public Guid Id;
+    public Guid NodeId;
+    public double Latitude;
+    public double Longitude;
 
-        public string? Title;
-        public string? Comment;
+    public string? Title;
+    public string? Comment;
 
-    }
 }

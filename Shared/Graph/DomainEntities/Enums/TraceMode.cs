@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public enum TraceMode
 {
-    public enum TraceMode
-    {
-        Dark,
-        Light
-    }
+    Dark,
+    Light
 }

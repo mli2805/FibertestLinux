@@ -1,8 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class Laser
 {
-    public class Laser
-    {
-        public string? laserUnit;
-    }
+    public string? laserUnit;
 }

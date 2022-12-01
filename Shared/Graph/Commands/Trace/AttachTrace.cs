@@ -1,12 +1,11 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class AttachTrace
 {
-    public class AttachTrace
-    {
-        public Guid TraceId;
+    public Guid TraceId;
 
-        public OtauPortDto? OtauPortDto;
+    public OtauPortDto? OtauPortDto;
 
-    }
 }

@@ -1,8 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class FiberRemoved
 {
-    
-    public class FiberRemoved
-    {
-        public Guid FiberId;
-    }
+    public Guid FiberId;
 }

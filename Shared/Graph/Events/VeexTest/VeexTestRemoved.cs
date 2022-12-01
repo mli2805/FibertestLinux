@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class VeexTestRemoved
 {
-    public class VeexTestRemoved
-    {
-        public Guid TestId;
-    }
+    public Guid TestId;
 }

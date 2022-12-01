@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class CleanTrace
 {
-    public class CleanTrace
-    {
-        public Guid TraceId;
-    }
+    public Guid TraceId;
 }

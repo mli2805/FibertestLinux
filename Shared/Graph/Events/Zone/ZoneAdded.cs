@@ -1,11 +1,10 @@
-﻿namespace Fibertest.Graph
-{
-    public class ZoneAdded
-    {
-        public Guid ZoneId;
-        public bool IsDefaultZone;
+﻿namespace Fibertest.Graph;
 
-        public string? Title;
-        public string? Comment;
-    }
+public class ZoneAdded
+{
+    public Guid ZoneId;
+    public bool IsDefaultZone;
+
+    public string? Title;
+    public string? Comment;
 }

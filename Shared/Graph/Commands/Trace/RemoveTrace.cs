@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class RemoveTrace
 {
-    public class RemoveTrace
-    {
-        public Guid TraceId;
-    }
+    public Guid TraceId;
 }

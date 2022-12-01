@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
-{
-    public class RemoveUnused
-    {
+﻿namespace Fibertest.Graph;
 
-    }
+public class RemoveUnused
+{
+
 }

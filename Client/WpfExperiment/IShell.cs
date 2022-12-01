@@ -1,6 +1,5 @@
-﻿namespace WpfExperiment
+﻿namespace WpfExperiment;
+
+internal interface IShell
 {
-    internal interface IShell
-    {
-    }
 }

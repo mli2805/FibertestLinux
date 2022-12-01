@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class UsersMachineKeyAssigned
 {
-    public class UsersMachineKeyAssigned
-    {
-        public Guid UserId;
-        public string? MachineKey;
-    }
+    public Guid UserId;
+    public string? MachineKey;
 }

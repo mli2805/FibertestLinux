@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Graph
-{
-    public class RemoveRtu
-    {
-        public Guid RtuId;
-        public Guid RtuNodeId;
+﻿namespace Fibertest.Graph;
 
-    }
+public class RemoveRtu
+{
+    public Guid RtuId;
+    public Guid RtuNodeId;
+
 }

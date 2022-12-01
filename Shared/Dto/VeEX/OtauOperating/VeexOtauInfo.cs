@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class VeexOtauInfo
 {
-    public class VeexOtauInfo
-    {
-        public List<VeexOtau>? OtauList;
-        public VeexOtauCascadingScheme? OtauScheme;
-    }
+    public List<VeexOtau>? OtauList;
+    public VeexOtauCascadingScheme? OtauScheme;
 }

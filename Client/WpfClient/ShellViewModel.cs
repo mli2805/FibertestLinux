@@ -1,8 +1,7 @@
 ﻿using Caliburn.Micro;
 
-namespace WpfClient
+namespace WpfClient;
+
+public class ShellViewModel : PropertyChangedBase, IShell
 {
-    public class ShellViewModel : PropertyChangedBase, IShell
-    {
-    }
 }

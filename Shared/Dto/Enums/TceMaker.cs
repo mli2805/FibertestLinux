@@ -1,9 +1,8 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public enum TceMaker
 {
-    public enum TceMaker
-    {
-        Huawei,
-        ZTE,
-    }
+    Huawei,
+    ZTE,
 }

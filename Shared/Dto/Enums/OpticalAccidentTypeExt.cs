@@ -1,17 +1,16 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public static class OpticalAccidentTypeExt
 {
-    public static class OpticalAccidentTypeExt
+    public static string ToLetter(this OpticalAccidentType type)
     {
-        public static string ToLetter(this OpticalAccidentType type)
+        switch (type)
         {
-            switch (type)
-            {
-                case OpticalAccidentType.Break: return @"B";
-                case OpticalAccidentType.Reflectance: return @"R";
-                case OpticalAccidentType.Loss: return @"L";
-                case OpticalAccidentType.LossCoeff: return @"C";
-                default: return @"N";
-            }
+            case OpticalAccidentType.Break: return @"B";
+            case OpticalAccidentType.Reflectance: return @"R";
+            case OpticalAccidentType.Loss: return @"L";
+            case OpticalAccidentType.LossCoeff: return @"C";
+            default: return @"N";
         }
     }
 }

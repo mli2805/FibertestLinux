@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum RtuPartState
 {
-    public enum RtuPartState
-    {
-        Broken = -1,
-        NotSetYet = 0,
-        Ok = 1,
-    }
+    Broken = -1,
+    NotSetYet = 0,
+    Ok = 1,
 }

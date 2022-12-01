@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class ExcludeEquipmentFromTrace
 {
-    public class ExcludeEquipmentFromTrace
-    {
-        public Guid EquipmentId;
-        public Guid TraceId;
-        public int IndexInTrace;
-    }
+    public Guid EquipmentId;
+    public Guid TraceId;
+    public int IndexInTrace;
 }

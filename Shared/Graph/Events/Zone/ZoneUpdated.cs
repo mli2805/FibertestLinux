@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Graph
-{
-    public class ZoneUpdated
-    {
-        public Guid ZoneId;
+﻿namespace Fibertest.Graph;
 
-        public string? Title;
-        public string? Comment;
-    }
+public class ZoneUpdated
+{
+    public Guid ZoneId;
+
+    public string? Title;
+    public string? Comment;
 }

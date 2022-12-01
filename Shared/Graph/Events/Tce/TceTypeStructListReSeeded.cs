@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class TceTypeStructListReSeeded
 {
-    public class TceTypeStructListReSeeded
-    {
-        public List<TceTypeStruct>? TceTypes;
-    }
+    public List<TceTypeStruct>? TceTypes;
 }

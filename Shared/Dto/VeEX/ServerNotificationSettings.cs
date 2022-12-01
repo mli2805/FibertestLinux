@@ -1,11 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class ServerNotificationSettings
 {
-    public class ServerNotificationSettings
-    {
-        public string? state;
-        public List<string>? eventTypes;
-        public string? url;
-    }
+    public string? state;
+    public List<string>? eventTypes;
+    public string? url;
 }

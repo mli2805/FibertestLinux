@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public struct PointLatLng
 {
-    public struct PointLatLng
-    {
-        public double Lat;
-        public double Lng;
-    }
+    public double Lat;
+    public double Lng;
 }

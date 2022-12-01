@@ -1,15 +1,14 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class VeexOtauAddress
 {
-    public class VeexOtauAddress
-    {
-        public string? address;
-        public int port;
-    }
+    public string? address;
+    public int port;
+}
     
-    public class NewOtau
-    {
-        public string? id;
-        public VeexOtauAddress? connectionParameters;
-    }
+public class NewOtau
+{
+    public string? id;
+    public VeexOtauAddress? connectionParameters;
 }

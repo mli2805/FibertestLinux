@@ -1,14 +1,13 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class UpdateMeasurementDto
 {
-    public class UpdateMeasurementDto
-    {
-        public string? ClientIp;
-        public int SorFileId;
+    public string? ClientIp;
+    public int SorFileId;
 
-        public EventStatus EventStatus;
-        public DateTime StatusChangedTimestamp;
-        public string? StatusChangedByUser;
+    public EventStatus EventStatus;
+    public DateTime StatusChangedTimestamp;
+    public string? StatusChangedByUser;
 
-        public string? Comment;
-    }
+    public string? Comment;
 }

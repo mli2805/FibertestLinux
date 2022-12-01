@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class BaseRefFile
 {
-    public class BaseRefFile
-    {
-        public BaseRefType Type;
-        public object? File;
-    }
+    public BaseRefType Type;
+    public object? File;
 }

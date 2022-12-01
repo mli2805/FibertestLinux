@@ -1,9 +1,8 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public enum RtuMaker
 {
-    public enum RtuMaker
-    {
-        IIT,
-        VeEX,
-    }
+    IIT,
+    VeEX,
 }

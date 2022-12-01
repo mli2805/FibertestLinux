@@ -1,16 +1,14 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class GponPortRelation
 {
-    
-    public class GponPortRelation
-    {
-        // public Guid Id;
-        public Guid TceId;
-        public int SlotPosition;
-        public int GponInterface;
-        public Guid RtuId;
-        public OtauPortDto? OtauPortDto;
-        public Guid TraceId;
-    }
+    // public Guid Id;
+    public Guid TceId;
+    public int SlotPosition;
+    public int GponInterface;
+    public Guid RtuId;
+    public OtauPortDto? OtauPortDto;
+    public Guid TraceId;
 }

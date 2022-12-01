@@ -1,15 +1,14 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum DbOptimizationStage
 {
-    public enum DbOptimizationStage
-    {
-        Starting,
-        SorsRemoving,
-        TableCompressing,
-        ModelAdjusting,
+    Starting,
+    SorsRemoving,
+    TableCompressing,
+    ModelAdjusting,
 
-        ModelCreating,
+    ModelCreating,
 
-        OptimizationDone,
-        SnapshotDone,
-    }
+    OptimizationDone,
+    SnapshotDone,
 }

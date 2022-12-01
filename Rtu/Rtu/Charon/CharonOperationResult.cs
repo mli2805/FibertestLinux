@@ -1,11 +1,10 @@
-﻿namespace Fibertest.Rtu
+﻿namespace Fibertest.Rtu;
+
+public enum CharonOperationResult
 {
-    public enum CharonOperationResult
-    {
-        OtdrError = -9,
-        AdditionalOtauError = -2,
-        MainOtauError = -1,
-        LogicalError = 0,
-        Ok = 1,
-    }
+    OtdrError = -9,
+    AdditionalOtauError = -2,
+    MainOtauError = -1,
+    LogicalError = 0,
+    Ok = 1,
 }

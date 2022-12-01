@@ -2,19 +2,17 @@
 
 // ReSharper disable InconsistentNaming
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class NetworkEvent
 {
-    
-    public class NetworkEvent
-    {
-        public int Ordinal;
+    public int Ordinal;
 
-        public DateTime EventTimestamp;
-        public Guid RtuId;
-        public ChannelEvent OnMainChannel;
-        public ChannelEvent OnReserveChannel;
+    public DateTime EventTimestamp;
+    public Guid RtuId;
+    public ChannelEvent OnMainChannel;
+    public ChannelEvent OnReserveChannel;
 
-        public bool IsRtuAvailable;
+    public bool IsRtuAvailable;
 
-    }
 }

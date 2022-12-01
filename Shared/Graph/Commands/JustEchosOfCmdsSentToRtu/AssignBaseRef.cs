@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Graph
-{
-    public class AssignBaseRef
-    {
-        public Guid TraceId;
+﻿namespace Fibertest.Graph;
 
-        public List<BaseRef> BaseRefs = new();
-    }
+public class AssignBaseRef
+{
+    public Guid TraceId;
+
+    public List<BaseRef> BaseRefs = new();
 }

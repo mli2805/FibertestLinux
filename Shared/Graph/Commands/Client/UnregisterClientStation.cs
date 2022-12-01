@@ -1,6 +1,5 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class UnregisterClientStation
 {
-    public class UnregisterClientStation
-    {
-    }
 }

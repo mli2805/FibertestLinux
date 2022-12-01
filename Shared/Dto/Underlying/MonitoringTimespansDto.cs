@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class MonitoringTimespansDto
 {
-    public class MonitoringTimespansDto
-    {
-        public TimeSpan PreciseMeas;
-        public TimeSpan PreciseSave;
-        public TimeSpan FastSave;
-    }
+    public TimeSpan PreciseMeas;
+    public TimeSpan PreciseSave;
+    public TimeSpan FastSave;
 }

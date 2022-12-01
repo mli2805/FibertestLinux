@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum AccidentPlace
 {
-    public enum AccidentPlace
-    {
-        InNode, BetweenNodes, BadSegment
-    }
+    InNode, BetweenNodes, BadSegment
 }

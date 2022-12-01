@@ -2,89 +2,88 @@
 using Fibertest.Utils;
 using Microsoft.Extensions.Options;
 
-namespace Fibertest.Rtu
+namespace Fibertest.Rtu;
+
+public class OtdrManager
 {
-    public class OtdrManager
+    private readonly IOptions<CharonConfig> _config;
+    private readonly ILogger<OtdrManager> _logger;
+    private readonly InterOpWrapper _interOpWrapper;
+    private readonly SerialPortManager _serialPort;
+
+    private const string CharonIp = "192.168.88.101";
+
+    private const int OtdrTcpPort = 1500;
+
+    public OtdrManager(IOptions<CharonConfig> config, ILogger<OtdrManager> logger, InterOpWrapper interOpWrapper, SerialPortManager serialPort)
     {
-        private readonly IOptions<CharonConfig> _config;
-        private readonly ILogger<OtdrManager> _logger;
-        private readonly InterOpWrapper _interOpWrapper;
-        private readonly SerialPortManager _serialPort;
+        _config = config;
+        _logger = logger;
+        _interOpWrapper = interOpWrapper;
+        _serialPort = serialPort;
 
-        private const string CharonIp = "192.168.88.101";
+    }
 
-        private const int OtdrTcpPort = 1500;
+    public async Task<RtuInitializedDto> InitializeOtdr()
+    {
+        if (!_interOpWrapper.InitDll())
+            return new RtuInitializedDto(ReturnCode.OtdrInitializationCannotInitializeDll);
 
-        public OtdrManager(IOptions<CharonConfig> config, ILogger<OtdrManager> logger, InterOpWrapper interOpWrapper, SerialPortManager serialPort)
-        {
-            _config = config;
-            _logger = logger;
-            _interOpWrapper = interOpWrapper;
-            _serialPort = serialPort;
+        Thread.Sleep(300);
+        if (! await ConnectOtdr())
+            return new RtuInitializedDto(ReturnCode.FailedToConnectOtdr);
 
-        }
+        var result = new RtuInitializedDto(ReturnCode.Ok);
 
-        public async Task<RtuInitializedDto> InitializeOtdr()
-        {
-            if (!_interOpWrapper.InitDll())
-                return new RtuInitializedDto(ReturnCode.OtdrInitializationCannotInitializeDll);
+        result.OtdrAddress = new NetAddress(CharonIp, OtdrTcpPort);
+        result.Mfid = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoMfid);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"MFID = {result.Mfid}");
+        result.Mfsn = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoMfsn);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"MFSN = {result.Mfsn}");
+        result.Omid = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoOmid);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"OMID = {result.Omid}");
+        result.Omsn = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoOmsn);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"OMSN = {result.Omsn}");
 
-            Thread.Sleep(300);
-            if (! await ConnectOtdr())
-                return new RtuInitializedDto(ReturnCode.FailedToConnectOtdr);
+        return result;
+    }
 
-            var result = new RtuInitializedDto(ReturnCode.Ok);
+    private async Task<bool>  ConnectOtdr()
+    {
+        await Task.Delay(1);
+        var tcpPort = 1500; // read from ini
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Connecting to OTDR {CharonIp}:{tcpPort}...");
+        var isOtdrConnected = _interOpWrapper.InitOtdr(ConnectionTypes.Tcp, CharonIp, tcpPort);
+        if (!isOtdrConnected)
+            _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectOtdr);
+        return isOtdrConnected;
+    }
 
-            result.OtdrAddress = new NetAddress(CharonIp, OtdrTcpPort);
-            result.Mfid = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoMfid);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"MFID = {result.Mfid}");
-            result.Mfsn = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoMfsn);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"MFSN = {result.Mfsn}");
-            result.Omid = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoOmid);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"OMID = {result.Omid}");
-            result.Omsn = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoOmsn);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"OMSN = {result.Omsn}");
+    public async Task<RtuInitializedDto> InitializeOtau(RtuInitializedDto result)
+    {
+        await Task.Delay(1);
+        var mainCharon = new Charon(new NetAddress(CharonIp, 23), true, _config, _logger, _serialPort);
+        var res = mainCharon.InitializeOtauRecursively();
+        if (res == mainCharon.NetAddress)
+            return new RtuInitializedDto(ReturnCode.OtauInitializationError);
 
-            return result;
-        }
+        result.Serial = mainCharon.Serial;
+        result.OwnPortCount = mainCharon.OwnPortCount;
+        result.FullPortCount = mainCharon.FullPortCount;
+        result.Children = mainCharon.GetChildrenDto();
 
-        private async Task<bool>  ConnectOtdr()
-        {
-            await Task.Delay(1);
-            var tcpPort = 1500; // read from ini
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Connecting to OTDR {CharonIp}:{tcpPort}...");
-            var isOtdrConnected = _interOpWrapper.InitOtdr(ConnectionTypes.Tcp, CharonIp, tcpPort);
-            if (!isOtdrConnected)
-                _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectOtdr);
-            return isOtdrConnected;
-        }
+        result.ReturnCode = ReturnCode.RtuInitializedSuccessfully;
 
-        public async Task<RtuInitializedDto> InitializeOtau(RtuInitializedDto result)
-        {
-            await Task.Delay(1);
-            var mainCharon = new Charon(new NetAddress(CharonIp, 23), true, _config, _logger, _serialPort);
-            var res = mainCharon.InitializeOtauRecursively();
-            if (res == mainCharon.NetAddress)
-                return new RtuInitializedDto(ReturnCode.OtauInitializationError);
+        return result;
+    }
 
-            result.Serial = mainCharon.Serial;
-            result.OwnPortCount = mainCharon.OwnPortCount;
-            result.FullPortCount = mainCharon.FullPortCount;
-            result.Children = mainCharon.GetChildrenDto();
-
-            result.ReturnCode = ReturnCode.RtuInitializedSuccessfully;
-
-            return result;
-        }
-
-        public async Task<bool> DisconnectOtdr()
-        {
-            await Task.Delay(1);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Disconnecting OTDR {CharonIp}...");
-            var result = _interOpWrapper.InitOtdr(ConnectionTypes.FreePort, CharonIp, OtdrTcpPort);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), 
-                result ? "OTDR disconnected successfully!" : "Failed to disconnect OTDR!");
-            return result;
-        }
+    public async Task<bool> DisconnectOtdr()
+    {
+        await Task.Delay(1);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Disconnecting OTDR {CharonIp}...");
+        var result = _interOpWrapper.InitOtdr(ConnectionTypes.FreePort, CharonIp, OtdrTcpPort);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), 
+            result ? "OTDR disconnected successfully!" : "Failed to disconnect OTDR!");
+        return result;
     }
 }

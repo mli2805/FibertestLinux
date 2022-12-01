@@ -4,50 +4,47 @@ using Fibertest.Dto;
 using Fibertest.Utils;
 using Serilog;
 
-namespace Fibertest.Rtu
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-            builder.WebHost
-                .ConfigureKestrel(o =>
-                {
-                    o.Listen(IPAddress.Any, (int)TcpPorts.RtuListenTo);
-                })
-                .ConfigureAppConfiguration((_, config) =>
-                {
-                    var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-                    var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-                    var configFile = Path.Combine(basePath, @"../config/rtu.json");
-                    config.AddJsonFile(configFile, false, true);
-                });
+namespace Fibertest.Rtu;
 
-            // Add services to the container.
-            builder.Services.AddGrpc(o =>
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        builder.WebHost
+            .ConfigureKestrel(o =>
             {
-                o.Interceptors.Add<RtuLoggerInterceptor>();
+                o.Listen(IPAddress.Any, (int)TcpPorts.RtuListenTo);
+            })
+            .ConfigureAppConfiguration((_, config) =>
+            {
+                var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+                var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
+                var configFile = Path.Combine(basePath, @"../config/rtu.json");
+                config.AddJsonFile(configFile, false, true);
             });
 
-            builder.Services
-                .AddConfig(builder.Configuration)
-                .AddDependencyGroup();
+        // Add services to the container.
+        builder.Services.AddGrpc(o =>
+        {
+            o.Interceptors.Add<RtuLoggerInterceptor>();
+        });
 
-            var logger = LoggerConfigurationFactory.Configure().CreateLogger();
+        builder.Services
+            .AddConfig(builder.Configuration)
+            .AddDependencyGroup();
 
-            builder.Logging.ClearProviders();
-            builder.Logging.AddSerilog(logger);
+        var logger = LoggerConfigurationFactory.Configure().CreateLogger();
 
-            var app = builder.Build();
+        builder.Logging.ClearProviders();
+        builder.Logging.AddSerilog(logger);
 
-            // Configure the HTTP request pipeline.
-            app.MapGrpcService<RtuGrpcService>();
-            app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+        var app = builder.Build();
 
-            app.Run();
-        }
+        // Configure the HTTP request pipeline.
+        app.MapGrpcService<RtuGrpcService>();
+        app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+
+        app.Run();
     }
-
-
 }

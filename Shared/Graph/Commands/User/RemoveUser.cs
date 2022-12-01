@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
-{
-    public class RemoveUser
-    {
-        public Guid UserId;
+﻿namespace Fibertest.Graph;
 
-    }
+public class RemoveUser
+{
+    public Guid UserId;
+
 }

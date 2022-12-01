@@ -1,11 +1,9 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class TraceUpdated
 {
-    
-    public class TraceUpdated
-    {
-        public Guid Id;
-        public string? Title;
-        public TraceMode Mode;
-        public string? Comment;
-    }
+    public Guid Id;
+    public string? Title;
+    public TraceMode Mode;
+    public string? Comment;
 }

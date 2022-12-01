@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum RtuPartStateChanges
 {
-    public enum RtuPartStateChanges
-    {
-        OnlyWorse, NoChanges, DifferentPartsHaveDifferentChanges, OnlyBetter
-    }
+    OnlyWorse, NoChanges, DifferentPartsHaveDifferentChanges, OnlyBetter
 }

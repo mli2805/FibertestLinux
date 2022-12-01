@@ -1,14 +1,13 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class BaseRequest
 {
-    public class BaseRequest
+    public string ConnectionId;
+
+    public BaseRequest(string connectionId)
     {
-        public string ConnectionId;
-
-        public BaseRequest(string connectionId)
-        {
-            ConnectionId = connectionId;
-        }
-        public virtual string What => "BaseRequest";
-
+        ConnectionId = connectionId;
     }
+    public virtual string What => "BaseRequest";
+
 }

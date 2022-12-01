@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class RemoveEventsAndSors
 {
-    public class RemoveEventsAndSors
-    {
-        public DateTime UpTo;
-        public bool IsMeasurementsNotEvents;
-        public bool IsOpticalEvents;
-        public bool IsNetworkEvents;
-    }
+    public DateTime UpTo;
+    public bool IsMeasurementsNotEvents;
+    public bool IsOpticalEvents;
+    public bool IsNetworkEvents;
 }

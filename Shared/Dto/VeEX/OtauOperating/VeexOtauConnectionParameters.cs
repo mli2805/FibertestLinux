@@ -1,12 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+[Serializable]
+public class VeexOtauConnectionParameters
 {
-    [Serializable]
-    public class VeexOtauConnectionParameters
-    {
-        public string? address;
-        public int port;
-        public string? protocol;
-    }
+    public string? address;
+    public int port;
+    public string? protocol;
 }

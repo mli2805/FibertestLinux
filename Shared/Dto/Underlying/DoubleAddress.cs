@@ -1,19 +1,18 @@
-﻿namespace Fibertest.Dto
-{
-    public class DoubleAddress
-    {
-        public NetAddress Main = new NetAddress();
-        public bool HasReserveAddress;
-        public NetAddress Reserve = new NetAddress();
+﻿namespace Fibertest.Dto;
 
-        public DoubleAddress Clone()
+public class DoubleAddress
+{
+    public NetAddress Main = new NetAddress();
+    public bool HasReserveAddress;
+    public NetAddress Reserve = new NetAddress();
+
+    public DoubleAddress Clone()
+    {
+        return new DoubleAddress()
         {
-            return new DoubleAddress()
-            {
-                Main = Main.Clone(),
-                HasReserveAddress = HasReserveAddress,
-                Reserve = Reserve.Clone(),
-            };
-        }
+            Main = Main.Clone(),
+            HasReserveAddress = HasReserveAddress,
+            Reserve = Reserve.Clone(),
+        };
     }
 }

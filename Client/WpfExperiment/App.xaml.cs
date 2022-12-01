@@ -1,13 +1,12 @@
-﻿namespace WpfExperiment
+﻿namespace WpfExperiment;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App
+    public App()
     {
-        public App()
-        {
-             InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

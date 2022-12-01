@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class PortWithTraceDto
 {
-    public class PortWithTraceDto
-    {
-        public OtauPortDto? OtauPort;
-        public Guid TraceId;
-        public FiberState LastTraceState;
-    }
+    public OtauPortDto? OtauPort;
+    public Guid TraceId;
+    public FiberState LastTraceState;
 }

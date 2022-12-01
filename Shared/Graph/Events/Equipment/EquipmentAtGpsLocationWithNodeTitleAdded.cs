@@ -1,17 +1,16 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
-{
-    public class EquipmentAtGpsLocationWithNodeTitleAdded
-    {
-        public Guid EmptyNodeEquipmentId;
-        public Guid RequestedEquipmentId;
-        public Guid NodeId;
-        public EquipmentType Type;
-        public double Latitude;
-        public double Longitude;
+namespace Fibertest.Graph;
 
-        public string? Title;
-        public string? Comment;
-    }
+public class EquipmentAtGpsLocationWithNodeTitleAdded
+{
+    public Guid EmptyNodeEquipmentId;
+    public Guid RequestedEquipmentId;
+    public Guid NodeId;
+    public EquipmentType Type;
+    public double Latitude;
+    public double Longitude;
+
+    public string? Title;
+    public string? Comment;
 }

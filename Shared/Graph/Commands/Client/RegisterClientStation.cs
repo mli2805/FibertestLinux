@@ -1,9 +1,8 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class RegisterClientStation
 {
-    public class RegisterClientStation
-    {
-        public ReturnCode RegistrationResult;
-    }
+    public ReturnCode RegistrationResult;
 }

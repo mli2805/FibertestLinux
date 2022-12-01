@@ -1,14 +1,13 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum MonitoringCurrentStep
 {
-    public enum MonitoringCurrentStep
-    {
-        Idle,
-        Toggle,
-        Measure,
-        FailedOtauProblem,
-        FailedOtdrProblem,
-        Interrupted,
-        Analysis,
-        MeasurementFinished,
-    }
+    Idle,
+    Toggle,
+    Measure,
+    FailedOtauProblem,
+    FailedOtdrProblem,
+    Interrupted,
+    Analysis,
+    MeasurementFinished,
 }

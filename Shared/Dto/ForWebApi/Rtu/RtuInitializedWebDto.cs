@@ -1,12 +1,11 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class RtuInitializedWebDto
 {
-    public class RtuInitializedWebDto
-    {
-        public Guid RtuId;
+    public Guid RtuId;
 
-        public ReturnCode ReturnCode;
-        public string? ErrorMessage;
+    public ReturnCode ReturnCode;
+    public string? ErrorMessage;
 
-        public RtuNetworkSettingsDto? RtuNetworkSettings;
-    }
+    public RtuNetworkSettingsDto? RtuNetworkSettings;
 }

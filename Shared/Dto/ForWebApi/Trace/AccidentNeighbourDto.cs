@@ -1,11 +1,10 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class AccidentNeighbourDto
 {
-    public class AccidentNeighbourDto
-    {
-        public int LandmarkIndex;
-        public string? Title;
-        public GeoPoint? Coors;
-        public double ToRtuOpticalDistanceKm;
-        public double ToRtuPhysicalDistanceKm;
-    }
+    public int LandmarkIndex;
+    public string? Title;
+    public GeoPoint? Coors;
+    public double ToRtuOpticalDistanceKm;
+    public double ToRtuPhysicalDistanceKm;
 }

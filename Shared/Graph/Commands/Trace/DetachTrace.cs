@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class DetachTrace
 {
-    public class DetachTrace
-    {
-        public Guid TraceId;
-    }
+    public Guid TraceId;
 }

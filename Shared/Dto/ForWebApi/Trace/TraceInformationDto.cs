@@ -1,13 +1,12 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class TraceInformationDto
 {
-    public class TraceInformationDto
-    {
-        public TraceHeaderDto Header = new TraceHeaderDto();
+    public TraceHeaderDto Header = new TraceHeaderDto();
 
-        public List<TraceInfoTableItem>? Equipment;
-        public List<TraceInfoTableItem>? Nodes;
+    public List<TraceInfoTableItem>? Equipment;
+    public List<TraceInfoTableItem>? Nodes;
 
-        public bool IsLightMonitoring;
-        public string? Comment;
-    }
+    public bool IsLightMonitoring;
+    public string? Comment;
 }

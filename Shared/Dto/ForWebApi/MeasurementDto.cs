@@ -1,11 +1,10 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class MeasurementDto
 {
-    public class MeasurementDto
-    {
-        public int SorFileId;
-        public BaseRefType BaseRefType;
-        public DateTime EventRegistrationTimestamp;
-        public bool IsEvent;
-        public FiberState TraceState;
-    }
+    public int SorFileId;
+    public BaseRefType BaseRefType;
+    public DateTime EventRegistrationTimestamp;
+    public bool IsEvent;
+    public FiberState TraceState;
 }

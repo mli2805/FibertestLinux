@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class BaseRefInfoDto
 {
-    public class BaseRefInfoDto
-    {
-        public int SorFileId;
-        public BaseRefType BaseRefType;
-        public DateTime AssignmentTimestamp;
-        public string? Username;
-    }
+    public int SorFileId;
+    public BaseRefType BaseRefType;
+    public DateTime AssignmentTimestamp;
+    public string? Username;
 }

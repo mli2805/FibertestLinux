@@ -1,12 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class AnalysisParameters
 {
-    public class AnalysisParameters
-    {
-        public double macrobendThreshold;
-        public bool findOnlyFirstAndLastEvents;
-        public bool setUpIitEvents;
-        public List<LasersParameter> lasersParameters = new List<LasersParameter>();
-    }
+    public double macrobendThreshold;
+    public bool findOnlyFirstAndLastEvents;
+    public bool setUpIitEvents;
+    public List<LasersParameter> lasersParameters = new List<LasersParameter>();
 }

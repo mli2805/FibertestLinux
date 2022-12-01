@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class RtuInformationDto
 {
-    public class RtuInformationDto
-    {
-        public string? RtuTitle;
-        public string? GpsCoors;
-        public string? Comment;
-    }
+    public string? RtuTitle;
+    public string? GpsCoors;
+    public string? Comment;
 }

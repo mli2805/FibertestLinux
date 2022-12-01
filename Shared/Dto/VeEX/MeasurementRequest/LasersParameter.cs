@@ -1,10 +1,9 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class LasersParameter
 {
-    public class LasersParameter
-    {
-        public double eventLossThreshold;
-        public int eventReflectanceThreshold;
-        public int endOfFiberThreshold;
-    }
+    public double eventLossThreshold;
+    public int eventReflectanceThreshold;
+    public int endOfFiberThreshold;
 }

@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class Conpoint
 {
-    public class Conpoint
-    {
-        public int Id;
-        public int InKadastrId;
-    }
+    public int Id;
+    public int InKadastrId;
 }

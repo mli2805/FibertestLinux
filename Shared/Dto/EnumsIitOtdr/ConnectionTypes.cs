@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum ConnectionTypes
 {
-    public enum ConnectionTypes
-    {
-        FreePort = -1,
-        Tcp = 103,
-    }
+    FreePort = -1,
+    Tcp = 103,
 }

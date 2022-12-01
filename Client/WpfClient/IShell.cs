@@ -1,6 +1,5 @@
-﻿namespace WpfClient
+﻿namespace WpfClient;
+
+internal interface IShell
 {
-    internal interface IShell
-    {
-    }
 }

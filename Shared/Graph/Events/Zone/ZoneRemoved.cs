@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
-{
-    public class ZoneRemoved
-    {
-        public Guid ZoneId;
+﻿namespace Fibertest.Graph;
 
-    }
+public class ZoneRemoved
+{
+    public Guid ZoneId;
+
 }

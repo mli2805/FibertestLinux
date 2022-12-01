@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class TceRemoved
 {
-    public class TceRemoved
-    {
-        public Guid Id;
-        public List<Guid>? ExcludedTraceIds;
-    }
+    public Guid Id;
+    public List<Guid>? ExcludedTraceIds;
 }

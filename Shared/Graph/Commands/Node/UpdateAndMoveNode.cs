@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class UpdateAndMoveNode
 {
-    public class UpdateAndMoveNode
-    {
-        public Guid NodeId;
-        public string? Title;
-        public PointLatLng Position;
-        public string? Comment;
-    }
+    public Guid NodeId;
+    public string? Title;
+    public PointLatLng Position;
+    public string? Comment;
 }

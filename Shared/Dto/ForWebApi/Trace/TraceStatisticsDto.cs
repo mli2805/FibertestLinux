@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class TraceStatisticsDto
 {
-    public class TraceStatisticsDto
-    {
-        public TraceHeaderDto Header = new TraceHeaderDto();
-        public List<BaseRefInfoDto>? BaseRefs;
-        public int MeasFullCount;
-        public List<MeasurementDto>? MeasPortion;
-    }
+    public TraceHeaderDto Header = new TraceHeaderDto();
+    public List<BaseRefInfoDto>? BaseRefs;
+    public int MeasFullCount;
+    public List<MeasurementDto>? MeasPortion;
 }

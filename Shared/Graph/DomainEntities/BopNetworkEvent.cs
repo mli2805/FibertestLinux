@@ -1,15 +1,13 @@
-﻿namespace Fibertest.Graph
-{
-    
-    public class BopNetworkEvent
-    {
-        public int Ordinal;
+﻿namespace Fibertest.Graph;
 
-        public DateTime EventTimestamp;
-        public string? Serial;
-        public string? OtauIp;
-        public int TcpPort;
-        public Guid RtuId;
-        public bool IsOk;
-    }
+public class BopNetworkEvent
+{
+    public int Ordinal;
+
+    public DateTime EventTimestamp;
+    public string? Serial;
+    public string? OtauIp;
+    public int TcpPort;
+    public Guid RtuId;
+    public bool IsOk;
 }

@@ -1,11 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class OtdrResetResponse
 {
-    public class OtdrResetResponse
-    {
-        public string? id;
-        public string? otdrId;
-        public string? status;
-    }
+    public string? id;
+    public string? otdrId;
+    public string? status;
 }

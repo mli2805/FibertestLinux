@@ -1,6 +1,5 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class LostClientConnection
 {
-    public class LostClientConnection
-    {
-    }
 }

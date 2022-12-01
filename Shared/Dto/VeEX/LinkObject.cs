@@ -1,8 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class LinkObject
 {
-    public class LinkObject
-    {
-        public string? self;
-    }
+    public string? self;
 }

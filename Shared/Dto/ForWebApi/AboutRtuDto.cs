@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class AboutRtuDto
 {
-    public class AboutRtuDto
-    {
-        public string? Title;
-        public string? Model;
-        public string? Serial;
-        public string? Version;
-    }
+    public string? Title;
+    public string? Model;
+    public string? Serial;
+    public string? Version;
 }

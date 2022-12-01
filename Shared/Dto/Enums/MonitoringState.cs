@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum MonitoringState
 {
-    public enum MonitoringState
-    {
-        Unknown,
-        Off,
-        On,
-    }
+    Unknown,
+    Off,
+    On,
 }

@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class ResponsibilitiesChanged
 {
-    public class ResponsibilitiesChanged
-    {
-        // Key - Subject; Value - list of zones where subject's belongings changed
-        public Dictionary<Guid, List<Guid>>? ResponsibilitiesDictionary;
-    }
+    // Key - Subject; Value - list of zones where subject's belongings changed
+    public Dictionary<Guid, List<Guid>>? ResponsibilitiesDictionary;
 }

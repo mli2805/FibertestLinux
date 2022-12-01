@@ -1,9 +1,8 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class VeexMonitoringDto
 {
-    public class VeexMonitoringDto
-    {
-        public string? state;
-        public string? type;
-    }
+    public string? state;
+    public string? type;
 }

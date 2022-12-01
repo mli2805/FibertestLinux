@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class SnapshotMade
 {
-    public class SnapshotMade
-    {
-        public DateTime UpTo;
-    }
+    public DateTime UpTo;
 }

@@ -1,15 +1,14 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class UpdateMeasurement
 {
-    public class UpdateMeasurement
-    {
-        public int SorFileId;
+    public int SorFileId;
 
-        public EventStatus EventStatus;
-        public DateTime StatusChangedTimestamp;
-        public string? StatusChangedByUser;
+    public EventStatus EventStatus;
+    public DateTime StatusChangedTimestamp;
+    public string? StatusChangedByUser;
 
-        public string? Comment;
-    }
+    public string? Comment;
 }

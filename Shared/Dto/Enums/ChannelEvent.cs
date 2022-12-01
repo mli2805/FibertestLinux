@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum ChannelEvent
 {
-    public enum ChannelEvent
-    {
-        Broken = -1,
-        Nothing,
-        Repaired,
-    }
+    Broken = -1,
+    Nothing,
+    Repaired,
 }

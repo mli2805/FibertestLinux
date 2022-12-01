@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class AboutDto
 {
-    public class AboutDto
-    {
-        public string? DcSoftware;
-        public string? WebApiSoftware;
-        public string? WebClientSoftware;
-        public List<AboutRtuDto>? Rtus;
-    }
+    public string? DcSoftware;
+    public string? WebApiSoftware;
+    public string? WebClientSoftware;
+    public List<AboutRtuDto>? Rtus;
 }

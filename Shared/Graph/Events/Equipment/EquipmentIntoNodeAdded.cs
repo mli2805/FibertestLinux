@@ -1,18 +1,16 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
-{
-    
-    public class EquipmentIntoNodeAdded
-    {
-        public Guid EquipmentId;
-        public Guid NodeId;
-        public string? Title;
-        public EquipmentType Type;
-        public int CableReserveLeft;
-        public int CableReserveRight;
-        public string? Comment;
+namespace Fibertest.Graph;
 
-        public List<Guid> TracesForInsertion = new();
-    }
+public class EquipmentIntoNodeAdded
+{
+    public Guid EquipmentId;
+    public Guid NodeId;
+    public string? Title;
+    public EquipmentType Type;
+    public int CableReserveLeft;
+    public int CableReserveRight;
+    public string? Comment;
+
+    public List<Guid> TracesForInsertion = new();
 }

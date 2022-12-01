@@ -1,10 +1,8 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class TraceRemoved
 {
-    
-    public class TraceRemoved
-    {
-        public Guid TraceId;
-        public List<Guid>? NodeIds;
-        public List<Guid>? FiberIds;
-    }
+    public Guid TraceId;
+    public List<Guid>? NodeIds;
+    public List<Guid>? FiberIds;
 }

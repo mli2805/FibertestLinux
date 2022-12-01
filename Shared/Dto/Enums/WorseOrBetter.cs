@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum WorseOrBetter
 {
-    public enum WorseOrBetter
-    {
-        Worse = -1,
-        TheSame = 0,
-        Better = 1
-    }
+    Worse = -1,
+    TheSame = 0,
+    Better = 1
 }

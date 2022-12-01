@@ -1,8 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class AllTracesDetached
 {
-    
-    public class AllTracesDetached
-    {
-        public Guid RtuId;
-    }
+    public Guid RtuId;
 }

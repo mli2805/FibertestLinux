@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class VeexMeasurementDto
 {
-    public class VeexMeasurementDto
-    {
-        public Guid RtuId;
-        public VeexNotification? VeexNotification;
-    }
+    public Guid RtuId;
+    public VeexNotification? VeexNotification;
 }

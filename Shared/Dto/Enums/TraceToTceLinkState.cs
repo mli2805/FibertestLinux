@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+[Serializable]
+public enum TraceToTceLinkState
 {
-    [Serializable]
-    public enum TraceToTceLinkState
-    {
-        NoLink,
-        LinkTceOff,
-        LinkTceOn,
-    }
+    NoLink,
+    LinkTceOff,
+    LinkTceOn,
 }

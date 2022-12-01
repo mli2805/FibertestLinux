@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class UpdateNode
 {
-    public class UpdateNode
-    {
-        public Guid NodeId;
-        public string? Title;
-        public string? Comment;
-    }
+    public Guid NodeId;
+    public string? Title;
+    public string? Comment;
 }

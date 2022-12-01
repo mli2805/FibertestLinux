@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class MoniLevel
 {
-    public class MoniLevel
-    {
-        public bool IsLevelFailed;
-        public MoniLevelType Type;
-    }
+    public bool IsLevelFailed;
+    public MoniLevelType Type;
 }

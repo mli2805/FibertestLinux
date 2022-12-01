@@ -1,11 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class SpanParameters
 {
-    public class SpanParameters
-    {
-        public int beginningEventIndex;
-        public int endEventIndex;
-        public bool includeBeginningEventLoss;
-        public bool includeEndEventLoss;
-    }
+    public int beginningEventIndex;
+    public int endEventIndex;
+    public bool includeBeginningEventLoss;
+    public bool includeEndEventLoss;
 }

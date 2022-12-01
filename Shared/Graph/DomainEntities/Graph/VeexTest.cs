@@ -1,18 +1,16 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class VeexTest
 {
-    
-    public class VeexTest
-    {
-        public Guid TestId;
-        public Guid TraceId;
-        public BaseRefType BasRefType;
+    public Guid TestId;
+    public Guid TraceId;
+    public BaseRefType BasRefType;
 
-        public bool IsOnBop;
-        public string? OtauId;
+    public bool IsOnBop;
+    public string? OtauId;
 
-        public DateTime CreationTimestamp;
+    public DateTime CreationTimestamp;
 
-    }
 }

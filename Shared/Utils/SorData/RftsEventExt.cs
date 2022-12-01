@@ -1,40 +1,39 @@
 ﻿using Fibertest.Dto;
 using Fibertest.OtdrDataFormat;
 
-namespace Fibertest.Utils
+namespace Fibertest.Utils;
+
+public static class RftsEventExt
 {
-    public static class RftsEventExt
+    public static OpticalAccidentType GetOpticalTypeOfAccident(this RftsEvent rftsEvent)
     {
-        public static OpticalAccidentType GetOpticalTypeOfAccident(this RftsEvent rftsEvent)
+        if ((rftsEvent.EventTypes & RftsEventTypes.IsFiberBreak) != 0)
+            return OpticalAccidentType.Break;
+
+        if ((rftsEvent.EventTypes & RftsEventTypes.IsNew) != 0)
+            return OpticalAccidentType.Loss;
+
+        if ((rftsEvent.ReflectanceThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
+            return OpticalAccidentType.Reflectance;
+        if ((rftsEvent.AttenuationThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
+            return OpticalAccidentType.Loss;
+        if ((rftsEvent.AttenuationCoefThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
+            return OpticalAccidentType.LossCoeff;
+        return OpticalAccidentType.None;
+    }
+
+    public static IEnumerable<OpticalAccidentType> GetOpticalTypesOfAccident(this RftsEvent rftsEvent)
+    {
+        if ((rftsEvent.EventTypes & RftsEventTypes.IsFiberBreak) != 0)
+            yield return OpticalAccidentType.Break;
+        else
         {
-            if ((rftsEvent.EventTypes & RftsEventTypes.IsFiberBreak) != 0)
-                return OpticalAccidentType.Break;
-
-            if ((rftsEvent.EventTypes & RftsEventTypes.IsNew) != 0)
-                return OpticalAccidentType.Loss;
-
             if ((rftsEvent.ReflectanceThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
-                return OpticalAccidentType.Reflectance;
+                yield return OpticalAccidentType.Reflectance;
             if ((rftsEvent.AttenuationThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
-                return OpticalAccidentType.Loss;
+                yield return OpticalAccidentType.Loss;
             if ((rftsEvent.AttenuationCoefThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
-                return OpticalAccidentType.LossCoeff;
-            return OpticalAccidentType.None;
-        }
-
-        public static IEnumerable<OpticalAccidentType> GetOpticalTypesOfAccident(this RftsEvent rftsEvent)
-        {
-            if ((rftsEvent.EventTypes & RftsEventTypes.IsFiberBreak) != 0)
-                yield return OpticalAccidentType.Break;
-            else
-            {
-                if ((rftsEvent.ReflectanceThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
-                    yield return OpticalAccidentType.Reflectance;
-                if ((rftsEvent.AttenuationThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
-                    yield return OpticalAccidentType.Loss;
-                if ((rftsEvent.AttenuationCoefThreshold.Type & ShortDeviationTypes.IsExceeded) != 0)
-                    yield return OpticalAccidentType.LossCoeff;
-            }
+                yield return OpticalAccidentType.LossCoeff;
         }
     }
 }

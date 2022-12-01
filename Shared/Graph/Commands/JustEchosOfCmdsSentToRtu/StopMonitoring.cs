@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class StopMonitoring
 {
-    public class StopMonitoring
-    {
-        public Guid RtuId;
-    }
+    public Guid RtuId;
 }

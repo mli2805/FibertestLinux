@@ -1,7 +1,6 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class NodeHighlighted
 {
-    public class NodeHighlighted
-    {
-        public Guid NodeId;
-    }
+    public Guid NodeId;
 }

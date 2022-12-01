@@ -1,20 +1,18 @@
 ﻿using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class Otau
 {
-    
-    public class Otau
-    {
-        public Guid Id;
-        public Guid RtuId;
-        public string? VeexRtuMainOtauId;
-        public bool IsMainOtau;
+    public Guid Id;
+    public Guid RtuId;
+    public string? VeexRtuMainOtauId;
+    public bool IsMainOtau;
 
-        public NetAddress NetAddress = new();
-        public string? Serial;
-        public int PortCount;
+    public NetAddress NetAddress = new();
+    public string? Serial;
+    public int PortCount;
 
-        public int MasterPort;
-        public bool IsOk;
-    }
+    public int MasterPort;
+    public bool IsOk;
 }

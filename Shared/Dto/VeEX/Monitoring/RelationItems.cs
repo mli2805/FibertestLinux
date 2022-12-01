@@ -1,8 +1,7 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public class RelationItems
 {
-    public class RelationItems
-    {
-        // ReSharper disable once InconsistentNaming
-        public List<TestsRelation>? items;
-    }
+    // ReSharper disable once InconsistentNaming
+    public List<TestsRelation>? items;
 }

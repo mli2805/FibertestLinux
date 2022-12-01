@@ -1,9 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿namespace Fibertest.Graph;
+
+public class FiberUpdated
 {
-    
-    public class FiberUpdated
-    {
-        public Guid Id;
-        public double UserInputedLength;
-    }
+    public Guid Id;
+    public double UserInputedLength;
 }

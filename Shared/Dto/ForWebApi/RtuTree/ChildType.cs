@@ -1,9 +1,8 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum ChildType
 {
-    public enum ChildType
-    {
-        FreePort,
-        Trace,
-        Otau,
-    }
+    FreePort,
+    Trace,
+    Otau,
 }

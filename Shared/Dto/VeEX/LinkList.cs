@@ -1,11 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
 
-namespace Fibertest.Dto
+namespace Fibertest.Dto;
+
+public class LinkList
 {
-    public class LinkList
-    {
-        public List<LinkObject>? items;
-        public int offset;
-        public int total;
-    }
+    public List<LinkObject>? items;
+    public int offset;
+    public int total;
 }

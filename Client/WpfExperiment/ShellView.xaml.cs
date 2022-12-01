@@ -1,13 +1,12 @@
-﻿namespace WpfExperiment
+﻿namespace WpfExperiment;
+
+/// <summary>
+/// Interaction logic for ShellView.xaml
+/// </summary>
+public partial class ShellView
 {
-    /// <summary>
-    /// Interaction logic for ShellView.xaml
-    /// </summary>
-    public partial class ShellView
+    public ShellView()
     {
-        public ShellView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
