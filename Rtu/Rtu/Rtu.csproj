@@ -12,6 +12,7 @@
     <Version>3.0.0.0</Version>
     <Copyright>Copyright © IIT Minsk 2017-2022</Copyright>
     <Authors>Leanid Marholin</Authors>
+    <AssemblyName>Fibertest.Rtu</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

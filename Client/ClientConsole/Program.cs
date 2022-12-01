@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using Fibertest.DataCenter;
 using Fibertest.Dto;
+using Fibertest.StringResources;
 using Grpc.Net.Client;
-using StringResources;
 
 namespace ClientConsole;
 

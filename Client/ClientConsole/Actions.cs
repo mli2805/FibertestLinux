@@ -1,7 +1,7 @@
 ﻿using Fibertest.DataCenter;
 using Fibertest.Dto;
+using Fibertest.StringResources;
 using Newtonsoft.Json;
-using StringResources;
 
 namespace ClientConsole;
 

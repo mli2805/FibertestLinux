@@ -3,7 +3,7 @@ Description=Fibertest 3.0 Rtu Service
 
 [Service]
 WorkingDirectory=/var/fibertest/rtu
-ExecStart=/var/fibertest/rtu/Rtu
+ExecStart=/var/fibertest/rtu/Fibertest.Rtu
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Caliburn.Micro;
 
-namespace WpfClient;
+namespace Fibertest.WpfClient;
 
 public class AppBootstrapper : BootstrapperBase
 {

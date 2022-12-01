@@ -1,4 +1,4 @@
-﻿namespace WpfClient;
+﻿namespace Fibertest.WpfClient;
 
 internal interface IShell
 {

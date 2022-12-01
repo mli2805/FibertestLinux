@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.StringResources;
 using Fibertest.Utils;
 using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using StringResources;
 
 namespace WpfExperiment;
 

@@ -3,7 +3,7 @@ Description=Fibertest 3.0 DataCenter Service
 
 [Service]
 WorkingDirectory=/var/fibertest/datacenter
-ExecStart=/var/fibertest/datacenter/DataCenter
+ExecStart=/var/fibertest/datacenter/Fibertest.DataCenter
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10

@@ -9,6 +9,7 @@
 		<Company>IIT</Company>
 		<Copyright>Copyright © IIT Minsk 2017-2022</Copyright>
 		<Authors>Leanid Marholin</Authors>
+		<AssemblyName>Fibertest.Dto</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>

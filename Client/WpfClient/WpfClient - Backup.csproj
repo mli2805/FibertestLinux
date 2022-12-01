@@ -7,7 +7,6 @@
 		<UseWPF>true</UseWPF>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<RootNamespace>Fibertest.WpfClient</RootNamespace>
-		<AssemblyName>Fibertest.WpfClient</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>

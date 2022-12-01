@@ -4,7 +4,7 @@ using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace WpfClient;
+namespace Fibertest.WpfClient;
 
 public static class ClientDependencyInjectionExtensions
 {

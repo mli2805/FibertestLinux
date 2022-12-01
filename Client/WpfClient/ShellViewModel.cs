@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 
-namespace WpfClient;
+namespace Fibertest.WpfClient;
 
 public class ShellViewModel : PropertyChangedBase, IShell
 {

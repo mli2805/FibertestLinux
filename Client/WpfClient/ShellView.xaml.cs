@@ -1,4 +1,4 @@
-﻿namespace WpfClient;
+﻿namespace Fibertest.WpfClient;
 
 /// <summary>
 /// Interaction logic for ShellView.xaml
