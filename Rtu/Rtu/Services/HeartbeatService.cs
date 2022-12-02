@@ -37,13 +37,15 @@ namespace Fibertest.Rtu
 
         private async Task DoWork(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            // while (!stoppingToken.IsCancellationRequested)
+            while (true)
             {
                 await SendHeartbeat();
 
-                var rtuHeartbeatRate = _config.Value.RtuHeartbeatRate;
+                var rtuHeartbeatRate = _config.Value.RtuHeartbeatRate == 0 ? 30 : _config.Value.RtuHeartbeatRate;
                 await Task.Delay(rtuHeartbeatRate * 1000, stoppingToken);
             }
+            // ReSharper disable once FunctionNeverReturns
         }
 
         private static readonly JsonSerializerSettings JsonSerializerSettings =
