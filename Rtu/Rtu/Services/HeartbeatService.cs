@@ -31,7 +31,7 @@ namespace Fibertest.Rtu
             FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
             _version = info.FileVersion;
 
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
+            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
             await DoWork(stoppingToken);
         }
 
@@ -68,9 +68,9 @@ namespace Fibertest.Rtu
             }
             catch (Exception e)
             {
-                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "SendHeartbeat: " + e.Message);
+                _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "SendHeartbeat: " + e.Message);
                 if (e.InnerException != null)
-                    _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "SendHeartbeat: " + e.InnerException.Message);
+                    _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "SendHeartbeat: " + e.InnerException.Message);
             }
         }
     }
