@@ -22,8 +22,8 @@
   <ItemGroup>
     <Protobuf Include="Protos\c2d.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\c2r.proto" GrpcServices="Server" />
-    <Protobuf Include="Protos\r2d.proto" GrpcServices="Server" />
     <Protobuf Include="../../Rtu/Rtu/Protos/d2rPackage.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos/r2d.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +35,12 @@
     <ProjectReference Include="..\..\Shared\Dto\Dto.csproj" />
     <ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
     <ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Protos\r2d.proto">
+      <GrpcServices>Server</GrpcServices>
+    </None>
   </ItemGroup>
 
 </Project>
