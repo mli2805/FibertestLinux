@@ -63,6 +63,7 @@ namespace Fibertest.Rtu
                     return false;
                 }
                 var dcUri = $"http://{serverAddress.Main.ToStringA()}";
+                _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"RTU heartbeat: uri is {dcUri}");
                 using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
                 _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"RTU heartbeat: gRPC channel to Data-Center {dcUri}");
                 var grpcClient = new R2D.R2DClient(grpcChannelDc);
