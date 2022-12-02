@@ -26,7 +26,7 @@ public class RtuGrpcService : d2r.d2rBase
             return new d2rResponse()
                 { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.FailedDeserializeJson)) };
         var request = (BaseRtuRequest)o;
-        _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"Request {request.What}");
+        _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"request {request.What} received");
 
         object result;
         switch (o)

@@ -56,6 +56,9 @@ public class RtuManager
         result2.IsMonitoringOn = _config.Value.IsMonitoringOn;
 
         result2.AcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
+
+        var unused = await _otdrManager.DisconnectOtdr();
+
         _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!");
         return result2;
     }

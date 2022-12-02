@@ -86,14 +86,14 @@ public partial class Charon
                 // read iniFile error
                 LastErrorMessage = $"Get extended ports error {LastErrorMessage}";
                 _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage);
-                return null; 
+                return null;
             }
 
             if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND\r\n")
             {
                 // charon too old, knows nothing about extensions
                 _logger.Log(LogLevel.Warning, Logs.RtuManager.ToInt(), "Charon too old, knows nothing about extensions");
-                return new Dictionary<int, NetAddress>(); 
+                return new Dictionary<int, NetAddress>();
             }
 
             if (LastAnswer.Substring(0, 22) == "[OpticalPortExtension]")
@@ -167,10 +167,10 @@ public partial class Charon
     private string DictionaryToContent(Dictionary<int, NetAddress> extPorts)
     {
         if (extPorts.Count == 0)
-            return "\r\n";
-        var result = "[OpticalPortExtension]\r\n";
+            return Environment.NewLine;
+        var result = "[OpticalPortExtension]" + Environment.NewLine;
         foreach (var extPort in extPorts)
-            result += $"{extPort.Key}={extPort.Value.ToStringA()}\r\n";
+            result += $"{extPort.Key}={extPort.Value.ToStringA()}" + Environment.NewLine;
         return result;
     }
 

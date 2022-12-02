@@ -74,7 +74,7 @@ public class OtdrManager
 
         result.ReturnCode = ReturnCode.RtuInitializedSuccessfully;
 
-        mainCharon.ShowMessageMeasurementPort();
+        mainCharon.ShowOnDisplayMessageReady();
 
         return result;
     }
