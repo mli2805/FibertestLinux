@@ -52,6 +52,7 @@ namespace Fibertest.Rtu
             new() { TypeNameHandling = TypeNameHandling.All };
         private async Task SendHeartbeat()
         {
+            _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"SendHeartbeat: at least we are here");
             var serverAddress = _config.Value.ServerAddress;
             if (serverAddress == null) return;
             var dcUri = $"http://{serverAddress.Main.ToStringA()}";
