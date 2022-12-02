@@ -21,7 +21,7 @@ namespace Fibertest.Rtu
             _config = config;
             _logger = logger;
 
-            _config.Update(o=>o.ServerAddress = new DoubleAddress() { Main = new NetAddress("192.168.96.184", 11937) });
+            _config.Update(o => o.ServerAddress = new DoubleAddress() { Main = new NetAddress("192.168.96.184", 11937) });
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -52,25 +52,26 @@ namespace Fibertest.Rtu
             new() { TypeNameHandling = TypeNameHandling.All };
         private async Task<bool> SendHeartbeat()
         {
-            _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"SendHeartbeat: at least we are here");
-            var serverAddress = _config.Value.ServerAddress;
-            if (serverAddress == null)
-            {
-                if (_isLastAttemptSuccessful)
-                    _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "Data Center address not found.");
-                return false;
-            }
-            var dcUri = $"http://{serverAddress.Main.ToStringA()}";
-            using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
-            _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"RTU heartbeat: gRPC channel to Data-Center {dcUri}");
-            var grpcClient = new R2D.R2DClient(grpcChannelDc);
-
-            var rtuId = _config.Value.RtuId;
-            var dto = new RtuChecksChannelDto() { RtuId = rtuId, IsMainChannel = true, Version = _version };
-            var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
-
             try
             {
+                _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"SendHeartbeat: at least we are here");
+                var serverAddress = _config.Value.ServerAddress;
+                if (serverAddress == null)
+                {
+                    if (_isLastAttemptSuccessful)
+                        _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "Data Center address not found.");
+                    return false;
+                }
+                var dcUri = $"http://{serverAddress.Main.ToStringA()}";
+                using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
+                _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"RTU heartbeat: gRPC channel to Data-Center {dcUri}");
+                var grpcClient = new R2D.R2DClient(grpcChannelDc);
+
+                var rtuId = _config.Value.RtuId;
+                var dto = new RtuChecksChannelDto() { RtuId = rtuId, IsMainChannel = true, Version = _version };
+                var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
+
+
                 R2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
                 if (!_isLastAttemptSuccessful)
                     _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"Got gRPC response {response.Json} from Data Center");
