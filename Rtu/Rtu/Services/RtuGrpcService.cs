@@ -52,7 +52,7 @@ public class RtuGrpcService : d2r.d2rBase
     {
         await Task.Delay(1);
         _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),
-            $"Command to attach OTAU {dto.NetAddress?.ToStringASpace ?? "no address!"} received");
+            $"Command to attach OTAU {dto.NetAddress?.ToStringA() ?? "no address!"} received");
         return new OtauAttachedDto(ReturnCode.Ok);
     }
 }

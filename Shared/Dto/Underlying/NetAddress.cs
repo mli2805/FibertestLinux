@@ -48,7 +48,7 @@ public class NetAddress
         return IsAddressSetAsIp ? Ip4Address : HostName;
     }
 
-    public string ToStringASpace => IsAddressSetAsIp ? $@"{Ip4Address} : {Port}" : $@"{HostName} : {Port}";
+    public string ToStringASpace() => IsAddressSetAsIp ? $@"{Ip4Address} : {Port}" : $@"{HostName} : {Port}";
     public string ToStringA() => IsAddressSetAsIp ? $@"{Ip4Address}:{Port}" : $@"{HostName}:{Port}";
 
     public static bool IsValidIp4(string str)

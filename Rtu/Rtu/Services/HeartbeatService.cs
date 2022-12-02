@@ -34,6 +34,7 @@ namespace Fibertest.Rtu
             _version = info.FileVersion;
 
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
+            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"{_config.Value.ServerAddress.Main.ToStringA()}");
             await DoWork(stoppingToken);
         }
 
