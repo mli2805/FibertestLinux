@@ -3,7 +3,7 @@ set -e
 
 cd /home/leanid/FibertestLinux/DataCenter/DataCenter/bin/Release/net6.0/publish
 
-sudo systemctl stop DataCenter.service
+sudo systemctl stop Dc.service
 echo "сервис остановлен"
 sleep 1s
 
@@ -12,10 +12,10 @@ cd /var/fibertest/datacenter
 sudo chmod a+rw dc.json
 echo "файлы скопированы"
 
-sudo systemctl start DataCenter.service
+sudo systemctl start Dc.service
 echo "сервис запущен"
 sleep 2s
-sudo systemctl status DataCenter.service
+sudo systemctl status Dc.service
 
 read -p "нажми Enter для продолжения"
 

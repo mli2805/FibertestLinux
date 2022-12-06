@@ -2,9 +2,9 @@
 
 public class DoubleAddress
 {
-    public NetAddress Main = new NetAddress();
-    public bool HasReserveAddress;
-    public NetAddress Reserve = new NetAddress();
+    public NetAddress Main { get; set; } = new NetAddress();
+    public bool HasReserveAddress { get; set; }
+    public NetAddress Reserve { get; set; } = new NetAddress();
 
     public DoubleAddress Clone()
     {

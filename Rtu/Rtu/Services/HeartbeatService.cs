@@ -20,8 +20,6 @@ namespace Fibertest.Rtu
         {
             _config = config;
             _logger = logger;
-
-            _config.Update(o => o.ServerAddress = new DoubleAddress() { Main = new NetAddress("192.168.96.184", 11937) });
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,7 +32,11 @@ namespace Fibertest.Rtu
             _version = info.FileVersion;
 
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
-            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"{_config.Value.ServerAddress.Main.ToStringA()}");
+            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
+                 $"Server address is {_config.Value.ServerAddress?.Main.ToStringA() ?? "null"}");
+            _config.Update(o => o.ServerAddress = new DoubleAddress() { Main = new NetAddress("192.168.96.184", 11937) });
+            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
+                 $"Server address is {_config.Value.ServerAddress?.Main.ToStringA() ?? "null"}");
             await DoWork(stoppingToken);
         }
 
@@ -55,7 +57,6 @@ namespace Fibertest.Rtu
         {
             try
             {
-                _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"SendHeartbeat: at least we are here");
                 var serverAddress = _config.Value.ServerAddress;
                 if (serverAddress == null)
                 {
@@ -63,6 +64,7 @@ namespace Fibertest.Rtu
                         _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "Data Center address not found.");
                     return false;
                 }
+
                 var dcUri = $"http://{serverAddress.Main.ToStringA()}";
                 _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"RTU heartbeat: uri is {dcUri}");
                 using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
