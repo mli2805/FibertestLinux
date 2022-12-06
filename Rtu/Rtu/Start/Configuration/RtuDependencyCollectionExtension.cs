@@ -13,6 +13,8 @@ public static class RtuDependencyCollectionExtension
     {
         services.AddSingleton<Boot>();
         services.AddHostedService(x => x.GetService<Boot>());
+        services.AddSingleton<MonitoringService>();
+        services.AddHostedService(x => x.GetService<MonitoringService>());
         services.AddSingleton<HeartbeatService>();
         services.AddHostedService(x => x.GetService<HeartbeatService>());
         return services;
