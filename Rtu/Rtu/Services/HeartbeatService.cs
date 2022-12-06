@@ -21,6 +21,8 @@ namespace Fibertest.Rtu
             _config = config;
             _logger = logger;
 
+            var dc = config.Value.ServerAddress?.Main.ToStringA() ?? "null";
+            logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"server address is {dc}");
             _config.Update(o => o.ServerAddress = new DoubleAddress() { Main = new NetAddress("192.168.96.184", 11937) });
         }
 
@@ -34,7 +36,8 @@ namespace Fibertest.Rtu
             _version = info.FileVersion;
 
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
-            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"{_config.Value.ServerAddress.Main.ToStringA()}");
+            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
+                $"Server address is {_config.Value.ServerAddress?.Main.ToStringA() ?? "null"}");
             await DoWork(stoppingToken);
         }
 
