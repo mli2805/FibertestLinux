@@ -13,8 +13,3 @@ public class RtuConfig
     public int RtuPauseAfterReboot { get; set; }
     public int RtuUpTimeForAdditionalPause { get; set; }
 }
-
-public class MonitoringConfig
-{
-    public bool IsMonitoringOn { get; set; }
-}
