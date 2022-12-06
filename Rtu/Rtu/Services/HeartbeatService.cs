@@ -33,10 +33,7 @@ namespace Fibertest.Rtu
 
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
-                 $"Server address is {_config.Value.ServerAddress?.Main.ToStringA() ?? "null"}");
-            _config.Update(o => o.ServerAddress = new DoubleAddress() { Main = new NetAddress("192.168.96.184", 11937) });
-            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
-                 $"Server address is {_config.Value.ServerAddress?.Main.ToStringA() ?? "null"}");
+                $"Server address is {_config.Value.ServerAddress?.Main.ToStringA() ?? "null"}");
             await DoWork(stoppingToken);
         }
 
