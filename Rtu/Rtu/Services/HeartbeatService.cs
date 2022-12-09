@@ -62,20 +62,19 @@ namespace Fibertest.Rtu
                     return false;
                 }
 
-                var dcUri = $"http://{serverAddress.Main.ToStringA()}";
-                _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"RTU heartbeat: uri is {dcUri}");
-                using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
-                _logger.Log(LogLevel.Debug, Logs.RtuService.ToInt(), $"RTU heartbeat: gRPC channel to Data-Center {dcUri}");
-                var grpcClient = new R2D.R2DClient(grpcChannelDc);
-
-                var rtuId = _config.Value.RtuId;
-                var dto = new RtuChecksChannelDto() { RtuId = rtuId, IsMainChannel = true, Version = _version };
+                var dto = new RtuChecksChannelDto() { RtuId = _config.Value.RtuId, IsMainChannel = true, Version = _version };
                 var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
-
+                var dcUri = $"http://{serverAddress.Main.ToStringA()}";
+                using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
+                var grpcClient = new R2D.R2DClient(grpcChannelDc);
+              
                 R2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
                 if (!_isLastAttemptSuccessful)
                     _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"Got gRPC response {response.Json} from Data Center");
+                else
+                    _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat sent by gRPC channel {dcUri}");
+
                 return true;
             }
             catch (Exception e)

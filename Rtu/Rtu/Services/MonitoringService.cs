@@ -6,14 +6,12 @@ namespace Fibertest.Rtu
     public class MonitoringService : BackgroundService
     {
         private readonly ILogger<MonitoringService> _logger;
-        private readonly IWritableOptions<MonitoringConfig> _config;
         private readonly RtuManager _rtuManager;
 
-        public MonitoringService(ILogger<MonitoringService> logger, IWritableOptions<MonitoringConfig> config,
+        public MonitoringService(ILogger<MonitoringService> logger, 
             RtuManager rtuManager)
         {
             _logger = logger;
-            _config = config;
             _rtuManager = rtuManager;
         }
 
@@ -29,6 +27,12 @@ namespace Fibertest.Rtu
         private async Task DoWork(CancellationToken stoppingToken)
         {
             await _rtuManager.InitializeRtu();
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(),  "It is a measurement thread ..." + Environment.NewLine);
+            }
         }
     }
 }
