@@ -3,7 +3,7 @@
 public class RtuUpdated
 {
     public Guid RtuId;
-    public string? Title;
+    public string Title = "";
 
     public PointLatLng Position;
     public string? Comment;

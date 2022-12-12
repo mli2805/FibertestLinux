@@ -27,7 +27,7 @@ public class RtuInitialized
     public int FullPortCount;
     public string? Version;
     public string? Version2;
-    public Dictionary<int, OtauDto>? Children;
+    public Dictionary<int, OtauDto> Children = new();
     public bool IsMonitoringOn;
     public TreeOfAcceptableMeasParams AcceptableMeasParams = new();
 }

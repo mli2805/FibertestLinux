@@ -7,7 +7,7 @@ public class RtuAtGpsLocationAdded
     public double Latitude;
     public double Longitude;
 
-    public string? Title;
-    public string? Comment;
+    public string Title = "";
+    public string Comment = "";
 
 }

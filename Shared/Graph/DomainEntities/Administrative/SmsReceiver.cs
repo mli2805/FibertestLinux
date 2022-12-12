@@ -2,7 +2,7 @@
 
 public class SmsReceiver
 {
-    public string? PhoneNumber;
+    public string PhoneNumber = "";
     public bool IsFiberBreakOn;
     public bool IsCriticalOn;
     public bool IsMajorOn;

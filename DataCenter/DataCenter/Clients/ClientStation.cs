@@ -27,7 +27,7 @@ public class ClientStation
         ConnectionId = dto.ConnectionId;
 
         UserId = user.UserId;
-        UserName = dto.UserName ?? "unknown";
+        UserName = dto.UserName;
         UserRole = user.Role;
 
         ClientIp = dto.Addresses?.Main.GetAddress() ?? "unknown";

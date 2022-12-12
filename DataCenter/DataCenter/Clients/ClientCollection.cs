@@ -12,7 +12,7 @@ public class ClientCollection
     {
         await Task.Delay(1);
         // instead of this line many-many checks
-        var user = new User() { Title = dto.UserName, EncodedPassword = dto.Password };
+        var user = new User(dto.UserName, dto.Password);
 
         var clientStation = new ClientStation(dto, user);
         if (!Clients.TryAdd(clientStation.ConnectionId, clientStation))

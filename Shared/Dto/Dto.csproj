@@ -16,4 +16,8 @@
 		<Folder Include="EnumsIitOtdr\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\StringResources\StringResources.csproj" />
+	</ItemGroup>
+
 </Project>

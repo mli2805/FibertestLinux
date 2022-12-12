@@ -6,6 +6,6 @@ public class AttachTrace
 {
     public Guid TraceId;
 
-    public OtauPortDto? OtauPortDto;
+    public OtauPortDto OtauPortDto = new OtauPortDto();
 
 }

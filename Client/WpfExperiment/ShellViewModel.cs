@@ -21,9 +21,10 @@ public class ShellViewModel : PropertyChangedBase, IShell
 
     private readonly string _clientId = "client-connection-id";
     private readonly string _username = "Vasya Pugovkin";
+    private static readonly string _password = "123";
     private readonly string _clientIP = "<<wpf address IP>>";
 
-    public ObservableCollection<string> Lines { get; set; } = new() {" Here will be log "};
+    public ObservableCollection<string> Lines { get; set; } = new() { " Here will be log " };
 
     public ShellViewModel(ILogger<ShellViewModel> logger, GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests)
     {
@@ -35,7 +36,8 @@ public class ShellViewModel : PropertyChangedBase, IShell
     public async void RegisterClient()
     {
         _grpcC2DRequests.ChangeAddress(DcAddress);
-        var res = await _grpcC2DRequests.RegisterClient(new RegisterClientDto(_clientId) { UserName = _username, ClientIp = _clientIP });
+        var res = await _grpcC2DRequests
+            .RegisterClient(new RegisterClientDto(_clientId, _username, _password) { ClientIp = _clientIP });
         Lines.Add($"Client registered {res.ReturnCode == ReturnCode.ClientRegisteredSuccessfully}");
     }
 
@@ -43,7 +45,8 @@ public class ShellViewModel : PropertyChangedBase, IShell
     {
         _grpcC2RRequests.Initialize(DcAddress);
         _logger.Log(LogLevel.Information, Logs.Client.ToInt(), Resources.SID_long_operation_please_wait);
-        var rtu = new Rtu() { Id = Guid.NewGuid(), RtuMaker = RtuMaker.IIT, MainChannel = new NetAddress(RtuAddress, TcpPorts.RtuListenTo) };
+        var rtu = new Rtu() 
+            { Id = Guid.NewGuid(), RtuMaker = RtuMaker.IIT, MainChannel = new NetAddress(RtuAddress, TcpPorts.RtuListenTo) };
         var dto = new InitializeRtuDto(_clientId, rtu.Id, rtu.RtuMaker);
         var res = await _grpcC2RRequests.InitializeRtu(dto);
         if (res.ReturnCode == ReturnCode.RtuInitializedSuccessfully)

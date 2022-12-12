@@ -1,0 +1,3497 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="SID_CableReserve" xml:space="preserve">
+    <value>CableReserve</value>
+  </data>
+	<data name="SID_Closure" xml:space="preserve">
+    <value>Closure</value>
+  </data>
+	<data name="SID_Cross" xml:space="preserve">
+    <value>Cross</value>
+  </data>
+	<data name="SID_Terminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+	<data name="SID_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+	<data name="SID_Add_Equipment" xml:space="preserve">
+    <value>Add Equipment</value>
+  </data>
+	<data name="SID_Edit_Equipment" xml:space="preserve">
+    <value>Edit Equipment</value>
+  </data>
+	<data name="SID_Last_node_of_trace_must_contain_some_equipment" xml:space="preserve">
+    <value>Last node of trace must contain some equipment</value>
+  </data>
+	<data name="SID_Path_couldn_t_be_found" xml:space="preserve">
+    <value>Path couldn't be found !</value>
+  </data>
+	<data name="SID_Title_is_required" xml:space="preserve">
+    <value>Title is required</value>
+  </data>
+	<data name="SID_There_is_a_node_with_the_same_title" xml:space="preserve">
+    <value>There is a node with the same title</value>
+  </data>
+	<data name="SID_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+	<data name="SID_Show_RTU" xml:space="preserve">
+    <value>Show RTU</value>
+  </data>
+	<data name="SID_Accept_the_path" xml:space="preserve">
+    <value>Accept the highlighted with lime color path?</value>
+  </data>
+	<data name="SID_It_s_impossible_to_change_trace_with_base_reflectogram" xml:space="preserve">
+    <value>It's impossible to change trace with base reflectogram</value>
+  </data>
+	<data name="SID_Length_should_be_a_number" xml:space="preserve">
+    <value>Length should be a number</value>
+  </data>
+	<data name="SID_Degrees_is_required" xml:space="preserve">
+    <value>Degrees is required</value>
+  </data>
+	<data name="SID_Invalid_input" xml:space="preserve">
+    <value>Invalid input</value>
+  </data>
+	<data name="SID_Add_node" xml:space="preserve">
+    <value>Add node</value>
+  </data>
+	<data name="SID_Remove_section" xml:space="preserve">
+    <value>Remove section</value>
+  </data>
+	<data name="SID_Landmarks" xml:space="preserve">
+    <value>Landmarks</value>
+  </data>
+	<data name="SID_Remove_node" xml:space="preserve">
+    <value>Remove node</value>
+  </data>
+	<data name="SID_Section" xml:space="preserve">
+    <value>Section</value>
+  </data>
+	<data name="SID_Section_with_nodes" xml:space="preserve">
+    <value>Section with nodes</value>
+  </data>
+	<data name="SID_noname_RTU" xml:space="preserve">
+    <value>noname RTU</value>
+  </data>
+	<data name="SID_Do_not_use" xml:space="preserve">
+    <value>Do not use equipment</value>
+  </data>
+	<data name="SID_Select_equipment" xml:space="preserve">
+    <value>Select equipment</value>
+  </data>
+	<data name="SID_Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+	<data name="SID_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+	<data name="SID_Well" xml:space="preserve">
+    <value>Well</value>
+  </data>
+	<data name="SID_Adjustment_point" xml:space="preserve">
+    <value>Adjustment point</value>
+  </data>
+	<data name="SID_There_is_a_rtu_with_the_same_title" xml:space="preserve">
+    <value>There is a rtu with the same title</value>
+  </data>
+	<data name="SID_Select_traces_for_equipment" xml:space="preserve">
+    <value>Select traces for equipment</value>
+  </data>
+	<data name="SID_Select_traces_which_will_use" xml:space="preserve">
+    <value>Select traces which will use added equipment 
+If chosen trace use some equipment in this node it will be replaced</value>
+    <comment>Shift+Enter for CR/LF insertion</comment>
+  </data>
+	<data name="SID_Question" xml:space="preserve">
+    <value>Question!</value>
+  </data>
+	<data name="SID_Trace" xml:space="preserve">
+    <value>Trace</value>
+  </data>
+	<data name="SID_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+	<data name="SID_Define_trace" xml:space="preserve">
+    <value>Define trace</value>
+  </data>
+	<data name="SID_System_events" xml:space="preserve">
+    <value>System events</value>
+  </data>
+	<data name="SID_equipment_without_name" xml:space="preserve">
+    <value>{0} without name</value>
+  </data>
+	<data name="SID_Switch_ended_unexpectedly" xml:space="preserve">
+    <value>Switch ended unexpectedly</value>
+  </data>
+	<data name="SID_RTU_Information" xml:space="preserve">
+    <value>RTU Information</value>
+  </data>
+	<data name="SID_Port_trace" xml:space="preserve">
+    <value>N{0} : {1}</value>
+  </data>
+	<data name="SID_coor_in_degrees" xml:space="preserve">
+    <value>{{Lat={0:#0.000000}, Lng={1:#0.000000}}}</value>
+  </data>
+	<data name="SID_Precise_base_ref" xml:space="preserve">
+    <value>Precise base ref</value>
+  </data>
+	<data name="SID_Second_base_ref" xml:space="preserve">
+    <value>Second base ref</value>
+  </data>
+	<data name="SID_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+	<data name="SID_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+	<data name="SID_Equipment_type" xml:space="preserve">
+    <value>Equipment type</value>
+  </data>
+	<data name="SID_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+	<data name="SID_Fast_base_ref" xml:space="preserve">
+    <value>Fast base ref</value>
+  </data>
+	<data name="SID_Gps_Length_m" xml:space="preserve">
+    <value>Gps Length, m</value>
+  </data>
+	<data name="SID_Nodes_of_section" xml:space="preserve">
+    <value>Nodes of section</value>
+  </data>
+	<data name="SID_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+	<data name="SID_Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+	<data name="SID_Select_and_setup_name" xml:space="preserve">
+    <value>Select and setup name</value>
+  </data>
+	<data name="SID_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+	<data name="SID_User_Length_m" xml:space="preserve">
+    <value>User Length, m</value>
+  </data>
+	<data name="SID_Node" xml:space="preserve">
+    <value>Node</value>
+  </data>
+	<data name="SID_Traces_in_node" xml:space="preserve">
+    <value>Traces in node</value>
+  </data>
+	<data name="SID_Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+	<data name="SID_Do_not_add_equipment" xml:space="preserve">
+    <value>Don't add equipment</value>
+  </data>
+	<data name="SID_Optical_length_m" xml:space="preserve">
+    <value>Optical Length, m</value>
+  </data>
+	<data name="SID_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+	<data name="SID_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+	<data name="SID_Port_N" xml:space="preserve">
+    <value>N{0}</value>
+  </data>
+	<data name="SID_Show_trace" xml:space="preserve">
+    <value>Show trace</value>
+  </data>
+	<data name="SID_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+	<data name="SID_Node_title_already_exists" xml:space="preserve">
+    <value>Node title already exists</value>
+  </data>
+	<data name="SID_It_s_prohibited_to_remove_last_node_from_trace" xml:space="preserve">
+    <value>It's prohibited to remove last node from trace</value>
+  </data>
+	<data name="SID_Section_already_exists" xml:space="preserve">
+    <value>Fiber already exists</value>
+  </data>
+	<data name="SID_Base_ref_is_set_for_trace" xml:space="preserve">
+    <value>Base ref is set for trace</value>
+  </data>
+	<data name="SID_RTU_is_not_found" xml:space="preserve">
+    <value>RTU is not found</value>
+  </data>
+	<data name="SID_Trace_should_start_from_RTU" xml:space="preserve">
+    <value>Trace should start from RTU</value>
+  </data>
+	<data name="SID_Equipments_count_in_trace_should_match_nodes_count" xml:space="preserve">
+    <value>Equipments count in trace should match nodes count</value>
+  </data>
+	<data name="SID_Base_refs_assignment" xml:space="preserve">
+    <value>Base refs assignment</value>
+  </data>
+	<data name="SID_Base_reflectograms" xml:space="preserve">
+    <value>Base reflectograms</value>
+  </data>
+	<data name="SID_Reflectogram_files" xml:space="preserve">
+    <value>Reflectogram files (*.sor)|*.sor</value>
+  </data>
+	<data name="SID_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+	<data name="SID_Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+	<data name="SID_Clean" xml:space="preserve">
+    <value>Clean</value>
+  </data>
+	<data name="SID_Measurement__Client_" xml:space="preserve">
+    <value>Measurement (Client)</value>
+  </data>
+	<data name="SID_Monitoring_settings" xml:space="preserve">
+    <value>Monitoring settings</value>
+  </data>
+	<data name="SID_Manual_mode" xml:space="preserve">
+    <value>Manual mode</value>
+  </data>
+	<data name="SID_Automatic_mode" xml:space="preserve">
+    <value>Automatic mode</value>
+  </data>
+	<data name="SID_Define_trace_step_by_step" xml:space="preserve">
+    <value>Define trace step by step</value>
+  </data>
+	<data name="SID_Attach_optical_switch" xml:space="preserve">
+    <value>Attach optical switch</value>
+  </data>
+	<data name="SID_Measurement__RFTS_Reflect_" xml:space="preserve">
+    <value>Measurement (RFTS Reflect)</value>
+  </data>
+	<data name="SID_Not_attached_traces_list" xml:space="preserve">
+    <value>Not attached traces list</value>
+  </data>
+	<data name="SID_List_of_traces" xml:space="preserve">
+    <value>List of traces</value>
+  </data>
+	<data name="SID_In_total__including_RTU" xml:space="preserve">
+    <value>In total, including RTU</value>
+  </data>
+	<data name="SID_not_attached" xml:space="preserve">
+    <value>not attached</value>
+  </data>
+	<data name="SID_Nodes" xml:space="preserve">
+    <value>Nodes</value>
+  </data>
+	<data name="SID_Trace_monitoring_mode" xml:space="preserve">
+    <value>Trace monitoring mode</value>
+  </data>
+	<data name="SID_Dark_OF" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+	<data name="SID_Light_OF" xml:space="preserve">
+    <value>In service</value>
+  </data>
+	<data name="SID_Add_adjustment_point" xml:space="preserve">
+    <value>Add adjustment point</value>
+  </data>
+	<data name="SID_Add_node_with_cable_reserve" xml:space="preserve">
+    <value>Add node with cable reserve</value>
+  </data>
+	<data name="SID_Add_node_with_sleeve" xml:space="preserve">
+    <value>Add node with closure</value>
+  </data>
+	<data name="SID_Add_node_with_cross" xml:space="preserve">
+    <value>Add node with cross</value>
+  </data>
+	<data name="SID_Add_node_with_terminal" xml:space="preserve">
+    <value>Add node with terminal</value>
+  </data>
+	<data name="SID_Add_node_with_other_equipment" xml:space="preserve">
+    <value>Add node with other equipment</value>
+  </data>
+	<data name="SID_Add_RTU" xml:space="preserve">
+    <value>Add RTU</value>
+  </data>
+	<data name="SID_Nodes_with_equipment" xml:space="preserve">
+    <value>Nodes with equipment</value>
+  </data>
+	<data name="SID_Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+	<data name="SID_Coordinates" xml:space="preserve">
+    <value>Coordinates</value>
+  </data>
+	<data name="SID_Host" xml:space="preserve">
+    <value>Host</value>
+  </data>
+	<data name="SID_Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+	<data name="SID_Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+	<data name="SID_Main_channel" xml:space="preserve">
+    <value>Main channel</value>
+  </data>
+	<data name="SID_OTDR_Network_Address" xml:space="preserve">
+    <value>OTDR Network Address</value>
+  </data>
+	<data name="SID_Reserve_channel" xml:space="preserve">
+    <value>Reserve channel</value>
+  </data>
+	<data name="SID_Serial" xml:space="preserve">
+    <value>Serial</value>
+  </data>
+	<data name="SID_Port_count" xml:space="preserve">
+    <value>Port count</value>
+  </data>
+	<data name="SID_Initialize" xml:space="preserve">
+    <value>Initialize</value>
+  </data>
+	<data name="SID_Attach_to" xml:space="preserve">
+    <value>Attach to</value>
+  </data>
+	<data name="SID_Port1" xml:space="preserve">
+    <value>Port:</value>
+  </data>
+	<data name="SID_Attach" xml:space="preserve">
+    <value>Attach</value>
+  </data>
+	<data name="SID_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+	<data name="SID_Additional_optical_switch" xml:space="preserve">
+    <value>Additional optical switch</value>
+  </data>
+	<data name="SID_Optical_switch_with_Address" xml:space="preserve">
+    <value>Optical switch {0}</value>
+  </data>
+	<data name="SID_Tree_statistics" xml:space="preserve">
+    <value>RTU {0} ;  OTAU {1} ;  Ports {2} ;  Traces {3} ;  Occupancy {4:F}%</value>
+  </data>
+	<data name="SID_Trace_information" xml:space="preserve">
+    <value>Trace information</value>
+  </data>
+	<data name="SID_Traces" xml:space="preserve">
+    <value>Traces</value>
+  </data>
+	<data name="SID_Rtu" xml:space="preserve">
+    <value>RTU</value>
+  </data>
+	<data name="SID_Servers" xml:space="preserve">
+    <value>Servers</value>
+  </data>
+	<data name="SID_Equip" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+	<data name="SID_All" xml:space="preserve">
+    <value>All objects</value>
+  </data>
+	<data name="SID_RTU_Title" xml:space="preserve">
+    <value>RTU Title</value>
+  </data>
+	<data name="SID_Network_settings" xml:space="preserve">
+    <value>Network settings</value>
+  </data>
+	<data name="SID_Please__wait_" xml:space="preserve">
+    <value>Please, wait...</value>
+  </data>
+	<data name="SID_Failed_" xml:space="preserve">
+    <value>Failed!</value>
+  </data>
+	<data name="SID_Successful_" xml:space="preserve">
+    <value>Successful!</value>
+  </data>
+	<data name="SID_Initialization" xml:space="preserve">
+    <value>Initialization</value>
+  </data>
+	<data name="SID_There_is_RTU_with_the_same_ip_address_" xml:space="preserve">
+    <value>There is RTU with the same ip address!</value>
+  </data>
+	<data name="SID_There_is_optical_switch_with_the_same_tcp_address_" xml:space="preserve">
+    <value>There is optical switch with the same tcp address!</value>
+  </data>
+	<data name="SID_Attachment" xml:space="preserve">
+    <value>Attachment</value>
+  </data>
+	<data name="SID_Input_user_name_and_password" xml:space="preserve">
+    <value>Input user name and password</value>
+  </data>
+	<data name="SID_Authentication" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
+	<data name="SID_Institute_of_Information_Technologies" xml:space="preserve">
+    <value>Institute of Information Technologies</value>
+  </data>
+	<data name="SID_Login" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+	<data name="SID_User" xml:space="preserve">
+    <value>User</value>
+  </data>
+	<data name="SID_Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+	<data name="SID_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+	<data name="SID_Enter_DataCenter_Server_address" xml:space="preserve">
+    <value>Enter DataCenter Server address.</value>
+  </data>
+	<data name="SID_DataCenter_Server" xml:space="preserve">
+    <value>DataCenter Server</value>
+  </data>
+	<data name="SID_Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+	<data name="SID_Users_list" xml:space="preserve">
+    <value>Users list</value>
+  </data>
+	<data name="SID_Responsibility_zones" xml:space="preserve">
+    <value>Responsibility zones</value>
+  </data>
+	<data name="SID_User_list" xml:space="preserve">
+    <value>User list</value>
+  </data>
+	<data name="SID_Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+	<data name="SID_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+	<data name="SID_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+	<data name="SID_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+	<data name="SID_Gis" xml:space="preserve">
+    <value>GIS</value>
+  </data>
+	<data name="SID_N_graph_events_loaded_successfully" xml:space="preserve">
+    <value>{0} graph events loaded successfully</value>
+  </data>
+	<data name="SID_Default_Zone" xml:space="preserve">
+    <value>Default Zone</value>
+  </data>
+	<data name="SID_No_zone_assigned" xml:space="preserve">
+    <value>No zone assigned</value>
+  </data>
+	<data name="SID_Users_Db_saved_successfully_" xml:space="preserve">
+    <value>Users Db saved successfully.</value>
+  </data>
+	<data name="SID_Responsibility_zone" xml:space="preserve">
+    <value>Responsibility zone</value>
+  </data>
+	<data name="SID_Graph_Db_saved_successfully_" xml:space="preserve">
+    <value>Graph Db saved successfully.</value>
+  </data>
+	<data name="SID_Object" xml:space="preserve">
+    <value>Object</value>
+  </data>
+	<data name="SID_Send_messages" xml:space="preserve">
+    <value>Send messages</value>
+  </data>
+	<data name="SID_Zone" xml:space="preserve">
+    <value>Zone</value>
+  </data>
+	<data name="SID_Add_user" xml:space="preserve">
+    <value>Add user</value>
+  </data>
+	<data name="SID_Remove_user" xml:space="preserve">
+    <value>Remove user</value>
+  </data>
+	<data name="SID_Password_should_be_set" xml:space="preserve">
+    <value>Password should be set</value>
+  </data>
+	<data name="SID_Passwords_don_t_match" xml:space="preserve">
+    <value>Passwords don't match</value>
+  </data>
+	<data name="SID_Responsibility_zones_settings" xml:space="preserve">
+    <value>Responsibility zones settings</value>
+  </data>
+	<data name="SID_Administrative" xml:space="preserve">
+    <value>Administrative</value>
+  </data>
+	<data name="SID_no" xml:space="preserve">
+    <value>no</value>
+  </data>
+	<data name="SID_yes" xml:space="preserve">
+    <value>yes</value>
+  </data>
+	<data name="SID_unexpected_input" xml:space="preserve">
+    <value>unexpected input</value>
+  </data>
+	<data name="SID__abs__" xml:space="preserve">
+    <value>(abs.)</value>
+  </data>
+	<data name="SID__rel__" xml:space="preserve">
+    <value>(rel.)</value>
+  </data>
+	<data name="SID_fail" xml:space="preserve">
+    <value>fail</value>
+  </data>
+	<data name="SID_pass" xml:space="preserve">
+    <value>pass</value>
+  </data>
+	<data name="SID_Event_N_0_" xml:space="preserve">
+    <value>Event # {0}</value>
+  </data>
+	<data name="SID________Common_Information" xml:space="preserve">
+    <value>       Common Information</value>
+  </data>
+	<data name="SID_Landmark_Name" xml:space="preserve">
+    <value>Landmark Name</value>
+  </data>
+	<data name="SID_Landmark_Type" xml:space="preserve">
+    <value>Landmark Type</value>
+  </data>
+	<data name="SID_Damage_Type" xml:space="preserve">
+    <value>Damage Type</value>
+  </data>
+	<data name="SID_Distance__km" xml:space="preserve">
+    <value>Distance, km</value>
+  </data>
+	<data name="SID_Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+	<data name="SID_Event_Type" xml:space="preserve">
+    <value>Event Type</value>
+  </data>
+	<data name="SID________Current_Measurement" xml:space="preserve">
+    <value>       Current Measurement</value>
+  </data>
+	<data name="SID_Reflectance_coefficient__dB" xml:space="preserve">
+    <value>Reflectance coefficient, dB</value>
+  </data>
+	<data name="SID_Attenuation_in_Closure__dB" xml:space="preserve">
+    <value>Attenuation in Closure, dB</value>
+  </data>
+	<data name="SID_Attenuation_coefficient__dB_km_" xml:space="preserve">
+    <value>Attenuation coefficient, dB/km </value>
+  </data>
+	<data name="SID________Monitoring_Thresholds" xml:space="preserve">
+    <value>       Monitoring Thresholds</value>
+  </data>
+	<data name="SID________Deviations_from_Base" xml:space="preserve">
+    <value>       Deviations from Base</value>
+  </data>
+	<data name="SID_Fiber_type_wavelength" xml:space="preserve">
+    <value>Fiber type - wavelength:</value>
+  </data>
+	<data name="SID_Backscattered_Coefficient" xml:space="preserve">
+    <value>Backscattered Coefficient:</value>
+  </data>
+	<data name="SID_Resolution" xml:space="preserve">
+    <value>Resolution - dL:</value>
+  </data>
+	<data name="SID_Pulse_width" xml:space="preserve">
+    <value>Pulse width - Tp:</value>
+  </data>
+	<data name="SID_Number_of_measurements_to_average" xml:space="preserve">
+    <value>Number of measurements to average - 4096*N</value>
+  </data>
+	<data name="SID_Time_to_average" xml:space="preserve">
+    <value>Time to average</value>
+  </data>
+	<data name="SID_Measurement_parameters" xml:space="preserve">
+    <value>Measurement parameters</value>
+  </data>
+	<data name="SID_Value__dB" xml:space="preserve">
+    <value>Value, dB:</value>
+  </data>
+	<data name="SID_Threshold__dB" xml:space="preserve">
+    <value>Threshold, dB:</value>
+  </data>
+	<data name="SID_Deviation__dB" xml:space="preserve">
+    <value>Deviation, dB:</value>
+  </data>
+	<data name="SID_State_" xml:space="preserve">
+    <value>State:</value>
+  </data>
+	<data name="SID_Total_fiber_loss" xml:space="preserve">
+    <value>Total fiber loss</value>
+  </data>
+	<data name="SID_Minor" xml:space="preserve">
+    <value>Minor</value>
+  </data>
+	<data name="SID_Major" xml:space="preserve">
+    <value>Major</value>
+  </data>
+	<data name="SID_Critical" xml:space="preserve">
+    <value>Critical</value>
+  </data>
+	<data name="SID_User_s" xml:space="preserve">
+    <value>User's</value>
+  </data>
+	<data name="SID_Measuring_with_averaging" xml:space="preserve">
+    <value>Measuring with averaging</value>
+  </data>
+	<data name="SID_Trace_state" xml:space="preserve">
+    <value>Trace state</value>
+  </data>
+	<data name="SID_ORL__dB" xml:space="preserve">
+    <value>ORL, dB</value>
+  </data>
+	<data name="SID_Parameters" xml:space="preserve">
+    <value>Parameters</value>
+  </data>
+	<data name="SID_Equipment" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+	<data name="SID_Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+	<data name="SID_Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+	<data name="SID_GPS_coordinates" xml:space="preserve">
+    <value>GPS-coordinates</value>
+  </data>
+	<data name="SID_GPS_coordinates_format" xml:space="preserve">
+    <value>GPS-coordinates format</value>
+  </data>
+	<data name="SID_Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+	<data name="SID_Nodes_with_equipment_only" xml:space="preserve">
+    <value>Nodes with equipment only</value>
+  </data>
+	<data name="SID_Landmark___0__" xml:space="preserve">
+    <value>Landmark "{0}"</value>
+  </data>
+	<data name="SID_Landmark" xml:space="preserve">
+    <value>Landmark</value>
+  </data>
+	<data name="SID_Reflectogram" xml:space="preserve">
+    <value>Reflectogram</value>
+  </data>
+	<data name="SID_Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+	<data name="SID__0__0_00000__km" xml:space="preserve">
+    <value>{0: 0.00000} km</value>
+  </data>
+	<data name="SID_Landmark___0_" xml:space="preserve">
+    <value>Landmark # {0}</value>
+  </data>
+	<data name="SID_new" xml:space="preserve">
+    <value>new</value>
+  </data>
+	<data name="SID_fiber_break" xml:space="preserve">
+    <value>Fiber break</value>
+  </data>
+	<data name="SID___new_" xml:space="preserve">
+    <value> (new)</value>
+  </data>
+	<data name="SID_fail___0__km_" xml:space="preserve">
+    <value>fail ({0} km)</value>
+  </data>
+	<data name="SID_fiber_break___0_0_00000__km" xml:space="preserve">
+    <value>fiber break  {0:0.00000} km</value>
+  </data>
+	<data name="SID_Wait__please___" xml:space="preserve">
+    <value>Wait, please...</value>
+  </data>
+	<data name="SID_OTAU_initialized_successfully_" xml:space="preserve">
+    <value>OTAU initialized successfully!</value>
+  </data>
+	<data name="SID_Now_active_is_port__0__on__1_" xml:space="preserve">
+    <value>Now active is port {0} on {1}</value>
+  </data>
+	<data name="SID_Can_t_get_active_port" xml:space="preserve">
+    <value>Can't get active port</value>
+  </data>
+	<data name="SID_Otau_initialization_started" xml:space="preserve">
+    <value>Otau initialization started</value>
+  </data>
+	<data name="SID_Otau_initialized_successfully" xml:space="preserve">
+    <value>Otau initialized successfully</value>
+  </data>
+	<data name="SID_Otau_toggled_to_port__0_" xml:space="preserve">
+    <value>Otau toggled to port {0}</value>
+  </data>
+	<data name="SID_Otau_toggled_to_port__0__on__1_" xml:space="preserve">
+    <value>Otau toggled to port {0} on {1}</value>
+  </data>
+	<data name="SID_charon__0__has__1___2__ports" xml:space="preserve">
+    <value>charon {0} has {1}/{2} ports</value>
+  </data>
+	<data name="SID_Optical_switch" xml:space="preserve">
+    <value>Optical switch</value>
+  </data>
+	<data name="SID_Attached_successfully__Press_initialize_main_otau_" xml:space="preserve">
+    <value>Attached successfully. Press initialize main otau.</value>
+  </data>
+	<data name="SID_Detached_successfully__Press_Initialize_main_otau" xml:space="preserve">
+    <value>Detached successfully. Press Initialize main otau</value>
+  </data>
+	<data name="SID_on_port_N_charon_" xml:space="preserve">
+    <value>
+on port {0}: charon {1} ip {2} has {3} ports</value>
+  </data>
+	<data name="SID_Main_charon" xml:space="preserve">
+    <value>Main charon</value>
+  </data>
+	<data name="SID_IP_address" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+	<data name="SID_TCP_port" xml:space="preserve">
+    <value>TCP port</value>
+  </data>
+	<data name="SID_Initialize_main_otau" xml:space="preserve">
+    <value>Initialize main otau</value>
+  </data>
+	<data name="SID_Detach" xml:space="preserve">
+    <value>Detach</value>
+  </data>
+	<data name="SID_from_optical_port" xml:space="preserve">
+    <value>from optical port </value>
+  </data>
+	<data name="SID_Active_port" xml:space="preserve">
+    <value>Active port</value>
+  </data>
+	<data name="SID_Toggle_to_port" xml:space="preserve">
+    <value>Toggle to port</value>
+  </data>
+	<data name="SID_BOP_IP_address" xml:space="preserve">
+    <value>BOP IP address</value>
+  </data>
+	<data name="SID_BOP_TCP_port" xml:space="preserve">
+    <value>BOP TCP port</value>
+  </data>
+	<data name="SID_To_optical_port" xml:space="preserve">
+    <value>To optical port</value>
+  </data>
+	<data name="SID__Error___" xml:space="preserve">
+    <value>
+ Error !!!</value>
+  </data>
+	<data name="SID_OTDR" xml:space="preserve">
+    <value>OTDR</value>
+  </data>
+	<data name="SID_OTDR_connected_successfully_" xml:space="preserve">
+    <value>OTDR connected successfully!</value>
+  </data>
+	<data name="SID_OTDR_connection_failed_" xml:space="preserve">
+    <value>OTDR connection failed!</value>
+  </data>
+	<data name="SID_Measurement_is_finished_" xml:space="preserve">
+    <value>Measurement is finished.</value>
+  </data>
+	<data name="SID_Measurement_error__see_log" xml:space="preserve">
+    <value>Measurement error, see log</value>
+  </data>
+	<data name="SID_Can_t_get_result__see_log" xml:space="preserve">
+    <value>Can't get result, see log</value>
+  </data>
+	<data name="SID_Comparison_end__" xml:space="preserve">
+    <value>Comparison end. IsFiberBreak = {0}, IsNoFiber = {1}</value>
+  </data>
+	<data name="SID_Monitoring_cycle__0___Wait__please___" xml:space="preserve">
+    <value>Monitoring cycle {0}. Wait, please...</value>
+  </data>
+	<data name="SID_Monitoring_cycle__0__" xml:space="preserve">
+    <value>Monitoring cycle {0}.</value>
+  </data>
+	<data name="SID__0_th_measurement_is_finished_" xml:space="preserve">
+    <value>{0}th measurement is finished.</value>
+  </data>
+	<data name="SID_Stop_command_is_sent" xml:space="preserve">
+    <value>Stop command is sent</value>
+  </data>
+	<data name="SID_No_Fiber_" xml:space="preserve">
+    <value>No Fiber!</value>
+  </data>
+	<data name="SID_Reboot_Mikrotik" xml:space="preserve">
+    <value>Reboot Mikrotik</value>
+  </data>
+	<data name="SID_Analysis_is_finished" xml:space="preserve">
+    <value>Analysis is finished</value>
+  </data>
+	<data name="SID_Settings_were_transferred_successfully_" xml:space="preserve">
+    <value>Settings were transferred successfully.</value>
+  </data>
+	<data name="SID_Settings_weren_t_transferred__See_logs_" xml:space="preserve">
+    <value>Settings weren't transferred. See logs.</value>
+  </data>
+	<data name="SID_Command_sent__wait_please_" xml:space="preserve">
+    <value>Command sent, wait please.</value>
+  </data>
+	<data name="SID_Monitoring_started___0_" xml:space="preserve">
+    <value>Monitoring started: {0}</value>
+  </data>
+	<data name="SID_Monitoring_stopped___0_" xml:space="preserve">
+    <value>Monitoring stopped: {0}</value>
+  </data>
+	<data name="SID_Monitoring_settings_applied___0_" xml:space="preserve">
+    <value>Monitoring settings applied: {0}</value>
+  </data>
+	<data name="SID_Do_not_measure" xml:space="preserve">
+    <value>Do not measure</value>
+  </data>
+	<data name="SID_Do_not_save" xml:space="preserve">
+    <value>Do not save</value>
+  </data>
+	<data name="SID_Every_hour" xml:space="preserve">
+    <value>Every hour</value>
+  </data>
+	<data name="SID_Every_6_hours" xml:space="preserve">
+    <value>Every 6 hours</value>
+  </data>
+	<data name="SID_Every_12_hours" xml:space="preserve">
+    <value>Every 12 hours</value>
+  </data>
+	<data name="SID_Every_day" xml:space="preserve">
+    <value>Every day</value>
+  </data>
+	<data name="SID_Every_2_days" xml:space="preserve">
+    <value>Every 2 days</value>
+  </data>
+	<data name="SID_Every_7_days" xml:space="preserve">
+    <value>Every 7 days</value>
+  </data>
+	<data name="SID_Every_30_days" xml:space="preserve">
+    <value>Every 30 days</value>
+  </data>
+	<data name="SID_Wrong_param" xml:space="preserve">
+    <value>Wrong param</value>
+  </data>
+	<data name="SID_Permanently" xml:space="preserve">
+    <value>Permanently</value>
+  </data>
+	<data name="SID__sec" xml:space="preserve">
+    <value> sec</value>
+  </data>
+	<data name="SID_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+	<data name="SID_Precise" xml:space="preserve">
+    <value>Precise</value>
+  </data>
+	<data name="SID_Measurement_frequency" xml:space="preserve">
+    <value>Measurement frequency</value>
+  </data>
+	<data name="SID_Save_frequency" xml:space="preserve">
+    <value>Save frequency</value>
+  </data>
+	<data name="SID_Fast" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+	<data name="SID_Cycle_full_time" xml:space="preserve">
+    <value>Cycle full time</value>
+  </data>
+	<data name="SID_Monitoring_mode" xml:space="preserve">
+    <value>Monitoring mode</value>
+  </data>
+	<data name="SID_Fast___Precise" xml:space="preserve">
+    <value>Fast / Precise</value>
+  </data>
+	<data name="SID_Trace_title" xml:space="preserve">
+    <value>Trace title</value>
+  </data>
+	<data name="SID_Automatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+	<data name="SID_Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+	<data name="SID_Error_" xml:space="preserve">
+    <value>Error!</value>
+  </data>
+	<data name="SID_There_are_no_ports_for_monitoring_" xml:space="preserve">
+    <value>There are no ports for monitoring!</value>
+  </data>
+	<data name="SID_Saved_in_DB" xml:space="preserve">
+    <value>Saved in DB</value>
+  </data>
+	<data name="SID_Cannot_connect_RTU__0_" xml:space="preserve">
+    <value>Cannot connect RTU {0}</value>
+  </data>
+	<data name="SID_Established_connection_with_RTU__0_" xml:space="preserve">
+    <value>Established connection with RTU {0}</value>
+  </data>
+	<data name="SID_Cannot_toggle_to_port_" xml:space="preserve">
+    <value>Cannot toggle to port.</value>
+  </data>
+	<data name="SID_Cannot_find_Reflect_exe" xml:space="preserve">
+    <value>Cannot find Reflect.exe</value>
+  </data>
+	<data name="SID_WcfServiceForClient_creation_error_" xml:space="preserve">
+    <value>WcfServiceForClient creation error!</value>
+  </data>
+	<data name="SID_Service_alive" xml:space="preserve">
+    <value>Service is started, but device is not initialized.</value>
+  </data>
+	<data name="SID_Ping_does_not_pass_" xml:space="preserve">
+    <value>Ping does not pass. Service state is unknown.</value>
+  </data>
+	<data name="SID_Rtu_initialized" xml:space="preserve">
+    <value>Service is started and initialized successfully.</value>
+  </data>
+	<data name="SID____Ping_passed__OK" xml:space="preserve">
+    <value>Service is not available.  Ping passed.</value>
+  </data>
+	<data name="SID_Cannot_deliver_command_to_RTU__0_" xml:space="preserve">
+    <value>Cannot deliver command to RTU {0}</value>
+  </data>
+	<data name="SID_Command_was_delivered_to_RTU__0__but_RTU_ignored_it__RTU_is_busy_" xml:space="preserve">
+    <value>Command was delivered to RTU {0} but RTU ignored it (RTU is busy)</value>
+  </data>
+	<data name="SID_Base_ref_assigned_successfully___0_" xml:space="preserve">
+    <value>Base ref assigned successfully: {0}</value>
+  </data>
+	<data name="SID_Monitoring_settings_applied_successfully___0_" xml:space="preserve">
+    <value>Monitoring settings applied successfully: {0}</value>
+  </data>
+	<data name="SID_Test_RTU_communication_functions" xml:space="preserve">
+    <value>Test RTU communication functions</value>
+  </data>
+	<data name="SID_Connection_check" xml:space="preserve">
+    <value>Connection check</value>
+  </data>
+	<data name="SID_Connection_established__RTU_is_Ok_" xml:space="preserve">
+    <value>Connection established, RTU is Ok!</value>
+  </data>
+	<data name="SID_Connection_established_Rtu_is_initializing_now" xml:space="preserve">
+    <value>Connection established, 
+RTU is initializing right now!</value>
+  </data>
+	<data name="SID_Cant_establish_connection_" xml:space="preserve">
+    <value>Can't establish connection!</value>
+  </data>
+	<data name="SID_Ping_passed_" xml:space="preserve">
+    <value>Ping passed.</value>
+  </data>
+	<data name="SID_Ping_failed" xml:space="preserve">
+    <value> Ping failed!</value>
+  </data>
+	<data name="SID_Request_is_sent" xml:space="preserve">
+    <value>Request is sent</value>
+  </data>
+	<data name="SID_Connection_established_successfully_" xml:space="preserve">
+    <value>Connection established successfully!</value>
+  </data>
+	<data name="SID_RTU_connected_successfully_" xml:space="preserve">
+    <value>RTU connected successfully!</value>
+  </data>
+	<data name="SID_Can_t_connect_RTU___0_" xml:space="preserve">
+    <value>Can't connect RTU, {0}</value>
+  </data>
+	<data name="SID_Can_t_connect_RTU" xml:space="preserve">
+    <value>Can't connect RTU</value>
+  </data>
+	<data name="SID_Title_should_be_set_" xml:space="preserve">
+    <value>Title should be set!</value>
+  </data>
+	<data name="SID_Can_t_establish_connection_with_server_" xml:space="preserve">
+    <value>Can't establish connection with server!</value>
+  </data>
+	<data name="SID_Can_t_establish_connection_with_RTU___0_Press_Test_before_Initialization_" xml:space="preserve">
+    <value>Can't establish connection with RTU! {0}Press Test before initialization.</value>
+  </data>
+	<data name="SID_Can_t_establish_connection_with_RTU_" xml:space="preserve">
+    <value>Can't establish connection with RTU!</value>
+  </data>
+	<data name="SID_Command_is_transmitted_to_RTU___0_Confirmation_is_waited_" xml:space="preserve">
+    <value>Command is transmitted to RTU. {0}Confirmation is waited.</value>
+  </data>
+	<data name="SID_RTU_Manager_software_version" xml:space="preserve">
+    <value>RTU Manager software version</value>
+  </data>
+	<data name="SID_Wrong_user_name_or_password_" xml:space="preserve">
+    <value>Wrong user name or password!</value>
+  </data>
+	<data name="SID_Establishing_connection___" xml:space="preserve">
+    <value>Establishing connection...</value>
+  </data>
+	<data name="SID_RTU_connection_established_successfully_" xml:space="preserve">
+    <value>RTU connection established successfully!</value>
+  </data>
+	<data name="SID_Cannot_establish_connection_with_RTU_" xml:space="preserve">
+    <value>Cannot establish connection with RTU!</value>
+  </data>
+	<data name="SID_RTU_initialized_successfully_" xml:space="preserve">
+    <value>RTU initialized successfully!</value>
+  </data>
+	<data name="SID_RTU_initialization_failed_" xml:space="preserve">
+    <value>RTU initialization failed!</value>
+  </data>
+	<data name="SID_RTU_initialization_error_" xml:space="preserve">
+    <value>RTU initialization error!</value>
+  </data>
+	<data name="SID_Cannot_find_dll_file_" xml:space="preserve">
+    <value>Cannot find dll file!</value>
+  </data>
+	<data name="SID_Cannot_initialize_dll_" xml:space="preserve">
+    <value>Cannot initialize measurement dll!</value>
+  </data>
+	<data name="SID_Cannot_establish_connection_with_DataCenter_" xml:space="preserve">
+    <value>Cannot establish connection with DataCenter!</value>
+  </data>
+	<data name="SID_RTU_is_turned_into_manual_mode" xml:space="preserve">
+    <value>RTU is turned into manual mode</value>
+  </data>
+	<data name="SID_Cannot_turn_RTU_into_manual_mode" xml:space="preserve">
+    <value>Cannot turn RTU into manual mode</value>
+  </data>
+	<data name="SID_RTU_is_turned_into_automatic_mode" xml:space="preserve">
+    <value>RTU is turned into automatic mode</value>
+  </data>
+	<data name="SID_Cannot_turn_RTU_into_automatic_mode" xml:space="preserve">
+    <value>Cannot turn RTU into automatic mode</value>
+  </data>
+	<data name="SID_Command_is_processing___" xml:space="preserve">
+    <value>Command is processing...</value>
+  </data>
+	<data name="SID_Error_during_Client_Datacenter_connection" xml:space="preserve">
+    <value>Error during Client-Datacenter connection</value>
+  </data>
+	<data name="SID_Error_during_Datacenter_Rtu_connection" xml:space="preserve">
+    <value>Error during Datacenter-Rtu connection</value>
+  </data>
+	<data name="SID_Database_error_" xml:space="preserve">
+    <value>Database error!</value>
+  </data>
+	<data name="SID_Base_ref_s__are_saved_successfully_" xml:space="preserve">
+    <value>Base ref(s) are saved successfully.</value>
+  </data>
+	<data name="SID_Monitoring_settings_applied_successfully_" xml:space="preserve">
+    <value>Monitoring settings applied successfully.</value>
+  </data>
+	<data name="SID_User_with_the_same_name_is_registered_on_another_PC" xml:space="preserve">
+    <value>User with the same name is registered from another device</value>
+  </data>
+	<data name="SID_Unknown_return_code" xml:space="preserve">
+    <value>Unknown return code</value>
+  </data>
+	<data name="SID_No_such_user_or_wrong_password_" xml:space="preserve">
+    <value>No such user or wrong password!</value>
+  </data>
+	<data name="SID_Network_events" xml:space="preserve">
+    <value>Network events RTU</value>
+  </data>
+	<data name="SID_Optical_events" xml:space="preserve">
+    <value>Optical events</value>
+  </data>
+	<data name="SID_Event_timestamp" xml:space="preserve">
+    <value>Event registration timestamp</value>
+  </data>
+	<data name="SID_Event_status" xml:space="preserve">
+    <value>Event status</value>
+  </data>
+	<data name="SID_Status_assignment_time" xml:space="preserve">
+    <value>Status changed at</value>
+  </data>
+	<data name="SID_Status_changed_by" xml:space="preserve">
+    <value>Status changed by</value>
+  </data>
+	<data name="SID_Number" xml:space="preserve">
+    <value>No</value>
+  </data>
+	<data name="SID_Not_in_trace" xml:space="preserve">
+    <value>Not in trace</value>
+  </data>
+	<data name="SID_Not_joined" xml:space="preserve">
+    <value>Not joined</value>
+  </data>
+	<data name="SID_Distace_measurement" xml:space="preserve">
+    <value>Distace measurement</value>
+  </data>
+	<data name="SID_Not_checked" xml:space="preserve">
+    <value>Not checked</value>
+  </data>
+	<data name="SID_Suspicion" xml:space="preserve">
+    <value>Suspicion</value>
+  </data>
+	<data name="SID_User_s_threshold" xml:space="preserve">
+    <value>User's threshold</value>
+  </data>
+	<data name="SID_No_fiber" xml:space="preserve">
+    <value>No fiber</value>
+  </data>
+	<data name="SID_Highlighted" xml:space="preserve">
+    <value>Highlighted</value>
+  </data>
+	<data name="SID_Planned" xml:space="preserve">
+    <value>Planned</value>
+  </data>
+	<data name="SID_Not_confirmed" xml:space="preserve">
+    <value>Not confirmed</value>
+  </data>
+	<data name="SID_Unprocessed" xml:space="preserve">
+    <value>Unprocessed</value>
+  </data>
+	<data name="SID_Suspended" xml:space="preserve">
+    <value>Suspended</value>
+  </data>
+	<data name="SID_Confirmed" xml:space="preserve">
+    <value>Confirmed</value>
+  </data>
+	<data name="SID_Second" xml:space="preserve">
+    <value>Second</value>
+  </data>
+	<data name="SID_Base_ref_type" xml:space="preserve">
+    <value>Base ref type</value>
+  </data>
+	<data name="SID_Assigned_at" xml:space="preserve">
+    <value>Assigned</value>
+  </data>
+	<data name="SID_Assigned_by" xml:space="preserve">
+    <value>User</value>
+  </data>
+	<data name="SID_Trace__0__statistics" xml:space="preserve">
+    <value>Trace {0} statistics</value>
+  </data>
+	<data name="SID_Event_Id" xml:space="preserve">
+    <value>Event ID</value>
+  </data>
+	<data name="SID_Accidents_place" xml:space="preserve">
+    <value>Accident's place</value>
+  </data>
+	<data name="SID_Rfts_Events" xml:space="preserve">
+    <value>RFTS Events</value>
+  </data>
+	<data name="SID_Export_to_kml" xml:space="preserve">
+    <value>Export to kml</value>
+  </data>
+	<data name="SID_Report" xml:space="preserve">
+    <value>Report</value>
+  </data>
+	<data name="SID_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+	<data name="SID_Accidents" xml:space="preserve">
+    <value>Accidents</value>
+  </data>
+	<data name="SID_Distance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+	<data name="SID_Left_node" xml:space="preserve">
+    <value>Left node</value>
+  </data>
+	<data name="SID_Dist_to_left" xml:space="preserve">
+    <value>Dist. to left</value>
+  </data>
+	<data name="SID_Right_node" xml:space="preserve">
+    <value>Right node</value>
+  </data>
+	<data name="SID_Dist_to_right" xml:space="preserve">
+    <value>Dist. to right</value>
+  </data>
+	<data name="SID_Optical_event" xml:space="preserve">
+    <value>Optical event</value>
+  </data>
+	<data name="SID_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+	<data name="SID_Show_reflectogram" xml:space="preserve">
+    <value>Show reflectogram</value>
+  </data>
+	<data name="SID_Show_ref_and_base" xml:space="preserve">
+    <value>Show ref + base</value>
+  </data>
+	<data name="SID_Save_reflectogram_as" xml:space="preserve">
+    <value>Save reflectogram as</value>
+  </data>
+	<data name="SID_Save_ref_and_base_as" xml:space="preserve">
+    <value>Save ref + base as</value>
+  </data>
+	<data name="SID_Trace_state_Event_status" xml:space="preserve">
+    <value>Trace state / Event status</value>
+  </data>
+	<data name="SID_Cannot_send_base_refs_to_RTU" xml:space="preserve">
+    <value>Cannot send base refs to RTU</value>
+  </data>
+	<data name="SID_Bop" xml:space="preserve">
+    <value>BOP</value>
+  </data>
+	<data name="SID_Traces_state" xml:space="preserve">
+    <value>Traces state</value>
+  </data>
+	<data name="SID_Bop_count" xml:space="preserve">
+    <value>Bop count</value>
+  </data>
+	<data name="SID_Trace_count" xml:space="preserve">
+    <value>Trace count</value>
+  </data>
+	<data name="SID_Timestamp" xml:space="preserve">
+    <value>Timestamp</value>
+  </data>
+	<data name="SID_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+	<data name="SID_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+	<data name="SID_Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+	<data name="SID_Not_available" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+	<data name="SID_Broken" xml:space="preserve">
+    <value>Broken</value>
+  </data>
+	<data name="SID_State_of_RTU" xml:space="preserve">
+    <value>State of RTU</value>
+  </data>
+	<data name="SID_Measurement_interrupted" xml:space="preserve">
+    <value>Measurement interrupted</value>
+  </data>
+	<data name="SID_Measurement_s_result_analysis__port__0____trace___1__" xml:space="preserve">
+    <value>Measurement's result analysis (port {0}), trace "{1}"</value>
+  </data>
+	<data name="SID_Measurement_on_port__0___trace___1__" xml:space="preserve">
+    <value>Measurement on port {0}, trace "{1}"</value>
+  </data>
+	<data name="SID_Toggling_to_the_port__0_" xml:space="preserve">
+    <value>Toggling to the port {0}</value>
+  </data>
+	<data name="SID_Measurement_termination_timestamp" xml:space="preserve">
+    <value>Measurement termination timestamp</value>
+  </data>
+	<data name="SID_State_at_" xml:space="preserve">
+    <value>State at {0} (ID {1})</value>
+  </data>
+	<data name="SID__not_attached_" xml:space="preserve">
+    <value>&lt;not attached&gt;</value>
+  </data>
+	<data name="SID_No_measurement" xml:space="preserve">
+    <value>No measurement</value>
+  </data>
+	<data name="SID___Client_s_address__0_" xml:space="preserve">
+    <value>  Client's address {0}</value>
+  </data>
+	<data name="SID_Status_of_optical_event" xml:space="preserve">
+    <value>Status of optical event</value>
+  </data>
+	<data name="SID_Current_accidents" xml:space="preserve">
+    <value>Current accidents</value>
+  </data>
+	<data name="SID_All_optical_events" xml:space="preserve">
+    <value>All optical events</value>
+  </data>
+	<data name="SID_All_network_events" xml:space="preserve">
+    <value>All network events</value>
+  </data>
+	<data name="SID_Network_events_Bop" xml:space="preserve">
+    <value>Network events BOP</value>
+  </data>
+	<data name="SID_No_traces_selected_for_monitoring_" xml:space="preserve">
+    <value>No traces selected for monitoring!</value>
+  </data>
+	<data name="SID_Select_RTU" xml:space="preserve">
+    <value>Select RTU</value>
+  </data>
+	<data name="SID_RTU_is_being_initialized___" xml:space="preserve">
+    <value>RTU is being initialized...</value>
+  </data>
+	<data name="SID_Trace_definition" xml:space="preserve">
+    <value>Trace definition</value>
+  </data>
+	<data name="SID_File_read_error__0__1_" xml:space="preserve">
+    <value>File read error!{0}{1}</value>
+  </data>
+	<data name="SID_Invalid_parameter___Wave_length__0_" xml:space="preserve">
+    <value>Invalid parameter : Wave length {0}</value>
+  </data>
+	<data name="SID_PreciseF" xml:space="preserve">
+    <value>Precise</value>
+  </data>
+	<data name="SID_FastF" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+	<data name="SID_SecondF" xml:space="preserve">
+    <value>Second</value>
+  </data>
+	<data name="SID_There_are_no_selected_row_" xml:space="preserve">
+    <value>There are no selected row.</value>
+  </data>
+	<data name="SID_Trace_length_on_map_is__0__km" xml:space="preserve">
+    <value>Trace length on map is {0} km</value>
+  </data>
+	<data name="SID_Optical_length_is__0__km" xml:space="preserve">
+    <value>Optical length is {0} km</value>
+  </data>
+	<data name="SID_Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+	<data name="SID_Long_operation__Removing_trace_s_measurements____Please_wait_" xml:space="preserve">
+    <value>Long operation: Removing trace's measurements... Please wait.</value>
+  </data>
+	<data name="SID_Attention_" xml:space="preserve">
+    <value>Attention!</value>
+  </data>
+	<data name="SID_All_measurements_for_trace" xml:space="preserve">
+    <value>All measurements for trace</value>
+  </data>
+	<data name="SID_will_be_removed" xml:space="preserve">
+    <value>will be removed!</value>
+  </data>
+	<data name="SID_Are_you_sure_" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+	<data name="SID_Assign_base_reflectogram_" xml:space="preserve">
+    <value>Assign base reflectogram?</value>
+  </data>
+	<data name="SID__base_" xml:space="preserve">
+    <value> base:</value>
+  </data>
+	<data name="SID_Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+	<data name="SID_Measurement_parameters_are_not_compatible_with_this_RTU" xml:space="preserve">
+    <value>Measurement parameters are not compatible with this RTU</value>
+  </data>
+	<data name="SID__0__base_is_not_compatible_with_trace" xml:space="preserve">
+    <value>{0} base is not compatible with trace</value>
+  </data>
+	<data name="SID_Landmarks_count_in_reflectogram_is__0_" xml:space="preserve">
+    <value>Landmarks count in reflectogram is: {0}</value>
+  </data>
+	<data name="SID__while" xml:space="preserve">
+    <value>while</value>
+  </data>
+	<data name="SID_Trace_s_node_count_is__0_" xml:space="preserve">
+    <value>Trace's node count is: {0}</value>
+  </data>
+	<data name="SID_Trace_s_equipment_count_is__0_" xml:space="preserve">
+    <value>Trace's equipment count is: {0}</value>
+  </data>
+	<data name="SID_Without_equipment" xml:space="preserve">
+    <value>Without equipment</value>
+  </data>
+	<data name="SID_Equipment__including_RTU" xml:space="preserve">
+    <value>Equipment, including RTU</value>
+  </data>
+	<data name="SID_Node_without_equipment" xml:space="preserve">
+    <value>Node without equipment</value>
+  </data>
+	<data name="SID_OTDR_initialization_error_" xml:space="preserve">
+    <value>OTDR initialization error!</value>
+  </data>
+	<data name="SID_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+	<data name="SID_Measurement_time_" xml:space="preserve">
+    <value>Measurement time:</value>
+  </data>
+	<data name="SID_Measure" xml:space="preserve">
+    <value>Measure</value>
+  </data>
+	<data name="SID_Precise_monitoring_out_of_turn" xml:space="preserve">
+    <value>Precise monitoring out of turn</value>
+  </data>
+	<data name="SID_Precise_monitoring_in_progress_" xml:space="preserve">
+    <value>Precise monitoring in progress.</value>
+  </data>
+	<data name="SID_Trace____0___" xml:space="preserve">
+    <value>Trace &lt;&lt;{0}&gt;&gt;</value>
+  </data>
+	<data name="SID_Measurement_time_accordingly_to_base_ref_is__0_" xml:space="preserve">
+    <value>Measurement time accordingly to base ref is {0}</value>
+  </data>
+	<data name="SID_Sending_command__Wait_please___" xml:space="preserve">
+    <value>Sending command. Wait please...</value>
+  </data>
+	<data name="SID_Interrupting_out_of_turn_monitoring__Wait_please___" xml:space="preserve">
+    <value>Interrupting out of turn monitoring. Wait please...</value>
+  </data>
+	<data name="SID_Interrupting_Measurement__Client___Wait_please___" xml:space="preserve">
+    <value>Interrupting Measurement (Client). Wait please...</value>
+  </data>
+	<data name="SID_Measurement__Client__in_progress__Please_wait___" xml:space="preserve">
+    <value>Measurement (Client) in progress. Please wait...</value>
+  </data>
+	<data name="SID_m" xml:space="preserve">
+    <value>m</value>
+  </data>
+	<data name="SID_Do_not_set_landmark_on_reflectogram" xml:space="preserve">
+    <value>* Do not set landmark on reflectogram</value>
+  </data>
+	<data name="SID_With_cable_reserve_to_the_left_m" xml:space="preserve">
+    <value>With cable reserve to the left, m</value>
+  </data>
+	<data name="SID_To_the_right_m" xml:space="preserve">
+    <value>To the right, m</value>
+  </data>
+	<data name="SID_There_are_no_thresholds_for_comparison" xml:space="preserve">
+    <value>There are no thresholds for comparison</value>
+  </data>
+	<data name="SID_Unplug_trace" xml:space="preserve">
+    <value>Unplug trace</value>
+  </data>
+	<data name="SID_In_node_are_placed_" xml:space="preserve">
+    <value>In node are placed:</value>
+  </data>
+	<data name="SID_Cable_reserve_could_not_be_more_than__0__m" xml:space="preserve">
+    <value>Cable reserve could not be more than {0} m</value>
+  </data>
+	<data name="SID_Trace_components_selection" xml:space="preserve">
+    <value>Trace components selection</value>
+  </data>
+	<data name="SID_Trace_title_contains_forbidden_symbols" xml:space="preserve">
+    <value>Trace title contains forbidden symbols</value>
+  </data>
+	<data name="SID_Remove_adjustment_point" xml:space="preserve">
+    <value>Remove adjustment point</value>
+  </data>
+	<data name="SID_Only_RTU" xml:space="preserve">
+    <value>Only RTU</value>
+  </data>
+	<data name="SID_RTU_and_traces" xml:space="preserve">
+    <value>RTU and traces</value>
+  </data>
+	<data name="SID_New_responsibility_zone_creation" xml:space="preserve">
+    <value>New responsibility zone creation</value>
+  </data>
+	<data name="SID_Update_responsibility_zone" xml:space="preserve">
+    <value>Update responsibility zone</value>
+  </data>
+	<data name="SID_New_user_creation" xml:space="preserve">
+    <value>New user creation</value>
+  </data>
+	<data name="SID_Update_user_info" xml:space="preserve">
+    <value>Update user info</value>
+  </data>
+	<data name="SID_Change_password" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+	<data name="SID_Input_current_password" xml:space="preserve">
+    <value>Input your current password</value>
+  </data>
+	<data name="SID_New_password" xml:space="preserve">
+    <value>New password</value>
+  </data>
+	<data name="SID_Wrong_password" xml:space="preserve">
+    <value>Wrong password!</value>
+  </data>
+	<data name="SID_Next_step" xml:space="preserve">
+    <value>Next step</value>
+  </data>
+	<data name="SID_Step_by_step_trace_defining" xml:space="preserve">
+    <value>Step by step trace defining</value>
+  </data>
+	<data name="SID____previous_" xml:space="preserve">
+    <value>  (previous)</value>
+  </data>
+	<data name="SID_Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+	<data name="SID_Cancel_step" xml:space="preserve">
+    <value>Cancel step</value>
+  </data>
+	<data name="SID_Step_forward" xml:space="preserve">
+    <value>Step forward</value>
+  </data>
+	<data name="SID_Step_backward" xml:space="preserve">
+    <value>Step backward</value>
+  </data>
+	<data name="SID_Semiautomatic_mode" xml:space="preserve">
+    <value>Semi-automatic mode</value>
+  </data>
+	<data name="SID_Distance_measurement_mode" xml:space="preserve">
+    <value>Distance measurement mode</value>
+  </data>
+	<data name="SID_L_m" xml:space="preserve">
+    <value>L, m</value>
+  </data>
+	<data name="SID_R_m" xml:space="preserve">
+    <value>R, m</value>
+  </data>
+	<data name="SID_Turn_alarm_off" xml:space="preserve">
+    <value>Turn alarm off</value>
+  </data>
+	<data name="SID_km" xml:space="preserve">
+    <value>km</value>
+  </data>
+	<data name="SID_between_nodes" xml:space="preserve">
+    <value>between nodes</value>
+  </data>
+	<data name="SID_and" xml:space="preserve">
+    <value>and</value>
+  </data>
+	<data name="SID_in_the_node" xml:space="preserve">
+    <value>in the node</value>
+  </data>
+	<data name="SID_Accidents_count___0_" xml:space="preserve">
+    <value>Accidents count: {0}</value>
+  </data>
+	<data name="SID_Trace_s_equipment_count__excluding_Cable_reserve__is__0_" xml:space="preserve">
+    <value>Trace's equipment count (excluding Cable reserve) is: {0}</value>
+  </data>
+	<data name="SID_Refractive_index" xml:space="preserve">
+    <value>Refractive index</value>
+  </data>
+	<data name="SID_Distance_range" xml:space="preserve">
+    <value>Distance range</value>
+  </data>
+	<data name="SID_Data_is_loading" xml:space="preserve">
+    <value>Data is loading, please wait...</value>
+  </data>
+	<data name="SID_Resending_base_refs_to_RTU___" xml:space="preserve">
+    <value>Resending base refs to RTU...</value>
+  </data>
+	<data name="SID_Base_refs_are_sent_to_RTU" xml:space="preserve">
+    <value>Base refs are sent to RTU</value>
+  </data>
+	<data name="SID_Cannot_send_base_ref_to_RTU" xml:space="preserve">
+    <value>Cannot send base ref to RTU</value>
+  </data>
+	<data name="SID_Can_t_get_base_refs_for_trace__0_" xml:space="preserve">
+    <value>Can't get base refs for trace {0}</value>
+  </data>
+	<data name="SID_Can_t_save_amended_reflectogram" xml:space="preserve">
+    <value>Can't save amended reflectogram</value>
+  </data>
+	<data name="SID_Registered" xml:space="preserve">
+    <value>Registered</value>
+  </data>
+	<data name="SID_More" xml:space="preserve">
+    <value>More</value>
+  </data>
+	<data name="SID_Waiting_for_data" xml:space="preserve">
+    <value>Waiting for data</value>
+  </data>
+	<data name="SID_Not_important" xml:space="preserve">
+    <value>Not important</value>
+  </data>
+	<data name="SID_Subject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+	<data name="SID_Responsibility_zones_subjects" xml:space="preserve">
+    <value>Responsibility zones subjects</value>
+  </data>
+	<data name="SID_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+	<data name="SID_Equipm__title" xml:space="preserve">
+    <value>Equipment title</value>
+  </data>
+	<data name="SID_Go_to_the_fork" xml:space="preserve">
+    <value>Go to the fork</value>
+  </data>
+	<data name="SID____noname_node_" xml:space="preserve">
+    <value>  &lt;noname node&gt;</value>
+  </data>
+	<data name="SID_Trace_cannot_be_terminated_by_or_pass_through_RTU_" xml:space="preserve">
+    <value>Trace cannot be terminated by or pass through RTU!</value>
+  </data>
+	<data name="SID_It_s_an_end_node_" xml:space="preserve">
+    <value>It's an end node.</value>
+  </data>
+	<data name="SID_If_you_need_to_continue__press__Step_backward_" xml:space="preserve">
+    <value>If you need to continue, press &lt;Step backward&gt;.</value>
+  </data>
+	<data name="SID_Show_on_map" xml:space="preserve">
+    <value>Show on map</value>
+  </data>
+	<data name="SID_Cancel_changes" xml:space="preserve">
+    <value>Cancel changes</value>
+  </data>
+	<data name="SID_Sent_successfully_" xml:space="preserve">
+    <value>Sent successfully!</value>
+  </data>
+	<data name="SID_Sending_failed_" xml:space="preserve">
+    <value>Sending failed!</value>
+  </data>
+	<data name="SID_Check_e_mail_notification" xml:space="preserve">
+    <value>Check e-mail notification</value>
+  </data>
+	<data name="SID__no_filter_" xml:space="preserve">
+    <value>&lt;no filter&gt;</value>
+  </data>
+	<data name="SID_Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+	<data name="SID_Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+	<data name="SID_Include_equipment_into_trace" xml:space="preserve">
+    <value>Include equipment into trace</value>
+  </data>
+	<data name="SID_Exclude_equipment_from_trace" xml:space="preserve">
+    <value>Exclude equipment from trace</value>
+  </data>
+	<data name="SID_Close_application_" xml:space="preserve">
+    <value>Close application?</value>
+  </data>
+	<data name="SID_Error_while_base_ref_acceptability_checking_" xml:space="preserve">
+    <value>Error while base ref acceptability checking!</value>
+  </data>
+	<data name="SID_Remove_adjustment_points_or_add_nodes" xml:space="preserve">
+    <value>Remove adjustment points or add nodes</value>
+  </data>
+	<data name="SID_next_to_the_node_your_are_going_to_remove" xml:space="preserve">
+    <value>next to the node your are going to remove</value>
+  </data>
+	<data name="SID_Attach_trace" xml:space="preserve">
+    <value>Attach trace</value>
+  </data>
+	<data name="SID_RTU_does_not_support_BOP" xml:space="preserve">
+    <value>This RTU does not support BOP attachment</value>
+  </data>
+	<data name="SID_Too_big_port_number_for_BOP_attachment" xml:space="preserve">
+    <value>Too big port number for BOP attachment</value>
+  </data>
+	<data name="SID_Detach_BOP_manually" xml:space="preserve">
+    <value>Detach BOP manually</value>
+  </data>
+	<data name="SID_and_start_initialization_again_" xml:space="preserve">
+    <value>and start initialization again.</value>
+  </data>
+	<data name="SID_Remove_RTU___0____" xml:space="preserve">
+    <value>Remove RTU "{0}" ?</value>
+  </data>
+	<data name="SID_Attach_OTAU_error_" xml:space="preserve">
+    <value>Attach OTAU error!</value>
+  </data>
+	<data name="SID_Change_the_language" xml:space="preserve">
+    <value>Change the language</value>
+  </data>
+	<data name="SID_Show_all_graph_on_application_start" xml:space="preserve">
+    <value>Show all graph on application start</value>
+  </data>
+	<data name="SID_To_adjust_trace_drawing_were_used__0__point_s_" xml:space="preserve">
+    <value>To adjust trace drawing were used {0} point(s)</value>
+  </data>
+	<data name="SID_The_changes_will_be_applied_after_application_restart" xml:space="preserve">
+    <value>* The changes will be applied after application restart</value>
+  </data>
+	<data name="SID_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+	<data name="SID_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+	<data name="SID_License" xml:space="preserve">
+    <value>License</value>
+  </data>
+	<data name="SID_I_have_a_license_file" xml:space="preserve">
+    <value>I have a license file</value>
+  </data>
+	<data name="SID_License_owner" xml:space="preserve">
+    <value>License owner</value>
+  </data>
+	<data name="SID_Exceeded_the_number_of_RTU_for_an_existing_license" xml:space="preserve">
+    <value>Exceeded the number of initialized RTU for an existing license</value>
+  </data>
+	<data name="SID_Exceeded_the_number_of_clients_registered_simultaneously" xml:space="preserve">
+    <value>Exceeded the number of clients registered simultaneously</value>
+  </data>
+	<data name="SID_Event_log" xml:space="preserve">
+    <value>Event log</value>
+  </data>
+	<data name="SID_User_operations_log" xml:space="preserve">
+    <value>User operations log</value>
+  </data>
+	<data name="SID_RTU_added" xml:space="preserve">
+    <value>RTU added</value>
+  </data>
+	<data name="SID_RTU_updated" xml:space="preserve">
+    <value>RTU updated</value>
+  </data>
+	<data name="SID_Trace_added" xml:space="preserve">
+    <value>Trace added</value>
+  </data>
+	<data name="SID_Trace_updated" xml:space="preserve">
+    <value>Trace updated</value>
+  </data>
+	<data name="SID_Trace_attached" xml:space="preserve">
+    <value>Trace attached</value>
+  </data>
+	<data name="SID_Monitoring_settings_changed" xml:space="preserve">
+    <value>Monitoring settings changed</value>
+  </data>
+	<data name="SID_Monitoring_stopped" xml:space="preserve">
+    <value>Monitoring stopped</value>
+  </data>
+	<data name="SID_Base_ref_assigned" xml:space="preserve">
+    <value>Base ref assigned</value>
+  </data>
+	<data name="SID_Client_started" xml:space="preserve">
+    <value>Client started</value>
+  </data>
+	<data name="SID_Client_exited" xml:space="preserve">
+    <value>Client exited</value>
+  </data>
+	<data name="SID_Trace_removed" xml:space="preserve">
+    <value>Trace removed</value>
+  </data>
+	<data name="SID_Trace_cleaned" xml:space="preserve">
+    <value>Trace cleaned</value>
+  </data>
+	<data name="SID_Trace_detached" xml:space="preserve">
+    <value>Trace detached</value>
+  </data>
+	<data name="SID_RTU_initialized2" xml:space="preserve">
+    <value>RTU initialized</value>
+  </data>
+	<data name="SID_Ordinal" xml:space="preserve">
+    <value>Ordinal</value>
+  </data>
+	<data name="SID_Client_Ip" xml:space="preserve">
+    <value>Client IP</value>
+  </data>
+	<data name="SID_Operation" xml:space="preserve">
+    <value>Operation</value>
+  </data>
+	<data name="SID_Additional_info" xml:space="preserve">
+    <value>Additional info</value>
+  </data>
+	<data name="SID_Choose_operations" xml:space="preserve">
+    <value>Choose operations</value>
+  </data>
+	<data name="SID_Unknown_code" xml:space="preserve">
+    <value>Unknown code</value>
+  </data>
+	<data name="SID_All_operations" xml:space="preserve">
+    <value>All operations</value>
+  </data>
+	<data name="SID_RTU_removed" xml:space="preserve">
+    <value>RTU removed</value>
+  </data>
+	<data name="SID_Monitoring_started" xml:space="preserve">
+    <value>Monitoring started</value>
+  </data>
+	<data name="SID_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+	<data name="SID_Zone___0___removal_" xml:space="preserve">
+    <value>Zone &lt;{0}&gt; removal!</value>
+  </data>
+	<data name="SID_Users_associated_with_this_zone_will_be_removed" xml:space="preserve">
+    <value>Users associated with this zone will be removed</value>
+  </data>
+	<data name="SID_Long_operation__please_wait" xml:space="preserve">
+    <value>Long operation, please wait...</value>
+  </data>
+	<data name="SID_Landmarks_of_traces_of_RTU_" xml:space="preserve">
+    <value>Landmarks of traces of RTU </value>
+  </data>
+	<data name="SID_Drawing_graph_of_traces_" xml:space="preserve">
+    <value>Drawing graph of traces.</value>
+  </data>
+	<data name="SID_Depending_on_graph_size_and_performance_of_your_PC" xml:space="preserve">
+    <value>Depending on graph size and performance of your PC</value>
+  </data>
+	<data name="SID_it_could_take_a_few_minutes_" xml:space="preserve">
+    <value>it could take a few minutes.</value>
+  </data>
+	<data name="SID_Please__wait___" xml:space="preserve">
+    <value>Please, wait...</value>
+  </data>
+	<data name="SID_license_en_rtf" xml:space="preserve">
+    <value>license_en.rtf</value>
+  </data>
+	<data name="SID__0__installed_on_your_PC_already__Continue_" xml:space="preserve">
+    <value>{0} installed on your PC already. Continue?</value>
+  </data>
+	<data name="SID_License_Agreement" xml:space="preserve">
+    <value>License Agreement</value>
+  </data>
+	<data name="SID_Setup_caption" xml:space="preserve">
+    <value>{0} setup</value>
+  </data>
+	<data name="SID_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+	<data name="SID_I_Agree" xml:space="preserve">
+    <value>I Agree</value>
+  </data>
+	<data name="SID_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+	<data name="SID_license_en_xps" xml:space="preserve">
+    <value>license_en.xps</value>
+  </data>
+	<data name="SID_Please_review_the_license_terms_before_installing__0__" xml:space="preserve">
+    <value>Please review the license terms before installing {0}.</value>
+  </data>
+	<data name="SID_If_you_accept_0_" xml:space="preserve">
+    <value>If you accept the terms of the agreement, click I Agree to continue. You must accept the agreement to install {0}</value>
+  </data>
+	<data name="SID_Choose_Install_Location" xml:space="preserve">
+    <value>Choose Install Location</value>
+  </data>
+	<data name="SID_Choose_folder_in_which_to_install__0_" xml:space="preserve">
+    <value>Choose folder in which to install {0}</value>
+  </data>
+	<data name="SID_Setup_will_install__0__in_" xml:space="preserve">
+    <value>Setup will install {0} in the following folder. To install in a different folder, click Browse and select another folder. Click Next to continue.</value>
+  </data>
+	<data name="SID_Space_available___0_" xml:space="preserve">
+    <value>Space available: {0}</value>
+  </data>
+	<data name="SID_Are_you_sure_you_want_to_quit__0__setup_" xml:space="preserve">
+    <value>Are you sure you want to quit {0} setup?</value>
+  </data>
+	<data name="SID_Please_select_a_setup_language" xml:space="preserve">
+    <value>Please select a setup language</value>
+  </data>
+	<data name="SID_Language_choice" xml:space="preserve">
+    <value>Language choice</value>
+  </data>
+	<data name="SID_Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+	<data name="SID_Destination_folder" xml:space="preserve">
+    <value>Destination Folder</value>
+  </data>
+	<data name="SID_Installation_Type" xml:space="preserve">
+    <value>Installation Type</value>
+  </data>
+	<data name="SID_Select_the_type_of__0__install__Click_Next_to_continue_" xml:space="preserve">
+    <value>Select the type of {0} install. Click Next to continue.</value>
+  </data>
+	<data name="SID_Type_of_install_" xml:space="preserve">
+    <value>Type of install:</value>
+  </data>
+	<data name="SID_Please_select_the_type_of__0__install" xml:space="preserve">
+    <value>Please select the type of {0} install</value>
+  </data>
+	<data name="SID_Installation_Complete" xml:space="preserve">
+    <value>Installation Complete</value>
+  </data>
+	<data name="SID_Setup_was_completed_successfully" xml:space="preserve">
+    <value>Setup was completed successfully</value>
+  </data>
+	<data name="SID_Installing" xml:space="preserve">
+    <value>Installing</value>
+  </data>
+	<data name="SID_Please_wait_while__0__is_being_installed" xml:space="preserve">
+    <value>Please wait while {0} is being installed</value>
+  </data>
+	<data name="SID_Installation_failed" xml:space="preserve">
+    <value>Installation failed</value>
+  </data>
+	<data name="SID__0__installation_failed_" xml:space="preserve">
+    <value>{0} installation failed.</value>
+  </data>
+	<data name="SID__0__will_be_uninstalled_from_the_following_folder__Click_Uninstall_to_start_the_uninstallation_" xml:space="preserve">
+    <value>{0} will be uninstalled from the following folder. Click Uninstall to start the uninstallation.</value>
+  </data>
+	<data name="SID_Full_uninstall__Will_be_deleted_all_user_data___ini__log__map__etc__" xml:space="preserve">
+    <value>Full uninstall (Will be deleted all user data - ini, log, map, etc.)</value>
+  </data>
+	<data name="SID_Uninstall__0_" xml:space="preserve">
+    <value>Uninstall {0}</value>
+  </data>
+	<data name="SID_Remove__0__from_your_computer" xml:space="preserve">
+    <value>Remove {0} from your computer</value>
+  </data>
+	<data name="SID_Uninstall_started___" xml:space="preserve">
+    <value>Uninstall started...</value>
+  </data>
+	<data name="SID_Shortcuts_deleted_" xml:space="preserve">
+    <value>Shortcuts deleted.</value>
+  </data>
+	<data name="SID_Registry_cleaned_" xml:space="preserve">
+    <value>Registry cleaned.</value>
+  </data>
+	<data name="SID_Uninstall_finished_" xml:space="preserve">
+    <value>Uninstall finished.</value>
+  </data>
+	<data name="SID_Deleting_files___" xml:space="preserve">
+    <value>Deleting files...</value>
+  </data>
+	<data name="SID_Cannot_delete_specified_folder_" xml:space="preserve">
+    <value>Cannot delete specified folder!</value>
+  </data>
+	<data name="SID_Files_are_deleted_successfully_" xml:space="preserve">
+    <value>Files are deleted successfully.</value>
+  </data>
+	<data name="SID_Uninstall" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+	<data name="SID_Files_are_copied_successfully_" xml:space="preserve">
+    <value>Files are copied successfully.</value>
+  </data>
+	<data name="SID_Copy_files_error___0_" xml:space="preserve">
+    <value>Copy files error: {0}</value>
+  </data>
+	<data name="SID_Error__Source_folder__0__not_found_" xml:space="preserve">
+    <value>Error! Source folder {0} not found!</value>
+  </data>
+	<data name="SID_Save_in_Registry_problem_" xml:space="preserve">
+    <value>Save in Registry problem </value>
+  </data>
+	<data name="SID__0__service_is_being_installed___" xml:space="preserve">
+    <value>{0} service is being installed...</value>
+  </data>
+	<data name="SID_Cannot_install_service__0_" xml:space="preserve">
+    <value>Cannot install service {0}</value>
+  </data>
+	<data name="SID__0__service_installed_successfully" xml:space="preserve">
+    <value>{0} service installed successfully</value>
+  </data>
+	<data name="SID__0__service_is_being_uninstalled___" xml:space="preserve">
+    <value>{0} service is being uninstalled...</value>
+  </data>
+	<data name="SID_Cannot_uninstall_service__0_" xml:space="preserve">
+    <value>Cannot uninstall service {0}</value>
+  </data>
+	<data name="SID_Service__0__uninstalled_successfully_" xml:space="preserve">
+    <value>Service {0} uninstalled successfully.</value>
+  </data>
+	<data name="SID__0__service_is_being_stopped___" xml:space="preserve">
+    <value>{0} service is being stopped...</value>
+  </data>
+	<data name="SID_Cannot_stop_service__0_" xml:space="preserve">
+    <value>Cannot stop service {0}</value>
+  </data>
+	<data name="SID_Service__0__stopped_successfully_" xml:space="preserve">
+    <value>Service {0} stopped successfully.</value>
+  </data>
+	<data name="SID_Uninstall_setup_started_" xml:space="preserve">
+    <value>Uninstall setup started.</value>
+  </data>
+	<data name="SID_Uninstall_setup_completed_successfully_" xml:space="preserve">
+    <value>Uninstall setup completed successfully.</value>
+  </data>
+	<data name="SID_Client_setup_started_" xml:space="preserve">
+    <value>Client setup started.</value>
+  </data>
+	<data name="SID_Files_are_copied___" xml:space="preserve">
+    <value>Files are being copied...</value>
+  </data>
+	<data name="SID_Shortcuts_are_created_successfully_" xml:space="preserve">
+    <value>Shortcuts are created successfully.</value>
+  </data>
+	<data name="SID_Client_setup_completed_successfully_" xml:space="preserve">
+    <value>Client setup completed successfully.</value>
+  </data>
+	<data name="SID_Data_Center_setup_started_" xml:space="preserve">
+    <value>Data Center setup started.</value>
+  </data>
+	<data name="SID_Data_Center_setup_completed_successfully_" xml:space="preserve">
+    <value>Data Center setup completed successfully.</value>
+  </data>
+	<data name="SID_RTU_Manager_setup_started_" xml:space="preserve">
+    <value>RTU Manager setup started.</value>
+  </data>
+	<data name="SID_RTU_Manager_setup_completed_successfully_" xml:space="preserve">
+    <value>RTU Manager setup completed successfully.</value>
+  </data>
+	<data name="SID_There_is_a_trace_with_the_same_title" xml:space="preserve">
+    <value>There is a trace with the same title</value>
+  </data>
+	<data name="SID_Add_server" xml:space="preserve">
+    <value>Add server</value>
+  </data>
+	<data name="SID_Client_s_connection_lost" xml:space="preserve">
+    <value>Client's connection lost</value>
+  </data>
+	<data name="SID_Server_connection_lost_" xml:space="preserve">
+    <value>Server connection lost!</value>
+  </data>
+	<data name="SID_Check_if_the_server" xml:space="preserve">
+    <value>Check if the server is available and functioning.</value>
+  </data>
+	<data name="SID_Restart_application" xml:space="preserve">
+    <value>Restart application.</value>
+  </data>
+	<data name="SID_Close_application" xml:space="preserve">
+    <value>Close application</value>
+  </data>
+	<data name="SID_Cannot_restore_connection_with_server" xml:space="preserve">
+    <value>Cannot restore connection with server.</value>
+  </data>
+	<data name="SID_BOP_state" xml:space="preserve">
+    <value>BOP state</value>
+  </data>
+	<data name="SID_Port_Rtu" xml:space="preserve">
+    <value>Port RTU</value>
+  </data>
+	<data name="SID_Bop_breakdown" xml:space="preserve">
+    <value>BOP breakdown</value>
+  </data>
+	<data name="SID_OK_BOP" xml:space="preserve">
+    <value>OK BOP</value>
+  </data>
+	<data name="SID__filter_applied_" xml:space="preserve">
+    <value>&lt;filter applied&gt;</value>
+  </data>
+	<data name="SID_Failed_to_apply_license_" xml:space="preserve">
+    <value>Failed to apply license!</value>
+  </data>
+	<data name="SID_License_applied_successfully_" xml:space="preserve">
+    <value>License applied successfully!</value>
+  </data>
+	<data name="SID_Invalid_license_file_" xml:space="preserve">
+    <value>Invalid license file!</value>
+  </data>
+	<data name="SID_License_could_not_be_applied_repeatedly_" xml:space="preserve">
+    <value>License file could not be applied repeatedly!</value>
+  </data>
+	<data name="SID_valid_until" xml:space="preserve">
+    <value>valid until</value>
+  </data>
+	<data name="SID_Load_from_Kadastr" xml:space="preserve">
+    <value>Load from Kadastr</value>
+  </data>
+	<data name="SID_Select_folder" xml:space="preserve">
+    <value>Select folder</value>
+  </data>
+	<data name="SID_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+	<data name="SID_Nodes_loaded_from_Kadastr_so_far___0_" xml:space="preserve">
+    <value>Nodes loaded from Kadastr so far: {0}</value>
+  </data>
+	<data name="SID_Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+	<data name="SID_Fibertest_2_0_Server_including_Kadastr" xml:space="preserve">
+    <value>Fibertest 2.0 Server (including Kadastr db)</value>
+  </data>
+	<data name="SID__0__lines_found_in_conpoints_csv" xml:space="preserve">
+    <value>{0} lines found in conpoints.csv</value>
+  </data>
+	<data name="SID__0__conpoints_applied" xml:space="preserve">
+    <value>{0} conpoints applied</value>
+  </data>
+	<data name="SID__0__lines_found_in_channels_csv" xml:space="preserve">
+    <value>{0} lines found in channels.csv</value>
+  </data>
+	<data name="SID__0__channels_applied" xml:space="preserve">
+    <value>{0} channels applied</value>
+  </data>
+	<data name="SID__0__lines_found_in_wells_csv" xml:space="preserve">
+    <value>{0} lines found in wells.csv</value>
+  </data>
+	<data name="SID__0__wells_applied" xml:space="preserve">
+    <value>{0} wells applied</value>
+  </data>
+	<data name="SID_Done_" xml:space="preserve">
+    <value>Done.</value>
+  </data>
+	<data name="SID_Kadastr_Db_connection_error___" xml:space="preserve">
+    <value>Kadastr Db connection error!  </value>
+  </data>
+	<data name="SID_DataCenter_connection_failed_" xml:space="preserve">
+    <value>DataCenter connection failed!</value>
+  </data>
+	<data name="SID_DataCenter_connected_successfully_" xml:space="preserve">
+    <value>DataCenter connected successfully!</value>
+  </data>
+	<data name="SID_First_and_last_landmarks_should_be_associated_with_key_events_" xml:space="preserve">
+    <value>First and last landmarks should be associated with key events.</value>
+  </data>
+	<data name="SID_System_state" xml:space="preserve">
+    <value>System state</value>
+  </data>
+	<data name="SID_Connection_state" xml:space="preserve">
+    <value>Connection state</value>
+  </data>
+	<data name="SID_Exceeded_the_number_of_super_clients_registered_simultaneously" xml:space="preserve">
+    <value>Exceeded the number of super-clients registered simultaneously</value>
+  </data>
+	<data name="SID_Failed_to_establish_connection_" xml:space="preserve">
+    <value>Failed to establish connection.</value>
+  </data>
+	<data name="SID_Disconnect" xml:space="preserve">
+    <value>Disconnect</value>
+  </data>
+	<data name="SID_Check_connection" xml:space="preserve">
+    <value>Check connection</value>
+  </data>
+	<data name="SID_Server_title" xml:space="preserve">
+    <value>Server title</value>
+  </data>
+	<data name="SID_Server_ip_address" xml:space="preserve">
+    <value>Server IP address</value>
+  </data>
+	<data name="SID_Server_tcp_port" xml:space="preserve">
+    <value>Server TCP port</value>
+  </data>
+	<data name="SID_User_name" xml:space="preserve">
+    <value>User name</value>
+  </data>
+	<data name="SID_User_password" xml:space="preserve">
+    <value>User password</value>
+  </data>
+	<data name="SID_Wait_please__while_all_clients_will_be_closed_" xml:space="preserve">
+    <value>Wait please, while all clients will be closed.</value>
+  </data>
+	<data name="SID_Reveal_traces" xml:space="preserve">
+    <value>Reveal traces</value>
+  </data>
+	<data name="SID_Load_additional_data_" xml:space="preserve">
+    <value>Load additional data.</value>
+  </data>
+	<data name="SID_Trace_statistics" xml:space="preserve">
+    <value>Trace statistics</value>
+  </data>
+	<data name="SID_All_BOP_network_events" xml:space="preserve">
+    <value>All BOP network events</value>
+  </data>
+	<data name="SID_RTU_shoud_be_in_Reveal_Traces_Mode_" xml:space="preserve">
+    <value>RTU shoud be in Reveal Traces Mode.</value>
+  </data>
+	<data name="SID_no_base" xml:space="preserve">
+    <value>no base</value>
+  </data>
+	<data name="SID_Opt_length_m" xml:space="preserve">
+    <value>Opt. length, m</value>
+  </data>
+	<data name="SID_Maximum_60" xml:space="preserve">
+    <value> ( maximum 60 ) </value>
+  </data>
+	<data name="SID_Must_be_number_no_more_than_60" xml:space="preserve">
+    <value>Must be number no more than 60</value>
+  </data>
+	<data name="SID_Send_e_mails" xml:space="preserve">
+    <value>Send e-mails</value>
+  </data>
+	<data name="SID_Check_sms_notification" xml:space="preserve">
+    <value>Check SMS notification</value>
+  </data>
+	<data name="SID_FiberBreak_NoFiber" xml:space="preserve">
+    <value>Fiber break / No fiber</value>
+  </data>
+	<data name="SID_Save_settings_and_send_test_message" xml:space="preserve">
+    <value>Save settings and send test message</value>
+  </data>
+	<data name="SID_SMS_settings" xml:space="preserve">
+    <value>SMS server settings</value>
+  </data>
+	<data name="SID_Save_settings_and_send_test_sms" xml:space="preserve">
+    <value>Save settings and send test SMS</value>
+  </data>
+	<data name="SID_User_settings" xml:space="preserve">
+    <value>User settings</value>
+  </data>
+	<data name="SID_This_user_has_no_right_to_start_client" xml:space="preserve">
+    <value>This user has no right to start Fibertest Client</value>
+  </data>
+	<data name="SID_Set_password" xml:space="preserve">
+    <value>Set password</value>
+  </data>
+	<data name="SID_Client_settings" xml:space="preserve">
+    <value>Client application settings</value>
+  </data>
+	<data name="SID_Failed_to_save_smtp_settings_" xml:space="preserve">
+    <value>Failed to save SMTP settings!</value>
+  </data>
+	<data name="SID_Failed_to_save_gsm_modem_com_port_" xml:space="preserve">
+    <value>Failed to save GSM-modem com port!</value>
+  </data>
+	<data name="SID_Test_e_mail_sent_successfully_" xml:space="preserve">
+    <value>Test e-mail sent successfully!</value>
+  </data>
+	<data name="SID_Failed_to_send_test_e_mail_" xml:space="preserve">
+    <value>Failed to send test e-mail!</value>
+  </data>
+	<data name="SID_Trace_State_Report" xml:space="preserve">
+    <value>Trace State Report</value>
+  </data>
+	<data name="SID_Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+	<data name="SID_Trace___0___state_is_changed_to___1___at__2_" xml:space="preserve">
+    <value>Trace "{0}" state is changed to "{1}" at {2}</value>
+  </data>
+	<data name="SID_Recovered" xml:space="preserve">
+    <value>Recovered</value>
+  </data>
+	<data name="SID_Breakdown" xml:space="preserve">
+    <value>Breakdown</value>
+  </data>
+	<data name="SID_Fibertest20__Test_SMS_message" xml:space="preserve">
+    <value>Fibertest20: Test SMS message</value>
+  </data>
+	<data name="SID_Choose_map_provider" xml:space="preserve">
+    <value>Choose map provider</value>
+  </data>
+	<data name="SID_E-mail_settings" xml:space="preserve">
+    <value>E-mail server settings</value>
+  </data>
+	<data name="SID_Test_SMS_is_placed_into_sending_queue" xml:space="preserve">
+    <value>Test SMS is placed into sending queue</value>
+  </data>
+	<data name="SID_Failed_to_place_test_SMS_into_sending_queue" xml:space="preserve">
+    <value>Failed to place test SMS into sending queue</value>
+  </data>
+	<data name="SID_This_user_has_no_right_to_start_SuperClient" xml:space="preserve">
+    <value>This user has no right to start Fibertest SuperClient</value>
+  </data>
+	<data name="SID_Edit_settings" xml:space="preserve">
+    <value>Change server's settings</value>
+  </data>
+	<data name="SID__0__on_BOP__1_" xml:space="preserve">
+    <value>{0} on BOP {1}</value>
+  </data>
+	<data name="SID_BOP__0_____1__at__2_" xml:space="preserve">
+    <value>BOP {0} - {1} at {2}</value>
+  </data>
+	<data name="SID____on_port__0___optical_switch__1___" xml:space="preserve">
+    <value> port {0}: optical switch {1}  </value>
+  </data>
+	<data name="SID_______________________serial__0____1__ports" xml:space="preserve">
+    <value>                     serial {0}  {1} ports</value>
+  </data>
+	<data name="SID_RTU_connection_state" xml:space="preserve">
+    <value>RTU connection state</value>
+  </data>
+	<data name="SID_Main" xml:space="preserve">
+    <value>Main</value>
+  </data>
+	<data name="SID_RTU_is_available" xml:space="preserve">
+    <value>RTU is available</value>
+  </data>
+	<data name="SID_RTU_is_not_available" xml:space="preserve">
+    <value>RTU is not available</value>
+  </data>
+	<data name="SID_Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+	<data name="SID_Main_channel_is_broken" xml:space="preserve">
+    <value>Main channel is broken!</value>
+  </data>
+	<data name="SID_Main_channel_is_Ok" xml:space="preserve">
+    <value>Main channel is Ok</value>
+  </data>
+	<data name="SID_Reserve_channel_is_broken" xml:space="preserve">
+    <value>Reserve channel is broken!</value>
+  </data>
+	<data name="SID_Reserve_channel_is_Ok" xml:space="preserve">
+    <value>Reserve channel is Ok</value>
+  </data>
+	<data name="SID_Data-center_software_version" xml:space="preserve">
+    <value>Data-center software version</value>
+  </data>
+	<data name="SID_Client_software_version" xml:space="preserve">
+    <value>Client software version</value>
+  </data>
+	<data name="SID_RTUs_software_version" xml:space="preserve">
+    <value>RTUs software version</value>
+  </data>
+	<data name="SID_Users_guide" xml:space="preserve">
+    <value>User's guide</value>
+  </data>
+	<data name="SID_Cannot_find_file_with_user_s_guide_" xml:space="preserve">
+    <value>Cannot find file with user's guide:</value>
+  </data>
+	<data name="SID_Repaired" xml:space="preserve">
+    <value>Repaired</value>
+  </data>
+	<data name="SID_Gsm_modem_com_port" xml:space="preserve">
+    <value>GSM modem com port</value>
+  </data>
+	<data name="SID_e_g_smtp_server" xml:space="preserve">
+    <value>e.g.:  smtp.gmail.com</value>
+  </data>
+	<data name="SID_If_you_use_Gmail" xml:space="preserve">
+    <value>If you use Gmail.com make sure that for your account unsafe connection are permitted</value>
+  </data>
+	<data name="SID_usually_smtp_port" xml:space="preserve">
+    <value>usually 587 or 465</value>
+  </data>
+	<data name="SID_e_g_postbox" xml:space="preserve">
+    <value>e.g.: name@gmail.com</value>
+  </data>
+	<data name="SID_usually_smtp_timeout" xml:space="preserve">
+    <value>usually 10000 to 20000</value>
+  </data>
+	<data name="SID_Left" xml:space="preserve">
+    <value>L, m</value>
+  </data>
+	<data name="SID_Right" xml:space="preserve">
+    <value>R, m</value>
+  </data>
+	<data name="SID_Gis_settings" xml:space="preserve">
+    <value>GIS settings</value>
+  </data>
+	<data name="SID_Without_map_mode" xml:space="preserve">
+    <value>"Without map" mode</value>
+  </data>
+	<data name="SID_Switches_mode_for_all_clients" xml:space="preserve">
+    <value>Switches mode for all users work places</value>
+  </data>
+	<data name="SID_Failed_to_save_GIS_mode_" xml:space="preserve">
+    <value>Failed to save GIS mode!</value>
+  </data>
+	<data name="SID_Switches_mode_for_all2" xml:space="preserve">
+    <value>( For ROOT's work place - after button pressed, </value>
+  </data>
+	<data name="SID_Switches_mode_for_all3" xml:space="preserve">
+    <value>for all other - after restart )</value>
+  </data>
+	<data name="SID_Show_map_temporarily" xml:space="preserve">
+    <value>Show map on this work place, till application is closed</value>
+  </data>
+	<data name="SID_Change_mode" xml:space="preserve">
+    <value>Change mode</value>
+  </data>
+	<data name="SID_In__Without_Map__mode" xml:space="preserve">
+    <value>In "Without Map" mode</value>
+  </data>
+	<data name="SID_Map_is_displayed" xml:space="preserve">
+    <value>Map is displayed</value>
+  </data>
+	<data name="SID_Measurement_updated" xml:space="preserve">
+    <value>Measurement status updated</value>
+  </data>
+	<data name="SID_Turn_alarm_on" xml:space="preserve">
+    <value>Turn alarm on</value>
+  </data>
+	<data name="SID_Select_trace" xml:space="preserve">
+    <value>Select trace</value>
+  </data>
+	<data name="SID_Page_" xml:space="preserve">
+    <value>Page </value>
+  </data>
+	<data name="SID_Components_of_monitoring_system__0_" xml:space="preserve">
+    <value>Components of monitoring system "{0}"</value>
+  </data>
+	<data name="SID_s_n__0_" xml:space="preserve">
+    <value>s/n {0}</value>
+  </data>
+	<data name="SID_ports____0_" xml:space="preserve">
+    <value>ports : {0}</value>
+  </data>
+	<data name="SID_software____0_" xml:space="preserve">
+    <value>software : {0}</value>
+  </data>
+	<data name="SID_port__0__1____" xml:space="preserve">
+    <value>port {0}{1}  ; </value>
+  </data>
+	<data name="SID_Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+	<data name="SID_Monitoring_system_components" xml:space="preserve">
+    <value>Monitoring system components</value>
+  </data>
+	<data name="SID_Main_channel____0_____1_" xml:space="preserve">
+    <value>  ; Main channel : {0} - {1}</value>
+  </data>
+	<data name="SID_____Reserve_channel____0_____1_" xml:space="preserve">
+    <value>  ; Reserve channel : {0} - {1}</value>
+  </data>
+	<data name="SID_Optical_events_report" xml:space="preserve">
+    <value>Optical events report</value>
+  </data>
+	<data name="SID_Create_report" xml:space="preserve">
+    <value>Create report</value>
+  </data>
+	<data name="SID_Current_optical_events" xml:space="preserve">
+    <value>Current optical events</value>
+  </data>
+	<data name="SID_Optical_events_for_period" xml:space="preserve">
+    <value>Optical events for period</value>
+  </data>
+	<data name="SID_from" xml:space="preserve">
+    <value>from</value>
+  </data>
+	<data name="SID_to" xml:space="preserve">
+    <value>to</value>
+  </data>
+	<data name="SID_Detailed_report" xml:space="preserve">
+    <value>Detailed report</value>
+  </data>
+	<data name="SID_Status_set" xml:space="preserve">
+    <value>Status set</value>
+  </data>
+	<data name="SID_measurement_finished" xml:space="preserve">
+    <value>measurement finished</value>
+  </data>
+	<data name="SID_event_registered" xml:space="preserve">
+    <value>event registered</value>
+  </data>
+	<data name="SID_Current_optical_events_report" xml:space="preserve">
+    <value>Current optical events report</value>
+  </data>
+	<data name="SID_Responsibility_zone___0_" xml:space="preserve">
+    <value>Responsibility zone: "{0}"</value>
+  </data>
+	<data name="SID_Output_accident_place" xml:space="preserve">
+    <value>Output accident place</value>
+  </data>
+	<data name="SID_Optical_events_report_for__0_d_____1_d_" xml:space="preserve">
+    <value>Optical events report for {0:d} - {1:d}</value>
+  </data>
+	<data name="SID_Turned_to_OK" xml:space="preserve">
+    <value>Turned to OK</value>
+  </data>
+	<data name="SID_Detach_all_traces" xml:space="preserve">
+    <value>Detach all traces</value>
+  </data>
+	<data name="SID_Step_by_step_trace_definition_is_started_already_" xml:space="preserve">
+    <value>Step by step trace definition is started already!</value>
+  </data>
+	<data name="SID_Measurement_time" xml:space="preserve">
+    <value>Measurement time</value>
+  </data>
+	<data name="SID_ServerTitle" xml:space="preserve">
+    <value>"{0}" ;</value>
+  </data>
+	<data name="SID_Server_____0_____1_____2_" xml:space="preserve">
+    <value>Server :  {0} {1} ; {2}</value>
+  </data>
+	<data name="SID_Event_registration_time" xml:space="preserve">
+    <value>Event registration time</value>
+  </data>
+	<data name="SID__0_____software__1_" xml:space="preserve">
+    <value>{0} ;  software {1}</value>
+  </data>
+	<data name="SID_Database_optimization" xml:space="preserve">
+    <value>Database optimization</value>
+  </data>
+	<data name="SID_Db_optimization_warning1" xml:space="preserve">
+    <value>1. It's highly recommended to make a backup before cleaning!</value>
+  </data>
+	<data name="SID_Db_optimization_warning2" xml:space="preserve">
+    <value>2. Please close all other Client and Superclient applications connected to this Server while optimization</value>
+  </data>
+	<data name="SID_Db_optimization_warning3" xml:space="preserve">
+    <value>3. Database optimization procedure is described in Client / Superclient User's guide </value>
+  </data>
+	<data name="SID_Measurements_in_Db" xml:space="preserve">
+    <value>Measurements:</value>
+  </data>
+	<data name="SID_which_a_not_events" xml:space="preserve">
+    <value>(which a not an optical events)</value>
+  </data>
+	<data name="SID_Optical_events_in_Db" xml:space="preserve">
+    <value>Optical events:</value>
+  </data>
+	<data name="SID_Network_events_in_Db" xml:space="preserve">
+    <value>Network events:</value>
+  </data>
+	<data name="SID_Db_drive_total_size" xml:space="preserve">
+    <value>Database drive's size:</value>
+  </data>
+	<data name="SID_Db_drive_free_space" xml:space="preserve">
+    <value>Database drive's free space:</value>
+  </data>
+	<data name="SID_Free_space_threshold" xml:space="preserve">
+    <value>Free space threshold:</value>
+  </data>
+	<data name="SID_Execute" xml:space="preserve">
+    <value>Execute</value>
+  </data>
+	<data name="SID_Network_events_0" xml:space="preserve">
+    <value>Network events</value>
+  </data>
+	<data name="SID_Up_to_and_including" xml:space="preserve">
+    <value>DB optimization up to and including</value>
+  </data>
+	<data name="SID_Nothing_selected_to_remove_" xml:space="preserve">
+    <value>Nothing selected to remove!</value>
+  </data>
+	<data name="SID_If_you_click_OK_now__the_data_will_be_permanently_deleted" xml:space="preserve">
+    <value>If you click OK now, the data will be permanently deleted</value>
+  </data>
+	<data name="SID_with_no_possibility_to_restore_them_" xml:space="preserve">
+    <value>with no possibility to restore them!</value>
+  </data>
+	<data name="SID_Measurements_which_are_not_optical_events" xml:space="preserve">
+    <value>Measurements which are not optical events</value>
+  </data>
+	<data name="SID_Database_optimization_" xml:space="preserve">
+    <value>Database optimization</value>
+  </data>
+	<data name="SID_Depending_on_database_size__choosen_parameters_and_performance_of_your_PC" xml:space="preserve">
+    <value>Depending on database size, choosen parameters and performance of your PC</value>
+  </data>
+	<data name="SID_Fibertest_data_size" xml:space="preserve">
+    <value>Fibertest data size:</value>
+  </data>
+	<data name="SID_Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+	<data name="SID_Disk_info" xml:space="preserve">
+    <value>Disk info</value>
+  </data>
+	<data name="SID_Database_optimization_is_terminated_successfully_" xml:space="preserve">
+    <value>Database optimization is terminated successfully!</value>
+  </data>
+	<data name="SID_Please_restart_application_" xml:space="preserve">
+    <value>Please restart application.</value>
+  </data>
+	<data name="SID_Exit_application" xml:space="preserve">
+    <value>Exit application</value>
+  </data>
+	<data name="SID_Events_and_reflectogram_removal" xml:space="preserve">
+    <value>Events and reflectogram removal</value>
+  </data>
+	<data name="SID_Up_to" xml:space="preserve">
+    <value>Up to</value>
+  </data>
+	<data name="SID_Free_space_threshold_exceeded_" xml:space="preserve">
+    <value>Data-center free space threshold exceeded!</value>
+  </data>
+	<data name="SID_Sorfiles_table_compressing__0_0_0__" xml:space="preserve">
+    <value>Sorfiles table compressing {0:0.0}%...</value>
+  </data>
+	<data name="SID_Model_adjusting___" xml:space="preserve">
+    <value>Model adjusting...</value>
+  </data>
+	<data name="SID_Db_optimization_started" xml:space="preserve">
+    <value>Db optimization started...</value>
+  </data>
+	<data name="SID_Measurements_chosen_for_deletion__0___Removing___" xml:space="preserve">
+    <value>Measurements chosen for deletion {0}. Removing...</value>
+  </data>
+	<data name="SID_Before__0___After__1___Released__2_" xml:space="preserve">
+    <value>Before {0}Gb  After {1}Gb  Released {2}Gb</value>
+  </data>
+	<data name="SID_Model_creating_____0__events" xml:space="preserve">
+    <value>Model creating... {0} events</value>
+  </data>
+	<data name="SID_Snapshot_created_" xml:space="preserve">
+    <value>Snapshot created.</value>
+  </data>
+	<data name="SID_Collecting_data_for_event_log___" xml:space="preserve">
+    <value>Collecting event log data...</value>
+  </data>
+	<data name="SID_Performing_registration_on__0_" xml:space="preserve">
+    <value>Performing registration on {0}</value>
+  </data>
+	<data name="SID_IIT" xml:space="preserve">
+    <value>IIT</value>
+  </data>
+	<data name="SID_Manufacturer" xml:space="preserve">
+    <value>Manufacturer</value>
+  </data>
+	<data name="SID_SNMP_settings" xml:space="preserve">
+    <value>SNMP server settings</value>
+  </data>
+	<data name="SID_Failed_to_save_SNMP_settings" xml:space="preserve">
+    <value>Failed to save SNMP settings</value>
+  </data>
+	<data name="SID_Is_SNMP_notification_turned_on" xml:space="preserve">
+    <value>Is SNMP notification turned on</value>
+  </data>
+	<data name="SID_Strings_encoding" xml:space="preserve">
+    <value>Strings encoding</value>
+  </data>
+	<data name="SID_Choose_encoding" xml:space="preserve">
+    <value>Choose encoding for strings with non ANSI symbols your SNMP manager is waiting for.</value>
+  </data>
+	<data name="SID_Fibertest_server_address" xml:space="preserve">
+    <value>Fibertest Data-Center address</value>
+  </data>
+	<data name="SID_SNMP_notification_on" xml:space="preserve">
+    <value>Is SNMP notification turned on</value>
+  </data>
+	<data name="SID_Listener_to_the_traps" xml:space="preserve">
+    <value>Listener to the traps sent by Fibertest Data Center</value>
+  </data>
+	<data name="SID_usually_162" xml:space="preserve">
+    <value>usually 162</value>
+  </data>
+	<data name="SID_Save_and_test" xml:space="preserve">
+    <value>Save and Test</value>
+  </data>
+	<data name="SID_Invalid_IP_address" xml:space="preserve">
+    <value>Invalid IP address</value>
+  </data>
+	<data name="SID_Base_reference_assignment_failed" xml:space="preserve">
+    <value>Base reference assignment failed</value>
+  </data>
+	<data name="SID_This_user_has_no_right_to_start_Web_Client" xml:space="preserve">
+    <value>This user has no right to start Web Client</value>
+  </data>
+	<data name="SID_Files_are_unzipped___" xml:space="preserve">
+    <value>Files are being unzipped...</value>
+  </data>
+	<data name="SID_Files_are_unzipped_successfully_" xml:space="preserve">
+    <value>Files are unzipped successfully.</value>
+  </data>
+	<data name="SID_Unzip_files_error___0_" xml:space="preserve">
+    <value>Unzip files error: {0}</value>
+  </data>
+	<data name="SID_Web_components_setup_started___" xml:space="preserve">
+    <value>Web components setup started...</value>
+  </data>
+	<data name="SID_Web_components_setup_completed_successfully_" xml:space="preserve">
+    <value>Web components setup completed successfully!</value>
+  </data>
+	<data name="SID_IIS_operation_error___0_" xml:space="preserve">
+    <value>IIS operation error: {0}</value>
+  </data>
+	<data name="SID_Site__0__installed_successfully" xml:space="preserve">
+    <value>Site {0} installed successfully</value>
+  </data>
+	<data name="SID_Site_installation_error___0_" xml:space="preserve">
+    <value>Site installation error. {0}</value>
+  </data>
+	<data name="SID_Site__0__uninstalled_successfully" xml:space="preserve">
+    <value>Site {0} uninstalled successfully</value>
+  </data>
+	<data name="SID_Site_uninstallation_error___0_" xml:space="preserve">
+    <value>Site uninstallation error. {0}</value>
+  </data>
+	<data name="SID_Clients_license_is_expired" xml:space="preserve">
+    <value>Clients license is expired</value>
+  </data>
+	<data name="SID_Exceeded_the_number_of_web_clients_registered_simultaneously" xml:space="preserve">
+    <value>Exceeded the number of web clients registered simultaneously</value>
+  </data>
+	<data name="SID_Web_clients_license_is_expired" xml:space="preserve">
+    <value>Web clients license is expired</value>
+  </data>
+	<data name="SID_Super_clients_license_is_expired" xml:space="preserve">
+    <value>Super-clients license is expired</value>
+  </data>
+	<data name="SID_Install_Web_Service" xml:space="preserve">
+    <value>Install Web Server Component</value>
+  </data>
+	<data name="SID_List_of_ssl_certificates" xml:space="preserve">
+    <value>List of SSL certificates installed in IIS</value>
+  </data>
+	<data name="SID_Failed_to_send_SNMP_trap_" xml:space="preserve">
+    <value>Failed to send SNMP trap!</value>
+  </data>
+	<data name="SID_SNMP_trap_sent_" xml:space="preserve">
+    <value>SNMP trap sent.</value>
+  </data>
+	<data name="SID_Make_sure_if_trap_has_been_received" xml:space="preserve">
+    <value>Make sure if trap has been received</value>
+  </data>
+	<data name="SID_SNMP_settings_are_saved_" xml:space="preserve">
+    <value>SNMP settings are saved.</value>
+  </data>
+	<data name="SID_Server_only" xml:space="preserve">
+    <value>Server only</value>
+  </data>
+	<data name="SID_Cache_only" xml:space="preserve">
+    <value>Cache only</value>
+  </data>
+	<data name="SID_Server_and_cache" xml:space="preserve">
+    <value>Server and cache</value>
+  </data>
+	<data name="SID_Choose_map_access_mode" xml:space="preserve">
+    <value>Choose map access mode</value>
+  </data>
+	<data name="SID_Searching_route_for_new_trace___" xml:space="preserve">
+    <value>Searching route for new trace...</value>
+  </data>
+	<data name="SID_Export_to_pdf" xml:space="preserve">
+    <value>Export to pdf</value>
+  </data>
+	<data name="SID_Failed_to_set_AntiGhost_parameter___0_" xml:space="preserve">
+    <value>Failed to set AntiGhost parameter, {0}</value>
+  </data>
+	<data name="SID_Uninstall_failed" xml:space="preserve">
+    <value>Uninstall failed</value>
+  </data>
+	<data name="SID_Uninstallation_completed_successfully" xml:space="preserve">
+    <value>Uninstallation completed successfully</value>
+  </data>
+	<data name="SID_Wait___" xml:space="preserve">
+    <value>Wait...</value>
+  </data>
+	<data name="SID_Failed_to_uninstall__0_" xml:space="preserve">
+    <value>Failed to uninstall {0}</value>
+  </data>
+	<data name="SID_Database_optimization_started_on_server_" xml:space="preserve">
+    <value>Database optimization started on server!</value>
+  </data>
+	<data name="SID_Please_leave_application_" xml:space="preserve">
+    <value>Please leave application.</value>
+  </data>
+	<data name="SID_User__0__is_logged_in_from_a_different_device_at__1_" xml:space="preserve">
+    <value>User {0} is logged in from a different device at {1}</value>
+  </data>
+	<data name="SID_License_viewer" xml:space="preserve">
+    <value>License viewer</value>
+  </data>
+	<data name="SID_Traces_in_DB" xml:space="preserve">
+    <value>Traces in DB</value>
+  </data>
+	<data name="SID_Nodes_count_does_not_match_sections_count_" xml:space="preserve">
+    <value>Nodes count does not match sections count!</value>
+  </data>
+	<data name="SID_Define_trace_again_" xml:space="preserve">
+    <value>Define trace again.</value>
+  </data>
+	<data name="SID_Iis_version_is" xml:space="preserve">
+    <value>IIS version is {0}!
+
+Fibertest Web Component needs IIS version 10 or later.</value>
+  </data>
+	<data name="SID_Iis_not_found" xml:space="preserve">
+    <value>IIS not found!
+
+Please install IIS before installing Fibertest Web Component.</value>
+  </data>
+	<data name="SID_License_file_not_found_" xml:space="preserve">
+    <value>License file not found!</value>
+  </data>
+	<data name="SID_SSL_certificate_password" xml:space="preserve">
+    <value>SSL certificate password</value>
+  </data>
+	<data name="SID_Choose_SSL_certificate_file" xml:space="preserve">
+    <value>Choose SSL certificate file</value>
+  </data>
+	<data name="SID_Loading_data_after_DB_recovery__optimization_" xml:space="preserve">
+    <value>Loading data after DB recovery (optimization), please wait</value>
+  </data>
+	<data name="SID_Failed_to_apply_monitoring_settings_" xml:space="preserve">
+    <value>Failed to apply monitoring settings!</value>
+  </data>
+	<data name="SID_Error_during_Client_RTU_operation__" xml:space="preserve">
+    <value>Error during Client RTU operation: </value>
+  </data>
+	<data name="SID_Open_another_file" xml:space="preserve">
+    <value>Open another file</value>
+  </data>
+	<data name="SID_Physical_length" xml:space="preserve">
+    <value>Physical length</value>
+  </data>
+	<data name="SID_Optical_length" xml:space="preserve">
+    <value>Optical length</value>
+  </data>
+	<data name="SID_This_equipment_could_not_be_changed_" xml:space="preserve">
+    <value>This equipment could not be changed!</value>
+  </data>
+	<data name="SID_There_are_traces_which_use_this_equipment_and_are_under_monitoring_now_" xml:space="preserve">
+    <value>There are traces which use this equipment and are under monitoring now.</value>
+  </data>
+	<data name="SID_Stop_monitoring_in_order_to_change_equipment" xml:space="preserve">
+    <value>Stop monitoring in order to change equipment.</value>
+  </data>
+	<data name="SID_Available_ports" xml:space="preserve">
+    <value>Available ports</value>
+  </data>
+	<data name="SID_Failed_to_initialize_optical_switch" xml:space="preserve">
+    <value>Failed to initialize optical switch!</value>
+  </data>
+	<data name="SID_Precise_base_ref_must_be_set_" xml:space="preserve">
+    <value>Precise base ref must be set!</value>
+  </data>
+	<data name="SID_Fast_base_ref_must_be_set_" xml:space="preserve">
+    <value>Fast base ref must be set!</value>
+  </data>
+	<data name="SID_License_Key" xml:space="preserve">
+    <value>License Key</value>
+  </data>
+	<data name="SID_Incremental" xml:space="preserve">
+    <value>Incremental</value>
+  </data>
+	<data name="SID_Rtu_count" xml:space="preserve">
+    <value>RTU count</value>
+  </data>
+	<data name="SID_Client_stations" xml:space="preserve">
+    <value>Client stations count</value>
+  </data>
+	<data name="SID_Web_clients" xml:space="preserve">
+    <value>WebClient stations count</value>
+  </data>
+	<data name="SID_SuperClients" xml:space="preserve">
+    <value>SuperClient stations count</value>
+  </data>
+	<data name="SID_Creation_date" xml:space="preserve">
+    <value>Creation date</value>
+  </data>
+	<data name="SID_Load_from_file" xml:space="preserve">
+    <value>Load from file</value>
+  </data>
+	<data name="SID_Save_as_file" xml:space="preserve">
+    <value>Save as file</value>
+  </data>
+	<data name="SID_Pdf_certificate" xml:space="preserve">
+    <value>Pdf Certificate</value>
+  </data>
+	<data name="SID_with_no_limitation_by_time" xml:space="preserve">
+    <value>with no limitation by time</value>
+  </data>
+	<data name="SID_for__0___1_" xml:space="preserve">
+    <value>for {0} {1}</value>
+  </data>
+	<data name="SID_month_s_" xml:space="preserve">
+    <value>month(s)</value>
+  </data>
+	<data name="SID_JS_Institute_of_Information_Technologies" xml:space="preserve">
+    <value>JS Institute of Information Technologies</value>
+  </data>
+	<data name="SID_License_key_long" xml:space="preserve">
+    <value>License key for optical fiber monitoring system software Fibertest 2.0</value>
+  </data>
+	<data name="SID_Optical_fiber_monitoring_system_software_FIBERTEST_2_0" xml:space="preserve">
+    <value>Optical fiber monitoring system software FIBERTEST 2.0</value>
+  </data>
+	<data name="SID_License_number_" xml:space="preserve">
+    <value>License number:</value>
+  </data>
+	<data name="SID_Remote_testing_unit_count" xml:space="preserve">
+    <value>Remote testing unit count</value>
+  </data>
+	<data name="SID_Create_new" xml:space="preserve">
+    <value>Create new</value>
+  </data>
+	<data name="SID_Failed_to_detach_additional_otau_" xml:space="preserve">
+    <value>Failed to detach additional otau!</value>
+  </data>
+	<data name="SID_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+	<data name="SID_Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+	<data name="SID_Copy_coordinates_to_clipboard" xml:space="preserve">
+    <value>Copy coordinates to clipboard</value>
+  </data>
+	<data name="SID_License_type" xml:space="preserve">
+    <value>License type</value>
+  </data>
+	<data name="SID_User_workplace_linking" xml:space="preserve">
+    <value>User-workplace linking</value>
+  </data>
+	<data name="SID_Basic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+	<data name="SID_User_is_linked_to_another_workstation" xml:space="preserve">
+    <value>User is linked to another workstation</value>
+  </data>
+	<data name="SID_Wrong_security_admin_password" xml:space="preserve">
+    <value>Wrong security admin password</value>
+  </data>
+	<data name="SID_User_has_no_linking_to_any_workstation" xml:space="preserve">
+    <value>User has no linking to any workstation</value>
+  </data>
+	<data name="SID_No_license_has_been_applied_yet" xml:space="preserve">
+    <value>No license has been applied yet!</value>
+  </data>
+	<data name="SID_To_link_user_to_the_workstation_your_privileges" xml:space="preserve">
+    <value>To link user to the workstation your privileges</value>
+  </data>
+	<data name="SID_have_to_be_confirmed_by_security_administrator_password_" xml:space="preserve">
+    <value>have to be confirmed by security administrator password.</value>
+  </data>
+	<data name="SID_Apply_Demo_license" xml:space="preserve">
+    <value>Apply Demo mode</value>
+  </data>
+	<data name="SID_Load_license_from_file" xml:space="preserve">
+    <value>Load license from file</value>
+  </data>
+	<data name="SID_You_can apply_DEMO_license_or" xml:space="preserve">
+    <value>You can apply DEMO license or load your license from file</value>
+  </data>
+	<data name="SID_License_will_not_be_applied_" xml:space="preserve">
+    <value>License will not be applied!</value>
+  </data>
+	<data name="SID_Password_is_not_entered_" xml:space="preserve">
+    <value>Password is not entered.</value>
+  </data>
+	<data name="SID_User_to_workstation_linking_set" xml:space="preserve">
+    <value>User to workstation linking set</value>
+  </data>
+	<data name="SID_Measurement_on_port__0__trace__1__is_finished" xml:space="preserve">
+    <value>Measurement on port {0} trace {1} is finished</value>
+  </data>
+	<data name="SID_License_key_type" xml:space="preserve">
+    <value>License key type</value>
+  </data>
+	<data name="SID_With_workstation_linking" xml:space="preserve">
+    <value>With workstation linking</value>
+  </data>
+	<data name="SID_Standart" xml:space="preserve">
+    <value>Standart</value>
+  </data>
+	<data name="SID_First_license_key_must_not_be_Incremental" xml:space="preserve">
+    <value>First license key must not be Incremental</value>
+  </data>
+	<data name="SID_With_user_s_account_to_workstation_linking" xml:space="preserve">
+    <value>With user's account to workstation linking</value>
+  </data>
+	<data name="SID_Reveal_trace" xml:space="preserve">
+    <value>Reveal trace</value>
+  </data>
+	<data name="SID_Highlight_trace" xml:space="preserve">
+    <value>Highlight trace</value>
+  </data>
+	<data name="SID_Trace_definition_mode__Minimum_zoom__0_" xml:space="preserve">
+    <value>Trace definition mode: Minimum zoom {0}</value>
+  </data>
+	<data name="SID_License_could_not_be_applied_" xml:space="preserve">
+    <value>License could not be applied!</value>
+  </data>
+	<data name="SID_To_apply_the_license" xml:space="preserve">
+    <value>To apply the license</value>
+  </data>
+	<data name="SID_security_administrator_password_has_to_be_input" xml:space="preserve">
+    <value>security administrator password has to be input</value>
+  </data>
+	<data name="SID_Failed_to_initialize_OTDR" xml:space="preserve">
+    <value>Failed to initialize OTDR!</value>
+  </data>
+	<data name="SID_Additional_OS_info_" xml:space="preserve">
+    <value>Additional OS info:</value>
+  </data>
+	<data name="SID_Measurement_on_port__0___trace___1___failed__OTAU_problem" xml:space="preserve">
+    <value>Measurement on port {0}, trace "{1}" failed. OTAU problem</value>
+  </data>
+	<data name="SID_Measurement_on_port__0___trace___1___failed__OTDR_problem" xml:space="preserve">
+    <value>Measurement on port {0}, trace "{1}" failed. OTDR problem</value>
+  </data>
+	<data name="SID_Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+	<data name="SID_Graph_visibility_settings" xml:space="preserve">
+    <value>Graph visibility settings</value>
+  </data>
+	<data name="SID_High_density_graph" xml:space="preserve">
+    <value>High density graph</value>
+  </data>
+	<data name="SID_Graph_is_visible_from_zoom" xml:space="preserve">
+    <value>Graph is visible from zoom:</value>
+  </data>
+	<data name="SID_Out_of_screen_part" xml:space="preserve">
+    <value>Out of screen part of rendered graph (%):</value>
+  </data>
+	<data name="SID_High_density_graph_explanation" xml:space="preserve">
+    <value>A large number of nodes, for example: networks of large cities with branched cable ducts, PON networks, etc.</value>
+  </data>
+	<data name="SID_Could_be_changed_after_installation" xml:space="preserve">
+    <value>The mode could be changed after installation in application settings</value>
+  </data>
+	<data name="SID_Graph_of_traces_optimization" xml:space="preserve">
+    <value>Graph of traces optimization</value>
+  </data>
+	<data name="SID_DB_optimization__" xml:space="preserve">
+    <value>DB optimization: </value>
+  </data>
+	<data name="SID__0__unused_nodes_found" xml:space="preserve">
+    <value>{0} unused nodes found</value>
+  </data>
+	<data name="SID__0__unused_fibers_found" xml:space="preserve">
+    <value>{0} unused fibers found</value>
+  </data>
+	<data name="SID_Remove_unused" xml:space="preserve">
+    <value>Remove nodes and fibers which are not used in any trace</value>
+  </data>
+	<data name="SID_Db_restructuring" xml:space="preserve">
+    <value>DB restructuring</value>
+  </data>
+	<data name="SID_Server_performance_improvement" xml:space="preserve">
+    <value>Server performance improvement</value>
+  </data>
+	<data name="SID_Remove_unused_explanation" xml:space="preserve">
+    <value>The sections marked in blue, the nodes associated with them, as well as free-standing nodes will be deleted.</value>
+  </data>
+	<data name="SID_Graph_of_traces_optimization_failed___0_" xml:space="preserve">
+    <value>Graph of traces optimization failed: {0}</value>
+  </data>
+	<data name="SID_Successfully_optimized_graph_of_traces_" xml:space="preserve">
+    <value>Successfully optimized graph of traces!</value>
+  </data>
+	<data name="SID_Update_equipment" xml:space="preserve">
+    <value>Update equipment</value>
+  </data>
+	<data name="SID_Telecommunications_equipment" xml:space="preserve">
+    <value>Telecommunications equipment (TCE)</value>
+  </data>
+	<data name="SID_Equipment__0__will_be_deleted" xml:space="preserve">
+    <value>Equipment {0} will be deleted</value>
+  </data>
+	<data name="SID_RTU_port_links_to_this_equipment_will_be_deleted" xml:space="preserve">
+    <value>RTU port links to this equipment will be deleted</value>
+  </data>
+	<data name="SID_Slot" xml:space="preserve">
+    <value>Slot</value>
+  </data>
+	<data name="SID_Update_components" xml:space="preserve">
+    <value>Update components</value>
+  </data>
+	<data name="SID_Map_TCE_to_RTU" xml:space="preserve">
+    <value>Map to RTU</value>
+  </data>
+	<data name="SID_Change_slot_count" xml:space="preserve">
+    <value>Change slot count</value>
+  </data>
+	<data name="SID_Interface_No" xml:space="preserve">
+    <value>Interface no.</value>
+  </data>
+	<data name="SID_Slot_count" xml:space="preserve">
+    <value>Slot count</value>
+  </data>
+	<data name="SID_Interface_count" xml:space="preserve">
+    <value>Interface count</value>
+  </data>
+	<data name="SID_Slot__0_" xml:space="preserve">
+    <value>Slot {0}</value>
+  </data>
+	<data name="SID_Equipment_components" xml:space="preserve">
+    <value>Equipment components</value>
+  </data>
+	<data name="SID_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+	<data name="SID_Software_version" xml:space="preserve">
+    <value>Software version</value>
+  </data>
+	<data name="SID_Failed_to_resend_base_to_rtu" xml:space="preserve">
+    <value>Base refs have been changed and saved in the DB. 
+Failed to send them to the RTU because it is not currently available. 
+Please try again later</value>
+  </data>
+	<data name="SID_Assign_base_refs_automatically" xml:space="preserve">
+    <value>Assign base refs automatically</value>
+  </data>
+	<data name="SID_EvtDetectDeltaCT" xml:space="preserve">
+    <value>Event detection attenuation threshold (CT), dB/km</value>
+  </data>
+	<data name="SID_EvtSearchStep" xml:space="preserve">
+    <value>New event search step, km</value>
+  </data>
+	<data name="SID_EvtDetectDeltaLen" xml:space="preserve">
+    <value>Threshold of non-reflective event offset, km</value>
+  </data>
+	<data name="SID_EvtRDetectDeltaLen" xml:space="preserve">
+    <value>Threshold of reflective event offset, km</value>
+  </data>
+	<data name="SID_AutoLT" xml:space="preserve">
+    <value>Auto analysis loss threshold (LT), (1 - 4 dB)</value>
+  </data>
+	<data name="SID_AutoRT" xml:space="preserve">
+    <value>Auto analysis reflectance threshold (RT), (-40 - -25 dB)</value>
+  </data>
+	<data name="SID_AutoET" xml:space="preserve">
+    <value>Auto analysis end-of-fiber threshold (ET), dB</value>
+  </data>
+	<data name="SID_NoLinkDistance" xml:space="preserve">
+    <value>Fiber detection distance, km</value>
+  </data>
+	<data name="SID_NoLinkDeltaDB" xml:space="preserve">
+    <value>Fiber detection threshold, dB</value>
+  </data>
+	<data name="SID_EventRT" xml:space="preserve">
+    <value>Reflection/backscattering difference threshold, dB</value>
+  </data>
+	<data name="SID_EOFLMN" xml:space="preserve">
+    <value>End of monitoring landmark number</value>
+  </data>
+	<data name="SID_CorrectMarkers" xml:space="preserve">
+    <value>Adjustment of neighboring event markers when new event is found</value>
+  </data>
+	<data name="SID_EvtChangeLT" xml:space="preserve">
+    <value>Event loss threshold at end-of-fiber search by template, dB</value>
+  </data>
+	<data name="SID_EvtChangeRT" xml:space="preserve">
+    <value>Reflectance threshold at end-of-fiber search by template, dB</value>
+  </data>
+	<data name="SID_EvtChangeCT" xml:space="preserve">
+    <value>Attenuation threshold at end-of-fiber search by template, dB/km</value>
+  </data>
+	<data name="SID_EvtChangeET" xml:space="preserve">
+    <value>End-of-fiber loss threshold at end-of-fiber search by template, dB</value>
+  </data>
+	<data name="SID_Lt_threshold" xml:space="preserve">
+    <value>Splice loss, dB</value>
+  </data>
+	<data name="SID_Rt_threshold" xml:space="preserve">
+    <value>Reflectance, dB</value>
+  </data>
+	<data name="SID_Ct_threshold" xml:space="preserve">
+    <value>OF loss, dB/km</value>
+  </data>
+	<data name="SID_Eelt_threshold" xml:space="preserve">
+    <value>End-to-end loss, dB</value>
+  </data>
+	<data name="SID_Threshold" xml:space="preserve">
+    <value>Threshold</value>
+  </data>
+	<data name="SID_Level_included_in_monitoring" xml:space="preserve">
+    <value>Level included in monitoring</value>
+  </data>
+	<data name="SID_Monitoring_thresholds" xml:space="preserve">
+    <value>Monitoring thresholds</value>
+  </data>
+	<data name="SID_Additional_parameters" xml:space="preserve">
+    <value>Additional parameters</value>
+  </data>
+	<data name="SID_Event_detection_thresholds" xml:space="preserve">
+    <value>Event detection thresholds (absolute values)</value>
+  </data>
+	<data name="SID_Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+	<data name="SID_Applying_base_refs__Please_wait" xml:space="preserve">
+    <value>Applying base refs. Please wait...</value>
+  </data>
+	<data name="SID_Show_reflectogram_on_completion" xml:space="preserve">
+    <value>Show reflectogram on completion</value>
+  </data>
+	<data name="SID_Telecommunications_equipment_model" xml:space="preserve">
+    <value>Telecommunications equipment type</value>
+  </data>
+	<data name="SID_Slots" xml:space="preserve">
+    <value>Slots</value>
+  </data>
+	<data name="SID_Save_and_close" xml:space="preserve">
+    <value>Save and close</value>
+  </data>
+	<data name="SID_Change_interface_count" xml:space="preserve">
+    <value>Change interface count</value>
+  </data>
+	<data name="SID_Change_type" xml:space="preserve">
+    <value>Change type</value>
+  </data>
+	<data name="SID_Changing_the_type_of_equipment_can_lead_to_loss_of_links" xml:space="preserve">
+    <value>Changing the type of equipment can lead to loss of links</value>
+  </data>
+	<data name="SID_RTU_port___telecommunication_equipment_interface" xml:space="preserve">
+    <value>RTU port - telecommunication equipment interface</value>
+  </data>
+	<data name="SID_Changes_will_be_applied_after_saving_in_the_next_window_" xml:space="preserve">
+    <value>Changes will be applied after saving in the next window.</value>
+  </data>
+	<data name="SID_Proceed_" xml:space="preserve">
+    <value>Proceed?</value>
+  </data>
+	<data name="SID_Trace___0___has_already_linked_to_another_interface" xml:space="preserve">
+    <value>Trace "{0}" has already linked to another interface</value>
+  </data>
+	<data name="SID__1__For_traces_0_05___0_5_km_long" xml:space="preserve">
+    <value>1. For traces  0.05 - 0.5 km long</value>
+  </data>
+	<data name="SID__2__For_traces_0_5___5_km_long" xml:space="preserve">
+    <value>2. For traces  0.5 - 5 km long</value>
+  </data>
+	<data name="SID__3__For_traces_5___10_km_long" xml:space="preserve">
+    <value>3. For traces  5 - 10 km long</value>
+  </data>
+	<data name="SID__4__For_traces_10___20_km_long" xml:space="preserve">
+    <value>4. For traces  10 - 20 km long</value>
+  </data>
+	<data name="SID_AutoBaseAttention" xml:space="preserve">
+    <value>Attention! It is not recommended to set automatic base for traces having inclusions with attenuation more than 1 dB</value>
+  </data>
+	<data name="SID_Failed_to_do_Measurement_Client__" xml:space="preserve">
+    <value>Failed to do Measurement(Client)!</value>
+  </data>
+	<data name="SID_Splice_loss_dB" xml:space="preserve">
+    <value>Splice loss (LT), (1 - 4 dB)</value>
+  </data>
+	<data name="SID_Reflectance_dB" xml:space="preserve">
+    <value>Reflectance (RT), (-40 - -25 dB)</value>
+  </data>
+	<data name="SID_links_added" xml:space="preserve">
+    <value>links added</value>
+  </data>
+	<data name="SID_links_exist" xml:space="preserve">
+    <value>links exist</value>
+  </data>
+	<data name="SID_links_removed" xml:space="preserve">
+    <value>links removed</value>
+  </data>
+	<data name="SID_TCE_added" xml:space="preserve">
+    <value>TCE added</value>
+  </data>
+	<data name="SID_TCE_updated" xml:space="preserve">
+    <value>TCE updated</value>
+  </data>
+	<data name="SID_TCE_removed" xml:space="preserve">
+    <value>TCE removed</value>
+  </data>
+	<data name="SID_Equipment_type_changed_successfully_" xml:space="preserve">
+    <value>Equipment type changed successfully!</value>
+  </data>
+	<data name="SID_Process_snmp_traps" xml:space="preserve">
+    <value>Process SNMP-traps</value>
+  </data>
+	<data name="SID_For_traces_0_05___20_km_long" xml:space="preserve">
+    <value>For traces  0.05 - 20 km long</value>
+  </data>
+	<data name="SID_Automatic_detection_of_measurement_parameters" xml:space="preserve">
+    <value>Automatic detection of measurement parameters</value>
+  </data>
+	<data name="SID_Failed_to_automatically_determine_the_correct_measurement_parameters" xml:space="preserve">
+    <value>Failed to automatically determine the correct measurement parameters</value>
+  </data>
+	<data name="SID_Measurement_timeout_expired" xml:space="preserve">
+    <value>Measurement timeout expired</value>
+  </data>
+	<data name="SID_Measurement_completed_successfully" xml:space="preserve">
+    <value>Measurement completed successfully</value>
+  </data>
+	<data name="SID_Base_refs_assigned_successfully" xml:space="preserve">
+    <value>Base refs assigned successfully</value>
+  </data>
+	<data name="SID_Failed_to_start" xml:space="preserve">
+    <value>Failed to start measurement</value>
+  </data>
+	<data name="SID_Failed_to_fetch_measurement_from_Rtu4000" xml:space="preserve">
+    <value>Failed to fetch measurement from Rtu4000</value>
+  </data>
+	<data name="SID_Failed_to_assign_as_base" xml:space="preserve">
+    <value>Failed to assign as base</value>
+  </data>
+	<data name="SID__0___1___Measurement_on_trace__2____3_" xml:space="preserve">
+    <value>{0}/{1}  Measurement on trace {2}: {3}</value>
+  </data>
+	<data name="SID_Start_monitoring_when_completed" xml:space="preserve">
+    <value>Start monitoring when completed</value>
+  </data>
+	<data name="SID_Starting_monitoring" xml:space="preserve">
+    <value>Starting monitoring</value>
+  </data>
+	<data name="SID_There_are__0__trace_s__attached_to_ports_of_the_RTU" xml:space="preserve">
+    <value>There are {0} trace(s) attached to ports of the RTU</value>
+  </data>
+	<data name="SID_Measurements_are_in_progress__Please_wait___" xml:space="preserve">
+    <value>Measurements are in progress. Please wait...</value>
+  </data>
+	<data name="SID_Failed_to_toggle_to_port" xml:space="preserve">
+    <value>Failed to toggle to port</value>
+  </data>
+	<data name="SID_Measurement_error" xml:space="preserve">
+    <value>Measurement error</value>
+  </data>
+	<data name="SID_Measurement_preparation_error" xml:space="preserve">
+    <value>Measurement preparation error</value>
+  </data>
+	<data name="SID_Measurement___successfully" xml:space="preserve">
+    <value>Measurement - successfully</value>
+  </data>
+	<data name="SID_Assignment___successfully" xml:space="preserve">
+    <value>Assignment - successfully</value>
+  </data>
+	<data name="SID_Measurement___failed" xml:space="preserve">
+    <value>Measurement - failed</value>
+  </data>
+	<data name="SID_Assignment___failed" xml:space="preserve">
+    <value>Assignment - failed</value>
+  </data>
+	<data name="SID_ON" xml:space="preserve">
+    <value>ON</value>
+  </data>
+	<data name="SID_OFF" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+	<data name="SID_TCE_type" xml:space="preserve">
+    <value>TCE type</value>
+  </data>
+	<data name="SID_TCE_title" xml:space="preserve">
+    <value>TCE title</value>
+  </data>
+	<data name="SID_interface__" xml:space="preserve">
+    <value>interface #</value>
+  </data>
+	<data name="SID_Setting_up_interaction_between_telecommunications_equipment_and_RTU" xml:space="preserve">
+    <value>Setting up interaction between telecommunications equipment and RTU</value>
+  </data>
+	<data name="SID_not_configured" xml:space="preserve">
+    <value>not configured</value>
+  </data>
+	<data name="SID_Unsuccessful_attempts_to_set_base_refs_for_RTU" xml:space="preserve">
+    <value>Unsuccessful attempts to set base refs for RTU</value>
+  </data>
+	<data name="SID_The_process_completed_at_" xml:space="preserve">
+    <value>The process completed at </value>
+  </data>
+	<data name="SID_The_process_of_setting_base_ref_for_RTU" xml:space="preserve">
+    <value>The process of setting base ref for RTU</value>
+  </data>
+	<data name="SID_is_completed_at_" xml:space="preserve">
+    <value>is completed at </value>
+  </data>
+	<data name="SID_Interrupt" xml:space="preserve">
+    <value>Interrupt</value>
+  </data>
+	<data name="SID_The_process_is_finishing__Please_wait___" xml:space="preserve">
+    <value>The process is finishing. Please wait...</value>
+  </data>
+	<data name="SID_Do_not_signal_about_Suspicion" xml:space="preserve">
+    <value>Do not signal about `Suspicion`</value>
+  </data>
+	<data name="SID_Suspicion_off" xml:space="preserve">
+    <value>Suspicion off</value>
+  </data>
+	<data name="SID_Auto_base_measurement_in_progress" xml:space="preserve">
+    <value>Auto base measurement in progress</value>
+  </data>
+	<data name="SID_RTU_initialization_in_progress" xml:space="preserve">
+    <value>RTU initialization in progress</value>
+  </data>
+	<data name="SID_RTU_is_busy" xml:space="preserve">
+    <value>RTU is busy</value>
+  </data>
+	<data name="SID_RTU__0__is_busy_" xml:space="preserve">
+    <value>RTU {0} is busy.</value>
+  </data>
+	<data name="SID_Measurement__Client__in_progress" xml:space="preserve">
+    <value>Measurement (Client) in progress</value>
+  </data>
+	<data name="SID_Monitoring_settings_are_being_applied" xml:space="preserve">
+    <value>Monitoring settings are being applied</value>
+  </data>
+	<data name="SID_There_is_a_TCE_with_the_same_name" xml:space="preserve">
+    <value>There is a TCE with the same name</value>
+  </data>
+	<data name="SID_There_is_a_TCE_with_the_same_IP_address" xml:space="preserve">
+    <value>There is a TCE with the same IP address</value>
+  </data>
+	<data name="SID_ThresholdsAttention" xml:space="preserve">
+    <value>Attention! The specified thresholds must be greater than the maximum values ​​in the inclusions on the trace</value>
+  </data>
+	<data name="SID_Current_operation" xml:space="preserve">
+    <value>Current operation</value>
+  </data>
+	<data name="SID_Operations_result" xml:space="preserve">
+    <value>Operations result</value>
+  </data>
+	<data name="SID_Unauthorized_RTU_access" xml:space="preserve">
+    <value>Unauthorized RTU access</value>
+  </data>
+	<data name="SID_Unauthorized_access_to_RTU__0__" xml:space="preserve">
+    <value>Unauthorized access to RTU {0}.</value>
+  </data>
+	<data name="SID_Please_enter_Platform_serial_number" xml:space="preserve">
+    <value>Please enter Platform serial number</value>
+  </data>
+	<data name="SID_Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+	<data name="SID_Choose_action___" xml:space="preserve">
+    <value>Choose action -</value>
+  </data>
+	<data name="SID_DllInit_result_is_" xml:space="preserve">
+    <value>DllInit result is</value>
+  </data>
+	<data name="SID_Example" xml:space="preserve">
+    <value>Example</value>
+  </data>
+	<data name="SID_FreeOtdr_result_is_" xml:space="preserve">
+    <value>FreeOtdr result is</value>
+  </data>
+	<data name="SID_FreeOtdr_returned_" xml:space="preserve">
+    <value>FreeOtdr returned</value>
+  </data>
+	<data name="SID_long_operation_please_wait" xml:space="preserve">
+    <value>long operation, please wait...</value>
+  </data>
+	<data name="SID_Serial_is__" xml:space="preserve">
+    <value>Serial is:</value>
+  </data>
+	<data name="SID__0___Exit" xml:space="preserve">
+    <value>0 - Exit</value>
+  </data>
+	<data name="SID__1___InitDllsAndConnectOtdr" xml:space="preserve">
+    <value>1 - InitDllsAndConnectOtdr</value>
+  </data>
+	<data name="SID__2___DisconnectOtdr" xml:space="preserve">
+    <value>2 - DisconnectOtdr</value>
+  </data>
+</root>

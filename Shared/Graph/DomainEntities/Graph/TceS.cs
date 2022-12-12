@@ -3,12 +3,12 @@
 public class TceS
 {
     public Guid Id = Guid.NewGuid();
-    public string? Title;
+    public string Title = "";
     public TceTypeStruct TceTypeStruct;
-    public string? Ip = @"0.0.0.0";
+    public string Ip = @"0.0.0.0";
     public List<TceSlot> Slots = new();
     public bool ProcessSnmpTraps;
-    public string? Comment;
+    public string Comment = "";
 
     public TceS()
     {

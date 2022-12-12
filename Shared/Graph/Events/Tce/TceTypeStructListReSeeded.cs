@@ -2,5 +2,5 @@
 
 public class TceTypeStructListReSeeded
 {
-    public List<TceTypeStruct>? TceTypes;
+    public List<TceTypeStruct> TceTypes = new();
 }

@@ -10,6 +10,7 @@ public static class Actions
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
     private static readonly string _clientId = "client-connection-id";
     private static readonly string _username = "Vasya Pugovkin";
+    private static readonly string _password = "123";
     private static readonly string _clientIP = "<<wpf address IP>>";
 
     public static async Task Do(int action, c2r.c2rClient grpcClient, c2d.c2dClient c2dClient)
@@ -24,7 +25,7 @@ public static class Actions
 
     private static async Task<ClientRegisteredDto?> RegisterClient(c2d.c2dClient grpcClient)
     {
-        var dto = new RegisterClientDto(_clientId) { UserName = _username, ClientIp = _clientIP };
+        var dto = new RegisterClientDto(_clientId, _username, _password ) { ClientIp = _clientIP };
         var command = new c2dCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
         try
         {

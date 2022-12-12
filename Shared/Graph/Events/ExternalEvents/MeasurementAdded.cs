@@ -18,5 +18,5 @@ public class MeasurementAdded
     public string? StatusChangedByUser;
 
     public string? Comment;
-    public List<AccidentOnTraceV2>? Accidents;
+    public List<AccidentOnTraceV2> Accidents = new List<AccidentOnTraceV2>();
 }

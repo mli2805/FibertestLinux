@@ -16,7 +16,7 @@ public class Measurement
     public string? StatusChangedByUser;
 
     public string? Comment;
-    public List<AccidentOnTraceV2>? Accidents;
+    public List<AccidentOnTraceV2> Accidents = new();
 
     public int SorFileId;
 }

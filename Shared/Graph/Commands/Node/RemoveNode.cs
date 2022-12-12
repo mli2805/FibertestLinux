@@ -16,6 +16,6 @@ public class RemoveNode
     public Guid NodeId;
     public bool IsAdjustmentPoint;
 
-    public List<NodeDetour>? DetoursForGraph;
+    public List<NodeDetour> DetoursForGraph = new List<NodeDetour>();
     public Guid FiberIdToDetourAdjustmentPoint; // if there are no traces passing through this point
 }

@@ -6,4 +6,6 @@ public class DataCenterConfig
     public int CheckHeartbeatEvery { get; set; }
     public int RtuHeartbeatPermittedGap { get; set; }
     public int ClientConnectionsPermittedGap { get; set; }
+
+    public string? PreviousStartOnVersion { get; set; }
 }

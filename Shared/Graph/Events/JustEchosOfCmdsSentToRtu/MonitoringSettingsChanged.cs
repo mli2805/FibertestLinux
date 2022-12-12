@@ -6,7 +6,7 @@ public class MonitoringSettingsChanged
 {
     public Guid RtuId;
 
-    public List<Guid>? TracesInMonitoringCycle;
+    public List<Guid> TracesInMonitoringCycle = new();
 
     public Frequency PreciseMeas;
     public Frequency PreciseSave;

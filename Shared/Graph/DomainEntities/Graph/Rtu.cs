@@ -17,7 +17,7 @@ public class Rtu
     public string? Omsn;
 
     public Guid NodeId;
-    public string? Title;
+    public string Title = "";
     public string? Comment;
 
     public NetAddress MainChannel = new(@"", -1);
