@@ -2,7 +2,7 @@
 {
     public class SorFile
     {
-        public int Id;
-        public byte[] SorBytes = Array.Empty<byte>();
+        public int Id { get; set; }
+        public byte[] SorBytes { get; set; } = Array.Empty<byte>();
     }
 }

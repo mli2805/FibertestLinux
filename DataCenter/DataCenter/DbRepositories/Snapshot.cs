@@ -2,12 +2,10 @@
 {
     public class Snapshot
     {
-        public int Id;
-        public Guid StreamIdOriginal;
-        public int LastEventNumber;
-        public DateTime LastEventDate;
-        public byte[] Payload = Array.Empty<byte>();
-
-
+        public int Id { get; set; }
+        public Guid StreamIdOriginal { get; set; }
+        public int LastEventNumber { get; set; }
+        public DateTime LastEventDate { get; set; }
+        public byte[] Payload { get; set; } = Array.Empty<byte>();
     }
 }
