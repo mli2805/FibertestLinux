@@ -101,7 +101,7 @@ namespace Fibertest.DataCenter
             {
                 MySqlConnection connection = new MySqlConnection(FtConnectionString);
                 connection.Open();
-                MySqlCommand command1 = new MySqlCommand($"SELECT CheckPointNumber FROM ft30graph.commits WHERE StreamRevision = {lastEventNumber};", connection);
+                MySqlCommand command1 = new MySqlCommand($"SELECT CheckPointNumber FROM ft30graph.Commits WHERE StreamRevision = {lastEventNumber};", connection);
                 var checkPointNumber = (long)(command1.ExecuteScalar() ?? 0 + 1);
 
                 MySqlCommand command = new MySqlCommand($"DELETE FROM ft20graph.commits WHERE CheckPointNumber < {checkPointNumber};", connection);
@@ -188,7 +188,7 @@ namespace Fibertest.DataCenter
             {
                 MySqlConnection connection = new MySqlConnection(FtConnectionString);
                 MySqlCommand command = new MySqlCommand(
-                    "SELECT StreamIdOriginal FROM ft30graph.commits", connection);
+                    "SELECT StreamIdOriginal FROM ft30graph.Commits", connection);
                 connection.Open();
                 var result = (string)(command.ExecuteScalar() ?? 0);
                 connection.Close();
