@@ -2,10 +2,11 @@
 
 public class DataCenterConfig
 {
-    public int EventSourcingPortion { get; set; }
-    public int CheckHeartbeatEvery { get; set; }
-    public int RtuHeartbeatPermittedGap { get; set; }
-    public int ClientConnectionsPermittedGap { get; set; }
-
-    public string? PreviousStartOnVersion { get; set; }
+    public ServerGeneralConfig ServerGeneral { get; set; } = new ServerGeneralConfig();
+    public ServerTimeoutConfig ServerTimeouts { get; set; } = new ServerTimeoutConfig();
+    public EventSourcingConfig EventSourcing { get; set; } = new EventSourcingConfig();
+    public MysqlConfig Mysql { get; set; } = new MysqlConfig();
+    public SmtpConfig Smtp { get; set; } = new SmtpConfig();
+    public SnmpConfig Snmp { get; set; } = new SnmpConfig();
+    public WebApiConfig WebApi { get; set; } = new WebApiConfig();
 }

@@ -9,15 +9,10 @@ public class ClientRegisteredDto : RequestAnswer
     public Guid ZoneId;
     public string? ZoneTitle;
         
-    public Guid StreamIdOriginal;
-    public int SnapshotLastEvent;
-    public DateTime SnapshotLastDate;
-    public string? DatacenterVersion;
     public bool IsWithoutMapMode;
+
+    public CurrentDatacenterParameters? CurrentDatacenterParameters;
         
-    public SmtpSettingsDto? Smtp;
-    public int GsmModemComPort;
-    public SnmpSettingsDto? Snmp;
 
     public ClientRegisteredDto(ReturnCode returnCode) : base(returnCode)
     {

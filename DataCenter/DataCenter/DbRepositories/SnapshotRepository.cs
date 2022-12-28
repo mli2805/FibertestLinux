@@ -5,13 +5,13 @@ namespace Fibertest.DataCenter
 {
     public class SnapshotRepository
     {
-        private readonly IParameterizer _parameterizer;
         private readonly ILogger<SnapshotRepository> _logger;
+        private readonly IDbInitializer _dbInitializer;
 
-        public SnapshotRepository(IParameterizer parameterizer, ILogger<SnapshotRepository> logger)
+        public SnapshotRepository(ILogger<SnapshotRepository> logger, IDbInitializer dbInitializer)
         {
-            _parameterizer = parameterizer;
             _logger = logger;
+            _dbInitializer = dbInitializer;
         }
 
         // max_allowed_packet is 16M ???
@@ -19,7 +19,7 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                await using var dbContext = new FtDbContext(_parameterizer.Options);
+                await using var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions);
 
                 _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Snapshot adding...");
                 var portion = 2 * 1024 * 1024;
@@ -52,7 +52,7 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                await using var dbContext = new FtDbContext(_parameterizer.Options);
+                await using var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions);
 
                 _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Snapshot reading...");
                 var portions = await dbContext.Snapshots
@@ -89,7 +89,7 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                using (var dbContext = new FtDbContext(_parameterizer.Options))
+                using (var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions))
                 {
                     _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Snapshots removing...");
                     var maxLastEventNumber = dbContext.Snapshots.Max(f => f.LastEventNumber); 

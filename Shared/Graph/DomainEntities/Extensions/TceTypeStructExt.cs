@@ -18,7 +18,6 @@ namespace Fibertest.Graph
         {
             // ===== HUAWEI =================================
 
-
             yield return new TceTypeStruct()
             {
                 Id = 101,

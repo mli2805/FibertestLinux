@@ -1,28 +1,40 @@
 ﻿using System.Data.Common;
 using Fibertest.Utils;
+using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using NEventStore;
 using NEventStore.Persistence.Sql.SqlDialects;
 
 namespace Fibertest.DataCenter
 {
-    public sealed class MySqlEventStoreInitializer : IEventStoreInitializer
+    public sealed class MySqlDbInitializer : IDbInitializer
     {
-        private readonly ILogger<MySqlEventStoreInitializer> _logger;
+        private readonly ILogger<MySqlDbInitializer> _logger;
+        private readonly MySerializer _mySerializer;
 
         private readonly int _mysqlTcpPort;
-        private readonly string _eventSourcingScheme;
-        public string? DataDir { get ; private set; }
-        public string ConnectionString { get; private set; }
+        private readonly string _postfix;
+        private string EventSourcingScheme => "ft30graph" + _postfix;
+        private string OtherTablesScheme => "ft30efcore" + _postfix;
 
-        public MySqlEventStoreInitializer(IWritableOptions<MysqlConfig> config, ILogger<MySqlEventStoreInitializer> logger)
+        public string ConnectionLogLine =>
+            $"MYSQL=localhost:{_mysqlTcpPort}   Database={EventSourcingScheme} / {OtherTablesScheme}";
+
+        // for "other" tables (not event sourcing)
+        public DbContextOptions<FtDbContext> FtDbContextOptions =>
+            new DbContextOptionsBuilder<FtDbContext>()
+                .UseMySql(FtConnectionString, ServerVersion.AutoDetect(FtConnectionString)).Options;
+
+        public string? DataDir { get; private set; }
+        private string FtConnectionString => $"server=localhost;port={_mysqlTcpPort};user id=root;password=root;database={OtherTablesScheme}";
+        public string EsConnectionString => $"server=localhost;port={_mysqlTcpPort};user id=root;password=root;database={EventSourcingScheme}";
+
+        public MySqlDbInitializer(IWritableOptions<MysqlConfig> config, ILogger<MySqlDbInitializer> logger, MySerializer mySerializer)
         {
             _logger = logger;
+            _mySerializer = mySerializer;
             _mysqlTcpPort = config.Value.TcpPort; // default 3306
-            var postfix = config.Value.SchemePostfix;
-            _eventSourcingScheme = "ft30graph" + postfix;
-
-            ConnectionString = $"server=localhost;port={_mysqlTcpPort};user id=root;password=root;";
+            _postfix = config.Value.SchemePostfix ?? "";
         }
 
         public IStoreEvents Init()
@@ -30,28 +42,32 @@ namespace Fibertest.DataCenter
             CreateDatabaseIfNotExists();
             try
             {
-                var providerFactory = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
+                DbProviderFactories.RegisterFactory("AnyNameYouWant", MySqlConnectorFactory.Instance);
+                var providerFactory = DbProviderFactories.GetFactory("AnyNameYouWant");
+
                 var eventStore = Wireup.Init()
-                    .UsingSqlPersistence(providerFactory, $"{ConnectionString}database={_eventSourcingScheme}")
+                    .UsingSqlPersistence(providerFactory, $"{EsConnectionString}")
                     .WithDialect(new MySqlDialect())
                     .InitializeStorageEngine()
+                    .UsingCustomSerialization(_mySerializer)
                     .Build();
 
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Events store: MYSQL=localhost:{_mysqlTcpPort}   Database={_eventSourcingScheme}");
+                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
+                    $"Events store: MYSQL=localhost:{_mysqlTcpPort}   Database={EventSourcingScheme}");
 
                 InitializeDataDir();
                 return eventStore;
             }
             catch (Exception e)
             {
-                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "MySqlEventStoreInitializer exception : " + e.Message);
+                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "MySqlDbInitializer exception : " + e.Message);
                 throw;
             }
         }
 
         private void InitializeDataDir()
         {
-            MySqlConnection connection = new MySqlConnection(ConnectionString);
+            MySqlConnection connection = new MySqlConnection(FtConnectionString);
             MySqlCommand command = new MySqlCommand("select @@datadir", connection);
             connection.Open();
             DataDir = (string)(command.ExecuteScalar() ?? 0);
@@ -64,7 +80,7 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                MySqlConnection connection = new MySqlConnection(FtConnectionString);
                 MySqlCommand command = new MySqlCommand("optimize table ft30efcore.sorfiles", connection);
                 connection.Open();
                 var unused = command.ExecuteNonQuery();
@@ -83,7 +99,7 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                MySqlConnection connection = new MySqlConnection(FtConnectionString);
                 connection.Open();
                 MySqlCommand command1 = new MySqlCommand($"SELECT CheckPointNumber FROM ft30graph.commits WHERE StreamRevision = {lastEventNumber};", connection);
                 var checkPointNumber = (long)(command1.ExecuteScalar() ?? 0 + 1);
@@ -113,7 +129,7 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                MySqlConnection connection = new MySqlConnection(FtConnectionString);
                 MySqlCommand command = new MySqlCommand(
                     $"SELECT SUM(data_length + index_length) FROM information_schema.tables WHERE table_schema = {schema}", connection);
                 connection.Open();
@@ -134,8 +150,8 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                MySqlConnection connection = new MySqlConnection(ConnectionString);
-                MySqlCommand command = new MySqlCommand($"drop database if exists {_eventSourcingScheme};", connection);
+                MySqlConnection connection = new MySqlConnection(FtConnectionString);
+                MySqlCommand command = new MySqlCommand($"drop database if exists {EventSourcingScheme};", connection);
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -152,8 +168,8 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                MySqlConnection connection = new MySqlConnection(ConnectionString);
-                MySqlCommand command = new MySqlCommand($"create database if not exists {_eventSourcingScheme};", connection);
+                MySqlConnection connection = new MySqlConnection(FtConnectionString);
+                MySqlCommand command = new MySqlCommand($"create database if not exists {EventSourcingScheme};", connection);
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -170,9 +186,9 @@ namespace Fibertest.DataCenter
         {
             try
             {
-                MySqlConnection connection = new MySqlConnection(ConnectionString);
+                MySqlConnection connection = new MySqlConnection(FtConnectionString);
                 MySqlCommand command = new MySqlCommand(
-                    "SELECT StreamIdOriginal FROM ft20graph.commits", connection);
+                    "SELECT StreamIdOriginal FROM ft30graph.commits", connection);
                 connection.Open();
                 var result = (string)(command.ExecuteScalar() ?? 0);
                 connection.Close();

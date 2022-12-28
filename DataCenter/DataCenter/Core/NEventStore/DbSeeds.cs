@@ -8,7 +8,8 @@ namespace Fibertest.DataCenter
     {
         public static readonly List<object> Collection = new List<object>()
         {
-            new AddZone() { IsDefaultZone = true, Title = StringResources.Resources.SID_Default_Zone },
+            new AddZone() 
+                { IsDefaultZone = true, Title = StringResources.Resources.SID_Default_Zone },
             new AddUser() { UserId = Guid.NewGuid(), Title = "developer",
                 EncodedPassword = "developer".GetSha256(), Role = Role.Developer, ZoneId = Guid.Empty },
             new AddUser() { UserId = Guid.NewGuid(), Title = "root",
@@ -23,6 +24,8 @@ namespace Fibertest.DataCenter
                 EncodedPassword = "websupervisor".GetSha256(), Role = Role.WebSupervisor, ZoneId = Guid.Empty },
             new AddUser() { UserId = Guid.NewGuid(), Title = "superclient", 
                 EncodedPassword = "superclient".GetSha256(), Role = Role.SuperClient, ZoneId = Guid.Empty },
+            new ReSeedTceTypeStructList() 
+                { TceTypes = TceTypeStructExt.Generate().ToList() },
         };
     }
 }

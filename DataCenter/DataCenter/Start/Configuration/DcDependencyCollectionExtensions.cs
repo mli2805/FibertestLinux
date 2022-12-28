@@ -1,3 +1,5 @@
+using Fibertest.Graph;
+
 namespace Fibertest.DataCenter;
 
 public static class DcDependencyCollectionExtensions
@@ -26,12 +28,26 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<ClientCollection>();
         services.AddSingleton<RtuOccupations>();
 
+        services.AddSingleton<SnapshotRepository>();
+
+
         return services;
     }
 
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
         services.AddSingleton<ClientGrpcRequestExecutor>();
+        services.AddSingleton<IDbInitializer, MySqlDbInitializer>();
+
+        services.AddSingleton<MySerializer>();
+        services.AddSingleton<EventsQueue>();
+        services.AddSingleton<CommandAggregator>();
+        services.AddSingleton<EventStoreService>();
+
+
+        services.AddSingleton<Model>();
+        services.AddSingleton<EventToLogLineParser>();
+        services.AddSingleton<EventLogComposer>();
 
         return services;
     }
