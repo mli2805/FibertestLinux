@@ -2,7 +2,7 @@
 
 public class FreeOtdrDto : BaseRtuRequest
 {
-    public FreeOtdrDto(string connectionId, Guid rtuId, RtuMaker rtuMaker) : base(connectionId, rtuId, rtuMaker)
+    public FreeOtdrDto(Guid rtuId, RtuMaker rtuMaker) : base(rtuId, rtuMaker)
     {
     }
 

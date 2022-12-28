@@ -18,14 +18,14 @@ internal class Program
         var uri = $"http://{serverAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
 
         using var grpcChannel = GrpcChannel.ForAddress(uri);
-        var grpcClient = new c2r.c2rClient(grpcChannel);
+        var c2RClient = new c2r.c2rClient(grpcChannel);
         var c2dClient = new c2d.c2dClient(grpcChannel);
 
         while (true)
         {
             Console.WriteLine(Resources.SID_Example);
             Console.WriteLine("");
-            if (!await Menu(grpcClient, c2dClient)) 
+            if (!await Menu(c2RClient, c2dClient)) 
                 return;
         }
     }

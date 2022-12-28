@@ -11,7 +11,7 @@ public class RegisterClientDto : BaseRequest
     public bool IsUnderSuperClient;
     public bool IsWebClient;
 
-    public RegisterClientDto(string connectionId, string username, string password) : base(connectionId)
+    public RegisterClientDto(string username, string password)
     {
         UserName = username;
         Password = password;
@@ -23,7 +23,7 @@ public class RegisterClientDto : BaseRequest
 
 public class UnRegisterClientDto : BaseRequest
 {
-    public UnRegisterClientDto(string connectionId, string userName) : base(connectionId)
+    public UnRegisterClientDto(string userName)
     {
         UserName = userName;
     }

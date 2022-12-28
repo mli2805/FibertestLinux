@@ -8,9 +8,9 @@ namespace ClientConsole;
 public static class Actions
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
-    private static readonly string _clientId = "client-connection-id";
     private static readonly string _username = "Vasya Pugovkin";
     private static readonly string _password = "123";
+    private static readonly string _clientId = "client-connection-id";
     private static readonly string _clientIP = "<<wpf address IP>>";
 
     public static async Task Do(int action, c2r.c2rClient grpcClient, c2d.c2dClient c2dClient)
@@ -25,7 +25,7 @@ public static class Actions
 
     private static async Task<ClientRegisteredDto?> RegisterClient(c2d.c2dClient grpcClient)
     {
-        var dto = new RegisterClientDto(_clientId, _username, _password ) { ClientIp = _clientIP };
+        var dto = new RegisterClientDto(_username, _password ) { ClientIp = _clientIP, ConnectionId = _clientId};
         var command = new c2dCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
         try
         {
@@ -45,7 +45,7 @@ public static class Actions
 
     private static async Task InitDllsAndConnectOtdr(c2r.c2rClient grpcClient)
     {
-        var dto = new InitializeRtuDto(_clientId, Guid.NewGuid(), RtuMaker.IIT);
+        var dto = new InitializeRtuDto(Guid.NewGuid(), RtuMaker.IIT) { ClientConnectionId = _clientId};
         var command = new c2rCommand()
         { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
         Console.WriteLine(Resources.SID_long_operation_please_wait);
@@ -67,7 +67,7 @@ public static class Actions
 
     private static async Task DisconnectOtdr(c2r.c2rClient grpcClient)
     {
-        var dto = new FreeOtdrDto("client-connection-id", Guid.NewGuid(), RtuMaker.IIT);
+        var dto = new FreeOtdrDto(Guid.NewGuid(), RtuMaker.IIT) { ClientConnectionId = _clientId };
         var command = new c2rCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
         try

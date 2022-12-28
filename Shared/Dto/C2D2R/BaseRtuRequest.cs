@@ -2,13 +2,12 @@
 
 public class BaseRtuRequest
 {
-    public string ConnectionId;
+    public string ClientConnectionId = "";
     public Guid RtuId;
     public RtuMaker RtuMaker;
 
-    public BaseRtuRequest(string connectionId, Guid rtuId, RtuMaker rtuMaker)
+    public BaseRtuRequest(Guid rtuId, RtuMaker rtuMaker)
     {
-        ConnectionId = connectionId;
         RtuId = rtuId;
         RtuMaker = rtuMaker;
     }

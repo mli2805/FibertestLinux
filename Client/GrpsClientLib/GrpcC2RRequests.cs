@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Fibertest.DataCenter;
+﻿using Fibertest.DataCenter;
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Grpc.Net.Client;
@@ -15,15 +14,21 @@ public class GrpcC2RRequests
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
 
     private string? _uri;
+    private string _clientConnectionId = "";
 
     public GrpcC2RRequests(IConfiguration config, ILogger<GrpcC2RRequests> logger)
     {
         _logger = logger;
-        var d = config.GetSection("General")["Zoom"];
-        Debug.WriteLine(d);
+        var dcAddress = config.GetSection("General")["DcAddress"];
+        _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
     }
 
-    public void Initialize(string dcAddress)
+    public void SetClientConnectionId(string clientConnectionId)
+    {
+        _clientConnectionId = clientConnectionId;
+    }
+
+    public void ChangeAddress(string dcAddress)
     {
         _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
     }
@@ -32,6 +37,7 @@ public class GrpcC2RRequests
     {
         if (_uri == null)
             return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError) { ErrorMessage = "Data-center address not set" };
+        dto.ClientConnectionId = _clientConnectionId;
 
         using var grpcChannel = GrpcChannel.ForAddress(_uri);
         var grpcClient = new c2r.c2rClient(grpcChannel);

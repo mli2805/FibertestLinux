@@ -34,7 +34,7 @@ public class C2RService : c2r.c2rBase
             if (request == null)
                 return CreateBadResponse(ReturnCode.FailedDeserializeJson);
 
-            var client = _clientCollection.Get(request.ConnectionId);
+            var client = _clientCollection.Get(request.ClientConnectionId);
             if (client == null)
                 return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
 

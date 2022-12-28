@@ -2,7 +2,7 @@
 
 public class AttachOtauDto : BaseRtuRequest
 {
-    public AttachOtauDto(string connectionId, Guid rtuId, RtuMaker rtuMaker) : base(connectionId, rtuId, rtuMaker)
+    public AttachOtauDto(Guid rtuId, RtuMaker rtuMaker) : base(rtuId, rtuMaker)
     {
     }
 

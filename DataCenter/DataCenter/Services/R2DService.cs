@@ -19,7 +19,6 @@ public class R2DService : R2D.R2DBase
 
     public override async Task<R2DGrpcResponse> SendCommand(R2DGrpcCommand r2DGrpcCommand, ServerCallContext context)
     {
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "we are in here");
         object? o = JsonConvert.DeserializeObject(r2DGrpcCommand.Json, JsonSerializerSettings);
 
         object r;

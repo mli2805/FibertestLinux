@@ -8,6 +8,8 @@ service c2d {
 
 message c2dCommand {
 	string json = 1;
+	bool isEventSourcingCommand = 2;
+	string clientConnectionId = 3;
 }
 
 message c2dResponse {

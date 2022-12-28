@@ -2,7 +2,7 @@
 
 public class StopMonitoringDto : BaseRtuRequest
 {
-    public StopMonitoringDto(string connectionId, Guid rtuId, RtuMaker rtuMaker) : base(connectionId, rtuId, rtuMaker)
+    public StopMonitoringDto(Guid rtuId, RtuMaker rtuMaker) : base(rtuId, rtuMaker)
     {
     }
 

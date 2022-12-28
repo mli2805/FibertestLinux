@@ -2,7 +2,7 @@
 
 public class InitializeRtuDto : BaseRtuRequest
 {
-    public InitializeRtuDto(string connectionId, Guid rtuId, RtuMaker rtuMaker) : base(connectionId, rtuId, rtuMaker)
+    public InitializeRtuDto(Guid rtuId, RtuMaker rtuMaker) : base(rtuId, rtuMaker)
     {
     }
 

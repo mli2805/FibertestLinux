@@ -1,12 +1,19 @@
 ﻿using System.Collections.Concurrent;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.Utils;
 
 namespace Fibertest.DataCenter;
 
 public class ClientCollection
 {
+    private readonly ILogger<ClientCollection> _logger;
     public readonly ConcurrentDictionary<string, ClientStation> Clients = new();
+
+    public ClientCollection(ILogger<ClientCollection> logger)
+    {
+        _logger = logger;
+    }
 
     public async Task<ClientRegisteredDto> RegisterClientAsync(RegisterClientDto dto)
     {
@@ -14,10 +21,12 @@ public class ClientCollection
         // instead of this line many-many checks
         var user = new User(dto.UserName, dto.Password);
 
-        var clientStation = new ClientStation(dto, user);
+        var clientStation = new ClientStation(dto, user) { ClientIp = dto.ClientIp ?? "client IP not set"};
         if (!Clients.TryAdd(clientStation.ConnectionId, clientStation))
             return new ClientRegisteredDto(ReturnCode.Error);
-        return this.FillInSuccessfulResult(dto, user);
+        var successfulResult = this.FillInSuccessfulResult(dto, user);
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Client {clientStation.UserName} from {clientStation.ClientIp} registered successfully!");
+        return successfulResult;
     }
 
     public async Task<RequestAnswer> RegisterHeartbeat(RegisterHeartbeatDto dto)
