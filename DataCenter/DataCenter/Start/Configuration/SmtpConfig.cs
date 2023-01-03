@@ -6,5 +6,5 @@ public class SmtpConfig
     public int SmtpPort { get; set; }
     public string MailFrom { get; set; } = string.Empty;
     public string MailFromPassword { get; set; } = string.Empty;
-    public int SmtpHSmtpTimeoutMsost { get; set; }
+    public int SmtpTimeoutMs { get; set; }
 }

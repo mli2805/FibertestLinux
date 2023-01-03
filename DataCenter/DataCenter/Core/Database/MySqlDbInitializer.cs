@@ -34,7 +34,7 @@ namespace Fibertest.DataCenter
             _logger = logger;
             _mySerializer = mySerializer;
             _mysqlTcpPort = config.Value.TcpPort; // default 3306
-            _postfix = config.Value.SchemePostfix ?? "";
+            _postfix = config.Value.SchemePostfix;
         }
 
         public IStoreEvents Init()

@@ -16,6 +16,7 @@ namespace Fibertest.DataCenter
 
         private readonly DoubleAddress _serverDoubleAddress;
 
+
         public IntermediateClass(IWritableOptions<DataCenterConfig> config, ILogger<IntermediateClass> logger, 
             RtuStationsRepository rtuStationsRepository, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
             RtuInitializationToGraphApplier rtuInitializationToGraphApplier)
@@ -25,7 +26,7 @@ namespace Fibertest.DataCenter
             _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
             _rtuInitializationToGraphApplier = rtuInitializationToGraphApplier;
 
-            _serverDoubleAddress = config.Value.ServerGeneral.ServerDoubleAddress;
+            _serverDoubleAddress = config.Value.General.ServerDoubleAddress;
         }
 
         // Web and Desktop clients send different dtos for RTU initialization

@@ -26,7 +26,7 @@ public class SerialPortManager
     public SerialPortManager(IOptions<CharonConfig> config, ILogger<SerialPortManager> logger)
     {
         _logger = logger;
-        _comPortName = config.Value.ComPortName ?? "/dev/ttyS1";
+        _comPortName = config.Value.ComPortName;
         _comPortSpeed = config.Value.ComPortSpeed;
         _pauseAfterReset = config.Value.PauseAfterReset != 0 ? config.Value.PauseAfterReset : 5;
     }

@@ -2,7 +2,7 @@
 
 public class ServerTimeoutConfig
 {
-    public int CheckHeartbeatEvery { get; set; }
-    public int RtuHeartbeatPermittedGap { get; set; }
-    public int ClientConnectionsPermittedGap { get; set; }
+    public int CheckHeartbeatEvery { get; set; } = 30;
+    public int RtuHeartbeatPermittedGap { get; set; } = 70;
+    public int ClientConnectionsPermittedGap { get; set; } = 180;
 }

@@ -2,7 +2,7 @@
 
 public class DataCenterConfig
 {
-    public ServerGeneralConfig ServerGeneral { get; set; } = new ServerGeneralConfig();
+    public ServerGeneralConfig General { get; set; } = new ServerGeneralConfig();
     public ServerTimeoutConfig ServerTimeouts { get; set; } = new ServerTimeoutConfig();
     public EventSourcingConfig EventSourcing { get; set; } = new EventSourcingConfig();
     public MysqlConfig Mysql { get; set; } = new MysqlConfig();

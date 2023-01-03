@@ -1,15 +1,8 @@
-﻿using Fibertest.Dto;
-
-namespace Fibertest.Rtu;
+﻿namespace Fibertest.Rtu;
 
 public class RtuConfig
 {
-    public int RtuHeartbeatRate { get; set; }
-
-    public DoubleAddress? ServerAddress { get; set; }
-    public Guid RtuId { get; set; }
-
-
-    public int RtuPauseAfterReboot { get; set; }
-    public int RtuUpTimeForAdditionalPause { get; set; }
+    public RtuGeneralConfig General { get; set; } = new RtuGeneralConfig();
+    public MonitoringConfig Monitoring { get; set; } = new MonitoringConfig();
+    public CharonConfig Charon { get; set; } = new CharonConfig();
 }

@@ -24,6 +24,8 @@ public class ShellViewModel : PropertyChangedBase, IShell
     private static readonly string _password = "123";
     private readonly string _clientIP = "192.168.96.21";
 
+    private Guid _rtuId = Guid.Parse("c77c77fe-f23f-441c-ae4b-84f25450c7e4");
+
     public ObservableCollection<string> Lines { get; set; } = new() { " Here will be log " };
 
     public ShellViewModel(ILogger<ShellViewModel> logger, GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests)
@@ -46,7 +48,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
     public async void AddRtu()
     {
         _grpcC2DRequests.ChangeAddress(DcAddress);
-        var cmd = new AddRtuAtGpsLocation(Guid.NewGuid(), Guid.NewGuid(), 57.2, 29.6, "RTU linux");
+        var cmd = new AddRtuAtGpsLocation(_rtuId, Guid.NewGuid(), 57.2, 29.6, "RTU linux");
         var res = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         Lines.Add($"Add RTU: {res.ReturnCode}");
     }
@@ -55,9 +57,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
     {
         _grpcC2RRequests.ChangeAddress(DcAddress);
         _logger.Log(LogLevel.Information, Logs.Client.ToInt(), Resources.SID_long_operation_please_wait);
-        var rtu = new Rtu() 
-            { Id = Guid.NewGuid(), RtuMaker = RtuMaker.IIT, MainChannel = new NetAddress(RtuAddress, TcpPorts.RtuListenTo) };
-        var dto = new InitializeRtuDto(rtu.Id, rtu.RtuMaker);
+        var dto = new InitializeRtuDto(_rtuId, RtuMaker.IIT);
         dto.RtuAddresses.Main = new NetAddress(RtuAddress, TcpPorts.RtuListenTo);
         var res = await _grpcC2RRequests.InitializeRtu(dto);
         if (res.ReturnCode == ReturnCode.RtuInitializedSuccessfully)

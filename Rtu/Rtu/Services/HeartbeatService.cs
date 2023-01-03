@@ -10,13 +10,13 @@ namespace Fibertest.Rtu
 {
     public class HeartbeatService : BackgroundService
     {
-        private readonly IWritableOptions<RtuConfig> _config;
+        private readonly IWritableOptions<RtuGeneralConfig> _config;
         private readonly ILogger<HeartbeatService> _logger;
 
         private string _version = "";
         private bool _isLastAttemptSuccessful;
 
-        public HeartbeatService(IWritableOptions<RtuConfig> config, ILogger<HeartbeatService> logger)
+        public HeartbeatService(IWritableOptions<RtuGeneralConfig> config, ILogger<HeartbeatService> logger)
         {
             _config = config;
             _logger = logger;
@@ -33,7 +33,7 @@ namespace Fibertest.Rtu
 
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
-                $"Server address is {_config.Value.ServerAddress?.Main.ToStringA() ?? "null"}");
+                $"Server address is {_config.Value.ServerAddress.Main.ToStringA()}");
             await DoWork(stoppingToken);
         }
 
@@ -55,13 +55,7 @@ namespace Fibertest.Rtu
             try
             {
                 var serverAddress = _config.Value.ServerAddress;
-                if (serverAddress == null)
-                {
-                    if (_isLastAttemptSuccessful)
-                        _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "Data Center address not found.");
-                    return false;
-                }
-
+               
                 var dto = new RtuChecksChannelDto(_config.Value.RtuId, _version, true);
                 var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 

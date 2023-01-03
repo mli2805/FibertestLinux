@@ -20,12 +20,13 @@ public class Program
                 // http
                 options.ListenAnyIP((int)TcpPorts.WebApiListenTo, o => o.Protocols = HttpProtocols.Http1);
             })
-            .ConfigureAppConfiguration((_, config) =>
+            .ConfigureAppConfiguration((_, configurationBuilder) =>
             {
                 var assemblyLocation = Assembly.GetExecutingAssembly().Location;
                 var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
                 var configFile = Path.Combine(basePath, @"../config/dc.json");
-                config.AddJsonFile(configFile, false, true);
+                ConfigValidator.Validate(configFile, new DataCenterConfig());
+                configurationBuilder.AddJsonFile(configFile, false, true);
             });
 
         // Add services to the container.
