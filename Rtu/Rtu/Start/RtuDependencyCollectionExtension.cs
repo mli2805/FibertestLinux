@@ -22,10 +22,10 @@ public static class RtuDependencyCollectionExtension
 
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
-        services.AddScoped<InterOpWrapper>(); // для каждого реквеста новый
-        services.AddScoped<SerialPortManager>(); 
-        services.AddScoped<OtdrManager>(); 
-        services.AddScoped<RtuManager>(); 
+        services.AddSingleton<InterOpWrapper>(); 
+        services.AddSingleton<SerialPortManager>(); 
+        services.AddSingleton<OtdrManager>(); 
+        services.AddSingleton<RtuManager>(); 
         return services;
     }
 
