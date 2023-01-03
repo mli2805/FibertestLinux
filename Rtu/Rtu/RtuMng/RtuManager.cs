@@ -2,22 +2,23 @@
 using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.Rtu;
 
 public class RtuManager
 {
-    private readonly IOptions<MonitoringConfig> _config;
+    private readonly IWritableOptions<RtuConfig> _rtuConfig;
+    private readonly IWritableOptions<MonitoringConfig> _monitoringConfig;
     private readonly ILogger<RtuManager> _logger;
     private readonly SerialPortManager _serialPortManager;
     private readonly InterOpWrapper _interOpWrapper;
     private readonly OtdrManager _otdrManager;
 
-    public RtuManager(IOptions<MonitoringConfig> config, ILogger<RtuManager> logger,
+    public RtuManager(IWritableOptions<RtuConfig> rtuConfig, IWritableOptions<MonitoringConfig> monitoringConfig, ILogger<RtuManager> logger,
         SerialPortManager serialPortManager, InterOpWrapper interOpWrapper, OtdrManager otdrManager)
     {
-        _config = config;
+        _rtuConfig = rtuConfig;
+        _monitoringConfig = monitoringConfig;
         _logger = logger;
         _serialPortManager = serialPortManager;
         _interOpWrapper = interOpWrapper;
@@ -26,6 +27,11 @@ public class RtuManager
 
     public async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto? dto = null)
     {
+        if (dto != null)
+        {
+            SaveInitializationParameters(dto);
+        }
+
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
         var creationTime = File.GetLastWriteTime(assembly.Location);
@@ -40,6 +46,7 @@ public class RtuManager
         _serialPortManager.ShowOnLedDisplay(LedDisplayCode.Connecting); // "Connecting..."
 
         var result = await _otdrManager.InitializeOtdr();
+        result.RtuId = _rtuConfig.Value.RtuId;
         if (result.ReturnCode != ReturnCode.Ok)
             return result;
 
@@ -53,12 +60,12 @@ public class RtuManager
             return result2;
         }
 
-        result2.IsMonitoringOn = _config.Value.IsMonitoringOn;
+        result2.IsMonitoringOn = _monitoringConfig.Value.IsMonitoringOn;
 
         result2.AcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
         _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU initialized successfully!" + Environment.NewLine);
 
-        if (!_config.Value.IsMonitoringOn)
+        if (!_monitoringConfig.Value.IsMonitoringOn)
         {
             _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RTU is in MANUAL mode, disconnect OTDR" + Environment.NewLine);
             var unused = await _otdrManager.DisconnectOtdr();
@@ -72,5 +79,14 @@ public class RtuManager
         _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "RtuManager: FreeOtdr");
         var res = await _otdrManager.DisconnectOtdr();
         return new RequestAnswer(res ? ReturnCode.Ok : ReturnCode.Error);
+    }
+
+    private void SaveInitializationParameters(InitializeRtuDto dto)
+    {
+        _rtuConfig.Update(c=>c.RtuId = dto.RtuId);
+        _rtuConfig.Update(c=>c.ServerAddress = dto.ServerAddresses);
+
+        _monitoringConfig.Update(c=>c.IsMonitoringOn = false);
+        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "Initialization by the USER puts RTU into MANUAL mode.");
     }
 }
