@@ -30,5 +30,5 @@ public class InitializeRtu
 
     public Dictionary<int, OtauDto>? Children;
     public bool IsMonitoringOn;
-    public TreeOfAcceptableMeasParams AcceptableMeasParams = new();
+    public TreeOfAcceptableMeasParams? AcceptableMeasParams = new();
 }

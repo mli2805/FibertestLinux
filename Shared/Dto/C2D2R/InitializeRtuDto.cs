@@ -8,7 +8,7 @@ public class InitializeRtuDto : BaseRtuRequest
 
     public VeexOtau MainVeexOtau = new VeexOtau(); // in Veex RTU it is a separate unit
     public DoubleAddress? ServerAddresses;
-    public DoubleAddress? RtuAddresses;
+    public DoubleAddress RtuAddresses = new DoubleAddress();
 
     public bool IsFirstInitialization;
 

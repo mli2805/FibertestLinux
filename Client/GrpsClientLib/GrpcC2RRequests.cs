@@ -53,7 +53,7 @@ public class GrpcC2RRequests
 
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
             if (result == null)
-                return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError) { ErrorMessage = "json deserialization error" };
+                return new RtuInitializedDto(ReturnCode.C2RGrpcOperationError) { ErrorMessage = "Client failed to deserialize response" };
 
             return result;
         }

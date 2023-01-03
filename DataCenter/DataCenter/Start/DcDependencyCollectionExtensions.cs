@@ -8,6 +8,7 @@ public static class DcDependencyCollectionExtensions
     {
         return services
             .AddBootAndBackgroundServices()
+            .AddGlobalVars()
             .AddDbRepositories()
             .AddOther();
     }
@@ -22,15 +23,16 @@ public static class DcDependencyCollectionExtensions
         return services;
     }
 
-    private static IServiceCollection AddDbRepositories(this IServiceCollection services)
+    private static IServiceCollection AddGlobalVars(this IServiceCollection services)
     {
-        services.AddScoped<RtuRepo>(); // для каждого реквеста новый
         services.AddSingleton<ClientCollection>();
         services.AddSingleton<RtuOccupations>();
-
+        return services;
+    }
+  private static IServiceCollection AddDbRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<RtuStationsRepository>(); // для каждого реквеста новый
         services.AddSingleton<SnapshotRepository>();
-
-
         return services;
     }
 
@@ -48,6 +50,10 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<Model>();
         services.AddSingleton<EventToLogLineParser>();
         services.AddSingleton<EventLogComposer>();
+
+        services.AddSingleton<ClientToIitRtuTransmitter>();
+        services.AddScoped<IntermediateClass>();
+        services.AddSingleton<RtuInitializationToGraphApplier>();
 
         return services;
     }

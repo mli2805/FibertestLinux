@@ -1,8 +1,6 @@
 using Fibertest.Dto;
-using Fibertest.Rtu;
 using Fibertest.Utils;
 using Grpc.Core;
-using Grpc.Net.Client;
 using Newtonsoft.Json;
 
 namespace Fibertest.DataCenter;
@@ -11,15 +9,21 @@ public class C2RService : c2r.c2rBase
 {
     private readonly ILogger<C2RService> _logger;
     private readonly ClientCollection _clientCollection;
-    private readonly RtuRepo _rtuRepo;
     private readonly RtuOccupations _rtuOccupations;
+    private readonly RtuStationsRepository _rtuStationsRepository;
+    private readonly IntermediateClass _intermediateClass;
+    private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
 
-    public C2RService(ILogger<C2RService> logger, ClientCollection clientCollection, RtuRepo rtuRepo, RtuOccupations rtuOccupations)
+    public C2RService(ILogger<C2RService> logger, ClientCollection clientCollection,
+        RtuOccupations rtuOccupations, RtuStationsRepository rtuStationsRepository,
+        IntermediateClass intermediateClass, ClientToIitRtuTransmitter clientToIitRtuTransmitter)
     {
         _logger = logger;
         _clientCollection = clientCollection;
-        _rtuRepo = rtuRepo;
         _rtuOccupations = rtuOccupations;
+        _rtuStationsRepository = rtuStationsRepository;
+        _intermediateClass = intermediateClass;
+        _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
     }
 
     private static readonly JsonSerializerSettings JsonSerializerSettings =
@@ -45,22 +49,28 @@ public class C2RService : c2r.c2rBase
                     request.RtuId, request.Why, client.UserName, out RtuOccupationState? currentState))
                 return CreateBadResponse(ReturnCode.RtuIsBusy, currentState);
 
-            var rtuStation = _rtuRepo.Get(request.RtuId);
+            if (request is InitializeRtuDto dto)
+            {
+                var res = await _intermediateClass.InitializeRtuAsync(dto);
+                return new c2rResponse() { Json = JsonConvert.SerializeObject(res, JsonSerializerSettings) };
+            }
+
+            var rtuStation = await _rtuStationsRepository.GetRtuStation(request.RtuId);
             if (rtuStation == null)
                 return CreateBadResponse(ReturnCode.RtuNotFound);
-            
-            var rtuAddress = rtuStation.GetRtuAvailableAddress();
+
+            string? rtuAddress = rtuStation.GetRtuAvailableAddress();
             if (rtuAddress == null)
                 return CreateBadResponse(ReturnCode.RtuNotAvailable);
             _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"rtuAddress {rtuAddress}");
 
-            string? responseJson = request.RtuMaker == RtuMaker.IIT
-                ? await TransferCommand(rtuAddress, command.Json)
+            string responseJson = request.RtuMaker == RtuMaker.IIT
+                ? await _clientToIitRtuTransmitter.TransferCommand(rtuAddress, command.Json)
                 : JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.NotImplementedYet), JsonSerializerSettings);
 
-            return responseJson == null 
-                ? new c2rResponse(){ Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.D2RGrpcOperationError), JsonSerializerSettings)  } 
-                : new c2rResponse(){ Json = responseJson };
+            _rtuOccupations.TrySetOccupation(request.RtuId, RtuOccupation.None, client.UserName, out RtuOccupationState? _);
+
+            return new c2rResponse() { Json = responseJson };
         }
         catch (Exception e)
         {
@@ -88,32 +98,5 @@ public class C2RService : c2r.c2rBase
             Json = JsonConvert.SerializeObject(new RequestAnswer(returnCode)
             { RtuOccupationState = currentState }, JsonSerializerSettings)
         };
-    }
-
-    private async Task<string?> TransferCommand(string rtuAddress, string commandContent)
-    {
-        var rtuUri = $"http://{rtuAddress}";
-        using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
-        _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), $"GrpcChannel for {rtuUri}");
-        var grpcClientRtu = new d2r.d2rClient(grpcChannelRtu);
-        _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), $"Command content {commandContent}");
-
-        var rtuCommand = new d2rCommand() { Json = commandContent };
-
-        try
-        {
-            d2rResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
-            _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), "Got gRPC response from RTU");
-            return response.Json;
-
-        }
-        catch (Exception e)
-        {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "TransferCommand: " + e.Message);
-            if (e.InnerException != null)
-                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "InnerException: " + e.InnerException.Message);
-
-            return null;
-        }
     }
 }

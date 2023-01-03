@@ -13,7 +13,7 @@ namespace Fibertest.Rtu
         private readonly IWritableOptions<RtuConfig> _config;
         private readonly ILogger<HeartbeatService> _logger;
 
-        private string? _version;
+        private string _version = "";
         private bool _isLastAttemptSuccessful;
 
         public HeartbeatService(IWritableOptions<RtuConfig> config, ILogger<HeartbeatService> logger)
@@ -29,7 +29,7 @@ namespace Fibertest.Rtu
 
             var assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
-            _version = info.FileVersion;
+            _version = info.FileVersion ?? "Unknown";
 
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
             _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
@@ -62,7 +62,7 @@ namespace Fibertest.Rtu
                     return false;
                 }
 
-                var dto = new RtuChecksChannelDto() { RtuId = _config.Value.RtuId, IsMainChannel = true, Version = _version };
+                var dto = new RtuChecksChannelDto(_config.Value.RtuId, _version, true);
                 var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
                 var dcUri = $"http://{serverAddress.Main.ToStringA()}";

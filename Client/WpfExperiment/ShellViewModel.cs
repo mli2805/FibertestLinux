@@ -58,6 +58,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
         var rtu = new Rtu() 
             { Id = Guid.NewGuid(), RtuMaker = RtuMaker.IIT, MainChannel = new NetAddress(RtuAddress, TcpPorts.RtuListenTo) };
         var dto = new InitializeRtuDto(rtu.Id, rtu.RtuMaker);
+        dto.RtuAddresses.Main = new NetAddress(RtuAddress, TcpPorts.RtuListenTo);
         var res = await _grpcC2RRequests.InitializeRtu(dto);
         if (res.ReturnCode == ReturnCode.RtuInitializedSuccessfully)
         {

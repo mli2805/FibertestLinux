@@ -15,7 +15,7 @@ public class RtuInitializedDto : RequestAnswer
 
     public bool IsInitialized => ReturnCode == ReturnCode.RtuInitializedSuccessfully;
         
-    public DoubleAddress? RtuAddresses;
+    public DoubleAddress RtuAddresses = new DoubleAddress();
     public NetAddress? OtdrAddress;
 
     public string? Serial;
