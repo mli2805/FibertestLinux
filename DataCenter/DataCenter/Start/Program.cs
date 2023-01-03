@@ -3,7 +3,6 @@ using Fibertest.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Core;
-using System.Reflection;
 
 namespace Fibertest.DataCenter;
 
@@ -17,16 +16,13 @@ public class Program
             {
                 // grpc
                 options.ListenAnyIP((int)TcpPorts.ServerListenToCommonClient, o => o.Protocols = HttpProtocols.Http2);
+                options.ListenAnyIP((int)TcpPorts.ServerListenToRtu, o => o.Protocols = HttpProtocols.Http2);
                 // http
                 options.ListenAnyIP((int)TcpPorts.WebApiListenTo, o => o.Protocols = HttpProtocols.Http1);
             })
             .ConfigureAppConfiguration((_, configurationBuilder) =>
             {
-                var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-                var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-                var configFile = Path.Combine(basePath, @"../config/dc.json");
-                ConfigValidator.Validate(configFile, new DataCenterConfig());
-                configurationBuilder.AddJsonFile(configFile, false, true);
+               configurationBuilder.Configure();
             });
 
         // Add services to the container.

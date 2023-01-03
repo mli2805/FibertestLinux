@@ -7,13 +7,27 @@ public static class DcConfigServiceCollectionExtension
 {
     public static IServiceCollection AddConfig(this IServiceCollection services, IConfiguration config)
     {
-        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-        var configFile = Path.Combine(basePath, @"../config/dc.json");
+        var configFile = GetConfigPath();
         
-        services.ConfigureWritable<DataCenterConfig>(config.GetSection("General"), configFile);
+        services.ConfigureWritable<ServerGeneralConfig>(config.GetSection("General"), configFile);
         services.ConfigureWritable<MysqlConfig>(config.GetSection("MySql"), configFile);
+        services.ConfigureWritable<EventSourcingConfig>(config.GetSection("EventSourcing"), configFile);
 
         return services;
+    }
+
+    public static void Configure(this IConfigurationBuilder configurationBuilder)
+    {
+        var configFile = GetConfigPath();
+
+        ConfigValidator.Validate(configFile, new DataCenterConfig());
+        configurationBuilder.AddJsonFile(configFile, false, true);
+    }
+
+    private static string GetConfigPath()
+    {
+        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+        var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
+        return Path.Combine(basePath, @"../config/dc.json");
     }
 }

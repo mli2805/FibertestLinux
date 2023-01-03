@@ -16,8 +16,8 @@ public class ShellViewModel : PropertyChangedBase, IShell
     private readonly ILogger<ShellViewModel> _logger;
     private readonly GrpcC2DRequests _grpcC2DRequests;
     private readonly GrpcC2RRequests _grpcC2RRequests;
-    // public string DcAddress { get; set; } = "192.168.96.21"; // notebook
-    public string DcAddress { get; set; } = "192.168.96.184"; // virtualBox Ubuntu 20.04
+    public string DcAddress { get; set; } = "192.168.96.21"; // notebook
+    // public string DcAddress { get; set; } = "192.168.96.184"; // virtualBox Ubuntu 20.04
     public string RtuAddress { get; set; } = "192.168.96.56"; // MAK 0068613
 
     private readonly string _clientId = "client-connection-id";

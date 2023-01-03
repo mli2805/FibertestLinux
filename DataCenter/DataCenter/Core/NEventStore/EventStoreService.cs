@@ -29,13 +29,13 @@ public class EventStoreService
         TypeNameHandling = TypeNameHandling.All
     };
 
-    public EventStoreService(IWritableOptions<DataCenterConfig> config, IWritableOptions<MysqlConfig> configMySql,
+    public EventStoreService(IWritableOptions<MysqlConfig> configMySql, IWritableOptions<EventSourcingConfig> configEvent,
         ILogger<EventStoreService> logger,
         IDbInitializer dbInitializer,
         SnapshotRepository snapshotRepository, EventLogComposer eventLogComposer,
         CommandAggregator commandAggregator, EventsQueue eventsQueue, Model writeModel)
     {
-        _eventsPortion = config.Value.EventSourcing.EventSourcingPortion; // default = 100
+        _eventsPortion = configEvent.Value.EventSourcingPortion;
         _configMySql = configMySql;
         _logger = logger;
         _dbInitializer = dbInitializer;
