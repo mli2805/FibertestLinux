@@ -15,8 +15,7 @@ namespace Fibertest.DataCenter
         private readonly RtuInitializationToGraphApplier _rtuInitializationToGraphApplier;
 
         private readonly DoubleAddress _serverDoubleAddress;
-
-
+        
         public IntermediateClass(IWritableOptions<ServerGeneralConfig> config, ILogger<IntermediateClass> logger, 
             RtuStationsRepository rtuStationsRepository, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
             RtuInitializationToGraphApplier rtuInitializationToGraphApplier)

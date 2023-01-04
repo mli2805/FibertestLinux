@@ -47,4 +47,38 @@ public class ClientCollection
             ? new RequestAnswer(ReturnCode.Ok)
             : new RequestAnswer(ReturnCode.Error);
     }
+
+    public List<KeyValuePair<string, string>> CleanDeadClients(TimeSpan timeSpan)
+    {
+        var commands = new List<KeyValuePair<string, string>>();
+        DateTime noLaterThan = DateTime.Now - timeSpan;
+        var deadStations = Clients.Values.Where(s => s.LastConnectionTimestamp < noLaterThan).ToList();
+        if (deadStations.Count == 0) return commands;
+
+        foreach (var deadStation in deadStations)
+        {
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+                $"Dead client {deadStation} with connectionId {deadStation.ConnectionId} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
+
+            var command = new KeyValuePair<string, string>(deadStation.UserName, deadStation.ClientIp);
+            commands.Add(command);
+            //await _eventStoreService.SendCommand(command, deadStation.UserName, deadStation.ClientIp);
+
+            Clients.TryRemove(deadStation.ConnectionId, out _);
+        }
+        LogStations();
+        return commands;
+    }
+
+    private void LogStations()
+    {
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), Environment.NewLine + $"There are {Clients.Count} client(s):");
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), new string('-', 78));
+        foreach (var station in Clients.Values)
+        {
+            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
+                $"{station.UserName}/{station.ClientIp}:{station.ClientAddressPort} with connection id {station.ConnectionId}");
+        }
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), new string('-', 78) + Environment.NewLine);
+    }
 }

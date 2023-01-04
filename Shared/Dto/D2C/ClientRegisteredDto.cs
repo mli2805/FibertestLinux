@@ -8,10 +8,9 @@ public class ClientRegisteredDto : RequestAnswer
     public Role Role;
     public Guid ZoneId;
     public string? ZoneTitle;
-        
-    public bool IsWithoutMapMode;
 
-    public CurrentDatacenterParameters? CurrentDatacenterParameters;
+
+    public DataCenterConfig DcCurrentParameters = new DataCenterConfig();
         
 
     public ClientRegisteredDto(ReturnCode returnCode) : base(returnCode)

@@ -46,7 +46,6 @@ public static class VeexPortExt
     public static List<VeexOtauPort> Create(PortWithTraceDto dto, string mainOtauId)
     {
         var otauPorts = new List<VeexOtauPort>();
-        if (dto.OtauPort == null) return otauPorts;
         if (!dto.OtauPort.IsPortOnMainCharon)
         {
             otauPorts.Add(new VeexOtauPort()

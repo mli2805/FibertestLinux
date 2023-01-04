@@ -1,6 +1,4 @@
-﻿using Fibertest.Dto;
-
-namespace Fibertest.DataCenter;
+﻿namespace Fibertest.Dto;
 
 public class ServerGeneralConfig
 {
@@ -9,4 +7,5 @@ public class ServerGeneralConfig
     public string DatacenterVersion { get; set; } = string.Empty;
     public string PreviousStartOnVersion { get; set; } = string.Empty;
     public int GsmModemComPort { get; set; }
+    public bool IsWithoutMapMode { get; set; }
 }

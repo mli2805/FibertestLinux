@@ -20,7 +20,7 @@ public static class ClientRegistrationExt
         //
         // result.DatacenterVersion = collection.CurrentDatacenterParameters.DatacenterVersion;
         // result.IsWithoutMapMode = collection.IniFile.Read(IniSection.Server, IniKey.IsWithoutMapMode, false);
-        // result.Smtp = collection.CurrentDatacenterParameters.Smtp;
+        // result.SmtpNotifier = collection.CurrentDatacenterParameters.SmtpNotifier;
         // result.GsmModemComPort = collection.CurrentDatacenterParameters.GsmModemComPort;
         // result.Snmp = collection.CurrentDatacenterParameters.Snmp;
 

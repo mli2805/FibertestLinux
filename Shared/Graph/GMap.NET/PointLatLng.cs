@@ -1,4 +1,6 @@
-﻿namespace Fibertest.Graph;
+﻿using System.Globalization;
+
+namespace Fibertest.Graph;
 
 public struct PointLatLng
 {
@@ -9,5 +11,10 @@ public struct PointLatLng
     {
         Lat = lat;
         Lng = lng;
+    }
+
+    public override string ToString()
+    {
+        return string.Format(CultureInfo.CurrentCulture, "{{Lat={0}, Lng={1}}}", this.Lat, this.Lng);
     }
 }

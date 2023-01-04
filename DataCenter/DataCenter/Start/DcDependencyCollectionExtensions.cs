@@ -1,4 +1,5 @@
 using Fibertest.Graph;
+using Fibertest.Utils.Snmp;
 
 namespace Fibertest.DataCenter;
 
@@ -10,6 +11,7 @@ public static class DcDependencyCollectionExtensions
             .AddBootAndBackgroundServices()
             .AddGlobalVars()
             .AddDbRepositories()
+            .AddNotifiers()
             .AddOther();
     }
 
@@ -17,6 +19,8 @@ public static class DcDependencyCollectionExtensions
     {
         services.AddSingleton<Boot>();
         services.AddHostedService(x => x.GetService<Boot>());
+        services.AddSingleton<LastConnectionTimeChecker>();
+        services.AddHostedService(x => x.GetService<LastConnectionTimeChecker>());
         services.AddSingleton<MessageQueueService>();
         services.AddHostedService(x => x.GetService<MessageQueueService>());
 
@@ -25,17 +29,29 @@ public static class DcDependencyCollectionExtensions
 
     private static IServiceCollection AddGlobalVars(this IServiceCollection services)
     {
+        services.AddSingleton<GlobalState>();
         services.AddSingleton<ClientCollection>();
         services.AddSingleton<RtuOccupations>();
+        services.AddSingleton<Model>();
         return services;
     }
-  private static IServiceCollection AddDbRepositories(this IServiceCollection services)
+    private static IServiceCollection AddDbRepositories(this IServiceCollection services)
     {
-        services.AddScoped<RtuStationsRepository>(); // для каждого реквеста новый
+        services.AddSingleton<RtuStationsRepository>(); // для каждого реквеста новый
         services.AddSingleton<SnapshotRepository>();
         return services;
     }
 
+    private static IServiceCollection AddNotifiers(this IServiceCollection services)
+    {
+        services.AddSingleton<IFtSignalRClient, FtSignalRClient>();
+
+        services.AddSingleton<SmtpNotifier>();
+        services.AddSingleton<SnmpAgent>();
+        services.AddSingleton<SnmpNotifier>();
+
+        return services;
+    }
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
         services.AddSingleton<ClientGrpcRequestExecutor>();
@@ -46,10 +62,9 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<CommandAggregator>();
         services.AddSingleton<EventStoreService>();
 
-
-        services.AddSingleton<Model>();
         services.AddSingleton<EventToLogLineParser>();
         services.AddSingleton<EventLogComposer>();
+
 
         services.AddSingleton<ClientToIitRtuTransmitter>();
         services.AddScoped<IntermediateClass>();

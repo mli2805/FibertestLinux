@@ -15,4 +15,14 @@ public class NetworkEvent
 
     public bool IsRtuAvailable;
 
+
+    public override string ToString()
+    {
+        var res = $"RTU {RtuId.First6()}";
+        if (OnMainChannel != ChannelEvent.Nothing)
+            res += $"   Main - {OnMainChannel}";
+        if (OnReserveChannel != ChannelEvent.Nothing)
+            res += $"   Reserve - {OnReserveChannel}";
+        return res;
+    }
 }

@@ -2,7 +2,7 @@
 
 public class PortWithTraceDto
 {
-    public OtauPortDto? OtauPort;
+    public OtauPortDto OtauPort = new();
     public Guid TraceId;
     public FiberState LastTraceState;
 }

@@ -1,4 +1,4 @@
-﻿namespace Fibertest.DataCenter;
+﻿namespace Fibertest.Dto;
 
 public class WebApiConfig
 {

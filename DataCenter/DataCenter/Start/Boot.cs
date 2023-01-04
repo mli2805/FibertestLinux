@@ -20,10 +20,14 @@ public sealed class Boot : IHostedService
     // Place here all that should be done before start listening to gRPC & Http requests, background workers, etc.
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), Environment.NewLine + Environment.NewLine + new string('-', 80));
+        var pid = Process.GetCurrentProcess().Id;
+        var tid = Thread.CurrentThread.ManagedThreadId;
+
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), Environment.NewLine + Environment.NewLine + new string('-', 78));
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Fibertest Data-Center {info.FileVersion}");
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
+
 
         _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), _mySqlDbInitializer.ConnectionLogLine);
         await _eventStoreService.InitializeBothDb();

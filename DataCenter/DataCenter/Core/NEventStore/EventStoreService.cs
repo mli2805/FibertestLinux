@@ -1,4 +1,5 @@
-﻿using Fibertest.Graph;
+﻿using Fibertest.Dto;
+using Fibertest.Graph;
 using Fibertest.Utils;
 using NEventStore;
 using Newtonsoft.Json;

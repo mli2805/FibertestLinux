@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Fibertest.Dto;
 using Fibertest.Utils;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
