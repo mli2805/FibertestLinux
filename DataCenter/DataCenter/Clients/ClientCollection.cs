@@ -21,11 +21,13 @@ public class ClientCollection
         // instead of this line many-many checks
         var user = new User(dto.UserName, dto.Password);
 
-        var clientStation = new ClientStation(dto, user) { ClientIp = dto.ClientIp ?? "client IP not set"};
+        var clientStation = new ClientStation(dto, user) { ClientIp = dto.ClientIp ?? "client IP not set" };
         if (!Clients.TryAdd(clientStation.ConnectionId, clientStation))
             return new ClientRegisteredDto(ReturnCode.Error);
         var successfulResult = this.FillInSuccessfulResult(dto, user);
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Client {clientStation.UserName} from {clientStation.ClientIp} registered successfully!");
+        _logger.LLog(Logs.DataCenter.ToInt(), 
+            $"Client {clientStation.UserName} from {clientStation.ClientIp} registered successfully!");
+        LogStations();
         return successfulResult;
     }
 
@@ -57,7 +59,7 @@ public class ClientCollection
 
         foreach (var deadStation in deadStations)
         {
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+            _logger.LLog(Logs.DataCenter.ToInt(),
                 $"Dead client {deadStation} with connectionId {deadStation.ConnectionId} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
 
             var command = new KeyValuePair<string, string>(deadStation.UserName, deadStation.ClientIp);
@@ -72,13 +74,14 @@ public class ClientCollection
 
     private void LogStations()
     {
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), Environment.NewLine + $"There are {Clients.Count} client(s):");
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), new string('-', 78));
+        _logger.HyphenLine(Logs.DataCenter.ToInt());
+        _logger.LLog(Logs.DataCenter.ToInt(), $"There are {Clients.Count} client(s):");
+        _logger.HyphenLine(Logs.RtuService.ToInt());
         foreach (var station in Clients.Values)
         {
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
+            _logger.LLog(Logs.DataCenter.ToInt(),
                 $"{station.UserName}/{station.ClientIp}:{station.ClientAddressPort} with connection id {station.ConnectionId}");
         }
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), new string('-', 78) + Environment.NewLine);
+        _logger.HyphenLine(Logs.DataCenter.ToInt());
     }
 }

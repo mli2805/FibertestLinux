@@ -58,7 +58,7 @@ namespace Fibertest.DataCenter
             var message = result.IsInitialized
                 ? "RTU initialized successfully."
                 : "RTU initialization failed";
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), message);
+            _logger.LLog(Logs.DataCenter.ToInt(), message);
             
             //await _ftSignalRClient.NotifyAll("RtuInitialized", rtuInitializedDto.ToCamelCaseJson());
 

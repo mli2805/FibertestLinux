@@ -31,7 +31,7 @@ public partial class InterOpWrapper
             var creationTime = File.GetLastWriteTime(iitOtdrLib);
             var version = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
 
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Iit_otdr.so {version} loaded successfully.");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"Iit_otdr.so {version} loaded successfully.");
         }
         catch (Exception e)
         {
@@ -54,7 +54,7 @@ public partial class InterOpWrapper
 
             if (initOtdr == 0)
             {
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "OTDR connected successfully!");
+                _logger.LLog(Logs.RtuManager.ToInt(), "OTDR connected successfully!");
                 return true;
             }
 

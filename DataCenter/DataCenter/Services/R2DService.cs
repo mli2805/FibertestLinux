@@ -37,7 +37,7 @@ public class R2DService : R2D.R2DBase
     private async Task<RequestAnswer> RegisterHeartbeat(RtuChecksChannelDto dto)
     {
         await Task.Delay(1);
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Command Register Heartbeat from RTU {dto.RtuId} received");
+        _logger.LLog(Logs.DataCenter.ToInt(), $"Command Register Heartbeat from RTU {dto.RtuId} received");
         var result = await _rtuStationsRepository.RegisterRtuHeartbeatAsync(dto);
         return new RequestAnswer(result == 1 ? ReturnCode.Ok : ReturnCode.Error);
     }
@@ -45,7 +45,7 @@ public class R2DService : R2D.R2DBase
     private async Task<RequestAnswer> ProcessMonitoringResult(MonitoringResultDto dto)
     {
         await Task.Delay(1);
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Monitoring Result from RTU {dto.RtuId} received");
+        _logger.LLog(Logs.DataCenter.ToInt(), $"Monitoring Result from RTU {dto.RtuId} received");
         return new RequestAnswer(ReturnCode.Ok);
     }
 }

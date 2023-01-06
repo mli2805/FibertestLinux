@@ -29,7 +29,7 @@ namespace Fibertest.DataCenter
             var data = MeasToSnmp(meas);
 
             _snmpAgent.SentRealTrap(data, FtTrapType.MeasurementAsSnmp);
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "SNMP trap sent");
+            _logger.LLog(Logs.DataCenter.ToInt(), "SNMP trap sent");
         }
 
         public void SendRtuNetworkEvent(NetworkEvent rtuEvent)

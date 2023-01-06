@@ -3,6 +3,7 @@
 public class OtauAttachedDto : RequestAnswer
 {
     public Guid OtauId;
+    public Guid RtuId;
     public string? Serial;
     public int PortCount;
 

@@ -36,7 +36,7 @@ public static class LoggerConfigurationFactory
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
         var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
         var logFolder = Path.Combine(basePath, @"../log");
-        
+
         var template = "[{Timestamp:HH:mm:ss} {CorrelationId} {Level:u3}] {Username} {Message:lj}{NewLine}{Exception}";
         var loggerConfiguration = new LoggerConfiguration()
             .MinimumLevel.Debug()

@@ -44,7 +44,7 @@ namespace Fibertest.Utils.Snmp
                     (int)trapType, // my trap type 
                     12345678, // system UpTime in 0,1sec
                     trapData);
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "SendSnmpV1Trap sent.");
+                _logger.LLog(Logs.DataCenter.ToInt(), "SendSnmpV1Trap sent.");
                 return true;
             }
             catch (Exception e)
@@ -65,7 +65,7 @@ namespace Fibertest.Utils.Snmp
                     upTime,
                     trapObjOid,
                     trapData);
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "SendSnmpV2Trap sent.");
+                _logger.LLog(Logs.DataCenter.ToInt(), "SendSnmpV2Trap sent.");
                 return true;
             }
             catch (Exception e)

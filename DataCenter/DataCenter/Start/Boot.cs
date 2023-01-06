@@ -23,19 +23,19 @@ public sealed class Boot : IHostedService
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
 
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), Environment.NewLine + Environment.NewLine + new string('-', 78));
+        _logger.StartLine(Logs.DataCenter.ToInt());
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
+        _logger.LLog(Logs.DataCenter.ToInt(), $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
 
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), _mySqlDbInitializer.ConnectionLogLine);
+        _logger.LLog(Logs.DataCenter.ToInt(), _mySqlDbInitializer.ConnectionLogLine);
         await _eventStoreService.InitializeBothDb();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "Leave Fibertest Data-Center service");
+        _logger.LLog(Logs.DataCenter.ToInt(), "Leave Fibertest Data-Center service");
         return Task.CompletedTask;
     }
 }

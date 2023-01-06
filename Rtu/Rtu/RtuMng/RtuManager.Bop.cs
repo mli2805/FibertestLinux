@@ -1,0 +1,63 @@
+﻿using Fibertest.Dto;
+using Fibertest.Utils;
+
+namespace Fibertest.Rtu;
+
+public partial class RtuManager
+{
+    public async Task<OtauAttachedDto> AttachOtau(AttachOtauDto param)
+    {
+        await Task.Delay(1);
+        _logger.SpaceLine(Logs.RtuManager.ToInt());
+        OtauAttachedDto result;
+
+        var newCharon = _mainCharon.AttachOtauToPort(param.NetAddress, param.OpticalPort);
+        if (newCharon != null)
+        {
+            _logger.LLog(Logs.RtuManager.ToInt(),
+                $"Otau {param.NetAddress.ToStringA()} attached to port {param.OpticalPort} and has {newCharon.OwnPortCount} ports");
+            result = new OtauAttachedDto(ReturnCode.OtauAttachedSuccessfully)
+            {
+                OtauId = param.OtauId,
+                RtuId = param.RtuId,
+                Serial = newCharon.Serial,
+                PortCount = newCharon.OwnPortCount,
+            };
+        }
+        else
+            result = new OtauAttachedDto(ReturnCode.RtuAttachOtauError)
+            {
+                ErrorMessage = _mainCharon.LastErrorMessage
+            };
+
+        _logger.LLog(Logs.RtuManager.ToInt(),
+            $"Now RTU has {_mainCharon.OwnPortCount}/{_mainCharon.FullPortCount} ports");
+        return result;
+    }
+
+    public async Task<OtauDetachedDto> DetachOtau(DetachOtauDto param)
+    {
+        await Task.Delay(1);
+        _logger.SpaceLine(Logs.RtuManager.ToInt());
+        OtauDetachedDto result;
+
+        if (_mainCharon.DetachOtauFromPort(param.OpticalPort))
+        {
+            _logger.LLog(Logs.RtuManager.ToInt(),
+                $"Otau {param.NetAddress.ToStringA()} detached from port {param.OpticalPort}");
+            _logger.LLog(Logs.RtuManager.ToInt(),
+                $"Now RTU has {_mainCharon.OwnPortCount}/{_mainCharon.FullPortCount} ports");
+
+            result = new OtauDetachedDto(ReturnCode.OtauDetachedSuccessfully);
+        }
+        else
+        {
+            result = new OtauDetachedDto(ReturnCode.RtuDetachOtauError)
+            {
+                ErrorMessage = _mainCharon.LastErrorMessage
+            };
+        }
+
+        return result;
+    }
+}

@@ -53,7 +53,7 @@ namespace Fibertest.DataCenter
                     .UsingCustomSerialization(_mySerializer)
                     .Build();
 
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
+                _logger.LLog(Logs.DataCenter.ToInt(),
                     $"Events store: MYSQL=localhost:{_mysqlTcpPort}   Database={EventSourcingScheme}");
 
                 InitializeDataDir();
@@ -74,7 +74,7 @@ namespace Fibertest.DataCenter
             DataDir = (string)(command.ExecuteScalar() ?? 0);
             connection.Close();
             Thread.Sleep(TimeSpan.FromMilliseconds(100));
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"MySQL data folder is {DataDir}");
+            _logger.LLog(Logs.DataCenter.ToInt(), $"MySQL data folder is {DataDir}");
         }
 
         public int OptimizeSorFilesTable()

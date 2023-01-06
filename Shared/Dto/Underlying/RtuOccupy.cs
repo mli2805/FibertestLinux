@@ -3,7 +3,7 @@
 public enum RtuOccupation
 {
     None, Xxx,
-    RemoveRtu, CleanOrRemoveTrace, AttachOrDetachOtau, AttachTrace,
+    RemoveRtu, CleanOrRemoveTrace, AttachOtau, DetachOtau, AttachTrace,
     DoAutoBaseMeasurement, DoMeasurementClient, DoPreciseMeasurementOutOfTurn,  
     InitializeRtu, ApplyMonitoringSettings, DetachTraces, AssignBaseRefs,
 }

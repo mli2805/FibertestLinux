@@ -80,7 +80,7 @@ public partial class InterOpWrapper
         if (result != 1)
             _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Force Lmax {lmaxNs} ns: Error = {result}!");
         else
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Force Lmax {lmaxNs} ns: Ok", 0, 3);
+            _logger.LLog(Logs.RtuManager.ToInt(), $"Force Lmax {lmaxNs} ns: Ok");
         return result == 1;
     }
 

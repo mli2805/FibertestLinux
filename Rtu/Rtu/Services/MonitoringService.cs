@@ -19,7 +19,7 @@ namespace Fibertest.Rtu
         {
             var pid = Process.GetCurrentProcess().Id;
             var tid = Thread.CurrentThread.ManagedThreadId;
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"RTU monitoring service started. Process {pid}, thread {tid}");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"RTU monitoring service started. Process {pid}, thread {tid}");
             
             await DoWork(stoppingToken);
         }

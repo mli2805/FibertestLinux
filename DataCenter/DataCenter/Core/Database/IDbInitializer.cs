@@ -8,7 +8,7 @@ namespace Fibertest.DataCenter
         public string EsConnectionString { get; } // Event sourcing
         DbContextOptions<FtDbContext> FtDbContextOptions { get; } // other tables
 
-        string? ConnectionLogLine { get; }
+        string ConnectionLogLine { get; }
         string? DataDir {get; }
         Guid GetStreamIdIfExists();
         IStoreEvents Init();

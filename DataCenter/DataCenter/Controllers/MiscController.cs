@@ -17,7 +17,7 @@ public class MiscController : ControllerBase
     [HttpGet("CheckApi")]
     public string CheckApi()
     {
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), null, "MiscController CheckApi");
+        _logger.LLog(Logs.WebApi.ToInt(), "MiscController CheckApi");
         return "Fibertest 3.0 controller greets you!";
     }
 }

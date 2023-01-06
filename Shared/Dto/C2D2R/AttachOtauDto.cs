@@ -7,9 +7,9 @@ public class AttachOtauDto : BaseRtuRequest
     }
 
     public Guid OtauId;
-    public NetAddress? NetAddress;
+    public NetAddress NetAddress = null!;
     public int OpticalPort;
 
     public override string What => "AttachOtau";
-    public override RtuOccupation Why => RtuOccupation.AttachOrDetachOtau;
+    public override RtuOccupation Why => RtuOccupation.AttachOtau;
 }

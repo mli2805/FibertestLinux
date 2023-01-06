@@ -24,7 +24,7 @@ namespace Fibertest.DataCenter
                 if (previousRtuStationRow == null)
                 {
                     dbContext.RtuStations.Add(rtuStation);
-                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+                    _logger.LLog(Logs.DataCenter.ToInt(), 
                         $"RtuStation {rtuStation.RtuGuid.First6()} successfully registered with main address {rtuStation.MainAddress}.");
                 }
                 else
@@ -35,7 +35,7 @@ namespace Fibertest.DataCenter
                     previousRtuStationRow.IsReserveAddressSet = rtuStation.IsReserveAddressSet;
                     previousRtuStationRow.ReserveAddress = rtuStation.ReserveAddress;
                     previousRtuStationRow.ReserveAddressPort = rtuStation.ReserveAddressPort;
-                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+                    _logger.LLog(Logs.DataCenter.ToInt(), 
                         $"RtuStation {rtuStation.RtuGuid.First6()} successfully updated.");
                 }
 
@@ -58,12 +58,12 @@ namespace Fibertest.DataCenter
                 {
                     dbContext.RtuStations.Remove(rtu);
                     await dbContext.SaveChangesAsync();
-                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "RTU removed.");
+                    _logger.LLog(Logs.DataCenter.ToInt(), "RTU removed.");
                     return null;
                 }
 
                 var message = $"RTU with id {rtuId.First6()} not found";
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), message);
+                _logger.LLog(Logs.DataCenter.ToInt(), message);
                 return message;
             }
             catch (Exception e)
@@ -82,12 +82,12 @@ namespace Fibertest.DataCenter
                 if (rtu != null)
                     return rtu.GetRtuDoubleAddress();
 
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"RTU with id {rtuId.First6()} not found");
+                _logger.LLog(Logs.DataCenter.ToInt(), $"RTU with id {rtuId.First6()} not found");
                 return null;
             }
             catch (Exception e)
             {
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "GetRtuAddresses: " + e.Message);
+                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "GetRtuAddresses: " + e.Message);
                 return null;
             }
         }
@@ -100,7 +100,7 @@ namespace Fibertest.DataCenter
                 var rtu = dbContext.RtuStations.FirstOrDefault(r => r.RtuGuid == dto.RtuId);
                 if (rtu == null)
                 {
-                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Unknown RTU's {dto.RtuId.First6()} heartbeat.");
+                    _logger.LLog(Logs.DataCenter.ToInt(), $"Unknown RTU's {dto.RtuId.First6()} heartbeat.");
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace Fibertest.DataCenter
                 {
                     var rtu = await dbContext.RtuStations.FirstOrDefaultAsync(r => r.RtuGuid == rtuId);
                     if (rtu != null) return true;
-                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Unknown RTU {rtuId.First6()}");
+                    _logger.LLog(Logs.DataCenter.ToInt(), $"Unknown RTU {rtuId.First6()}");
                     return false;
                 }
             }

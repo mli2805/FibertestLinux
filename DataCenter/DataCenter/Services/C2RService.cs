@@ -42,7 +42,7 @@ public class C2RService : c2r.c2rBase
             if (client == null)
                 return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
 
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(),
+            _logger.LLog(Logs.DataCenter.ToInt(),
                 $"Client {client} sent {request.What} RTU {request.RtuId.First6()} request");
 
             if (!_rtuOccupations.TrySetOccupation(
@@ -62,7 +62,7 @@ public class C2RService : c2r.c2rBase
             string? rtuAddress = rtuStation.GetRtuAvailableAddress();
             if (rtuAddress == null)
                 return CreateBadResponse(ReturnCode.RtuNotAvailable);
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"rtuAddress {rtuAddress}");
+            _logger.LLog(Logs.DataCenter.ToInt(), $"rtuAddress {rtuAddress}");
 
             string responseJson = request.RtuMaker == RtuMaker.IIT
                 ? await _clientToIitRtuTransmitter.TransferCommand(rtuAddress, command.Json)

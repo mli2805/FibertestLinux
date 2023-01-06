@@ -31,8 +31,8 @@ namespace Fibertest.Rtu
             FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
             _version = info.FileVersion ?? "Unknown";
 
-            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
-            _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(),
+            _logger.LLog(Logs.RtuService.ToInt(), $"RTU heartbeat service started. Process {pid}, thread {tid}");
+            _logger.LLog(Logs.RtuService.ToInt(),
                 $"Server address is {_config.Value.ServerAddress.Main.ToStringA()}");
             await DoWork(stoppingToken);
         }
@@ -66,9 +66,9 @@ namespace Fibertest.Rtu
               
                 R2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
                 if (!_isLastAttemptSuccessful)
-                    _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"Got gRPC response {response.Json} from Data Center");
+                    _logger.LLog(Logs.RtuService.ToInt(), $"Got gRPC response {response.Json} from Data Center");
                 else
-                    _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"RTU heartbeat sent by gRPC channel {dcUri}");
+                    _logger.LLog(Logs.RtuService.ToInt(), $"RTU heartbeat sent by gRPC channel {dcUri}");
 
                 return true;
             }

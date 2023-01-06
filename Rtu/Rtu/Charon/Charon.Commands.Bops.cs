@@ -7,7 +7,7 @@ public partial class Charon
 {
     public bool DetachOtauFromPort(int fromOpticalPort)
     {
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Detach from port {fromOpticalPort} requested...");
+        _logger.LLog(Logs.RtuManager.ToInt(), $"Detach from port {fromOpticalPort} requested...");
         var extPorts = GetExtendedPorts();
         if (extPorts == null)
             return false;
@@ -43,7 +43,7 @@ public partial class Charon
 
     public Charon? AttachOtauToPort(NetAddress additionalOtauAddress, int toOpticalPort)
     {
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Attach {additionalOtauAddress.ToStringA()} to port {toOpticalPort} requested...");
+        _logger.LLog(Logs.RtuManager.ToInt(), $"Attach {additionalOtauAddress.ToStringA()} to port {toOpticalPort} requested...");
         if (!ValidateAttachCommand(additionalOtauAddress, toOpticalPort))
             return null;
         var extPorts = GetExtendedPorts();
@@ -62,7 +62,7 @@ public partial class Charon
             return null;
         }
 
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Check connection with OTAU {additionalOtauAddress.ToStringA()}");
+        _logger.LLog(Logs.RtuManager.ToInt(), $"Check connection with OTAU {additionalOtauAddress.ToStringA()}");
         var child = new Charon(additionalOtauAddress, false, _config, _logger, _serialPort);
         if (child.InitializeOtauRecursively() != null)
         {

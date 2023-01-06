@@ -42,7 +42,7 @@ namespace Fibertest.DataCenter
         public async Task<bool> SendOpticalEvent(MonitoringResultDto dto, AddMeasurement addMeasurement)
         {
             var mailTo = _writeModel.GetEmailsToSendMonitoringResult(dto);
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
+            _logger.LLog(Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
             if (mailTo.Count == 0) return true;
 
             var subj = _writeModel.GetShortMessageForMonitoringResult(dto);
@@ -102,7 +102,7 @@ namespace Fibertest.DataCenter
         public async Task<bool> SendNetworkEvent(Guid rtuId, bool isMainChannel, bool isOk)
         {
             var mailTo = _writeModel.GetEmailsToSendNetworkEvent(rtuId);
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
+            _logger.LLog(Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
             if (mailTo.Count == 0) return true;
 
             var subj = _writeModel.GetShortMessageForNetworkEvent(rtuId, isMainChannel, isOk);
@@ -111,7 +111,7 @@ namespace Fibertest.DataCenter
         public async Task<bool> SendBopState(AddBopNetworkEvent cmd)
         {
             var mailTo = _writeModel.GetEmailsToSendBopNetworkEvent(cmd);
-            _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
+            _logger.LLog(Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
             if (mailTo.Count == 0) return true;
 
             var subj = EventReport.GetShortMessageForBopState(cmd);

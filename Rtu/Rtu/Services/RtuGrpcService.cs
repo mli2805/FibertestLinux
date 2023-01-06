@@ -26,14 +26,15 @@ public class RtuGrpcService : d2r.d2rBase
             return new d2rResponse()
                 { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.FailedDeserializeJson)) };
         var request = (BaseRtuRequest)o;
-        _logger.Log(LogLevel.Information, Logs.RtuService.ToInt(), $"request {request.What} received");
+        _logger.LLog(Logs.RtuService.ToInt(), $"request {request.What} received");
 
         object result;
         switch (o)
         {
             case InitializeRtuDto dto: result = await _rtuManager.InitializeRtu(dto); break;
             case StopMonitoringDto _: result = await StopMonitoring(); break;
-            case AttachOtauDto dto: result = await AttachOtau(dto); break;
+            case AttachOtauDto dto: result = await _rtuManager.AttachOtau(dto); break;
+            case DetachOtauDto dto: result = await _rtuManager.DetachOtau(dto); break;
             case FreeOtdrDto _: result = await _rtuManager.FreeOtdr(); break;
             default: result = new RequestAnswer(ReturnCode.Error); break;
         }
@@ -44,15 +45,9 @@ public class RtuGrpcService : d2r.d2rBase
     private async Task<RequestAnswer> StopMonitoring()
     {
         await Task.Delay(1);
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "StopMonitoring d2RCommand received");
+        _logger.LLog(Logs.RtuManager.ToInt(), "StopMonitoring d2RCommand received");
         return new RequestAnswer(ReturnCode.Ok);
     }
 
-    private async Task<OtauAttachedDto> AttachOtau(AttachOtauDto dto)
-    {
-        await Task.Delay(1);
-        _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(),
-            $"Command to attach OTAU {dto.NetAddress?.ToStringA() ?? "no address!"} received");
-        return new OtauAttachedDto(ReturnCode.Ok);
-    }
+   
 }

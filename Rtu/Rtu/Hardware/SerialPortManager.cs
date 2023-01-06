@@ -37,20 +37,20 @@ public class SerialPortManager
         {
             var serialPort = new SerialPort(_comPortName, _comPortSpeed);
             serialPort.Open();
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"port {_comPortName} opened successfully");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"port {_comPortName} opened successfully");
 
             serialPort.RtsEnable = !serialPort.RtsEnable;
             Thread.Sleep(10);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Now RTS is toggled to {serialPort.RtsEnable}");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"Now RTS is toggled to {serialPort.RtsEnable}");
             serialPort.RtsEnable = !serialPort.RtsEnable;
             Thread.Sleep(10);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Now RTS is toggled to {serialPort.RtsEnable}");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"Now RTS is toggled to {serialPort.RtsEnable}");
             serialPort.Close();
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"port {_comPortName} closed successfully");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"port {_comPortName} closed successfully");
 
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Pause after charon reset {_pauseAfterReset} seconds...");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"Pause after charon reset {_pauseAfterReset} seconds...");
             Thread.Sleep(TimeSpan.FromSeconds(_pauseAfterReset));
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), "Charon reset finished");
+            _logger.LLog(Logs.RtuManager.ToInt(), "Charon reset finished");
             return ReturnCode.Ok;
         }
         catch (Exception e)

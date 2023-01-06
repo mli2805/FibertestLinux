@@ -60,7 +60,7 @@ public partial class Charon
 
             var lines = LastAnswer.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             CharonIniSize = int.Parse(lines[0]);
-            _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), $"Charon ini size is {CharonIniSize}");
+            _logger.LLog(Logs.RtuManager.ToInt(), $"Charon ini size is {CharonIniSize}");
             return CharonIniSize;
         }
         catch (Exception e)
@@ -85,7 +85,7 @@ public partial class Charon
             {
                 // read iniFile error
                 LastErrorMessage = $"Get extended ports error {LastErrorMessage}";
-                _logger.Log(LogLevel.Information, Logs.RtuManager.ToInt(), LastErrorMessage);
+                _logger.LLog(Logs.RtuManager.ToInt(), LastErrorMessage);
                 return null;
             }
 

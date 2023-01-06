@@ -44,7 +44,7 @@ namespace Fibertest.DataCenter
                             clientHandler.ServerCertificateCustomValidationCallback +=
                                 (_, _, _, sslPolicyErrors) =>
                                 {
-                                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Negotiation with server returns sslPolicyErrors: {sslPolicyErrors}");
+                                    _logger.LLog(Logs.DataCenter.ToInt(), $"Negotiation with server returns sslPolicyErrors: {sslPolicyErrors}");
                                     return true;
                                 };
                         return message;
@@ -56,14 +56,14 @@ namespace Fibertest.DataCenter
             {
                 if (error != null)
                     _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), $"FtSignalRClient connection was closed: {error.Message}");
-                //                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), "FtSignalRClient connection was closed.");
+                //                _logger.LLog(Logs.DataCenter.ToInt(), "FtSignalRClient connection was closed.");
                 await Task.Delay(1);
             };
 
             _connection.On<string>("NotifyServer", connId =>
             {
                 ServerConnectionId = connId;
-                //                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"NotifyServer returned id {connId}");
+                //                _logger.LLog(Logs.DataCenter.ToInt(), $"NotifyServer returned id {connId}");
             });
         }
 
@@ -79,12 +79,12 @@ namespace Fibertest.DataCenter
                 {
                     var unused = _connection.InvokeAsync("NotifyAll", eventType, dataInJson);
                     if (eventType != "NotifyMonitoringStep" && eventType != "NudgeSignalR") // too many
-                        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"FtSignalRClient NotifyAll: {eventType} sent successfully.");
+                        _logger.LLog(Logs.DataCenter.ToInt(), $"FtSignalRClient NotifyAll: {eventType} sent successfully.");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"FtSignalRClient NotifyAll: {eventType} " + ex.Message);
+                _logger.LLog(Logs.DataCenter.ToInt(), $"FtSignalRClient NotifyAll: {eventType} " + ex.Message);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Fibertest.DataCenter
                 if (_connection != null && isConnected)
                 {
                     var unused = _connection.InvokeAsync("SendToOne", connectionId, eventType, dataInJson);
-                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"FtSignalRClient: {eventType} sent successfully.");
+                    _logger.LLog(Logs.DataCenter.ToInt(), $"FtSignalRClient: {eventType} sent successfully.");
                 }
             }
             catch (Exception ex)
@@ -131,7 +131,7 @@ namespace Fibertest.DataCenter
             if (!_isWebApiInstalled) return false;
             if (_connection == null)
             {
-                if (isLog) _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Build signalR connection to {_webApiUrl}");
+                if (isLog) _logger.LLog(Logs.DataCenter.ToInt(), $"Build signalR connection to {_webApiUrl}");
                 try
                 {
                     Build();
@@ -142,13 +142,13 @@ namespace Fibertest.DataCenter
                     return false;
                 }
                 if (_connection != null && isLog) 
-                    _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"SignalR connection state is {_connection.State}");
+                    _logger.LLog(Logs.DataCenter.ToInt(), $"SignalR connection state is {_connection.State}");
                 await Task.Delay(500);
             }
 
             if (_connection != null && _connection.State != HubConnectionState.Connected)
             {
-                if (isLog) _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"Start signalR connection to {_webApiUrl}");
+                if (isLog) _logger.LLog(Logs.DataCenter.ToInt(), $"Start signalR connection to {_webApiUrl}");
                 try
                 {
                     await _connection.StartAsync();
@@ -159,7 +159,7 @@ namespace Fibertest.DataCenter
                     _connection = null;
                     return false;
                 }
-                if (isLog) _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), $"SignalR connection state is {_connection.State}");
+                if (isLog) _logger.LLog(Logs.DataCenter.ToInt(), $"SignalR connection state is {_connection.State}");
                 await Task.Delay(500);
             }
 
