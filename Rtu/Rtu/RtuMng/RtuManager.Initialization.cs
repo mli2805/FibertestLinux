@@ -66,6 +66,7 @@ public partial class RtuManager
     private void SaveInitializationParameters(InitializeRtuDto dto)
     {
         _rtuGeneralConfig.Update(c=>c.RtuId = dto.RtuId);
+        _rtuGeneralConfig.Update(c=>c.RtuId = dto.RtuId);
         _rtuGeneralConfig.Update(c=>c.ServerAddress = dto.ServerAddresses!);
 
         _monitoringConfig.Update(c=>c.IsMonitoringOn = false);

@@ -44,6 +44,7 @@ public enum ReturnCode
     C2DGrpcOperationError = 2004,
     D2RGrpcOperationError = 2014,
     C2RGrpcOperationError  = 2024,
+    R2DGrpcOperationError = 2034,
         
     FailedDeserializeJson = 2101,
     UnAuthorizedAccess = 2111, // NoSuchClientStation

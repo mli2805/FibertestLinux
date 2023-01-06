@@ -22,6 +22,8 @@ public static class RtuDependencyCollectionExtension
 
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
+        services.AddSingleton<GrpcSender>(); 
+     
         services.AddSingleton<InterOpWrapper>(); 
         services.AddSingleton<SerialPortManager>(); 
         services.AddSingleton<OtdrManager>(); 

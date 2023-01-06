@@ -5,7 +5,7 @@ namespace Fibertest.Utils
     public static class LoggerExt
     {
         // timestamp without message AND then absolutely empty space
-        public static void SpaceLine<T>(this ILogger<T> logger, EventId eventId)
+        public static void EmptyLine<T>(this ILogger<T> logger, EventId eventId)
         {
             logger.Log(LogLevel.Information, eventId, Environment.NewLine);
         }

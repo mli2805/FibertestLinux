@@ -28,6 +28,7 @@ public class R2DService : R2D.R2DBase
         {
             case RtuChecksChannelDto dto: r = await RegisterHeartbeat(dto); break;
             case MonitoringResultDto dto: r = await ProcessMonitoringResult(dto); break;
+            case CurrentMonitoringStepDto dto: r = await TransmitCurrentMonitoringStep(dto); break;
             default: r = new RequestAnswer(ReturnCode.Error); break;
         }
 
@@ -46,6 +47,13 @@ public class R2DService : R2D.R2DBase
     {
         await Task.Delay(1);
         _logger.LLog(Logs.DataCenter.ToInt(), $"Monitoring Result from RTU {dto.RtuId} received");
+        return new RequestAnswer(ReturnCode.Ok);
+    }
+
+    private async Task<RequestAnswer> TransmitCurrentMonitoringStep(CurrentMonitoringStepDto dto)
+    {
+        await Task.Delay(1);
+        _logger.LLog(Logs.DataCenter.ToInt(), $"Current monitoring step from RTU {dto.RtuId} received");
         return new RequestAnswer(ReturnCode.Ok);
     }
 }

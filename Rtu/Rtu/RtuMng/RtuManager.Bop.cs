@@ -8,7 +8,7 @@ public partial class RtuManager
     public async Task<OtauAttachedDto> AttachOtau(AttachOtauDto param)
     {
         await Task.Delay(1);
-        _logger.SpaceLine(Logs.RtuManager.ToInt());
+        _logger.EmptyLine(Logs.RtuManager.ToInt());
         OtauAttachedDto result;
 
         var newCharon = _mainCharon.AttachOtauToPort(param.NetAddress, param.OpticalPort);
@@ -38,7 +38,7 @@ public partial class RtuManager
     public async Task<OtauDetachedDto> DetachOtau(DetachOtauDto param)
     {
         await Task.Delay(1);
-        _logger.SpaceLine(Logs.RtuManager.ToInt());
+        _logger.EmptyLine(Logs.RtuManager.ToInt());
         OtauDetachedDto result;
 
         if (_mainCharon.DetachOtauFromPort(param.OpticalPort))
