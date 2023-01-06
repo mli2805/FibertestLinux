@@ -12,6 +12,7 @@ public partial class RtuManager
     private readonly IWritableOptions<RtuGeneralConfig> _rtuGeneralConfig;
     private readonly IWritableOptions<MonitoringConfig> _monitoringConfig;
     private readonly IOptions<CharonConfig> _charonConfig;
+    private readonly IWritableOptions<RecoveryConfig> _recoveryConfig;
     private readonly ILogger<RtuManager> _logger;
     private readonly SerialPortManager _serialPortManager;
     private readonly InterOpWrapper _interOpWrapper;
@@ -23,13 +24,15 @@ public partial class RtuManager
 
 
     public RtuManager(IWritableOptions<RtuGeneralConfig> rtuGeneralConfig, IWritableOptions<MonitoringConfig> monitoringConfig,
-        IOptions<CharonConfig> charonConfig, ILogger<RtuManager> logger,
+        IOptions<CharonConfig> charonConfig, IWritableOptions<RecoveryConfig> recoveryConfig,
+        ILogger<RtuManager> logger,
         SerialPortManager serialPortManager, InterOpWrapper interOpWrapper, OtdrManager otdrManager,
         GrpcSender grpcSender)
     {
         _rtuGeneralConfig = rtuGeneralConfig;
         _monitoringConfig = monitoringConfig;
         _charonConfig = charonConfig;
+        _recoveryConfig = recoveryConfig;
         _logger = logger;
         _serialPortManager = serialPortManager;
         _interOpWrapper = interOpWrapper;

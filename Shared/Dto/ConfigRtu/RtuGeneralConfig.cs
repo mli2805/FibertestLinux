@@ -1,6 +1,4 @@
-﻿using Fibertest.Dto;
-
-namespace Fibertest.Rtu;
+﻿namespace Fibertest.Dto;
 
 public class RtuGeneralConfig
 {

@@ -1,4 +1,6 @@
-﻿namespace Fibertest.Rtu;
+﻿using Fibertest.Utils;
+
+namespace Fibertest.Rtu;
 
 public static class RtuDependencyCollectionExtension
 {

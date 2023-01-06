@@ -1,9 +1,9 @@
 ﻿using System.IO.Ports;
 using Fibertest.Dto;
-using Fibertest.Utils;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Fibertest.Rtu;
+namespace Fibertest.Utils;
 
 public enum LedDisplayCode : byte
 {

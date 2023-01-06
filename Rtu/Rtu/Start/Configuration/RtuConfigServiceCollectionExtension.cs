@@ -1,5 +1,6 @@
 ﻿using Fibertest.Utils;
 using System.Reflection;
+using Fibertest.Dto;
 
 namespace Fibertest.Rtu;
 
