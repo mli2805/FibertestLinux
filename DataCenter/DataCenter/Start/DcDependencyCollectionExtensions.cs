@@ -66,9 +66,10 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<EventLogComposer>();
 
 
+        services.AddSingleton<C2RCommandsProcessor>();
         services.AddSingleton<ClientToIitRtuTransmitter>();
-        services.AddScoped<IntermediateClass>();
-        services.AddSingleton<RtuInitializationToGraphApplier>();
+        services.AddSingleton<RtuResponseApplier>();
+        services.AddSingleton<RtuResponseToGraphApplier>();
 
         return services;
     }

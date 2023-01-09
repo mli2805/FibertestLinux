@@ -12,18 +12,18 @@ namespace Fibertest.DataCenter
         private readonly ILogger<IntermediateClass> _logger;
         private readonly RtuStationsRepository _rtuStationsRepository;
         private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
-        private readonly RtuInitializationToGraphApplier _rtuInitializationToGraphApplier;
+        private readonly RtuResponseToGraphApplier _rtuResponseToGraphApplier;
 
         private readonly DoubleAddress _serverDoubleAddress;
         
         public IntermediateClass(IWritableOptions<ServerGeneralConfig> config, ILogger<IntermediateClass> logger, 
             RtuStationsRepository rtuStationsRepository, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
-            RtuInitializationToGraphApplier rtuInitializationToGraphApplier)
+            RtuResponseToGraphApplier rtuResponseToGraphApplier)
         {
             _logger = logger;
             _rtuStationsRepository = rtuStationsRepository;
             _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
-            _rtuInitializationToGraphApplier = rtuInitializationToGraphApplier;
+            _rtuResponseToGraphApplier = rtuResponseToGraphApplier;
 
             _serverDoubleAddress = config.Value.ServerDoubleAddress;
         }
@@ -77,7 +77,7 @@ namespace Fibertest.DataCenter
                 }
             }
 
-            await _rtuInitializationToGraphApplier.ApplyRtuInitializationResult(dto, result);
+            await _rtuResponseToGraphApplier.ApplyRtuInitializationResult(dto, result);
             return result;
         }
 

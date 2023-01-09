@@ -4,14 +4,14 @@ using Fibertest.Utils;
 
 namespace Fibertest.DataCenter
 {
-    public class RtuInitializationToGraphApplier
+    public class RtuResponseToGraphApplier
     {
-        private readonly ILogger<RtuInitializationToGraphApplier> _logger;
+        private readonly ILogger<RtuResponseToGraphApplier> _logger;
         private readonly Model _writeModel;
         private readonly EventStoreService _eventStoreService;
         private readonly ClientCollection _clientCollection;
 
-        public RtuInitializationToGraphApplier(ILogger<RtuInitializationToGraphApplier> logger,
+        public RtuResponseToGraphApplier(ILogger<RtuResponseToGraphApplier> logger,
             Model writeModel, EventStoreService eventStoreService, ClientCollection clientCollection)
         {
             _logger = logger;

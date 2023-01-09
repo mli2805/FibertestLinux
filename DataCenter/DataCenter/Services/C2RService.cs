@@ -10,20 +10,16 @@ public class C2RService : c2r.c2rBase
     private readonly ILogger<C2RService> _logger;
     private readonly ClientCollection _clientCollection;
     private readonly RtuOccupations _rtuOccupations;
-    private readonly RtuStationsRepository _rtuStationsRepository;
-    private readonly IntermediateClass _intermediateClass;
-    private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
+    private readonly C2RCommandsProcessor _c2RCommandsProcessor;
 
     public C2RService(ILogger<C2RService> logger, ClientCollection clientCollection,
-        RtuOccupations rtuOccupations, RtuStationsRepository rtuStationsRepository,
-        IntermediateClass intermediateClass, ClientToIitRtuTransmitter clientToIitRtuTransmitter)
+        RtuOccupations rtuOccupations, 
+        C2RCommandsProcessor c2RCommandsProcessor)
     {
         _logger = logger;
         _clientCollection = clientCollection;
         _rtuOccupations = rtuOccupations;
-        _rtuStationsRepository = rtuStationsRepository;
-        _intermediateClass = intermediateClass;
-        _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
+        _c2RCommandsProcessor = c2RCommandsProcessor;
     }
 
     private static readonly JsonSerializerSettings JsonSerializerSettings =
@@ -34,7 +30,7 @@ public class C2RService : c2r.c2rBase
     {
         try
         {
-            var request = Deserialize(command.Json);
+            var request = (BaseRtuRequest?)JsonConvert.DeserializeObject(command.Json, JsonSerializerSettings);
             if (request == null)
                 return CreateBadResponse(ReturnCode.FailedDeserializeJson);
 
@@ -49,24 +45,7 @@ public class C2RService : c2r.c2rBase
                     request.RtuId, request.Why, client.UserName, out RtuOccupationState? currentState))
                 return CreateBadResponse(ReturnCode.RtuIsBusy, currentState);
 
-            if (request is InitializeRtuDto dto)
-            {
-                var res = await _intermediateClass.InitializeRtuAsync(dto);
-                return new c2rResponse() { Json = JsonConvert.SerializeObject(res, JsonSerializerSettings) };
-            }
-
-            var rtuStation = await _rtuStationsRepository.GetRtuStation(request.RtuId);
-            if (rtuStation == null)
-                return CreateBadResponse(ReturnCode.RtuNotFound);
-
-            string? rtuAddress = rtuStation.GetRtuAvailableAddress();
-            if (rtuAddress == null)
-                return CreateBadResponse(ReturnCode.RtuNotAvailable);
-            _logger.LLog(Logs.DataCenter.ToInt(), $"rtuAddress {rtuAddress}");
-
-            string responseJson = request.RtuMaker == RtuMaker.IIT
-                ? await _clientToIitRtuTransmitter.TransferCommand(rtuAddress, command.Json)
-                : JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.NotImplementedYet), JsonSerializerSettings);
+            var responseJson = await _c2RCommandsProcessor.SendCommand(request);
 
             _rtuOccupations.TrySetOccupation(request.RtuId, RtuOccupation.None, client.UserName, out RtuOccupationState? _);
 
@@ -79,27 +58,6 @@ public class C2RService : c2r.c2rBase
         }
     }
 
-    private BaseRtuRequest? Deserialize(string json)
-    {
-        return JsonConvert.DeserializeObject(json, JsonSerializerSettings) switch
-        {
-            CheckRtuConnectionDto dto => dto,
-            InitializeRtuDto dto => dto,
-            StopMonitoringDto dto => dto,
-            AssignBaseRefsDto dto => dto,
-            ApplyMonitoringSettingsDto dto => dto,
-            ReSendBaseRefsDto dto => dto,
-            AttachOtauDto dto => dto,
-            DetachOtauDto dto => dto,
-            GetLineParametersDto dto => dto,
-            DoClientMeasurementDto dto => dto,
-            DoOutOfTurnPreciseMeasurementDto dto => dto,
-            PrepareReflectMeasurementDto dto => dto,
-            InterruptMeasurementDto dto => dto,
-            FreeOtdrDto dto => dto,
-            _ => null
-        };
-    }
 
     private c2rResponse CreateBadResponse(ReturnCode returnCode, RtuOccupationState? currentState = null)
     {

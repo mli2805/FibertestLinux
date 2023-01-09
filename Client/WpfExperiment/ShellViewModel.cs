@@ -26,6 +26,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
     private readonly string _clientIP = "192.168.96.21";
 
     private Guid _rtuId = Guid.Parse("c77c77fe-f23f-441c-ae4b-84f25450c7e4");
+    private Guid _otauId = Guid.Parse("12345678-f23f-441c-ae4b-84f25450c7e4");
 
     public ObservableCollection<string> Lines { get; set; } = new() { " Here will be log " };
 
@@ -75,13 +76,12 @@ public class ShellViewModel : PropertyChangedBase, IShell
         }
     }
 
-    private Guid _otauId = Guid.Empty;
     public async void AttachOtau()
     {
         _grpcC2RRequests.ChangeAddress(DcAddress);
         var dto = new AttachOtauDto(_rtuId, RtuMaker.IIT)
         {
-            OtauId = Guid.NewGuid(),
+            OtauId = _otauId,
             NetAddress = new NetAddress("192.168.96.57", TcpPorts.IitBop),
             OpticalPort = 4,
         };
@@ -94,8 +94,6 @@ public class ShellViewModel : PropertyChangedBase, IShell
 
     public async void DetachOtau()
     {
-        if (_otauId == Guid.Empty) return;
-
         _grpcC2RRequests.ChangeAddress(DcAddress);
         var dto = new DetachOtauDto(_rtuId, RtuMaker.IIT)
         {
