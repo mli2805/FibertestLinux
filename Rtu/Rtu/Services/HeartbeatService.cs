@@ -67,7 +67,7 @@ namespace Fibertest.Rtu
                 var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
                 var dcUri = $"http://{serverAddress.Main.ToStringA()}";
-                _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "SendHeartbeat: " + dcUri);
+                _logger.LLog(Logs.RtuService.ToInt(), "SendHeartbeat: " + dcUri);
                 using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
                 var grpcClient = new R2D.R2DClient(grpcChannelDc);
               
