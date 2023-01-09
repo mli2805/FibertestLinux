@@ -60,7 +60,9 @@ public class ShellViewModel : PropertyChangedBase, IShell
         _logger.LLog(Logs.Client.ToInt(), Resources.SID_long_operation_please_wait);
         var dto = new InitializeRtuDto(_rtuId, RtuMaker.IIT);
         dto.RtuAddresses.Main = new NetAddress(RtuAddress, TcpPorts.RtuListenTo);
-        var res = await _grpcC2RRequests.InitializeRtu(dto);
+
+        var res = await _grpcC2RRequests.SendAnyC2RRequest<InitializeRtuDto, RtuInitializedDto>(dto);
+
         if (res.ReturnCode == ReturnCode.RtuInitializedSuccessfully)
         {
             Lines.Add("RTU initialized successfully!");
@@ -70,6 +72,41 @@ public class ShellViewModel : PropertyChangedBase, IShell
         else
         {
             Lines.Add($"Failed to initialize RTU. {res.ReturnCode} {res.ErrorMessage}");
+        }
+    }
+
+    private Guid _otauId = Guid.Empty;
+    public async void AttachOtau()
+    {
+        _grpcC2RRequests.ChangeAddress(DcAddress);
+        var dto = new AttachOtauDto(_rtuId, RtuMaker.IIT)
+        {
+            OtauId = Guid.NewGuid(),
+            NetAddress = new NetAddress("192.168.96.57", TcpPorts.IitBop),
+            OpticalPort = 4,
+        };
+        var res = await _grpcC2RRequests.SendAnyC2RRequest<AttachOtauDto, OtauAttachedDto>(dto);
+        if (res.IsAttached)
+        {
+            _otauId = res.OtauId;
+        }
+    }
+
+    public async void DetachOtau()
+    {
+        if (_otauId == Guid.Empty) return;
+
+        _grpcC2RRequests.ChangeAddress(DcAddress);
+        var dto = new DetachOtauDto(_rtuId, RtuMaker.IIT)
+        {
+            OtauId = _otauId,
+            NetAddress = new NetAddress("192.168.96.57", TcpPorts.IitBop),
+            OpticalPort = 4,
+        };
+        var res = await _grpcC2RRequests.SendAnyC2RRequest<DetachOtauDto, OtauDetachedDto>(dto);
+        if (res.IsDetached)
+        {
+            _otauId = Guid.Empty;
         }
     }
 

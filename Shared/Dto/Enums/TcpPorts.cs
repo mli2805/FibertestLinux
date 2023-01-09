@@ -23,5 +23,6 @@ public enum TcpPorts
     SuperClientListenTo = 11939,
 
     // БОП - IIT additional OTAU block
-    IitBop = 11934,
+    // hardcoded in mikrotik ?
+    IitBop = 11834,
 }

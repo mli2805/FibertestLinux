@@ -31,6 +31,8 @@
                 <Button DockPanel.Dock="Top" Name="RegisterClient" Margin="5" Width="120" Height="22" Content="Register client"/>
                 <Button DockPanel.Dock="Top" Name="AddRtu" Margin="5" Width="120" Height="22" Content="Add RTU"/>
                 <Button DockPanel.Dock="Top" Name="InitializeRtu" Margin="5" Width="120" Height="22" Content="Initialize RTU"/>
+                <Button DockPanel.Dock="Top" Name="AttachOtau" Margin="5" Width="120" Height="22" Content="Attach OTAU"/>
+                <Button DockPanel.Dock="Top" Name="DetachOtau" Margin="5" Width="120" Height="22" Content="Detach OTAU"/>
                 <StackPanel></StackPanel>
             </DockPanel>
         </TabItem>

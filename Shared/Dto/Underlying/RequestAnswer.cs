@@ -7,6 +7,10 @@ public class RequestAnswer
 
     public RtuOccupationState? RtuOccupationState;
 
+    public RequestAnswer()
+    {
+    }
+
     public RequestAnswer(ReturnCode returnCode)
     {
         ReturnCode = returnCode;

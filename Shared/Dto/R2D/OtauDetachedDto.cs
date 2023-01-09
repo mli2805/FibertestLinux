@@ -7,6 +7,10 @@ public class OtauDetachedDto : RequestAnswer
 
     public bool IsDetached => ReturnCode == ReturnCode.OtauDetachedSuccessfully;
 
+    public OtauDetachedDto()
+    {
+    }
+
     public OtauDetachedDto(ReturnCode returnCode) : base(returnCode)
     {
     }

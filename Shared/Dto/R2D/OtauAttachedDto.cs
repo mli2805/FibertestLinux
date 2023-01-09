@@ -9,6 +9,7 @@ public class OtauAttachedDto : RequestAnswer
 
     public bool IsAttached => ReturnCode == ReturnCode.OtauAttachedSuccessfully;
 
+    public OtauAttachedDto(){}
     public OtauAttachedDto(ReturnCode returnCode) : base(returnCode)
     {
     }

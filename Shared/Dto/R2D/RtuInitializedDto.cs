@@ -31,6 +31,10 @@ public class RtuInitializedDto : RequestAnswer
         
     public TreeOfAcceptableMeasParams? AcceptableMeasParams;
 
+    public RtuInitializedDto()
+    {
+    }
+
     public RtuInitializedDto(ReturnCode returnCode) : base(returnCode)
     {
     }
