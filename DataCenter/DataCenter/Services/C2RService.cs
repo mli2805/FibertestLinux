@@ -83,9 +83,19 @@ public class C2RService : c2r.c2rBase
     {
         return JsonConvert.DeserializeObject(json, JsonSerializerSettings) switch
         {
+            CheckRtuConnectionDto dto => dto,
             InitializeRtuDto dto => dto,
             StopMonitoringDto dto => dto,
+            AssignBaseRefsDto dto => dto,
+            ApplyMonitoringSettingsDto dto => dto,
+            ReSendBaseRefsDto dto => dto,
             AttachOtauDto dto => dto,
+            DetachOtauDto dto => dto,
+            GetLineParametersDto dto => dto,
+            DoClientMeasurementDto dto => dto,
+            DoOutOfTurnPreciseMeasurementDto dto => dto,
+            PrepareReflectMeasurementDto dto => dto,
+            InterruptMeasurementDto dto => dto,
             FreeOtdrDto dto => dto,
             _ => null
         };
