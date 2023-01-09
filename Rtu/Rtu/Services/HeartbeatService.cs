@@ -39,12 +39,19 @@ namespace Fibertest.Rtu
 
         private async Task DoWork(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                _isLastAttemptSuccessful = await SendHeartbeat();
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    _isLastAttemptSuccessful = await SendHeartbeat();
 
-                var rtuHeartbeatRate = _config.Value.RtuHeartbeatRate == 0 ? 30 : _config.Value.RtuHeartbeatRate;
-                await Task.Delay(rtuHeartbeatRate * 1000, stoppingToken);
+                    var rtuHeartbeatRate = _config.Value.RtuHeartbeatRate == 0 ? 30 : _config.Value.RtuHeartbeatRate;
+                    await Task.Delay(rtuHeartbeatRate * 1000, stoppingToken);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), "Heartbeat service DoWork: " + e.Message);
             }
         }
 
