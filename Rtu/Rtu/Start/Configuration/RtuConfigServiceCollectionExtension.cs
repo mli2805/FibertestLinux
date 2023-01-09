@@ -15,7 +15,7 @@ public static class RtuConfigServiceCollectionExtension
         services.ConfigureWritable<RtuGeneralConfig>(config.GetSection("General"), configFile);
         services.ConfigureWritable<CharonConfig>(config.GetSection("Charon"), configFile);
         services.ConfigureWritable<MonitoringConfig>(config.GetSection("Monitoring"), configFile);
-
+        services.ConfigureWritable<RecoveryConfig>(config.GetSection("Recovery"), configFile);
         return services;
     }
 }
