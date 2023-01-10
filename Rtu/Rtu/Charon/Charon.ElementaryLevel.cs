@@ -116,6 +116,8 @@ public partial class Charon
 
     private Dictionary<int, NetAddress> ParseIniContent(string content)
     {
+        _logger.LLog(Logs.RtuManager.ToInt(), $"start parsing: {content}");
+
         var result = new Dictionary<int, NetAddress>();
         string[] separator = new[] { "\r\n" };
         var lines = content.Split(separator, StringSplitOptions.RemoveEmptyEntries);
