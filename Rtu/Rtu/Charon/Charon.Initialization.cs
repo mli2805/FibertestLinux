@@ -59,7 +59,7 @@ public partial class Charon
             _logger.LLog(Logs.RtuManager.ToInt(), LastErrorMessage);
             return NetAddress;
         }
-        Serial = Serial.Substring(0, Serial.Length - 2); // "\r\n"
+        Serial = Serial.Substring(0, Serial.Length - Environment.NewLine.Length);
         _logger.LLog(Logs.RtuManager.ToInt(), $"Serial {Serial}");
 
         OwnPortCount = GetOwnPortCount();
@@ -80,8 +80,6 @@ public partial class Charon
             var extendedPorts = GetExtendedPorts();
             if (extendedPorts == null)
                 return NetAddress;
-
-            _logger.LLog(Logs.RtuManager.ToInt(), $"extendedPorts contains {extendedPorts.Count} entries");
 
             bool isBopRemoved = false;
             foreach (var p in extendedPorts.Keys.ToList())
@@ -107,7 +105,7 @@ public partial class Charon
                 }
                 else
                 {
-                    childCharon.Serial = childSerial.Substring(0, childSerial.Length - 2); // "\r\n"
+                    childCharon.Serial = childSerial.Substring(0, childSerial.Length - Environment.NewLine.Length);
                     if (childCharon.InitializeOtauRecursively() != null)
                     {
                         _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectBop);
