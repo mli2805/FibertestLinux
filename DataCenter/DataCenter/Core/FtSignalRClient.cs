@@ -8,7 +8,7 @@ namespace Fibertest.DataCenter
     public interface IFtSignalRClient
     {
         Task<bool> IsSignalRConnected(bool isLog = true);
-        Task NotifyAll(string eventType, string dataInJson);
+        Task NotifyAll(string eventType, string? dataInJson);
         Task SendToOne(string connectionId, string eventType, string dataInJson);
         Task<bool> CheckServerIn();
 
@@ -69,7 +69,7 @@ namespace Fibertest.DataCenter
 
 
         // DataCenter notifies WebClients
-        public async Task NotifyAll(string eventType, string dataInJson)
+        public async Task NotifyAll(string eventType, string? dataInJson)
         {
             if (!_isWebApiInstalled) return;
             try

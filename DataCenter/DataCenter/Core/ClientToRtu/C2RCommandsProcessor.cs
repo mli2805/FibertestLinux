@@ -13,7 +13,7 @@ namespace Fibertest.DataCenter
     /// </summary>
     public class C2RCommandsProcessor
     {
-        private readonly ILogger<IntermediateClass> _logger;
+        private readonly ILogger<C2RCommandsProcessor> _logger;
         private readonly RtuStationsRepository _rtuStationsRepository;
         private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
         private readonly RtuResponseApplier _rtuResponseApplier;
@@ -22,7 +22,7 @@ namespace Fibertest.DataCenter
             new() { TypeNameHandling = TypeNameHandling.All };
 
         private readonly DoubleAddress _serverDoubleAddress;
-        public C2RCommandsProcessor(IWritableOptions<ServerGeneralConfig> config, ILogger<IntermediateClass> logger,
+        public C2RCommandsProcessor(IWritableOptions<ServerGeneralConfig> config, ILogger<C2RCommandsProcessor> logger,
             RtuStationsRepository rtuStationsRepository, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
             RtuResponseApplier rtuResponseApplier)
         {

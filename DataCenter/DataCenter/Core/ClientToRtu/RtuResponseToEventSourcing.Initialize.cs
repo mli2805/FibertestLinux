@@ -4,22 +4,8 @@ using Fibertest.Utils;
 
 namespace Fibertest.DataCenter
 {
-    public class RtuResponseToGraphApplier
+    public partial class RtuResponseToEventSourcing
     {
-        private readonly ILogger<RtuResponseToGraphApplier> _logger;
-        private readonly Model _writeModel;
-        private readonly EventStoreService _eventStoreService;
-        private readonly ClientCollection _clientCollection;
-
-        public RtuResponseToGraphApplier(ILogger<RtuResponseToGraphApplier> logger,
-            Model writeModel, EventStoreService eventStoreService, ClientCollection clientCollection)
-        {
-            _logger = logger;
-            _writeModel = writeModel;
-            _eventStoreService = eventStoreService;
-            _clientCollection = clientCollection;
-        }
-
         public async Task ApplyRtuInitializationResult(InitializeRtuDto dto, RtuInitializedDto result)
         {
             var client = _clientCollection.Get(dto.ClientConnectionId);
@@ -45,7 +31,7 @@ namespace Fibertest.DataCenter
             }
 
             // main veex otau state changed
-            if (!dto.IsFirstInitialization && 
+            if (!dto.IsFirstInitialization &&
                 originalRtu.MainVeexOtau.connected != result.MainVeexOtau.connected)
             {
                 commandList.Add(new AddBopNetworkEvent()
@@ -69,7 +55,7 @@ namespace Fibertest.DataCenter
                         // This happens when Khazanov writes into RTU's ini file while RTU works
                         // should not happen in real life but anyway
                         result.Children.Remove(keyValuePair.Key);
-                        _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), 
+                        _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(),
                             $"There is no bop with address {keyValuePair.Value.NetAddress.ToStringA()} in graph");
                         continue;
                     }
