@@ -57,7 +57,7 @@ public partial class Charon
         LastAnswer = "";
         LastErrorMessage = "";
         IsLastCommandSuccessful = false;
-        string cmd = "ini_write" + Environment.NewLine;
+        string cmd = "ini_write\r\n";
         try
         {
             //---create a TCPClient object at the IP and port no.---

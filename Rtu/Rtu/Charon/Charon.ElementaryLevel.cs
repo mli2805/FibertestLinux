@@ -7,22 +7,22 @@ public partial class Charon
 {
     public bool ResetOtau()
     {
-        SendCommand("otau_reset" + Environment.NewLine);
+        SendCommand("otau_reset\r\n");
         if (!IsLastCommandSuccessful)
             return false;
-        return LastAnswer == "OK" + Environment.NewLine;
+        return LastAnswer == "OK";
     }
 
 
     public string GetSerial()
     {
-        SendCommand("get_rtu_number" + Environment.NewLine);
+        SendCommand("get_rtu_number\r\n");
         return LastAnswer;
     }
 
     private int GetOwnPortCount()
     {
-        SendCommand("otau_get_count_channels" + Environment.NewLine);
+        SendCommand("otau_get_count_channels\r\n");
         if (!IsLastCommandSuccessful)
             return -1;
 
@@ -37,13 +37,13 @@ public partial class Charon
 
     public string ShowOnDisplayMessageReady()
     {
-        SendCommand("pc_loaded" + Environment.NewLine);
+        SendCommand("pc_loaded\r\n");
         return !IsLastCommandSuccessful ? LastErrorMessage : "";
     }
 
     public string ShowMessageMeasurementPort()
     {
-        SendCommand("meas" + Environment.NewLine);
+        SendCommand("meas\r\n");
         return !IsLastCommandSuccessful ? LastErrorMessage : "";
     }
 
@@ -51,14 +51,14 @@ public partial class Charon
     {
         try
         {
-            SendCommand("ini_size" + Environment.NewLine);
+            SendCommand("ini_size\r\n");
             if (!IsLastCommandSuccessful)
                 return 0; // read error
 
-            if (LastAnswer.Length >= 15 && LastAnswer.Substring(0, 15) == "ERROR_COMMAND" + Environment.NewLine)
+            if (LastAnswer.Length >= 15 && LastAnswer.Substring(0, 15) == "ERROR_COMMAND\r\n")
                 return 480; // charon too old, know nothing about ini file size
 
-            var lines = LastAnswer.Split(new[] { "" + Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            var lines = LastAnswer.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             CharonIniSize = int.Parse(lines[0]);
             _logger.LLog(Logs.RtuManager.ToInt(), $"Charon ini size is {CharonIniSize}");
             return CharonIniSize;
@@ -89,7 +89,7 @@ public partial class Charon
                 return null;
             }
 
-            if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND" + Environment.NewLine)
+            if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND\r\n")
             {
                 // charon too old, knows nothing about extensions
                 _logger.Log(LogLevel.Warning, Logs.RtuManager.ToInt(), "Charon too old, knows nothing about extensions");
@@ -112,7 +112,7 @@ public partial class Charon
         }
     }
 
-    private void ReadIniFile() { SendCommand("ini_read" + Environment.NewLine); }
+    private void ReadIniFile() { SendCommand("ini_read\r\n"); }
 
     private Dictionary<int, NetAddress> ParseIniContent(string content)
     {
@@ -139,7 +139,7 @@ public partial class Charon
             return -1;
         }
 
-        SendCommand($"otau_set_channel {port} d" + Environment.NewLine);
+        SendCommand($"otau_set_channel {port} d\r\n");
         if (!IsLastCommandSuccessful)
             return -1;
         var resultingPort = GetActivePort();
@@ -152,7 +152,7 @@ public partial class Charon
 
     private int GetActivePort()
     {
-        SendCommand("otau_get_channel" + Environment.NewLine);
+        SendCommand("otau_get_channel\r\n");
         if (!IsLastCommandSuccessful)
             return -1;
 
@@ -168,9 +168,9 @@ public partial class Charon
     {
         if (extPorts.Count == 0)
             return Environment.NewLine;
-        var result = "[OpticalPortExtension]" + Environment.NewLine;
+        var result = "[OpticalPortExtension]\r\n";
         foreach (var extPort in extPorts)
-            result += $"{extPort.Key}={extPort.Value.ToStringA()}" + Environment.NewLine;
+            result += $"{extPort.Key}={extPort.Value.ToStringA()}\r\n";
         return result;
     }
 

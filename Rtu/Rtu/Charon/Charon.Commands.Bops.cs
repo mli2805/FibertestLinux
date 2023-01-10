@@ -11,7 +11,7 @@ public partial class Charon
         var extPorts = GetExtendedPorts();
         if (extPorts == null)
             return false;
-        if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND" + Environment.NewLine)
+        if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND\r\n")
         {
             return true;
         }
@@ -51,7 +51,7 @@ public partial class Charon
         {
             return null;
         }
-        if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND" + Environment.NewLine)
+        if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND\r\n")
         {
             return null;
         }
