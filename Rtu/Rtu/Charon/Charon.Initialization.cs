@@ -81,6 +81,8 @@ public partial class Charon
             if (extendedPorts == null)
                 return NetAddress;
 
+            _logger.LLog(Logs.RtuManager.ToInt(), $"extendedPorts contains {extendedPorts.Count} entries");
+
             bool isBopRemoved = false;
             foreach (var p in extendedPorts.Keys.ToList())
             {
