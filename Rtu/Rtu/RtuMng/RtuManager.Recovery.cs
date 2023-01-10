@@ -81,7 +81,7 @@ namespace Fibertest.Rtu
 
             _logger.LLog(Logs.RtuService.ToInt(), $"Mikrotik {damagedOtau.Ip} reboot N{damagedOtau.RebootAttempts}");
             _logger.LLog(Logs.RtuManager.ToInt(), $"Reboot attempt N{damagedOtau.RebootAttempts}");
-            var connectionTimeout = _charonConfig.Value.ConnectionTimeout;
+            var connectionTimeout = _fullConfig.Value.ConnectionTimeout;
             try
             {
                 MikrotikInBop.ConnectAndReboot(_logger, Logs.RtuManager.ToInt(), damagedOtau.Ip, connectionTimeout);

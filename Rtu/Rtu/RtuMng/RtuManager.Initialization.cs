@@ -35,7 +35,9 @@ public partial class RtuManager
         result.Version = version;
         result.Version2 = "";
           
-        var result2 = await InitializeOtau(result);
+        var result2 = dto != null
+            ? await ReInitializeOtauOnUsersRequest(dto, result)
+            : await InitializeOtau(result); // on service or module restart
         if (!result2.IsInitialized)
         {
             _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "Failed initialize RTU!");

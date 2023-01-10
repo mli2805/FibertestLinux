@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Fibertest.Dto;
+﻿using Fibertest.Dto;
 using Fibertest.Utils;
 
 namespace Fibertest.DataCenter;
@@ -8,8 +7,8 @@ public static class DcConfigServiceCollectionExtension
 {
     public static IServiceCollection AddConfig(this IServiceCollection services, IConfiguration config)
     {
-        var configFile = GetConfigPath();
-        
+        var configFile = ConfigUtils.GetConfigPath("dc.json");
+
         services.ConfigureWritable<ServerGeneralConfig>(config.GetSection("General"), configFile);
         services.ConfigureWritable<BroadcastConfig>(config.GetSection("Broadcast"), configFile);
         services.ConfigureWritable<ServerTimeoutConfig>(config.GetSection("ServerTimeouts"), configFile);
@@ -24,16 +23,10 @@ public static class DcConfigServiceCollectionExtension
 
     public static void Configure(this IConfigurationBuilder configurationBuilder)
     {
-        var configFile = GetConfigPath();
+        var configFile = ConfigUtils.GetConfigPath("dc.json");
 
-        ConfigValidator.Validate(configFile, new DataCenterConfig());
+        ConfigUtils.Validate(configFile, new DataCenterConfig());
         configurationBuilder.AddJsonFile(configFile, false, true);
     }
-
-    private static string GetConfigPath()
-    {
-        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-        return Path.Combine(basePath, @"../config/dc.json");
-    }
+    
 }

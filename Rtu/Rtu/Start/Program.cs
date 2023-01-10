@@ -21,7 +21,7 @@ public class Program
                 var assemblyLocation = Assembly.GetExecutingAssembly().Location;
                 var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
                 var configFile = Path.Combine(basePath, @"../config/rtu.json");
-                ConfigValidator.Validate(configFile, new RtuConfig());
+                ConfigUtils.Validate(configFile, new RtuConfig());
                 config.AddJsonFile(configFile, false, true);
             });
 

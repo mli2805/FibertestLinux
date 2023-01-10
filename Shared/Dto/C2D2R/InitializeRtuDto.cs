@@ -15,7 +15,7 @@ public class InitializeRtuDto : BaseRtuRequest
     // RTU properties after previous initialization
     public string? Serial;
     public int OwnPortCount;
-    public Dictionary<int, OtauDto>? Children;
+    public Dictionary<int, OtauDto> Children = new Dictionary<int, OtauDto>();
 
     public override string What => "InitializeRtu";
     public override RtuOccupation Why => RtuOccupation.InitializeRtu;
