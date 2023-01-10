@@ -119,7 +119,8 @@ public partial class Charon
         _logger.LLog(Logs.RtuManager.ToInt(), $"start parsing: {content}");
 
         var result = new Dictionary<int, NetAddress>();
-        string[] separator = new[] { "\r\n" };
+      //  string[] separator = new[] { "\r\n" };
+        string[] separator = new[] { Environment.NewLine };
         var lines = content.Split(separator, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 1; i < lines.Length - 1; i++)
         {
