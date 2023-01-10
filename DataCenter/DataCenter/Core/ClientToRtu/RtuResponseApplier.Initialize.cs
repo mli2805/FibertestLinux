@@ -1,10 +1,10 @@
 ﻿using Fibertest.Dto;
 using Fibertest.Utils;
 
-namespace Fibertest.DataCenter
+namespace Fibertest.DataCenter;
+
+public partial class RtuResponseApplier
 {
-    public partial class RtuResponseApplier
-    {
     public async Task<string> ApplyRtuInitializationResult(InitializeRtuDto dto, string jsonResult)
     {
         var result = Deserialize<RtuInitializedDto>(jsonResult);
@@ -54,5 +54,4 @@ namespace Fibertest.DataCenter
         }
         return rtuStation;
     }
-  }
 }

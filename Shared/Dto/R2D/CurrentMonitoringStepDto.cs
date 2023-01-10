@@ -1,11 +1,10 @@
-﻿namespace Fibertest.Dto
-{
-    public class CurrentMonitoringStepDto
-    {
-        public Guid RtuId;
+﻿namespace Fibertest.Dto;
 
-        public MonitoringCurrentStep Step;
-        public PortWithTraceDto? PortWithTraceDto = null!;
-        public BaseRefType BaseRefType;
-    }
+public class CurrentMonitoringStepDto
+{
+    public Guid RtuId;
+
+    public MonitoringCurrentStep Step;
+    public PortWithTraceDto? PortWithTraceDto = null!;
+    public BaseRefType BaseRefType;
 }

@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Fibertest.Dto;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class VeexTestMappingProfile : Profile
 {
-    public class VeexTestMappingProfile : Profile
+    public VeexTestMappingProfile()
     {
-        public VeexTestMappingProfile()
-        {
-            CreateMap<VeexTestCreatedDto, AddVeexTest>();
-        }
+        CreateMap<VeexTestCreatedDto, AddVeexTest>();
     }
 }

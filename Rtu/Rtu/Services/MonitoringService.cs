@@ -1,38 +1,37 @@
 ﻿using Fibertest.Utils;
 using System.Diagnostics;
 
-namespace Fibertest.Rtu
+namespace Fibertest.Rtu;
+
+public class MonitoringService : BackgroundService
 {
-    public class MonitoringService : BackgroundService
+    private readonly ILogger<MonitoringService> _logger;
+    private readonly RtuManager _rtuManager;
+
+    public MonitoringService(ILogger<MonitoringService> logger, 
+        RtuManager rtuManager)
     {
-        private readonly ILogger<MonitoringService> _logger;
-        private readonly RtuManager _rtuManager;
+        _logger = logger;
+        _rtuManager = rtuManager;
+    }
 
-        public MonitoringService(ILogger<MonitoringService> logger, 
-            RtuManager rtuManager)
-        {
-            _logger = logger;
-            _rtuManager = rtuManager;
-        }
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            var pid = Process.GetCurrentProcess().Id;
-            var tid = Thread.CurrentThread.ManagedThreadId;
-            _logger.LLog(Logs.RtuManager.ToInt(), $"RTU monitoring service started. Process {pid}, thread {tid}");
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        var pid = Process.GetCurrentProcess().Id;
+        var tid = Thread.CurrentThread.ManagedThreadId;
+        _logger.LLog(Logs.RtuManager.ToInt(), $"RTU monitoring service started. Process {pid}, thread {tid}");
             
-            await DoWork(stoppingToken);
-        }
+        await DoWork(stoppingToken);
+    }
 
-        private async Task DoWork(CancellationToken stoppingToken)
+    private async Task DoWork(CancellationToken stoppingToken)
+    {
+        await _rtuManager.InitializeRtu();
+
+        while (!stoppingToken.IsCancellationRequested)
         {
-            await _rtuManager.InitializeRtu();
-
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
-                _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(),  "It is a measurement thread ..." + Environment.NewLine);
-            }
+            await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+            _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(),  "It is a measurement thread ..." + Environment.NewLine);
         }
     }
 }

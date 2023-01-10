@@ -1,51 +1,50 @@
 ﻿using Fibertest.Dto;
 using NEventStore;
 
-namespace Fibertest.Graph
+namespace Fibertest.Graph;
+
+public class EventLogComposer
 {
-    public class EventLogComposer
+    private readonly Model _model;
+    private readonly EventToLogLineParser _eventToLogLineParser;
+
+    private int _ordinal = 1;
+
+    public EventLogComposer(Model model, EventToLogLineParser eventToLogLineParser)
     {
-        private readonly Model _model;
-        private readonly EventToLogLineParser _eventToLogLineParser;
+        _model = model;
+        _eventToLogLineParser = eventToLogLineParser;
+    }
 
-        private int _ordinal = 1;
+    public void Initialize()
+    {
+        _eventToLogLineParser.InitializeBySnapshot(_model);
+        _ordinal = _model.UserActionsLog.Count + 1;
+    }
 
-        public EventLogComposer(Model model, EventToLogLineParser eventToLogLineParser)
+    public void AddEventToLog(EventMessage msg)
+    {
+        try
         {
-            _model = model;
-            _eventToLogLineParser = eventToLogLineParser;
+            var username = (string)msg.Headers[@"Username"];
+            var user = _model.Users.FirstOrDefault(u => u.Title == username);
+
+            var line = _eventToLogLineParser.ParseEventBody(msg.Body);
+            // event should be parsed even before check in order to update internal dictionaries
+            if (line == null || user == null
+                             || user.Role < Role.Developer && line.OperationCode != LogOperationCode.EventsAndSorsRemoved)
+                return;
+
+            line.Ordinal = _ordinal;
+            line.Username = username;
+            line.ClientIp = (string)msg.Headers[@"ClientIp"];
+            line.Timestamp = (DateTime)msg.Headers[@"Timestamp"];
+            _model.UserActionsLog.Insert(0, line);
+            _ordinal++;
         }
-
-        public void Initialize()
+        catch (Exception e)
         {
-            _eventToLogLineParser.InitializeBySnapshot(_model);
-            _ordinal = _model.UserActionsLog.Count + 1;
-        }
-
-        public void AddEventToLog(EventMessage msg)
-        {
-            try
-            {
-                var username = (string)msg.Headers[@"Username"];
-                var user = _model.Users.FirstOrDefault(u => u.Title == username);
-
-                var line = _eventToLogLineParser.ParseEventBody(msg.Body);
-                // event should be parsed even before check in order to update internal dictionaries
-                if (line == null || user == null
-                                 || user.Role < Role.Developer && line.OperationCode != LogOperationCode.EventsAndSorsRemoved)
-                    return;
-
-                line.Ordinal = _ordinal;
-                line.Username = username;
-                line.ClientIp = (string)msg.Headers[@"ClientIp"];
-                line.Timestamp = (DateTime)msg.Headers[@"Timestamp"];
-                _model.UserActionsLog.Insert(0, line);
-                _ordinal++;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            Console.WriteLine(e);
         }
     }
 }

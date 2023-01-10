@@ -1,8 +1,7 @@
-﻿namespace Fibertest.DataCenter
+﻿namespace Fibertest.DataCenter;
+
+public class SorFile
 {
-    public class SorFile
-    {
-        public int Id { get; set; }
-        public byte[] SorBytes { get; set; } = Array.Empty<byte>();
-    }
+    public int Id { get; set; }
+    public byte[] SorBytes { get; set; } = Array.Empty<byte>();
 }

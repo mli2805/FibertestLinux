@@ -1,10 +1,9 @@
-﻿namespace Fibertest.Dto
+﻿namespace Fibertest.Dto;
+
+public enum RecoveryStep
 {
-    public enum RecoveryStep
-    {
-        Ok              = 0,
-        ResetArpAndCharon        = 1,
-        RestartService  = 2,
-        RebootPc        = 3,
-    }
+    Ok              = 0,
+    ResetArpAndCharon        = 1,
+    RestartService  = 2,
+    RebootPc        = 3,
 }

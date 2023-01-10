@@ -1,16 +1,15 @@
 ﻿using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace Fibertest.Utils
+namespace Fibertest.Utils;
+
+public static class JsonUtil
 {
-    public static class JsonUtil
+    public static string ToCamelCaseJson(this object o)
     {
-        public static string ToCamelCaseJson(this object o)
-        {
-            return JsonConvert.SerializeObject(o,
-                new JsonSerializerSettings() {
-                    ContractResolver = new DefaultContractResolver() { NamingStrategy = new CamelCaseNamingStrategy() }
-                });
-        }
+        return JsonConvert.SerializeObject(o,
+            new JsonSerializerSettings() {
+                ContractResolver = new DefaultContractResolver() { NamingStrategy = new CamelCaseNamingStrategy() }
+            });
     }
 }

@@ -1,54 +1,53 @@
 ﻿using Fibertest.Dto;
 using Newtonsoft.Json;
 
-namespace Fibertest.Rtu
+namespace Fibertest.Rtu;
+
+public partial class RtuManager
 {
-    public partial class RtuManager
+    private readonly object _isSenderBusyLocker = new object();
+    private bool _isSenderBusy;
+
+    private bool IsSenderBusy
     {
-        private readonly object _isSenderBusyLocker = new object();
-        private bool _isSenderBusy;
-
-        private bool IsSenderBusy
+        get
         {
-            get
+            lock (_isSenderBusyLocker)
             {
-                lock (_isSenderBusyLocker)
-                {
-                    return _isSenderBusy;
-                }
-            }
-            set
-            {
-                lock (_isSenderBusyLocker)
-                {
-                    _isSenderBusy = value;
-                }
+                return _isSenderBusy;
             }
         }
-
-        public async void SendCurrentMonitoringStep(MonitoringCurrentStep currentStep,
-            MonitoringPort? monitoringPort = null, BaseRefType baseRefType = BaseRefType.None)
+        set
         {
-            if (IsSenderBusy)
-                return;
-
-            IsSenderBusy = true;
-
-            var dto = new CurrentMonitoringStepDto()
+            lock (_isSenderBusyLocker)
             {
-                RtuId = _id,
-                Step = currentStep,
-                PortWithTraceDto = monitoringPort == null
-                    ? null
-                    : new PortWithTraceDto(
-                        new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon, monitoringPort.CharonSerial),
+                _isSenderBusy = value;
+            }
+        }
+    }
+
+    public async void SendCurrentMonitoringStep(MonitoringCurrentStep currentStep,
+        MonitoringPort? monitoringPort = null, BaseRefType baseRefType = BaseRefType.None)
+    {
+        if (IsSenderBusy)
+            return;
+
+        IsSenderBusy = true;
+
+        var dto = new CurrentMonitoringStepDto()
+        {
+            RtuId = _id,
+            Step = currentStep,
+            PortWithTraceDto = monitoringPort == null
+                ? null
+                : new PortWithTraceDto(
+                    new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon, monitoringPort.CharonSerial),
                     monitoringPort.TraceId),
-                BaseRefType = baseRefType,
-            };
+            BaseRefType = baseRefType,
+        };
 
-            await _grpcSender.SendToDc(JsonConvert.SerializeObject(dto, JsonSerializerSettings));
+        await _grpcSender.SendToDc(JsonConvert.SerializeObject(dto, JsonSerializerSettings));
 
-            IsSenderBusy = false;
-        }
+        IsSenderBusy = false;
     }
 }
