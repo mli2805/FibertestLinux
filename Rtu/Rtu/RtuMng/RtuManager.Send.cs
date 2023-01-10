@@ -38,16 +38,11 @@ namespace Fibertest.Rtu
             {
                 RtuId = _id,
                 Step = currentStep,
-                PortWithTraceDto = monitoringPort == null ? null : new PortWithTraceDto()
-                {
-                    OtauPort = new OtauPortDto()
-                    {
-                        Serial = monitoringPort.CharonSerial,
-                        OpticalPort = monitoringPort.OpticalPort,
-                        IsPortOnMainCharon = monitoringPort.IsPortOnMainCharon,
-                    },
-                    TraceId = monitoringPort.TraceId,
-                },
+                PortWithTraceDto = monitoringPort == null
+                    ? null
+                    : new PortWithTraceDto(
+                        new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon, monitoringPort.CharonSerial),
+                    monitoringPort.TraceId),
                 BaseRefType = baseRefType,
             };
 

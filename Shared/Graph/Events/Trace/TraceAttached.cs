@@ -5,8 +5,8 @@ namespace Fibertest.Graph;
 public class TraceAttached
 {
     public Guid TraceId;
-    public OtauPortDto OtauPortDto = new OtauPortDto();
+    public OtauPortDto OtauPortDto = null!; // mapping
 
     public FiberState PreviousTraceState;
-    public List<AccidentOnTraceV2> AccidentsInLastMeasurement = new List<AccidentOnTraceV2>();
+    public List<AccidentOnTraceV2> AccidentsInLastMeasurement = null!; // mapping
 }

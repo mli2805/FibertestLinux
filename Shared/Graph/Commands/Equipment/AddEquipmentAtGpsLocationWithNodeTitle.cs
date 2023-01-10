@@ -13,4 +13,6 @@ public class AddEquipmentAtGpsLocationWithNodeTitle
 
     public string? Title;
     public string? Comment;
+
+   
 }

@@ -104,7 +104,7 @@ namespace Fibertest.Graph
                 foreach (Trace trace in model.Traces.Where(t => t.OtauPort != null && t.OtauPort.Serial == rtu.Serial))
                 {
                     if (trace.OtauPort != null) // nonsense but but it is a Resharper's fault
-                        trace.OtauPort.Serial = e.Serial;
+                        trace.OtauPort.Serial = e.Serial!;
                 }
 
                 // if in Client OTAU attached to not existent now port

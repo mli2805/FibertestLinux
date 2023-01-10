@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using Fibertest.Dto;
@@ -25,8 +26,10 @@ public class ShellViewModel : PropertyChangedBase, IShell
     private static readonly string _password = "123";
     private readonly string _clientIP = "192.168.96.21";
 
-    private Guid _rtuId = Guid.Parse("c77c77fe-f23f-441c-ae4b-84f25450c7e4");
+    private Guid _rtuId = Guid.Parse("87654321-f23f-441c-ae4b-84f25450c7e4");
     private Guid _otauId = Guid.Parse("12345678-f23f-441c-ae4b-84f25450c7e4");
+    private Guid _rtuNodeId = Guid.Parse("34567890-f23f-441c-ae4b-84f25450c7e4");
+    private Guid _traceId = Guid.Parse("5bb563ca-0ca1-466d-9c76-b60ba48133ef");
 
     public ObservableCollection<string> Lines { get; set; } = new() { " Here will be log " };
 
@@ -50,11 +53,50 @@ public class ShellViewModel : PropertyChangedBase, IShell
     public async void AddRtu()
     {
         _grpcC2DRequests.ChangeAddress(DcAddress);
-        var cmd = new AddRtuAtGpsLocation(_rtuId, Guid.NewGuid(), 57.2, 29.6, "RTU linux");
+        var cmd = new AddRtuAtGpsLocation(_rtuId, _rtuNodeId, 57.2, 29.6, "RTU linux");
         var res = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+        _rtuNodeId = cmd.NodeId;
         Lines.Add($"Add RTU: {res.ReturnCode}");
     }
 
+    public async void AddTrace()
+    {
+        _grpcC2DRequests.ChangeAddress(DcAddress);
+        var cmd = new AddEquipmentAtGpsLocation(EquipmentType.Cross, 57.5, 29.9);
+        var res = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+        if (res.ReturnCode != ReturnCode.Ok) return;
+        var nodeId = cmd.NodeId;
+        var equipmentId = cmd.RequestedEquipmentId;
+
+        var cmd2 = new AddFiber(_rtuNodeId, nodeId);
+        var res2 = await _grpcC2DRequests.SendEventSourcingCommand(cmd2);
+        if (res2.ReturnCode != ReturnCode.Ok) return;
+        var fiberId = cmd2.FiberId;
+        
+        var cmd3 = new AddTrace(_traceId, _rtuId, 
+            new List<Guid>() {_rtuNodeId, nodeId}, 
+            new List<Guid>(){_rtuId, equipmentId}, 
+            new List<Guid>(){fiberId});
+        var res3 = await _grpcC2DRequests.SendEventSourcingCommand(cmd3);
+        if (res3.ReturnCode != ReturnCode.Ok) return;
+        Lines.Add($"Add trace: {res3.ReturnCode}");
+    }
+
+    public async void AttachTrace()
+    {
+        _grpcC2DRequests.ChangeAddress(DcAddress);
+        var cmd = new AttachTrace(_traceId, new OtauPortDto(1, true, "68613"));
+        var res = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+        if (res.ReturnCode != ReturnCode.Ok) return;
+        Lines.Add($"Attach trace: {res.ReturnCode}");
+    }
+
+    public async void AssignBaseRefs()
+    {
+        _grpcC2RRequests.ChangeAddress(DcAddress);
+        var dto = new AssignBaseRefsDto(_rtuId, RtuMaker.IIT);
+
+    }
     public async void InitializeRtu()
     {
         _grpcC2RRequests.ChangeAddress(DcAddress);
