@@ -77,7 +77,7 @@ public partial class RtuManager
         _rtuGeneralConfig.Update(c=>c.ServerAddress = dto.ServerAddresses!);
 
         _monitoringConfig.Update(c=>c.IsMonitoringOn = false);
-        _logger.LLog(Logs.RtuManager.ToInt(), Environment.NewLine + "Initialization by the USER puts RTU into MANUAL mode.");
+        _logger.LLog(Logs.RtuManager.ToInt(), "Initialization by the USER puts RTU into MANUAL mode.");
     }
 
     private void EvaluateFrequencies()
