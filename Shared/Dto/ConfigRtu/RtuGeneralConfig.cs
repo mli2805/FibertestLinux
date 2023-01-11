@@ -8,6 +8,7 @@ public class RtuGeneralConfig
     public Guid RtuId { get; set; }
     public int PreviousOwnPortCount { get; set; } = -1;
     public string CharonIp { get; set; } = "192.168.88.101";
+    public int OtdrTcpPort { get; set; } = 1500;
 
 
     public int RtuPauseAfterReboot { get; set; } = 20;

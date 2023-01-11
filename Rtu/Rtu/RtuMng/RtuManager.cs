@@ -21,11 +21,17 @@ public partial class RtuManager
 
     private Guid _id;
     private Charon _mainCharon = null!;
+    private int _measurementNumber;
+    private TimeSpan _preciseMakeTimespan;
+    private TimeSpan _preciseSaveTimespan;
+    private TimeSpan _fastSaveTimespan;
 
+    private CancellationTokenSource? _cancellationTokenSource;
+    private MonitoringQueue _monitoringQueue;
 
     public RtuManager(IOptions<CharonConfig> fullConfig, IWritableOptions<RtuGeneralConfig> rtuGeneralConfig,
         IWritableOptions<MonitoringConfig> monitoringConfig, IWritableOptions<RecoveryConfig> recoveryConfig,
-        ILogger<RtuManager> logger,
+        ILogger<RtuManager> logger, MonitoringQueue monitoringQueue,
         SerialPortManager serialPortManager, InterOpWrapper interOpWrapper, OtdrManager otdrManager,
         GrpcSender grpcSender)
     {
@@ -34,6 +40,7 @@ public partial class RtuManager
         _fullConfig = fullConfig;
         _recoveryConfig = recoveryConfig;
         _logger = logger;
+        _monitoringQueue = monitoringQueue;
         _serialPortManager = serialPortManager;
         _interOpWrapper = interOpWrapper;
         _otdrManager = otdrManager;

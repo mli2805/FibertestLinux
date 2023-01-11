@@ -47,6 +47,7 @@ public class C2RCommandsProcessor
                     JsonConvert.SerializeObject(command, JsonSerializerSettings))
             : JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.NotImplementedYet),
                 JsonSerializerSettings);
+
         return await PostProcessResult(command, resultJson);
     }
 

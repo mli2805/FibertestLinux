@@ -32,21 +32,16 @@ public class RtuGrpcService : d2r.d2rBase
         switch (o)
         {
             case InitializeRtuDto dto: result = await _rtuManager.InitializeRtu(dto); break;
-            case StopMonitoringDto _: result = await StopMonitoring(); break;
+            case ApplyMonitoringSettingsDto dto: result = await _rtuManager.ApplyMonitoringSettings(dto); break;
+            case StopMonitoringDto _: result = await _rtuManager.StopMonitoring(); break;
             case AttachOtauDto dto: result = await _rtuManager.AttachOtau(dto); break;
             case DetachOtauDto dto: result = await _rtuManager.DetachOtau(dto); break;
+            case AssignBaseRefsDto dto: result = await _rtuManager.SaveBaseRefs(dto); break;
             case FreeOtdrDto _: result = await _rtuManager.FreeOtdr(); break;
             default: result = new RequestAnswer(ReturnCode.Error); break;
         }
 
         return new d2rResponse() { Json = JsonConvert.SerializeObject(result) };
-    }
-
-    private async Task<RequestAnswer> StopMonitoring()
-    {
-        await Task.Delay(1);
-        _logger.LLog(Logs.RtuManager.ToInt(), "StopMonitoring d2RCommand received");
-        return new RequestAnswer(ReturnCode.Ok);
     }
 
    

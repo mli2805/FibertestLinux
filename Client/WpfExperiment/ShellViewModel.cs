@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
@@ -78,7 +79,6 @@ public class ShellViewModel : PropertyChangedBase, IShell
             new List<Guid>(){_rtuId, equipmentId}, 
             new List<Guid>(){fiberId});
         var res3 = await _grpcC2DRequests.SendEventSourcingCommand(cmd3);
-        if (res3.ReturnCode != ReturnCode.Ok) return;
         Lines.Add($"Add trace: {res3.ReturnCode}");
     }
 
@@ -87,16 +87,24 @@ public class ShellViewModel : PropertyChangedBase, IShell
         _grpcC2DRequests.ChangeAddress(DcAddress);
         var cmd = new AttachTrace(_traceId, new OtauPortDto(1, true, "68613"));
         var res = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
-        if (res.ReturnCode != ReturnCode.Ok) return;
         Lines.Add($"Attach trace: {res.ReturnCode}");
     }
 
     public async void AssignBaseRefs()
     {
         _grpcC2RRequests.ChangeAddress(DcAddress);
-        var dto = new AssignBaseRefsDto(_rtuId, RtuMaker.IIT);
-
+        var bytes = await File.ReadAllBytesAsync(@"c:\temp\sor\1 km 1 port.sor");
+        var baseRefDtos = new List<BaseRefDto>()
+        {
+            new() { Id = Guid.NewGuid(), BaseRefType = BaseRefType.Precise, SorBytes = bytes},
+            new() { Id = Guid.NewGuid(), BaseRefType = BaseRefType.Fast, SorBytes = bytes},
+        };
+        var dto = new AssignBaseRefsDto(_rtuId, RtuMaker.IIT, _traceId, baseRefDtos, new List<int>());
+        dto.OtauPortDto = new OtauPortDto(1, true, "68613");
+        var res = await _grpcC2RRequests.SendAnyC2RRequest<AssignBaseRefsDto, BaseRefAssignedDto>(dto);
+        Lines.Add($"Assign Base Refs: {res.ReturnCode}");
     }
+
     public async void InitializeRtu()
     {
         _grpcC2RRequests.ChangeAddress(DcAddress);

@@ -45,9 +45,14 @@ public partial class RtuManager
         }
 
         result2.IsMonitoringOn = _monitoringConfig.Value.IsMonitoringOn;
-
         result2.AcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
+
         _logger.LLog(Logs.RtuManager.ToInt(), "RTU initialized successfully!" + Environment.NewLine);
+
+        _monitoringQueue.Load();
+        EvaluateFrequencies();
+
+        _recoveryConfig.Update(c=>c.RecoveryStep = RecoveryStep.Ok);
 
         if (!_monitoringConfig.Value.IsMonitoringOn)
         {
@@ -73,4 +78,12 @@ public partial class RtuManager
 
         _monitoringConfig.Update(c=>c.IsMonitoringOn = false);
         _logger.LLog(Logs.RtuManager.ToInt(), Environment.NewLine + "Initialization by the USER puts RTU into MANUAL mode.");
-    } }
+    }
+
+    private void EvaluateFrequencies()
+    {
+        _preciseMakeTimespan = TimeSpan.FromSeconds(_monitoringConfig.Value.PreciseMakeTimespan);
+        _preciseSaveTimespan = TimeSpan.FromSeconds(_monitoringConfig.Value.PreciseSaveTimespan);
+        _fastSaveTimespan = TimeSpan.FromSeconds(_monitoringConfig.Value.FastSaveTimespan);
+    }
+}
