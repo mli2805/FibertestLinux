@@ -10,8 +10,9 @@ public partial class RtuManager
     {
         await Task.Delay(1);
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-        var portDataFolder = Path.Combine(basePath, @"../PortData");
+        var assemblyPath = Path.GetDirectoryName(assemblyLocation)!;
+        var fibertestPath = Directory.GetParent(assemblyPath)!.Name;
+        var portDataFolder = Path.Combine(fibertestPath, @"PortData");
 
         if (!Directory.Exists(portDataFolder))
         {
@@ -19,7 +20,7 @@ public partial class RtuManager
             _logger.LLog(Logs.RtuService.ToInt(), $"Created: {portDataFolder}");
         }
 
-        var portFolder = portDataFolder + $@"{dto.OtauPortDto!.Serial}p{dto.OtauPortDto!.OpticalPort:000}/";
+        var portFolder = portDataFolder + $"/{dto.OtauPortDto!.Serial}p{dto.OtauPortDto!.OpticalPort:000}";
         if (!Directory.Exists(portFolder))
         {
             Directory.CreateDirectory(portFolder);

@@ -10,11 +10,6 @@ public static class LoggerExt
         logger.Log(LogLevel.Information, eventId, "");
     }
 
-    public static void EmptyLine<T>(this ILogger<T> logger, EventId eventId)
-    {
-        logger.Log(LogLevel.Information, eventId, Environment.NewLine);
-    }
-
     public static void HyphenLine<T>(this ILogger<T> logger, EventId eventId)
     {
         logger.Log(LogLevel.Information, eventId, new string('-', 78));
@@ -23,6 +18,12 @@ public static class LoggerExt
     public static void StartLine<T>(this ILogger<T> logger, EventId eventId)
     {
         logger.Log(LogLevel.Information, eventId, Environment.NewLine + Environment.NewLine + new string('-', 78));
+    }
+
+    public static void EmptyAndLog<T>(this ILogger<T> logger, EventId eventId, string message = "", LogLevel logLevel = LogLevel.Information)
+    {
+        logger.Log(LogLevel.Information, eventId, "");
+        logger.Log(logLevel, eventId, message);
     }
 
     public static void LLog<T>(this ILogger<T> logger, EventId eventId, string message = "", LogLevel logLevel = LogLevel.Information)

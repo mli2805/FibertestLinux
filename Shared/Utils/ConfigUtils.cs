@@ -29,7 +29,8 @@ public static class ConfigUtils
     public static string GetConfigPath(string filename)
     {
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-        return Path.Combine(basePath, $@"../config/{filename}");
+        var assemblyPath = Path.GetDirectoryName(assemblyLocation)!;
+        var fibertestPath = Directory.GetParent(assemblyPath)!.Name;
+        return Path.Combine(fibertestPath, $@"config/{filename}");
     }
 }
