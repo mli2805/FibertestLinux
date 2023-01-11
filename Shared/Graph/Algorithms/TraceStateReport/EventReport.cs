@@ -76,7 +76,7 @@ public static class EventReport
         content = content.Replace(@"@TimeConst", Resources.SID_Time);
         content = content.Replace(@"@time", reportModel.TimeStamp.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern));
 
-        var path = FileOperations.GetParentFolder(AppDomain.CurrentDomain.BaseDirectory) + @"\temp";
+        var path = FileOperations.GetFibertestFolder() + @"/temp";
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
         var filename = path + $@"\report-{reportModel.TimeStamp:yyyy-MM-dd-hh-mm-ss}.html";

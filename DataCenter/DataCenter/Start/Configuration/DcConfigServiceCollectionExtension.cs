@@ -1,5 +1,6 @@
 ﻿using Fibertest.Dto;
 using Fibertest.Utils;
+using Fibertest.Utils.Setup;
 
 namespace Fibertest.DataCenter;
 
@@ -7,7 +8,7 @@ public static class DcConfigServiceCollectionExtension
 {
     public static IServiceCollection AddConfig(this IServiceCollection services, IConfiguration config)
     {
-        var configFile = ConfigUtils.GetConfigPath("dc.json");
+        var configFile = FileOperations.GetFibertestFolder() +"/config/dc.json";
 
         services.ConfigureWritable<ServerGeneralConfig>(config.GetSection("General"), configFile);
         services.ConfigureWritable<BroadcastConfig>(config.GetSection("Broadcast"), configFile);
@@ -23,7 +24,7 @@ public static class DcConfigServiceCollectionExtension
 
     public static void Configure(this IConfigurationBuilder configurationBuilder)
     {
-        var configFile = ConfigUtils.GetConfigPath("dc.json");
+        var configFile = FileOperations.GetFibertestFolder() +"/config/dc.json";
 
         ConfigUtils.Validate(configFile, new DataCenterConfig());
         configurationBuilder.AddJsonFile(configFile, false, true);

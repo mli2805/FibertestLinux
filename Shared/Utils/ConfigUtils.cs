@@ -1,4 +1,3 @@
-using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Fibertest.Utils;
@@ -19,18 +18,5 @@ public static class ConfigUtils
         var config = JsonConvert.DeserializeObject<T>(json);
         if (config == null) return;
         File.WriteAllText(filename, JsonConvert.SerializeObject(config));
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="filename">configFile.json</param>
-    /// <returns>../config/configFile.json</returns>
-    public static string GetConfigPath(string filename)
-    {
-        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var assemblyPath = Path.GetDirectoryName(assemblyLocation)!;
-        var fibertestPath = Directory.GetParent(assemblyPath)!.Name;
-        return Path.Combine(fibertestPath, $@"config/{filename}");
     }
 }

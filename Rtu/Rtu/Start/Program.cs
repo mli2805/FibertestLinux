@@ -1,5 +1,4 @@
 using System.Net;
-using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Serilog;
@@ -16,13 +15,9 @@ public class Program
             {
                 o.Listen(IPAddress.Any, (int)TcpPorts.RtuListenTo);
             })
-            .ConfigureAppConfiguration((_, config) =>
+            .ConfigureAppConfiguration((_, configurationBuilder) =>
             {
-                var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-                var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-                var configFile = Path.Combine(basePath, @"../config/rtu.json");
-                ConfigUtils.Validate(configFile, new RtuConfig());
-                config.AddJsonFile(configFile, false, true);
+                configurationBuilder.Configure();
             });
 
         // Add services to the container.

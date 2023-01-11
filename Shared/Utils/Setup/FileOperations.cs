@@ -1,18 +1,15 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace Fibertest.Utils.Setup;
 
 public static class FileOperations
 {
-    public static string GetParentFolder(string path, int depth = 1)
+    public static string GetFibertestFolder()
     {
-        for (int i = 0; i < depth; i++)
-        {
-            var index = path.Substring(0, path.Length - 1).LastIndexOf(@"\", StringComparison.CurrentCulture);
-            if (index == -1) return string.Empty;
-            path = path.Substring(0, index);
-        }
-        return path;
+        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+        var assemblyPath = Path.GetDirectoryName(assemblyLocation)!;
+        return Directory.GetParent(assemblyPath)!.Name;
     }
 
     public static bool DirectoryCopyWithDecorations(string sourceDirName, string destDirName,

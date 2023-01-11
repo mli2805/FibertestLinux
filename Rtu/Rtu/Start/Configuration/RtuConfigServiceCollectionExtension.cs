@@ -1,5 +1,6 @@
 ﻿using Fibertest.Utils;
 using Fibertest.Dto;
+using Fibertest.Utils.Setup;
 
 namespace Fibertest.Rtu;
 
@@ -7,7 +8,7 @@ public static class RtuConfigServiceCollectionExtension
 {
     public static IServiceCollection AddConfig(this IServiceCollection services, IConfiguration config)
     {
-        var configFile = ConfigUtils.GetConfigPath("rtu.json");
+        var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
 
         services.ConfigureWritable<RtuGeneralConfig>(config.GetSection("General"), configFile);
         services.ConfigureWritable<CharonConfig>(config.GetSection("Charon"), configFile);
@@ -18,7 +19,7 @@ public static class RtuConfigServiceCollectionExtension
 
     public static void Configure(this IConfigurationBuilder configurationBuilder)
     {
-        var configFile = ConfigUtils.GetConfigPath("rtu.json");
+        var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
 
         ConfigUtils.Validate(configFile, new DataCenterConfig());
         configurationBuilder.AddJsonFile(configFile, false, true);
