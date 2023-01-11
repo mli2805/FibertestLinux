@@ -59,7 +59,7 @@ public partial class Charon
             _logger.LLog(Logs.RtuManager.ToInt(), LastErrorMessage);
             return NetAddress;
         }
-        Serial = Serial.Substring(0, Serial.Length - Environment.NewLine.Length);
+        Serial = Serial.Substring(0, Serial.Length - 2);
         _logger.LLog(Logs.RtuManager.ToInt(), $"Serial {Serial}");
 
         OwnPortCount = GetOwnPortCount();
