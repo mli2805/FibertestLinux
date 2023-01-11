@@ -7,7 +7,7 @@ public static class LoggerExt
     // timestamp without message AND then absolutely empty space
     public static void TimestampWithoutMessage<T>(this ILogger<T> logger, EventId eventId)
     {
-        logger.Log(LogLevel.Information, eventId, Environment.NewLine);
+        logger.Log(LogLevel.Information, eventId, "");
     }
 
     public static void EmptyLine<T>(this ILogger<T> logger, EventId eventId)

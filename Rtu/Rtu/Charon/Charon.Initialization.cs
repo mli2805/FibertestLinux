@@ -122,6 +122,8 @@ public partial class Charon
                 RewriteIni(extendedPorts);
         }
         _logger.LLog(Logs.RtuManager.ToInt(), $"Full port count  {FullPortCount}");
+        _logger.LLog(Logs.RtuManager.ToInt(), "");
+        _logger.LLog(Logs.RtuManager.ToInt(), $"{Serial}");
         _logger.LLog(Logs.RtuManager.ToInt(), $"OTAU {Serial} initialized successfully.   {OwnPortCount}/{FullPortCount}.");
         return null;
     }

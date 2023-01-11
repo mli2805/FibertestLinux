@@ -19,7 +19,11 @@ public sealed class Boot : IHostedService
         _logger.StartLine(Logs.RtuService.ToInt());
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+        _logger.StartLine(Logs.RtuService.ToInt());
+        _logger.StartLine(Logs.RtuManager.ToInt());
         _logger.LLog(Logs.RtuService.ToInt(), $"Fibertest RTU service {info.FileVersion}");
+        _logger.LLog(Logs.RtuManager.ToInt(), $"Fibertest RTU service {info.FileVersion}");
         return Task.CompletedTask;
     }
 
