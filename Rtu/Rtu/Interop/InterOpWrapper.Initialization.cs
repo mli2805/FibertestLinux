@@ -50,11 +50,12 @@ public partial class InterOpWrapper
         try
         {
             initOtdr = InitOTDR((int)type, ip, port);
-            //         SetEqualStepsOfMeasurement();
+            SetEqualStepsOfMeasurement();
 
             if (initOtdr == 0)
             {
-                _logger.LLog(Logs.RtuManager.ToInt(), "OTDR connected successfully!");
+                var word1 = type == ConnectionTypes.FreePort ? "disconnected" : "connected";
+                _logger.LLog(Logs.RtuManager.ToInt(), $"OTDR {word1} successfully!");
                 return true;
             }
 
@@ -70,9 +71,11 @@ public partial class InterOpWrapper
             return false;
         }
 
-        _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"OTDR connection failed! Error: {initOtdr}");
+        var word = type == ConnectionTypes.FreePort ? "disconnection" : "connection";
+        _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"OTDR {word} failed! Error: {initOtdr}");
         if (initOtdr == 805)
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"InterOpWrapper.InitOTDR: 805 - ERROR_COM_OPEN - check otdr address or reboot rtu");
+            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(),
+                "InterOpWrapper.InitOTDR: 805 - ERROR_COM_OPEN - check otdr address or reboot RTU");
         return false;
     }
 }

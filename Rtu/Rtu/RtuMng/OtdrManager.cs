@@ -101,9 +101,6 @@ public partial class OtdrManager
     {
         await Task.Delay(1);
         _logger.LLog(Logs.RtuManager.ToInt(), $"Disconnecting OTDR {_charonIp}...");
-        var result = _interOpWrapper.InitOtdr(ConnectionTypes.FreePort, _charonIp, _otdrTcpPort);
-        _logger.LLog(Logs.RtuManager.ToInt(),
-            result ? "OTDR disconnected successfully!" : "Failed to disconnect OTDR!");
-        return result;
+        return _interOpWrapper.InitOtdr(ConnectionTypes.FreePort, _charonIp, _otdrTcpPort);
     }
 }

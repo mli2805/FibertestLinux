@@ -47,7 +47,7 @@ public partial class RtuManager
         result2.IsMonitoringOn = _monitoringConfig.Value.IsMonitoringOn;
         result2.AcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
 
-        _logger.LLog(Logs.RtuManager.ToInt(), "RTU initialized successfully!" + Environment.NewLine);
+        _logger.LLog(Logs.RtuManager.ToInt(), "RTU initialized successfully!");
 
         _monitoringQueue.Load();
         EvaluateFrequencies();
@@ -56,7 +56,7 @@ public partial class RtuManager
 
         if (!_monitoringConfig.Value.IsMonitoringOn)
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), "RTU is in MANUAL mode, disconnect OTDR" + Environment.NewLine);
+            _logger.LLog(Logs.RtuManager.ToInt(), "RTU is in MANUAL mode, disconnect OTDR");
             var unused = await _otdrManager.DisconnectOtdr();
         }
 

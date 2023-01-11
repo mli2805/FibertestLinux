@@ -58,8 +58,7 @@ public class MonitoringQueue
 
     public void Load()
     {
-        _logger.EmptyLine(Logs.RtuManager.ToInt());
-        _logger.LLog(Logs.RtuManager.ToInt(), "Monitoring queue assembling...");
+        _logger.LLog(Logs.RtuManager.ToInt(), Environment.NewLine + "Monitoring queue assembling...");
         Queue = new Queue<MonitoringPort>();
 
         try
