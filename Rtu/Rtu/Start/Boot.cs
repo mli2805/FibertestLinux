@@ -16,7 +16,6 @@ public sealed class Boot : IHostedService
     // Place here all that should be done before start listening to gRPC & Http requests, background workers, etc.
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.StartLine(Logs.RtuService.ToInt());
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
 
