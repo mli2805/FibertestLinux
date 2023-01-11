@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using Fibertest.Utils;
+using Fibertest.Utils.Setup;
 
 namespace Fibertest.Rtu;
 
@@ -23,6 +24,9 @@ public sealed class Boot : IHostedService
         _logger.StartLine(Logs.RtuManager.ToInt());
         _logger.LLog(Logs.RtuService.ToInt(), $"Fibertest RTU service {info.FileVersion}");
         _logger.LLog(Logs.RtuManager.ToInt(), $"Fibertest RTU service {info.FileVersion}");
+
+        var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
+        _logger.LLog(Logs.RtuService.ToInt(), $"config file: {configFile}");
         return Task.CompletedTask;
     }
 
