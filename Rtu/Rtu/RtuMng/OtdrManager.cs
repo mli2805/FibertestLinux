@@ -68,13 +68,13 @@ public partial class OtdrManager
         var destinationPath = Path.Combine(_iitOtdrFolder, @"etc");
         if (!Directory.Exists(destinationPath))
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Can't work without <{destinationPath}> folder!");
+            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't work without <{destinationPath}> folder!");
             return false;
         }
         var sourcePath = Path.Combine(_iitOtdrFolder, "etc_default");
         if (!Directory.Exists(sourcePath))
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Can't work without <{sourcePath}> folder!");
+            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't work without <{sourcePath}> folder!");
             return false;
         }
         var files = Directory.GetFiles(sourcePath);
@@ -84,6 +84,7 @@ public partial class OtdrManager
             var destFile = Path.Combine(destinationPath, sourceFile);
             File.Copy(file, destFile, true);
         }
+        _logger.LLog(Logs.RtuManager.ToInt(), "ETC folder restored successfully!");
         return true;
     }
 
