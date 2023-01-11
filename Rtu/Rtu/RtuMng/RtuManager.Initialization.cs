@@ -9,10 +9,11 @@ public partial class RtuManager
 {
     public async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto? dto = null)
     {
+        // prohibit to send heartbeats
+        ShouldSendHeartbeat.TryDequeue(out _);
+
         if (dto != null)
-        {
             SaveInitializationParameters(dto);
-        }
 
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -34,7 +35,7 @@ public partial class RtuManager
 
         result.Version = version;
         result.Version2 = "";
-          
+
         var result2 = dto != null
             ? await ReInitializeOtauOnUsersRequest(dto, result)
             : await InitializeOtau(result); // on service or module restart
@@ -52,13 +53,16 @@ public partial class RtuManager
         _monitoringQueue.Load();
         EvaluateFrequencies();
 
-        _recoveryConfig.Update(c=>c.RecoveryStep = RecoveryStep.Ok);
+        _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.Ok);
 
         if (!_monitoringConfig.Value.IsMonitoringOn)
         {
             _logger.LLog(Logs.RtuManager.ToInt(), "RTU is in MANUAL mode, disconnect OTDR");
             var unused = await _otdrManager.DisconnectOtdr();
         }
+
+        // permit to send heartbeats
+        ShouldSendHeartbeat.Enqueue(new object());
 
         return result2;
     }
@@ -72,11 +76,11 @@ public partial class RtuManager
 
     private void SaveInitializationParameters(InitializeRtuDto dto)
     {
-        _rtuGeneralConfig.Update(c=>c.RtuId = dto.RtuId);
-        _rtuGeneralConfig.Update(c=>c.RtuId = dto.RtuId);
-        _rtuGeneralConfig.Update(c=>c.ServerAddress = dto.ServerAddresses!);
+        _rtuGeneralConfig.Update(c => c.RtuId = dto.RtuId);
+        _rtuGeneralConfig.Update(c => c.RtuId = dto.RtuId);
+        _rtuGeneralConfig.Update(c => c.ServerAddress = dto.ServerAddresses!);
 
-        _monitoringConfig.Update(c=>c.IsMonitoringOn = false);
+        _monitoringConfig.Update(c => c.IsMonitoringOn = false);
         _logger.EmptyAndLog(Logs.RtuManager.ToInt(), "Initialization by the USER puts RTU into MANUAL mode.");
     }
 

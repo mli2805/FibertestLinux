@@ -10,16 +10,22 @@ namespace Fibertest.Rtu;
 
 public class HeartbeatService : BackgroundService
 {
+    private static readonly JsonSerializerSettings JsonSerializerSettings =
+        new() { TypeNameHandling = TypeNameHandling.All };
     private readonly IWritableOptions<RtuGeneralConfig> _config;
     private readonly ILogger<HeartbeatService> _logger;
+    private readonly RtuManager _rtuManager;
 
     private string _version = "";
     private bool _isLastAttemptSuccessful;
+    private bool _initializationInProgress;
 
-    public HeartbeatService(IWritableOptions<RtuGeneralConfig> config, ILogger<HeartbeatService> logger)
+    public HeartbeatService(IWritableOptions<RtuGeneralConfig> config, ILogger<HeartbeatService> logger,
+        RtuManager rtuManager)
     {
         _config = config;
         _logger = logger;
+        _rtuManager = rtuManager;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -43,6 +49,16 @@ public class HeartbeatService : BackgroundService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                while (!_rtuManager.ShouldSendHeartbeat.TryPeek(out object? _))
+                {
+                    if (!_initializationInProgress)
+                        _logger.LLog(Logs.RtuService.ToInt(), "Heartbeats are suspended during RTU initialization.");
+
+                    _initializationInProgress = true;
+                    Thread.Sleep(3000);
+                }
+
+                _initializationInProgress = false;
                 _isLastAttemptSuccessful = await SendHeartbeat();
 
                 var rtuHeartbeatRate = _config.Value.RtuHeartbeatRate == 0 ? 30 : _config.Value.RtuHeartbeatRate;
@@ -55,14 +71,12 @@ public class HeartbeatService : BackgroundService
         }
     }
 
-    private static readonly JsonSerializerSettings JsonSerializerSettings =
-        new() { TypeNameHandling = TypeNameHandling.All };
     private async Task<bool> SendHeartbeat()
     {
         try
         {
             var serverAddress = _config.Value.ServerAddress;
-               
+
             var dto = new RtuChecksChannelDto(_config.Value.RtuId, _version, true);
             var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
@@ -70,7 +84,7 @@ public class HeartbeatService : BackgroundService
             _logger.LLog(Logs.RtuService.ToInt(), "SendHeartbeat: " + dcUri);
             using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
             var grpcClient = new R2D.R2DClient(grpcChannelDc);
-              
+
             R2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
             if (!_isLastAttemptSuccessful)
                 _logger.LLog(Logs.RtuService.ToInt(), $"Got gRPC response {response.Json} from Data Center");

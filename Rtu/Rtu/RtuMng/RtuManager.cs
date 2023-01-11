@@ -1,4 +1,5 @@
-﻿using Fibertest.Dto;
+﻿using System.Collections.Concurrent;
+using Fibertest.Dto;
 using Fibertest.Utils;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -28,6 +29,7 @@ public partial class RtuManager
 
     private CancellationTokenSource? _cancellationTokenSource;
     private MonitoringQueue _monitoringQueue;
+    public readonly ConcurrentQueue<object> ShouldSendHeartbeat = new ConcurrentQueue<object>();
 
     public RtuManager(IOptions<CharonConfig> fullConfig, IWritableOptions<RtuGeneralConfig> rtuGeneralConfig,
         IWritableOptions<MonitoringConfig> monitoringConfig, IWritableOptions<RecoveryConfig> recoveryConfig,
