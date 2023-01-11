@@ -9,7 +9,7 @@ public static class FileOperations
     {
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
         var assemblyPath = Path.GetDirectoryName(assemblyLocation)!;
-        return Directory.GetParent(assemblyPath)!.Name;
+        return Directory.GetParent(assemblyPath)!.FullName;
     }
 
     public static bool DirectoryCopyWithDecorations(string sourceDirName, string destDirName,
