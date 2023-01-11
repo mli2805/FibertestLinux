@@ -105,7 +105,7 @@ public partial class Charon
                 }
                 else
                 {
-                    childCharon.Serial = childSerial.Substring(0, childSerial.Length - Environment.NewLine.Length);
+                    childCharon.Serial = childSerial.Substring(0, childSerial.Length - 2);
                     if (childCharon.InitializeOtauRecursively() != null)
                     {
                         _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectBop);
@@ -122,8 +122,6 @@ public partial class Charon
                 RewriteIni(extendedPorts);
         }
         _logger.LLog(Logs.RtuManager.ToInt(), $"Full port count  {FullPortCount}");
-        _logger.LLog(Logs.RtuManager.ToInt(), "");
-        _logger.LLog(Logs.RtuManager.ToInt(), $"{Serial}");
         _logger.LLog(Logs.RtuManager.ToInt(), $"OTAU {Serial} initialized successfully.   {OwnPortCount}/{FullPortCount}.");
         return null;
     }

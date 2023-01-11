@@ -7,7 +7,7 @@ sudo systemctl stop Dc.service
 echo "сервис остановлен"
 sleep 1s
 
-cp * /var/fibertest/datacenter/
+cp -r * /var/fibertest/datacenter/
 cd /var/fibertest/datacenter
 sudo chmod a+rw dc.json
 echo "файлы скопированы"
