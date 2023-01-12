@@ -59,7 +59,7 @@ public class MonitoringQueue
     public void Load()
     {
         _logger.TimestampWithoutMessage(Logs.RtuManager);
-        _logger.LLog(Logs.RtuManager, "Monitoring queue assembling...");
+        _logger.LogInfo(Logs.RtuManager, "Monitoring queue assembling...");
         Queue = new Queue<MonitoringPort>();
 
         try
@@ -81,7 +81,7 @@ public class MonitoringQueue
             _logger.LogError(Logs.RtuManager, $"Queue parsing: {e.Message}");
         }
 
-        _logger.LLog(Logs.RtuManager, $"{Queue.Count} port(s) in queue.");
+        _logger.LogInfo(Logs.RtuManager, $"{Queue.Count} port(s) in queue.");
     }
 
     public void Save()

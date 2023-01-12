@@ -54,7 +54,7 @@ public class LastConnectionTimeChecker : BackgroundService
     {
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.LLog(Logs.DataCenter, $"Last connection checker started. Process {pid}, thread {tid}");
+        _logger.LogInfo(Logs.DataCenter, $"Last connection checker started. Process {pid}, thread {tid}");
         await DoWork(stoppingToken);
     }
 
@@ -114,7 +114,7 @@ public class LastConnectionTimeChecker : BackgroundService
                 changedStations.Add(rtuStation);
                 networkEvents.Add(networkEvent);
                 _snmpNotifier.SendRtuNetworkEvent(networkEvent);
-                _logger.LLog(Logs.DataCenter, $"{networkEvent}");
+                _logger.LogInfo(Logs.DataCenter, $"{networkEvent}");
             }
         }
         if (changedStations.Count > 0)
@@ -145,7 +145,7 @@ public class LastConnectionTimeChecker : BackgroundService
         {
             rtuStation.IsReserveAddressOkDuePreviousCheck = false;
             networkEvent.OnReserveChannel = ChannelEvent.Broken;
-            _logger.LLog(Logs.DataCenter, $"RTU \"{rtuTitle}\" Reserve channel - Broken");
+            _logger.LogInfo(Logs.DataCenter, $"RTU \"{rtuTitle}\" Reserve channel - Broken");
             await _smtpNotifier.SendNetworkEvent(rtuStation.RtuGuid, false, false);
             // _smsManager.SendNetworkEvent(rtuStation.RtuGuid, false, false);
             return true;
@@ -156,7 +156,7 @@ public class LastConnectionTimeChecker : BackgroundService
         {
             rtuStation.IsReserveAddressOkDuePreviousCheck = true;
             networkEvent.OnReserveChannel = ChannelEvent.Repaired;
-            _logger.LLog(Logs.DataCenter, $"RTU \"{rtuTitle}\" Reserve channel - Recovered");
+            _logger.LogInfo(Logs.DataCenter, $"RTU \"{rtuTitle}\" Reserve channel - Recovered");
             await _smtpNotifier.SendNetworkEvent(rtuStation.RtuGuid, false, true);
             // _smsManager.SendNetworkEvent(rtuStation.RtuGuid, false, true);
             return true;
@@ -173,7 +173,7 @@ public class LastConnectionTimeChecker : BackgroundService
         {
             rtuStation.IsMainAddressOkDuePreviousCheck = false;
             networkEvent.OnMainChannel = ChannelEvent.Broken;
-            _logger.LLog(Logs.DataCenter, $"RTU \"{rtuTitle}\" Main channel - Broken");
+            _logger.LogInfo(Logs.DataCenter, $"RTU \"{rtuTitle}\" Main channel - Broken");
             await _smtpNotifier.SendNetworkEvent(rtuStation.RtuGuid, true, false);
             // _smsManager.SendNetworkEvent(rtuStation.RtuGuid, true, false);
             return true;
@@ -183,7 +183,7 @@ public class LastConnectionTimeChecker : BackgroundService
         {
             rtuStation.IsMainAddressOkDuePreviousCheck = true;
             networkEvent.OnMainChannel = ChannelEvent.Repaired;
-            _logger.LLog(Logs.DataCenter, $"RTU \"{rtuTitle}\" Main channel - Recovered");
+            _logger.LogInfo(Logs.DataCenter, $"RTU \"{rtuTitle}\" Main channel - Recovered");
             await _smtpNotifier.SendNetworkEvent(rtuStation.RtuGuid, true, true);
             // _smsManager.SendNetworkEvent(rtuStation.RtuGuid, true, true);
             return true;

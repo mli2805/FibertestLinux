@@ -37,8 +37,8 @@ public class HeartbeatService : BackgroundService
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
         _version = info.FileVersion ?? "Unknown";
 
-        _logger.LLog(Logs.RtuService, $"RTU heartbeat service started. Process {pid}, thread {tid}");
-        _logger.LLog(Logs.RtuService,
+        _logger.LogInfo(Logs.RtuService, $"RTU heartbeat service started. Process {pid}, thread {tid}");
+        _logger.LogInfo(Logs.RtuService,
             $"Server address is {_config.Value.ServerAddress.Main.ToStringA()}");
         await DoWork(stoppingToken);
     }
@@ -52,7 +52,7 @@ public class HeartbeatService : BackgroundService
                 while (!_rtuManager.ShouldSendHeartbeat.TryPeek(out object? _))
                 {
                     if (!_initializationInProgress)
-                        _logger.LLog(Logs.RtuService, "Heartbeats are suspended during RTU initialization.");
+                        _logger.LogInfo(Logs.RtuService, "Heartbeats are suspended during RTU initialization.");
 
                     _initializationInProgress = true;
                     Thread.Sleep(3000);
@@ -81,15 +81,15 @@ public class HeartbeatService : BackgroundService
             var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
             var dcUri = $"http://{serverAddress.Main.ToStringA()}";
-            _logger.LLog(Logs.RtuService, "SendHeartbeat: " + dcUri);
+            _logger.LogInfo(Logs.RtuService, "SendHeartbeat: " + dcUri);
             using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
             var grpcClient = new R2D.R2DClient(grpcChannelDc);
 
             R2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
             if (!_isLastAttemptSuccessful)
-                _logger.LLog(Logs.RtuService, $"Got gRPC response {response.Json} from Data Center");
+                _logger.LogInfo(Logs.RtuService, $"Got gRPC response {response.Json} from Data Center");
             else
-                _logger.LLog(Logs.RtuService, $"RTU heartbeat sent by gRPC channel {dcUri}");
+                _logger.LogInfo(Logs.RtuService, $"RTU heartbeat sent by gRPC channel {dcUri}");
 
             return true;
         }

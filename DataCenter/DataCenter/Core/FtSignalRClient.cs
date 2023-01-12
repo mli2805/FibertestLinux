@@ -44,7 +44,7 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
                         clientHandler.ServerCertificateCustomValidationCallback +=
                             (_, _, _, sslPolicyErrors) =>
                             {
-                                _logger.LLog(Logs.DataCenter, $"Negotiation with server returns sslPolicyErrors: {sslPolicyErrors}");
+                                _logger.LogInfo(Logs.DataCenter, $"Negotiation with server returns sslPolicyErrors: {sslPolicyErrors}");
                                 return true;
                             };
                     return message;
@@ -56,14 +56,14 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
         {
             if (error != null)
                 _logger.LogError(Logs.DataCenter, $"FtSignalRClient connection was closed: {error.Message}");
-            //                _logger.LLog(Logs.DataCenter, "FtSignalRClient connection was closed.");
+            //                _logger.LogInfo(Logs.DataCenter, "FtSignalRClient connection was closed.");
             await Task.Delay(1);
         };
 
         _connection.On<string>("NotifyServer", connId =>
         {
             ServerConnectionId = connId;
-            //                _logger.LLog(Logs.DataCenter, $"NotifyServer returned id {connId}");
+            //                _logger.LogInfo(Logs.DataCenter, $"NotifyServer returned id {connId}");
         });
     }
 
@@ -79,12 +79,12 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
             {
                 var unused = _connection.InvokeAsync("NotifyAll", eventType, dataInJson);
                 if (eventType != "NotifyMonitoringStep" && eventType != "NudgeSignalR") // too many
-                    _logger.LLog(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} sent successfully.");
+                    _logger.LogInfo(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} sent successfully.");
             }
         }
         catch (Exception ex)
         {
-            _logger.LLog(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} " + ex.Message);
+            _logger.LogInfo(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} " + ex.Message);
         }
     }
 
@@ -98,7 +98,7 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
             if (_connection != null && isConnected)
             {
                 var unused = _connection.InvokeAsync("SendToOne", connectionId, eventType, dataInJson);
-                _logger.LLog(Logs.DataCenter, $"FtSignalRClient: {eventType} sent successfully.");
+                _logger.LogInfo(Logs.DataCenter, $"FtSignalRClient: {eventType} sent successfully.");
             }
         }
         catch (Exception ex)
@@ -131,7 +131,7 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
         if (!_isWebApiInstalled) return false;
         if (_connection == null)
         {
-            if (isLog) _logger.LLog(Logs.DataCenter, $"Build signalR connection to {_webApiUrl}");
+            if (isLog) _logger.LogInfo(Logs.DataCenter, $"Build signalR connection to {_webApiUrl}");
             try
             {
                 Build();
@@ -142,13 +142,13 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
                 return false;
             }
             if (_connection != null && isLog) 
-                _logger.LLog(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
+                _logger.LogInfo(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
             await Task.Delay(500);
         }
 
         if (_connection != null && _connection.State != HubConnectionState.Connected)
         {
-            if (isLog) _logger.LLog(Logs.DataCenter, $"Start signalR connection to {_webApiUrl}");
+            if (isLog) _logger.LogInfo(Logs.DataCenter, $"Start signalR connection to {_webApiUrl}");
             try
             {
                 await _connection.StartAsync();
@@ -159,7 +159,7 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
                 _connection = null;
                 return false;
             }
-            if (isLog) _logger.LLog(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
+            if (isLog) _logger.LogInfo(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
             await Task.Delay(500);
         }
 

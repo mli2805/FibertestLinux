@@ -24,8 +24,8 @@ public partial class RtuManager
                 return recoveryResult.ReturnCode; // Reset Charon
             case RecoveryStep.ResetArpAndCharon:
                 _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.RestartService);
-                _logger.LLog(Logs.RtuManager, "Recovery procedure: Exit rtu service.");
-                _logger.LLog(Logs.RtuService, "Recovery procedure: Exit rtu service.");
+                _logger.LogInfo(Logs.RtuManager, "Recovery procedure: Exit rtu service.");
+                _logger.LogInfo(Logs.RtuService, "Recovery procedure: Exit rtu service.");
                 Environment.FailFast("Recovery procedure: Exit rtu service.");
                 // ReSharper disable once HeuristicUnreachableCode
                 return ReturnCode.Ok;
@@ -35,8 +35,8 @@ public partial class RtuManager
                 {
                     _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.RebootPc);
                     var delay = _recoveryConfig.Value.RebootSystemDelay;
-                    _logger.LLog(Logs.RtuManager, "Recovery procedure: Reboot system.");
-                    _logger.LLog(Logs.RtuService, "Recovery procedure: Reboot system.");
+                    _logger.LogInfo(Logs.RtuManager, "Recovery procedure: Reboot system.");
+                    _logger.LogInfo(Logs.RtuService, "Recovery procedure: Reboot system.");
                     RestoreFunctions.RebootSystem(_logger, delay);
                     Thread.Sleep(TimeSpan.FromSeconds(delay + 5));
                     return ReturnCode.Ok;
@@ -79,8 +79,8 @@ public partial class RtuManager
                 IsOk = false
             });
 
-        _logger.LLog(Logs.RtuService, $"Mikrotik {damagedOtau.Ip} reboot N{damagedOtau.RebootAttempts}");
-        _logger.LLog(Logs.RtuManager, $"Reboot attempt N{damagedOtau.RebootAttempts}");
+        _logger.LogInfo(Logs.RtuService, $"Mikrotik {damagedOtau.Ip} reboot N{damagedOtau.RebootAttempts}");
+        _logger.LogInfo(Logs.RtuManager, $"Reboot attempt N{damagedOtau.RebootAttempts}");
         var connectionTimeout = _fullConfig.Value.ConnectionTimeout;
         try
         {

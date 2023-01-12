@@ -53,7 +53,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
                 .UsingCustomSerialization(_mySerializer)
                 .Build();
 
-            _logger.LLog(Logs.DataCenter,
+            _logger.LogInfo(Logs.DataCenter,
                 $"Events store: MYSQL=localhost:{_mysqlTcpPort}   Database={EventSourcingScheme}");
 
             InitializeDataDir();
@@ -74,7 +74,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         DataDir = (string)(command.ExecuteScalar() ?? 0);
         connection.Close();
         Thread.Sleep(TimeSpan.FromMilliseconds(100));
-        _logger.LLog(Logs.DataCenter, $"MySQL data folder is {DataDir}");
+        _logger.LogInfo(Logs.DataCenter, $"MySQL data folder is {DataDir}");
     }
 
     public int OptimizeSorFilesTable()

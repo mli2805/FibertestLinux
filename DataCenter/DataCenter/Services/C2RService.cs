@@ -38,7 +38,7 @@ public class C2RService : c2r.c2rBase
             if (client == null)
                 return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
 
-            _logger.LLog(Logs.DataCenter,
+            _logger.LogInfo(Logs.DataCenter,
                 $"Client {client} sent {request.What} RTU {request.RtuId.First6()} request");
 
             if (!_rtuOccupations.TrySetOccupation(

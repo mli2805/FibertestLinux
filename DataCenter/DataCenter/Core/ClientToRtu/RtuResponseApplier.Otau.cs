@@ -14,7 +14,7 @@ public partial class RtuResponseApplier
             var res = await _responseToEventSourcing.ApplyOtauAttachmentResult(dto, result);
             if (res == null)
                 await _ftSignalRClient.NotifyAll("FetchTree", null);
-            _logger.LLog(Logs.DataCenter, "OTAU attached successfully.");
+            _logger.LogInfo(Logs.DataCenter, "OTAU attached successfully.");
         }
         else
             _logger.LogError(Logs.DataCenter, "Failed to attach OTAU!");
@@ -31,7 +31,7 @@ public partial class RtuResponseApplier
             var res = await _responseToEventSourcing.ApplyOtauDetachmentResult(dto);
             if (res == null)
                 await _ftSignalRClient.NotifyAll("FetchTree", null);
-            _logger.LLog(Logs.DataCenter, "OTAU detached successfully.");
+            _logger.LogInfo(Logs.DataCenter, "OTAU detached successfully.");
         }
         else
             _logger.LogError(Logs.DataCenter, "Failed to detach OTAU!");

@@ -31,7 +31,7 @@ public class C2DService : c2d.c2dBase
         {
             if (command.IsEventSourcingCommand)
             {
-                _logger.LLog(Logs.DataCenter, "Event sourcing command");
+                _logger.LogInfo(Logs.DataCenter, "Event sourcing command");
                 var cmd = JsonConvert.DeserializeObject(command.Json, JsonSerializerSettings);
                 if (cmd == null)
                     return CreateBadResponse(ReturnCode.FailedDeserializeJson);
@@ -55,7 +55,7 @@ public class C2DService : c2d.c2dBase
                 if (client == null)
                     return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
             }
-            _logger.LLog(Logs.DataCenter, $"Client sent {request.What} request");
+            _logger.LogInfo(Logs.DataCenter, $"Client sent {request.What} request");
               
             var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);
             return new c2dResponse { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };

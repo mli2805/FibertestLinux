@@ -31,7 +31,7 @@ public partial class Charon
 
     public CharonOperationResult SetExtendedActivePort(string serial, int port)
     {
-        _logger.LLog(Logs.RtuManager, $"Toggling to port {port} on {serial}...");
+        _logger.LogInfo(Logs.RtuManager, $"Toggling to port {port} on {serial}...");
         if (Serial == serial)
             return SetActivePortOnMainCharon(port);
         else
@@ -53,7 +53,7 @@ public partial class Charon
         if (activePort == port)
             return CharonOperationResult.Ok;
 
-        _logger.LLog(Logs.RtuManager, "Toggling second attempt...");
+        _logger.LogInfo(Logs.RtuManager, "Toggling second attempt...");
         activePort = SetActivePort(port);
         if (activePort == port)
             return CharonOperationResult.Ok;
@@ -87,7 +87,7 @@ public partial class Charon
         if (activePort == port)
             return CharonOperationResult.Ok;
 
-        _logger.LLog(Logs.RtuManager, "Toggling second attempt...");
+        _logger.LogInfo(Logs.RtuManager, "Toggling second attempt...");
         activePort = charon.SetActivePort(port);
         if (activePort == port)
             return CharonOperationResult.Ok;

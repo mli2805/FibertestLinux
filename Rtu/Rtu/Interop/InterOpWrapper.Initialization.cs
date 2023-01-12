@@ -31,7 +31,7 @@ public partial class InterOpWrapper
             var creationTime = File.GetLastWriteTime(iitOtdrLib);
             var version = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
 
-            _logger.LLog(Logs.RtuManager, $"Iit_otdr.so {version} loaded successfully.");
+            _logger.LogInfo(Logs.RtuManager, $"Iit_otdr.so {version} loaded successfully.");
         }
         catch (Exception e)
         {
@@ -55,7 +55,7 @@ public partial class InterOpWrapper
             if (initOtdr == 0)
             {
                 var word1 = type == ConnectionTypes.FreePort ? "disconnected" : "connected";
-                _logger.LLog(Logs.RtuManager, $"OTDR {word1} successfully!");
+                _logger.LogInfo(Logs.RtuManager, $"OTDR {word1} successfully!");
                 return true;
             }
 

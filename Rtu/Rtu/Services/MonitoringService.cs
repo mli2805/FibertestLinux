@@ -19,7 +19,7 @@ public class MonitoringService : BackgroundService
     {
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.LLog(Logs.RtuManager, $"RTU monitoring service started. Process {pid}, thread {tid}");
+        _logger.LogInfo(Logs.RtuManager, $"RTU monitoring service started. Process {pid}, thread {tid}");
             
         await DoWork(stoppingToken);
     }

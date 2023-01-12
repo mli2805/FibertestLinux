@@ -24,7 +24,7 @@ public class RtuStationsRepository
             if (previousRtuStationRow == null)
             {
                 dbContext.RtuStations.Add(rtuStation);
-                _logger.LLog(Logs.DataCenter, 
+                _logger.LogInfo(Logs.DataCenter, 
                     $"RtuStation {rtuStation.RtuGuid.First6()} successfully registered with main address {rtuStation.MainAddress}.");
             }
             else
@@ -35,7 +35,7 @@ public class RtuStationsRepository
                 previousRtuStationRow.IsReserveAddressSet = rtuStation.IsReserveAddressSet;
                 previousRtuStationRow.ReserveAddress = rtuStation.ReserveAddress;
                 previousRtuStationRow.ReserveAddressPort = rtuStation.ReserveAddressPort;
-                _logger.LLog(Logs.DataCenter, 
+                _logger.LogInfo(Logs.DataCenter, 
                     $"RtuStation {rtuStation.RtuGuid.First6()} successfully updated.");
             }
 
@@ -58,12 +58,12 @@ public class RtuStationsRepository
             {
                 dbContext.RtuStations.Remove(rtu);
                 await dbContext.SaveChangesAsync();
-                _logger.LLog(Logs.DataCenter, "RTU removed.");
+                _logger.LogInfo(Logs.DataCenter, "RTU removed.");
                 return null;
             }
 
             var message = $"RTU with id {rtuId.First6()} not found";
-            _logger.LLog(Logs.DataCenter, message);
+            _logger.LogInfo(Logs.DataCenter, message);
             return message;
         }
         catch (Exception e)
@@ -82,7 +82,7 @@ public class RtuStationsRepository
             if (rtu != null)
                 return rtu.GetRtuDoubleAddress();
 
-            _logger.LLog(Logs.DataCenter, $"RTU with id {rtuId.First6()} not found");
+            _logger.LogInfo(Logs.DataCenter, $"RTU with id {rtuId.First6()} not found");
             return null;
         }
         catch (Exception e)
@@ -100,7 +100,7 @@ public class RtuStationsRepository
             var rtu = dbContext.RtuStations.FirstOrDefault(r => r.RtuGuid == dto.RtuId);
             if (rtu == null)
             {
-                _logger.LLog(Logs.DataCenter, $"Unknown RTU's {dto.RtuId.First6()} heartbeat.");
+                _logger.LogInfo(Logs.DataCenter, $"Unknown RTU's {dto.RtuId.First6()} heartbeat.");
             }
             else
             {
@@ -127,7 +127,7 @@ public class RtuStationsRepository
             {
                 var rtu = await dbContext.RtuStations.FirstOrDefaultAsync(r => r.RtuGuid == rtuId);
                 if (rtu != null) return true;
-                _logger.LLog(Logs.DataCenter, $"Unknown RTU {rtuId.First6()}");
+                _logger.LogInfo(Logs.DataCenter, $"Unknown RTU {rtuId.First6()}");
                 return false;
             }
         }

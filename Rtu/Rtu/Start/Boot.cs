@@ -26,19 +26,19 @@ public sealed class Boot : IHostedService
 
         _logger.StartLine(Logs.RtuService);
         _logger.StartLine(Logs.RtuManager);
-        _logger.LLog(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
-        _logger.LLog(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
+        _logger.LogInfo(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
+        _logger.LogInfo(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
 
         var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
-        _logger.LLog(Logs.RtuService, $"config file: {configFile}");
-        _logger.LLog(Logs.RtuService, 
+        _logger.LogInfo(Logs.RtuService, $"config file: {configFile}");
+        _logger.LogInfo(Logs.RtuService, 
             $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");
         return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LLog(Logs.RtuService, "Leave Fibertest RTU service");
+        _logger.LogInfo(Logs.RtuService, "Leave Fibertest RTU service");
         return Task.CompletedTask;
     }
 }

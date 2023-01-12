@@ -44,7 +44,7 @@ public class SnmpAgent
                 (int)trapType, // my trap type 
                 12345678, // system UpTime in 0,1sec
                 trapData);
-            _logger.LLog(Logs.DataCenter, "SendSnmpV1Trap sent.");
+            _logger.LogInfo(Logs.DataCenter, "SendSnmpV1Trap sent.");
             return true;
         }
         catch (Exception e)
@@ -65,7 +65,7 @@ public class SnmpAgent
                 upTime,
                 trapObjOid,
                 trapData);
-            _logger.LLog(Logs.DataCenter, "SendSnmpV2Trap sent.");
+            _logger.LogInfo(Logs.DataCenter, "SendSnmpV2Trap sent.");
             return true;
         }
         catch (Exception e)
