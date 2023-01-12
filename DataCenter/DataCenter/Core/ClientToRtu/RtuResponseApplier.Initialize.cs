@@ -1,5 +1,6 @@
 ﻿using Fibertest.Dto;
 using Fibertest.Utils;
+using Newtonsoft.Json;
 
 namespace Fibertest.DataCenter;
 
@@ -30,7 +31,7 @@ public partial class RtuResponseApplier
         else
             _logger.LogError(Logs.DataCenter, "Failed to initialize RTU!");
 
-        return jsonResult;
+        return JsonConvert.SerializeObject(result, JsonSerializerSettings);
     }
 
     private static RtuStation CreateRtuStation(RtuInitializedDto dto)

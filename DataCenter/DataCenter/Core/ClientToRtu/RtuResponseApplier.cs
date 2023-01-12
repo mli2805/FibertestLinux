@@ -1,4 +1,5 @@
 ﻿using Fibertest.Dto;
+using Fibertest.Graph;
 using Newtonsoft.Json;
 
 namespace Fibertest.DataCenter;
@@ -9,14 +10,19 @@ public partial class RtuResponseApplier
         new() { TypeNameHandling = TypeNameHandling.All };
 
     private readonly ILogger<RtuResponseApplier> _logger;
+    private readonly Model _writeModel;
+    private readonly SorFileRepository _sorFileRepository;
     private readonly RtuStationsRepository _rtuStationsRepository;
     private readonly RtuResponseToEventSourcing _responseToEventSourcing;
     private readonly IFtSignalRClient _ftSignalRClient;
 
-    public RtuResponseApplier(ILogger<RtuResponseApplier> logger, RtuStationsRepository rtuStationsRepository,
+    public RtuResponseApplier(ILogger<RtuResponseApplier> logger, Model writeModel,
+        SorFileRepository sorFileRepository, RtuStationsRepository rtuStationsRepository,
         RtuResponseToEventSourcing responseToEventSourcing, IFtSignalRClient ftSignalRClient)
     {
         _logger = logger;
+        _writeModel = writeModel;
+        _sorFileRepository = sorFileRepository;
         _rtuStationsRepository = rtuStationsRepository;
         _responseToEventSourcing = responseToEventSourcing;
         _ftSignalRClient = ftSignalRClient;

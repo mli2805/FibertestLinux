@@ -25,4 +25,10 @@
 		<ProjectReference Include="..\Utils\Utils.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="Fibertest.OtdrDataFormat">
+	    <HintPath>..\..\OtdrDataFormat\Fibertest.OtdrDataFormat.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Fibertest.Dto;
+using Fibertest.OtdrDataFormat;
 using Fibertest.StringResources;
 
 namespace Fibertest.Graph;
@@ -115,27 +116,27 @@ public static class EquipmentTypeExt
     }
 
 
-    //public static LandmarkCode ToLandmarkCode(this EquipmentType type)
-    //{
-    //    switch (type)
-    //    {
-    //        case EquipmentType.EmptyNode:
-    //            return LandmarkCode.Manhole;
-    //        case EquipmentType.Other:
-    //            return LandmarkCode.Other;
-    //        case EquipmentType.Closure:
-    //            return LandmarkCode.Coupler;
-    //        case EquipmentType.Cross:
-    //            return LandmarkCode.WiringCloset;
-    //        case EquipmentType.CableReserve:
-    //            return LandmarkCode.CableSlackLoop;
-    //        case EquipmentType.Terminal:
-    //            return LandmarkCode.RemoteTerminal;
+    public static LandmarkCode ToLandmarkCode(this EquipmentType type)
+    {
+        switch (type)
+        {
+            case EquipmentType.EmptyNode:
+                return LandmarkCode.Manhole;
+            case EquipmentType.Other:
+                return LandmarkCode.Other;
+            case EquipmentType.Closure:
+                return LandmarkCode.Coupler;
+            case EquipmentType.Cross:
+                return LandmarkCode.WiringCloset;
+            case EquipmentType.CableReserve:
+                return LandmarkCode.CableSlackLoop;
+            case EquipmentType.Terminal:
+                return LandmarkCode.RemoteTerminal;
 
-    //        case EquipmentType.Rtu:
-    //            return LandmarkCode.FiberDistributingFrame;
-    //    }
+            case EquipmentType.Rtu:
+                return LandmarkCode.FiberDistributingFrame;
+        }
 
-    //    return LandmarkCode.Other;
-    //}
+        return LandmarkCode.Other;
+    }
 }

@@ -45,7 +45,9 @@ public class C2RService : c2r.c2rBase
                     request.RtuId, request.Why, client.UserName, out RtuOccupationState? currentState))
                 return CreateBadResponse(ReturnCode.RtuIsBusy, currentState);
 
+            ////////////////////////////////////////////////////////////////////////////
             var responseJson = await _c2RCommandsProcessor.SendCommand(request);
+            ////////////////////////////////////////////////////////////////////////////
 
             _rtuOccupations.TrySetOccupation(request.RtuId, RtuOccupation.None, client.UserName, out RtuOccupationState? _);
 

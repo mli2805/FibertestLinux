@@ -30,9 +30,8 @@ public class ClientToIitRtuTransmitter
         try
         {
             d2rResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
-            _logger.LogDebug(Logs.DataCenter, "Got gRPC response from RTU");
+            _logger.LogDebug(Logs.DataCenter, $"Got gRPC response from RTU: {response.Json}");
             return response.Json;
-
         }
         catch (Exception e)
         {
