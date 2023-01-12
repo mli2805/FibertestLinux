@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using Fibertest.Utils.Setup;
 
 namespace Fibertest.Rtu;
 
@@ -9,27 +10,33 @@ public partial class RtuManager
     public async Task<BaseRefAssignedDto> SaveBaseRefs(AssignBaseRefsDto dto)
     {
         await Task.Delay(1);
-        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var assemblyPath = Path.GetDirectoryName(assemblyLocation)!;
-        var fibertestPath = Directory.GetParent(assemblyPath)!.Name;
-        var portDataFolder = Path.Combine(fibertestPath, @"PortData");
-
-        if (!Directory.Exists(portDataFolder))
+        try
         {
-            Directory.CreateDirectory(portDataFolder);
-            _logger.LogInfo(Logs.RtuService, $"Created: {portDataFolder}");
-        }
+            var fibertestPath = FileOperations.GetFibertestFolder();
+            var portDataFolder = Path.Combine(fibertestPath, @"PortData");
 
-        var portFolder = portDataFolder + $"/{dto.OtauPortDto!.Serial}p{dto.OtauPortDto!.OpticalPort:000}";
-        if (!Directory.Exists(portFolder))
+            if (!Directory.Exists(portDataFolder))
+            {
+                Directory.CreateDirectory(portDataFolder);
+                _logger.LogInfo(Logs.RtuService, $"Created: {portDataFolder}");
+            }
+
+            var portFolder = portDataFolder + $"/{dto.OtauPortDto!.Serial}p{dto.OtauPortDto!.OpticalPort:000}";
+            if (!Directory.Exists(portFolder))
+            {
+                Directory.CreateDirectory(portFolder);
+                _logger.LogInfo(Logs.RtuService, $"Created: {portFolder}");
+            }
+
+            foreach (var baseRef in dto.BaseRefs)
+                RemoveOldSaveNew(baseRef, portFolder);
+            return new BaseRefAssignedDto(ReturnCode.BaseRefAssignedSuccessfully);
+        }
+        catch (Exception e)
         {
-            Directory.CreateDirectory(portFolder);
-            _logger.LogInfo(Logs.RtuService, $"Created: {portFolder}");
+            _logger.LogError(Logs.RtuService, $"SaveBaseRefs: {e.Message}");
+            return new BaseRefAssignedDto(ReturnCode.BaseRefAssignmentFailed);
         }
-
-        foreach (var baseRef in dto.BaseRefs)
-            RemoveOldSaveNew(baseRef, portFolder);
-        return new BaseRefAssignedDto(ReturnCode.BaseRefAssignedSuccessfully);
     }
 
     private void RemoveOldSaveNew(BaseRefDto baseRef, string fullFolderName)
