@@ -276,11 +276,11 @@ public partial class RtuManager
 
     private void SendByMsmq(MonitoringResultDto dto)
     {
-
+        _logger.LogError(Logs.RtuManager, dto.RtuId.First6());
     }
 
     private void SendByMsmq(BopStateChangedDto dto)
     {
-
+        _logger.LogError(Logs.RtuManager, dto.RtuId.First6());
     }
 }
