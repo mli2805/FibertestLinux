@@ -59,7 +59,7 @@ public static class LoggerConfigurationFactory
                 .File(Path.Combine(logFolder, "cl-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(WithEventId(Logs.DataCenter))
+                .Filter.ByIncludingOnly(WithEventId(Logs.DataCenter.ToInt()))
                 .WriteTo
                 .File(Path.Combine(logFolder, "dc-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
@@ -69,12 +69,12 @@ public static class LoggerConfigurationFactory
                 .File(Path.Combine(logFolder, "trap-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(WithEventId(Logs.RtuService))
+                .Filter.ByIncludingOnly(WithEventId(Logs.RtuService.ToInt()))
                 .WriteTo
                 .File(Path.Combine(logFolder, "srv-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(WithEventId(Logs.RtuManager))
+                .Filter.ByIncludingOnly(WithEventId(Logs.RtuManager.ToInt()))
                 .WriteTo
                 .File(Path.Combine(logFolder, "mng-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
