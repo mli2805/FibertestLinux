@@ -8,4 +8,5 @@ public class ServerGeneralConfig
     public string PreviousStartOnVersion { get; set; } = string.Empty;
     public int GsmModemComPort { get; set; }
     public bool IsWithoutMapMode { get; set; }
+    public string LogLevel { get; set; } = "2";
 }

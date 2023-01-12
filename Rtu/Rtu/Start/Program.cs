@@ -30,7 +30,8 @@ public class Program
             .AddConfig(builder.Configuration)
             .AddDependencyGroup();
 
-        var logger = LoggerConfigurationFactory.Configure().CreateLogger();
+        var logLevel = builder.Configuration.GetSection("General")["LogLevel"];
+        var logger = LoggerConfigurationFactory.Configure(logLevel).CreateLogger();
 
         builder.Logging.ClearProviders();
         builder.Logging.AddSerilog(logger);

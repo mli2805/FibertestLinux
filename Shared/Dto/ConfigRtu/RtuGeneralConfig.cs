@@ -13,4 +13,6 @@ public class RtuGeneralConfig
 
     public int RtuPauseAfterReboot { get; set; } = 20;
     public int RtuUpTimeForAdditionalPause { get; set; } = 100;
+
+    public string LogLevel { get; set; } = "2";
 }

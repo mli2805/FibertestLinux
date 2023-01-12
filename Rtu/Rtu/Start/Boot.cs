@@ -1,16 +1,20 @@
 using System.Diagnostics;
 using System.Reflection;
+using Fibertest.Dto;
 using Fibertest.Utils;
 using Fibertest.Utils.Setup;
+using Microsoft.Extensions.Options;
 
 namespace Fibertest.Rtu;
 
 public sealed class Boot : IHostedService
 {
+    private readonly IOptions<RtuGeneralConfig> _generalConfig;
     private readonly ILogger<Boot> _logger;
 
-    public Boot(ILogger<Boot> logger)
+    public Boot(IOptions<RtuGeneralConfig> generalConfig, ILogger<Boot> logger)
     {
+        _generalConfig = generalConfig;
         _logger = logger;
     }
 
@@ -27,6 +31,8 @@ public sealed class Boot : IHostedService
 
         var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
         _logger.LLog(Logs.RtuService.ToInt(), $"config file: {configFile}");
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");
         return Task.CompletedTask;
     }
 

@@ -36,8 +36,9 @@ public class Program
             .AddConfig(builder.Configuration)
             .AddDependencies();
 
+        var logLevel = builder.Configuration.GetSection("General")["LogLevel"];
         Logger logger = LoggerConfigurationFactory
-            .Configure() // here is my configuration of log files
+            .Configure(logLevel) // here is my configuration of log files
             .CreateLogger();
 
         builder.Logging.ClearProviders();

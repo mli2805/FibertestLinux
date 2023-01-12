@@ -31,15 +31,28 @@ public static class LogsExt
 /// </summary>
 public static class LoggerConfigurationFactory
 {
-    public static LoggerConfiguration Configure()
+    public static LogEventLevel Parse(string logLevel)
+    {
+        switch (logLevel)
+        {
+            case "0" : return LogEventLevel.Fatal;
+            case "1" : return LogEventLevel.Warning;
+            case "2" : return LogEventLevel.Information;
+            case "3" : return LogEventLevel.Debug;
+            case "4" : return LogEventLevel.Verbose;
+            default: return LogEventLevel.Information;
+        }
+    }
+
+    public static LoggerConfiguration Configure(string logLevelConstant)
     {
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
         var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
         var logFolder = Path.Combine(basePath, @"../log");
 
-        var template = "[{Timestamp:HH:mm:ss} {CorrelationId} {Level:u3}] {Username} {Message:lj}{NewLine}{Exception}";
+        var template = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
         var loggerConfiguration = new LoggerConfiguration()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Is(Parse(logLevelConstant))
             .Enrich.FromLogContext()
             .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.Client.ToInt()))

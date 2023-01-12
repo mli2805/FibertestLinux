@@ -1,19 +1,21 @@
 using System.Diagnostics;
 using System.Reflection;
+using Fibertest.Dto;
 using Fibertest.Utils;
+using Microsoft.Extensions.Options;
 
 namespace Fibertest.DataCenter;
 
 public sealed class Boot : IHostedService
 {
+    private readonly IOptions<ServerGeneralConfig> _generalConfig;
     private readonly ILogger<Boot> _logger;
-    private readonly IDbInitializer _mySqlDbInitializer;
     private readonly EventStoreService _eventStoreService;
 
-    public Boot(ILogger<Boot> logger, IDbInitializer mySqlDbInitializer, EventStoreService eventStoreService)
+    public Boot(IOptions<ServerGeneralConfig> generalConfig, ILogger<Boot> logger, EventStoreService eventStoreService)
     {
+        _generalConfig = generalConfig;
         _logger = logger;
-        _mySqlDbInitializer = mySqlDbInitializer;
         _eventStoreService = eventStoreService;
     }
 
@@ -28,8 +30,9 @@ public sealed class Boot : IHostedService
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
         _logger.LLog(Logs.DataCenter.ToInt(), $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
+        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");
 
-        _logger.LLog(Logs.DataCenter.ToInt(), _mySqlDbInitializer.ConnectionLogLine);
         await _eventStoreService.InitializeBothDb();
     }
 

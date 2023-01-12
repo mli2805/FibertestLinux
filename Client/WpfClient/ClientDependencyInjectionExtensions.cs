@@ -16,7 +16,7 @@ public static class ClientDependencyInjectionExtensions
             builder.AddDebug();  // Debug.WriteLine() - see Output window
             builder.AddConsole(); // in WPF does not work !!!
             builder.AddSerilog(LoggerConfigurationFactory
-                .Configure() // here is my configuration of log files
+                .Configure("2") // here is my configuration of log files
                 .CreateLogger());
         });
 
