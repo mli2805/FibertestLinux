@@ -38,7 +38,7 @@ public class C2RService : c2r.c2rBase
             if (client == null)
                 return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
 
-            _logger.LLog(Logs.DataCenter.ToInt(),
+            _logger.LLog(Logs.DataCenter,
                 $"Client {client} sent {request.What} RTU {request.RtuId.First6()} request");
 
             if (!_rtuOccupations.TrySetOccupation(
@@ -53,7 +53,7 @@ public class C2RService : c2r.c2rBase
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), e.Message);
+            _logger.LogError(Logs.DataCenter, e.Message);
             return CreateBadResponse(ReturnCode.D2RGrpcOperationError);
         }
     }

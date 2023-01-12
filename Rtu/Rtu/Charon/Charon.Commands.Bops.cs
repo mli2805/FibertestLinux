@@ -7,7 +7,7 @@ public partial class Charon
 {
     public bool DetachOtauFromPort(int fromOpticalPort)
     {
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Detach from port {fromOpticalPort} requested...");
+        _logger.LLog(Logs.RtuManager, $"Detach from port {fromOpticalPort} requested...");
         var extPorts = GetExtendedPorts();
         if (extPorts == null)
             return false;
@@ -18,7 +18,7 @@ public partial class Charon
         if (!extPorts.ContainsKey(fromOpticalPort))
         {
             LastErrorMessage = "There is no such extended port. Nothing to do.";
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
+            _logger.LogError(Logs.RtuManager, LastErrorMessage);
             return true;
         }
 
@@ -43,7 +43,7 @@ public partial class Charon
 
     public Charon? AttachOtauToPort(NetAddress additionalOtauAddress, int toOpticalPort)
     {
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Attach {additionalOtauAddress.ToStringA()} to port {toOpticalPort} requested...");
+        _logger.LLog(Logs.RtuManager, $"Attach {additionalOtauAddress.ToStringA()} to port {toOpticalPort} requested...");
         if (!ValidateAttachCommand(additionalOtauAddress, toOpticalPort))
             return null;
         var extPorts = GetExtendedPorts();
@@ -58,11 +58,11 @@ public partial class Charon
         if (extPorts.ContainsKey(toOpticalPort))
         {
             LastErrorMessage = "This is extended port already. Denied.";
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
+            _logger.LogError(Logs.RtuManager, LastErrorMessage);
             return null;
         }
 
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Check connection with OTAU {additionalOtauAddress.ToStringA()}");
+        _logger.LLog(Logs.RtuManager, $"Check connection with OTAU {additionalOtauAddress.ToStringA()}");
         var child = new Charon(additionalOtauAddress, false, _config, _logger, _serialPort);
         if (child.InitializeOtauRecursively() != null)
         {
@@ -87,7 +87,7 @@ public partial class Charon
         if (toOpticalPort < 1 || toOpticalPort > OwnPortCount)
         {
             LastErrorMessage = $"Optical port number should be from 1 to {OwnPortCount}";
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
+            _logger.LogError(Logs.RtuManager, LastErrorMessage);
             IsLastCommandSuccessful = false;
             return false;
         }
@@ -95,7 +95,7 @@ public partial class Charon
         if (!additionalOtauAddress.HasValidTcpPort())
         {
             LastErrorMessage = "Tcp port number should be from 1 to 65355";
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
+            _logger.LogError(Logs.RtuManager, LastErrorMessage);
             IsLastCommandSuccessful = false;
             return false;
         }
@@ -103,7 +103,7 @@ public partial class Charon
         if (!additionalOtauAddress.HasValidIp4Address())
         {
             LastErrorMessage = "Invalid ip address";
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
+            _logger.LogError(Logs.RtuManager, LastErrorMessage);
             IsLastCommandSuccessful = false;
             return false;
         }

@@ -212,7 +212,7 @@ public class CommandAggregator
             if (trace == null)
             {
                 var message = $@"AddEquipmentIntoNode: Trace {traceId.First6()} not found";
-                _logger.Log(LogLevel.Error, _logF, message);
+                _logger.LogError(_logF, message);
                 return message;
             }
             if (trace.HasAnyBaseRef)
@@ -228,7 +228,7 @@ public class CommandAggregator
             if (trace == null)
             {
                 var message = $@"AddEquipmentIntoNode: Trace {traceId.First6()} not found";
-                _logger.Log(LogLevel.Error, _logF, message);
+                _logger.LogError(_logF, message);
                 return message;
             }
             var idx = trace.NodeIds.IndexOf(cmd.NodeId);

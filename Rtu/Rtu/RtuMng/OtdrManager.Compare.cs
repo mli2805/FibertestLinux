@@ -34,7 +34,7 @@ namespace Fibertest.Rtu
                     moniResult.IsNoFiber = true;
                     break;
                 default:
-                    _logger.LLog(Logs.RtuManager.ToInt(), $"something goes wrong, code {returnCode}");
+                    _logger.LLog(Logs.RtuManager, $"something goes wrong, code {returnCode}");
                     break;
             }
         }
@@ -75,7 +75,7 @@ namespace Fibertest.Rtu
             MoniResult moniResult = new MoniResult();
 
             var levelCount = baseSorData.RftsParameters.LevelsCount;
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Comparison begin. Level count = {levelCount}");
+            _logger.LLog(Logs.RtuManager, $"Comparison begin. Level count = {levelCount}");
 
             for (int i = 0; i < levelCount; i++)
             {
@@ -121,7 +121,7 @@ namespace Fibertest.Rtu
                 moniResult.Levels.Add(moniLevel);
 
                 var levelResult = returnCode != ComparisonReturns.Ok ? returnCode.ToString() : moniLevel.IsLevelFailed ? "Failed!" : "OK!";
-                _logger.LLog(Logs.RtuManager.ToInt(), $"Level {type} comparison result = {levelResult}!");
+                _logger.LLog(Logs.RtuManager, $"Level {type} comparison result = {levelResult}!");
 
                 SetMoniResultFlags(moniResult, returnCode);
 
@@ -131,7 +131,7 @@ namespace Fibertest.Rtu
             }
             catch (Exception e)
             {
-                _logger.LLog(Logs.RtuManager.ToInt(), $"Compare one level error: {e.Message}");
+                _logger.LLog(Logs.RtuManager, $"Compare one level error: {e.Message}");
             }
         } }
 }

@@ -25,7 +25,7 @@ public class ClientCollection
         if (!Clients.TryAdd(clientStation.ConnectionId, clientStation))
             return new ClientRegisteredDto(ReturnCode.Error);
         var successfulResult = this.FillInSuccessfulResult(dto, user);
-        _logger.LLog(Logs.DataCenter.ToInt(), 
+        _logger.LLog(Logs.DataCenter, 
             $"Client {clientStation.UserName} from {clientStation.ClientIp} registered successfully!");
         LogStations();
         return successfulResult;
@@ -59,7 +59,7 @@ public class ClientCollection
 
         foreach (var deadStation in deadStations)
         {
-            _logger.LLog(Logs.DataCenter.ToInt(),
+            _logger.LLog(Logs.DataCenter,
                 $"Dead client {deadStation} with connectionId {deadStation.ConnectionId} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
 
             var command = new KeyValuePair<string, string>(deadStation.UserName, deadStation.ClientIp);
@@ -74,14 +74,14 @@ public class ClientCollection
 
     private void LogStations()
     {
-        _logger.HyphenLine(Logs.DataCenter.ToInt());
-        _logger.LLog(Logs.DataCenter.ToInt(), $"There are {Clients.Count} client(s):");
-        _logger.HyphenLine(Logs.RtuService.ToInt());
+        _logger.HyphenLine(Logs.DataCenter);
+        _logger.LLog(Logs.DataCenter, $"There are {Clients.Count} client(s):");
+        _logger.HyphenLine(Logs.RtuService);
         foreach (var station in Clients.Values)
         {
-            _logger.LLog(Logs.DataCenter.ToInt(),
+            _logger.LLog(Logs.DataCenter,
                 $"{station.UserName}/{station.ClientIp}:{station.ClientAddressPort} with connection id {station.ConnectionId}");
         }
-        _logger.HyphenLine(Logs.DataCenter.ToInt());
+        _logger.HyphenLine(Logs.DataCenter);
     }
 }

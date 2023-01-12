@@ -20,7 +20,7 @@ public partial class Charon
             if (!success)
             {
                 LastErrorMessage = "Can't establish connection. Check connection timeout";
-                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
+                _logger.LogError(Logs.RtuManager, LastErrorMessage);
                 return;
             }
             client.SendTimeout = TimeSpan.FromSeconds(_writeTimeout).Milliseconds;
@@ -30,7 +30,7 @@ public partial class Charon
             byte[] bytesToSend = Encoding.ASCII.GetBytes(cmd);
 
             //---send the text---
-            _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(), $"Sending : {cmd.Trim()}");
+            _logger.LogDebug(Logs.RtuManager, $"Sending : {cmd.Trim()}");
             nwStream.Write(bytesToSend, 0, bytesToSend.Length);
 
             // for bulk command could be needed
@@ -41,12 +41,12 @@ public partial class Charon
             int bytesRead = nwStream.Read(bytesToRead, 0, client.ReceiveBufferSize);
             client.Close();
             LastAnswer = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Received : {LastAnswer.Trim()}");
+            _logger.LogDebug(Logs.RtuManager, $"Received : {LastAnswer.Trim()}");
             IsLastCommandSuccessful = true;
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), e.Message);
+            _logger.LogError(Logs.RtuManager, e.Message);
             LastErrorMessage = e.Message;
         }
     }
@@ -67,7 +67,7 @@ public partial class Charon
             if (!success)
             {
                 LastErrorMessage = "Can't establish connection. Check connection timeout";
-                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), LastErrorMessage);
+                _logger.LogError(Logs.RtuManager, LastErrorMessage);
                 return;
             }
             client.SendTimeout = TimeSpan.FromSeconds(2).Milliseconds;
@@ -77,14 +77,14 @@ public partial class Charon
 
             //---send the command---
             byte[] bytesToSend = Encoding.ASCII.GetBytes(cmd);
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Sending : {cmd.Trim()}");
+            _logger.LogDebug(Logs.RtuManager, $"Sending : {cmd.Trim()}");
             nwStream.Write(bytesToSend, 0, bytesToSend.Length);
 
             //---read back the answer---
             byte[] bytesToRead = new byte[client.ReceiveBufferSize];
             int bytesRead = nwStream.Read(bytesToRead, 0, client.ReceiveBufferSize);
             LastAnswer = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Received : {LastAnswer.Trim()}");
+            _logger.LogDebug(Logs.RtuManager, $"Received : {LastAnswer.Trim()}");
 
             //---send the content---
             byte[] contentBytes = new byte[CharonIniSize];
@@ -116,14 +116,14 @@ public partial class Charon
             bytesToRead = new byte[client.ReceiveBufferSize];
             bytesRead = nwStream.Read(bytesToRead, 0, client.ReceiveBufferSize);
             LastAnswer = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Received : {LastAnswer.Trim()}");
+            _logger.LogDebug(Logs.RtuManager, $"Received : {LastAnswer.Trim()}");
 
             client.Close();
             IsLastCommandSuccessful = true;
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), e.Message);
+            _logger.LogError(Logs.RtuManager, e.Message);
             LastErrorMessage = e.Message;
         }
 

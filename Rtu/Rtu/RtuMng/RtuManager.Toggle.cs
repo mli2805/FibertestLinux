@@ -17,10 +17,10 @@ public partial class RtuManager
         var damagedOtau = _damagedOtaus.FirstOrDefault(b => b.Ip == cha.NetAddress.Ip4Address);
         if (damagedOtau != null)
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Port is on damaged BOP {damagedOtau.Ip}");
+            _logger.LLog(Logs.RtuManager, $"Port is on damaged BOP {damagedOtau.Ip}");
             if (DateTime.Now - damagedOtau.RebootStarted < _mikrotikRebootTimeout)
             {
-                _logger.LLog(Logs.RtuManager.ToInt(), $"Mikrotik {cha.NetAddress.Ip4Address} is rebooting, step to the next port");
+                _logger.LLog(Logs.RtuManager, $"Mikrotik {cha.NetAddress.Ip4Address} is rebooting, step to the next port");
                 return false;
             }
             else
@@ -37,16 +37,16 @@ public partial class RtuManager
         {
             case CharonOperationResult.Ok:
                 {
-                    _logger.LLog(Logs.RtuManager.ToInt(), "Toggled Ok.");
+                    _logger.LLog(Logs.RtuManager, "Toggled Ok.");
                     // Here TCP port is important
                     if (damagedOtau != null &&
                         damagedOtau.Ip == cha.NetAddress.Ip4Address &&
                         damagedOtau.TcpPort == cha.NetAddress.Port)
                     {
-                        _logger.LLog(Logs.RtuManager.ToInt(), $"OTAU {cha.NetAddress.ToStringA()} recovered");
+                        _logger.LLog(Logs.RtuManager, $"OTAU {cha.NetAddress.ToStringA()} recovered");
                         if (damagedOtau.RebootAttempts >= _recoveryConfig.Value.MikrotikRebootAttemptsBeforeNotification)
                         {
-                            _logger.LLog(Logs.RtuManager.ToInt(), "Send notification to server.");
+                            _logger.LLog(Logs.RtuManager, "Send notification to server.");
                             var dto = new BopStateChangedDto()
                             {
                                 RtuId = _id,
@@ -81,7 +81,7 @@ public partial class RtuManager
                 }
             default:
                 {
-                    _logger.LLog(Logs.RtuManager.ToInt(), _mainCharon.LastErrorMessage);
+                    _logger.LLog(Logs.RtuManager, _mainCharon.LastErrorMessage);
                     return false;
                 }
         }

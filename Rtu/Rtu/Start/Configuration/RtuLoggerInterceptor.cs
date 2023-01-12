@@ -27,7 +27,7 @@ public class RtuLoggerInterceptor : Interceptor
         catch (Exception ex)
         {
             // Note: The gRPC framework also logs exceptions thrown by handlers to .NET Core logging.
-            _logger.Log(LogLevel.Error, Logs.RtuService.ToInt(), ex, $"Error thrown by {context.Method}.");
+            _logger.LogError(Logs.RtuService.ToInt(), ex, $"Error thrown by {context.Method}.");
 
             throw;
         }

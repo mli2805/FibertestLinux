@@ -25,10 +25,10 @@ public partial class RtuResponseApplier
             }
 
             await _responseToEventSourcing.ApplyRtuInitializationResult(dto, result);
-            _logger.LLog(Logs.DataCenter.ToInt(), "RTU initialized successfully.");
+            _logger.LLog(Logs.DataCenter, "RTU initialized successfully.");
         }
         else
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "Failed to initialize RTU!");
+            _logger.LogError(Logs.DataCenter, "Failed to initialize RTU!");
 
         return jsonResult;
     }

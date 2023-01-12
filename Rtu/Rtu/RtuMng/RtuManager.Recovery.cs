@@ -24,8 +24,8 @@ public partial class RtuManager
                 return recoveryResult.ReturnCode; // Reset Charon
             case RecoveryStep.ResetArpAndCharon:
                 _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.RestartService);
-                _logger.LLog(Logs.RtuManager.ToInt(), "Recovery procedure: Exit rtu service.");
-                _logger.LLog(Logs.RtuService.ToInt(), "Recovery procedure: Exit rtu service.");
+                _logger.LLog(Logs.RtuManager, "Recovery procedure: Exit rtu service.");
+                _logger.LLog(Logs.RtuService, "Recovery procedure: Exit rtu service.");
                 Environment.FailFast("Recovery procedure: Exit rtu service.");
                 // ReSharper disable once HeuristicUnreachableCode
                 return ReturnCode.Ok;
@@ -35,8 +35,8 @@ public partial class RtuManager
                 {
                     _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.RebootPc);
                     var delay = _recoveryConfig.Value.RebootSystemDelay;
-                    _logger.LLog(Logs.RtuManager.ToInt(), "Recovery procedure: Reboot system.");
-                    _logger.LLog(Logs.RtuService.ToInt(), "Recovery procedure: Reboot system.");
+                    _logger.LLog(Logs.RtuManager, "Recovery procedure: Reboot system.");
+                    _logger.LLog(Logs.RtuService, "Recovery procedure: Reboot system.");
                     RestoreFunctions.RebootSystem(_logger, delay);
                     Thread.Sleep(TimeSpan.FromSeconds(delay + 5));
                     return ReturnCode.Ok;
@@ -79,8 +79,8 @@ public partial class RtuManager
                 IsOk = false
             });
 
-        _logger.LLog(Logs.RtuService.ToInt(), $"Mikrotik {damagedOtau.Ip} reboot N{damagedOtau.RebootAttempts}");
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Reboot attempt N{damagedOtau.RebootAttempts}");
+        _logger.LLog(Logs.RtuService, $"Mikrotik {damagedOtau.Ip} reboot N{damagedOtau.RebootAttempts}");
+        _logger.LLog(Logs.RtuManager, $"Reboot attempt N{damagedOtau.RebootAttempts}");
         var connectionTimeout = _fullConfig.Value.ConnectionTimeout;
         try
         {
@@ -88,7 +88,7 @@ public partial class RtuManager
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Cannot connect Mikrotik {damagedOtau.Ip}" + e.Message);
+            _logger.LogError(Logs.RtuManager, $"Cannot connect Mikrotik {damagedOtau.Ip}" + e.Message);
         }
 
     }

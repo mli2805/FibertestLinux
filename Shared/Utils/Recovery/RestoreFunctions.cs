@@ -8,18 +8,18 @@ public static class RestoreFunctions
     public static void ClearArp(ILogger logger)
     {
         var res = Arp.GetTable();
-        logger.LLog(Logs.RtuService.ToInt(), res ?? "");
+        logger.LLog(Logs.RtuService, res ?? "");
         Arp.ClearCache();
-        logger.LLog(Logs.RtuManager.ToInt(), "Recovery procedure: Clear ARP table.");
-        logger.LLog(Logs.RtuManager.ToInt(), "Recovery procedure: Reset Charon");
-        logger.LLog(Logs.RtuService.ToInt(), "Recovery procedure: Clear ARP table and Reset Charon.");
+        logger.LLog(Logs.RtuManager, "Recovery procedure: Clear ARP table.");
+        logger.LLog(Logs.RtuManager, "Recovery procedure: Reset Charon");
+        logger.LLog(Logs.RtuService, "Recovery procedure: Clear ARP table and Reset Charon.");
         res = Arp.GetTable();
-        logger.LLog(Logs.RtuService.ToInt(), res ?? "");
+        logger.LLog(Logs.RtuService, res ?? "");
     }
 
     public static void RebootSystem(ILogger logger, int delay)
     {
-        logger.LLog(Logs.RtuManager.ToInt(), $"Recovery procedure: System reboot in {delay} sec...");
+        logger.LLog(Logs.RtuManager, $"Recovery procedure: System reboot in {delay} sec...");
         ProcessStartInfo proc = new ProcessStartInfo
         {
             FileName = "cmd",
@@ -33,7 +33,7 @@ public static class RestoreFunctions
         }
         catch (Exception e)
         {
-            logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), e.Message);
+            logger.LogError(Logs.RtuManager, e.Message);
         }
     }
 }

@@ -37,8 +37,8 @@ public partial class RtuManager
 
         if (res != null)
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Child charon {res.ToStringA()} initialization failed.");
-            _logger.LLog(Logs.RtuManager.ToInt(), "But RTU should work without BOP, so continue...");
+            _logger.LLog(Logs.RtuManager, $"Child charon {res.ToStringA()} initialization failed.");
+            _logger.LLog(Logs.RtuManager, "But RTU should work without BOP, so continue...");
         }
             
         _mainCharon.ShowOnDisplayMessageReady();
@@ -48,13 +48,13 @@ public partial class RtuManager
 
     private async Task<RtuInitializedDto> ReInitializeOtauOnUsersRequest(InitializeRtuDto dto, RtuInitializedDto resultDto)
     {
-        _logger.LLog(Logs.RtuManager.ToInt(), $"RTU hardware has {_mainCharon.Children.Count} additional OTAU ");
+        _logger.LLog(Logs.RtuManager, $"RTU hardware has {_mainCharon.Children.Count} additional OTAU ");
         foreach (var pair in _mainCharon.Children)
-            _logger.LLog(Logs.RtuManager.ToInt(),
+            _logger.LLog(Logs.RtuManager,
                 $"   port {pair.Key}: bop {pair.Value.NetAddress.ToStringA()} {pair.Value.Serial} isOk - {pair.Value.IsOk}");
-        _logger.LLog(Logs.RtuManager.ToInt(), $"RTU in client has {dto.Children.Count} additional OTAU");
+        _logger.LLog(Logs.RtuManager, $"RTU in client has {dto.Children.Count} additional OTAU");
         foreach (var pair in dto.Children)
-            _logger.LLog(Logs.RtuManager.ToInt(),
+            _logger.LLog(Logs.RtuManager,
                 $"   port {pair.Key}: bop {pair.Value.NetAddress.ToStringA()} {pair.Value.Serial} isOk - {pair.Value.IsOk}");
 
         if (!_mainCharon.IsBopSupported)
@@ -66,7 +66,7 @@ public partial class RtuManager
 
         if (!IsFullMatch(_mainCharon, dto))
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), "FullMatch - false, need to rewrite ini");
+            _logger.LLog(Logs.RtuManager, "FullMatch - false, need to rewrite ini");
             var expPorts = dto.Children.ToDictionary(pair => pair.Key, pair => pair.Value.NetAddress);
             _mainCharon.RewriteIni(expPorts);
         }
@@ -88,7 +88,7 @@ public partial class RtuManager
                 return false;
         }
 
-        _logger.LLog(Logs.RtuManager.ToInt(), "Full match!");
+        _logger.LLog(Logs.RtuManager, "Full match!");
         return true;
     }
 }

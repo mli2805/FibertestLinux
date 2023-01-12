@@ -14,7 +14,6 @@ public enum Logs
     DataCenter = 187901,
     WebApi = 625487,
     Client = 351458,
-
 }
 
 public static class LogsExt
@@ -60,7 +59,7 @@ public static class LoggerConfigurationFactory
                 .File(Path.Combine(logFolder, "cl-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(WithEventId(Logs.DataCenter.ToInt()))
+                .Filter.ByIncludingOnly(WithEventId(Logs.DataCenter))
                 .WriteTo
                 .File(Path.Combine(logFolder, "dc-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
@@ -70,12 +69,12 @@ public static class LoggerConfigurationFactory
                 .File(Path.Combine(logFolder, "trap-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(WithEventId(Logs.RtuService.ToInt()))
+                .Filter.ByIncludingOnly(WithEventId(Logs.RtuService))
                 .WriteTo
                 .File(Path.Combine(logFolder, "srv-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))
             .WriteTo.Logger(cc => cc
-                .Filter.ByIncludingOnly(WithEventId(Logs.RtuManager.ToInt()))
+                .Filter.ByIncludingOnly(WithEventId(Logs.RtuManager))
                 .WriteTo
                 .File(Path.Combine(logFolder, "mng-.log"), outputTemplate: template,
                     rollingInterval: RollingInterval.Day, flushToDiskInterval: TimeSpan.FromSeconds(1)))

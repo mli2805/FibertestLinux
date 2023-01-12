@@ -21,24 +21,24 @@ public class ClientToIitRtuTransmitter
     {
         var rtuUri = $"http://{rtuAddress}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
-        _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), $"GrpcChannel for {rtuUri}");
+        _logger.LogDebug(Logs.DataCenter, $"GrpcChannel for {rtuUri}");
         var grpcClientRtu = new d2r.d2rClient(grpcChannelRtu);
-        _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), $"Command content {commandContent}");
+        _logger.LogDebug(Logs.DataCenter, $"Command content {commandContent}");
 
         var rtuCommand = new d2rCommand() { Json = commandContent };
 
         try
         {
             d2rResponse response = await grpcClientRtu.SendCommandAsync(rtuCommand);
-            _logger.Log(LogLevel.Debug, Logs.DataCenter.ToInt(), "Got gRPC response from RTU");
+            _logger.LogDebug(Logs.DataCenter, "Got gRPC response from RTU");
             return response.Json;
 
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "TransferCommand: " + e.Message);
+            _logger.LogError(Logs.DataCenter, "TransferCommand: " + e.Message);
             if (e.InnerException != null)
-                _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "InnerException: " + e.InnerException.Message);
+                _logger.LogError(Logs.DataCenter, "InnerException: " + e.InnerException.Message);
 
             object badResult;
             switch (JsonConvert.DeserializeObject(commandContent, JsonSerializerSettings))

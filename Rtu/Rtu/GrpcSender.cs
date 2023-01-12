@@ -32,17 +32,17 @@ public class GrpcSender
             var response = await grpcClient.SendCommandAsync(command);
             if (response == null)
             {
-                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "RTU failed to receive gRPC response");
+                _logger.LogError(Logs.RtuManager, "RTU failed to receive gRPC response");
                 return;
             }
 
             var result = JsonConvert.DeserializeObject<RtuInitializedDto>(response.Json);
             if (result == null)
-                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "RTU failed to deserialize gRPC response");
+                _logger.LogError(Logs.RtuManager, "RTU failed to deserialize gRPC response");
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.Client.ToInt(), "RTU failed to send gRPC message: " + e.Message);
+            _logger.LogError(Logs.Client,"RTU failed to send gRPC message: " + e.Message);
         }
     }
 }

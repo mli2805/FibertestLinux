@@ -42,7 +42,7 @@ public class SmtpNotifier
     public async Task<bool> SendOpticalEvent(MonitoringResultDto dto, AddMeasurement addMeasurement)
     {
         var mailTo = _writeModel.GetEmailsToSendMonitoringResult(dto);
-        _logger.LLog(Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
+        _logger.LLog(Logs.DataCenter, $"There are {mailTo.Count} addresses to send e-mail");
         if (mailTo.Count == 0) return true;
 
         var subj = _writeModel.GetShortMessageForMonitoringResult(dto);
@@ -83,7 +83,7 @@ public class SmtpNotifier
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), @"ShowReport: " + e.Message);
+            _logger.LogError(Logs.DataCenter, @"ShowReport: " + e.Message);
             return null;
         }
     }
@@ -102,7 +102,7 @@ public class SmtpNotifier
     public async Task<bool> SendNetworkEvent(Guid rtuId, bool isMainChannel, bool isOk)
     {
         var mailTo = _writeModel.GetEmailsToSendNetworkEvent(rtuId);
-        _logger.LLog(Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
+        _logger.LLog(Logs.DataCenter, $"There are {mailTo.Count} addresses to send e-mail");
         if (mailTo.Count == 0) return true;
 
         var subj = _writeModel.GetShortMessageForNetworkEvent(rtuId, isMainChannel, isOk);
@@ -111,7 +111,7 @@ public class SmtpNotifier
     public async Task<bool> SendBopState(AddBopNetworkEvent cmd)
     {
         var mailTo = _writeModel.GetEmailsToSendBopNetworkEvent(cmd);
-        _logger.LLog(Logs.DataCenter.ToInt(), $"There are {mailTo.Count} addresses to send e-mail");
+        _logger.LLog(Logs.DataCenter, $"There are {mailTo.Count} addresses to send e-mail");
         if (mailTo.Count == 0) return true;
 
         var subj = EventReport.GetShortMessageForBopState(cmd);
@@ -144,7 +144,7 @@ public class SmtpNotifier
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), e.Message);
+            _logger.LogError(Logs.DataCenter, e.Message);
             return false;
         }
     }

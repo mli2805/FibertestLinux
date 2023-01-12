@@ -24,21 +24,21 @@ public sealed class Boot : IHostedService
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
 
-        _logger.StartLine(Logs.RtuService.ToInt());
-        _logger.StartLine(Logs.RtuManager.ToInt());
-        _logger.LLog(Logs.RtuService.ToInt(), $"Fibertest RTU service {info.FileVersion}");
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Fibertest RTU service {info.FileVersion}");
+        _logger.StartLine(Logs.RtuService);
+        _logger.StartLine(Logs.RtuManager);
+        _logger.LLog(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
+        _logger.LLog(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
 
         var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
-        _logger.LLog(Logs.RtuService.ToInt(), $"config file: {configFile}");
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+        _logger.LLog(Logs.RtuService, $"config file: {configFile}");
+        _logger.LLog(Logs.RtuService, 
             $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");
         return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LLog(Logs.RtuService.ToInt(), "Leave Fibertest RTU service");
+        _logger.LLog(Logs.RtuService, "Leave Fibertest RTU service");
         return Task.CompletedTask;
     }
 }

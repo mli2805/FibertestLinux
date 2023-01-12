@@ -108,7 +108,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
     public async void InitializeRtu()
     {
         _grpcC2RRequests.ChangeAddress(DcAddress);
-        _logger.LLog(Logs.Client.ToInt(), Resources.SID_long_operation_please_wait);
+        _logger.LLog(Logs.Client,Resources.SID_long_operation_please_wait);
         var dto = new InitializeRtuDto(_rtuId, RtuMaker.IIT);
         dto.RtuAddresses.Main = new NetAddress(RtuAddress, TcpPorts.RtuListenTo);
 

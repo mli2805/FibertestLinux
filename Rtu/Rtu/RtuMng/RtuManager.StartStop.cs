@@ -14,7 +14,7 @@ public partial class RtuManager
 
         SaveNewFrequenciesInConfig(dto.Timespans);
         _monitoringQueue.ComposeNewQueue(dto.Ports);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Queue merged. {_monitoringQueue.Count()} port(s) in queue");
+        _logger.LLog(Logs.RtuManager, $"Queue merged. {_monitoringQueue.Count()} port(s) in queue");
         _monitoringQueue.Save();
         _monitoringQueue.SaveBackup();
 
@@ -44,7 +44,7 @@ public partial class RtuManager
         if (!wasMonitoringOn)
             _monitoringQueue.RaiseMonitoringModeChangedFlag();
 
-        _logger.LLog(Logs.RtuManager.ToInt(), Environment.NewLine + "RTU is turned into AUTOMATIC mode.");
+        _logger.LLog(Logs.RtuManager, Environment.NewLine + "RTU is turned into AUTOMATIC mode.");
 
         // с этого начинается цикл мониторинга
         // _monitoringConfig.Update(c=>c.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
@@ -64,12 +64,12 @@ public partial class RtuManager
     {
         if (!_monitoringConfig.Value.IsMonitoringOn)
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), $"{caller}: RTU is in MANUAL mode already");
+            _logger.LLog(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
             return;
         }
 
         _monitoringConfig.Update(c => c.IsMonitoringOn = false);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"{caller}: Interrupting current measurement...");
+        _logger.LLog(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
         _cancellationTokenSource?.Cancel();
 
         // if Lmax = 240km and Time = 10min one step lasts 5-6 sec

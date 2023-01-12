@@ -6,7 +6,7 @@ public static class MikrotikInBop
 {
     public static void ConnectAndReboot<T>(ILogger<T> logger, EventId eventId, string ip, int connectionTimeout)
     {
-        logger.LLog(eventId, $"Connect Mikrotik {ip} started...");
+        logger.Log(LogLevel.Information, eventId, $"Connect Mikrotik {ip} started...");
         var mikrotik = new Mikrotik(ip, connectionTimeout);
         if (!mikrotik.IsAvailable)
         {
@@ -19,8 +19,9 @@ public static class MikrotikInBop
             mikrotik.Close();
             return;
         }
-        logger.LLog(eventId, "Connected and logged in successfully.");
-        logger.LLog(eventId, $"Reboot Mikrotik {ip} started...");
+
+        logger.Log(LogLevel.Information, "Connected and logged in successfully.");
+        logger.Log(LogLevel.Information, $"Reboot Mikrotik {ip} started...");
         mikrotik.Send("/system/reboot", true);
         mikrotik.Read();
         mikrotik.Close();

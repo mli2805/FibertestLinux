@@ -74,7 +74,7 @@ public class C2RCommandsProcessor
             if (rtuAddress == null)
                 return new Tuple<RequestAnswer, string?>(new RequestAnswer(ReturnCode.RtuNotAvailable), null);
         }
-        _logger.LLog(Logs.DataCenter.ToInt(), $"rtuAddress {rtuAddress}");
+        _logger.LLog(Logs.DataCenter, $"rtuAddress {rtuAddress}");
 
         return new Tuple<RequestAnswer, string?>(new RequestAnswer(ReturnCode.Ok), rtuAddress);
     }

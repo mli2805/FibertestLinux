@@ -21,7 +21,7 @@ public class SnapshotRepository
         {
             await using var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions);
 
-            _logger.LLog(Logs.DataCenter.ToInt(), "Snapshot adding...");
+            _logger.LLog(Logs.DataCenter, "Snapshot adding...");
             var portion = 2 * 1024 * 1024;
             for (int i = 0; i <= data.Length / portion; i++)
             {
@@ -36,14 +36,14 @@ public class SnapshotRepository
                 dbContext.Snapshots.Add(snapshot);
                 var result = await dbContext.SaveChangesAsync();
                 if (result == 1)
-                    _logger.LLog(Logs.DataCenter.ToInt(), $"{i+1} portion,   {payload.Length} size");
+                    _logger.LLog(Logs.DataCenter, $"{i+1} portion,   {payload.Length} size");
                 else return -1;
             }
             return data.Length / portion;
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "AddSnapshotAsync: " + e.Message);
+            _logger.LogError(Logs.DataCenter, "AddSnapshotAsync: " + e.Message);
             return -1;
         }
     }
@@ -54,13 +54,13 @@ public class SnapshotRepository
         {
             await using var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions);
 
-            _logger.LLog(Logs.DataCenter.ToInt(), "Snapshot reading...");
+            _logger.LLog(Logs.DataCenter, "Snapshot reading...");
             var portions = await dbContext.Snapshots
                 .Where(l => l.StreamIdOriginal == graphDbVersionId)
                 .ToListAsync();
             if (!portions.Any())
             {
-                _logger.LLog(Logs.DataCenter.ToInt(), "No snapshots");
+                _logger.LLog(Logs.DataCenter, "No snapshots");
                 return null;
             }
             var size = portions.Sum(p => p.Payload.Length);
@@ -73,13 +73,13 @@ public class SnapshotRepository
             }
             var result = new Tuple<int, byte[], DateTime>
                 (portions.First().LastEventNumber, data, portions.First().LastEventDate);
-            _logger.LLog(Logs.DataCenter.ToInt(), 
+            _logger.LLog(Logs.DataCenter, 
                 $@"Snapshot size {result.Item2.Length:0,0} bytes.    Number of last event in snapshot {result.Item1:0,0}.");
             return result;
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "ReadSnapshotAsync: " + e.Message);
+            _logger.LogError(Logs.DataCenter, "ReadSnapshotAsync: " + e.Message);
             return null;
         }
     }
@@ -91,7 +91,7 @@ public class SnapshotRepository
         {
             using (var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions))
             {
-                _logger.LLog(Logs.DataCenter.ToInt(), "Snapshots removing...");
+                _logger.LLog(Logs.DataCenter, "Snapshots removing...");
                 var maxLastEventNumber = dbContext.Snapshots.Max(f => f.LastEventNumber); 
                 var oldSnapshotPortions = dbContext.Snapshots.Where(f=>f.LastEventNumber != maxLastEventNumber).ToList();
                 dbContext.Snapshots.RemoveRange(oldSnapshotPortions);
@@ -100,7 +100,7 @@ public class SnapshotRepository
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), "RemoveOldSnapshots: " + e.Message);
+            _logger.LogError(Logs.DataCenter, "RemoveOldSnapshots: " + e.Message);
             return -1;
         }
     }

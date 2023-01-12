@@ -57,7 +57,7 @@ public class GrpcC2DRequests
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.Client.ToInt(), e.Message);
+            _logger.LogError(Logs.Client,e.Message);
             return new ClientRegisteredDto(ReturnCode.C2DGrpcOperationError) { ErrorMessage = e.Message };
         }
     }
@@ -83,7 +83,7 @@ public class GrpcC2DRequests
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.Client.ToInt(), e.Message);
+            _logger.LogError(Logs.Client,e.Message);
             return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = e.Message };
         }
     }
@@ -110,7 +110,7 @@ public class GrpcC2DRequests
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.Client.ToInt(), e.Message);
+            _logger.LogError(Logs.Client,e.Message);
             return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = e.Message };
         }
     }

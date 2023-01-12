@@ -21,7 +21,7 @@ public partial class RtuManager
         var version = $"{info.FileVersion}";
 
         var versionRtuManager = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
-        _logger.LLog(Logs.RtuManager.ToInt(), $"RtuManager {versionRtuManager}");
+        _logger.LLog(Logs.RtuManager, $"RtuManager {versionRtuManager}");
         var res = _serialPortManager.ResetCharon();
         if (res != ReturnCode.Ok)
             return new RtuInitializedDto(res);
@@ -41,14 +41,14 @@ public partial class RtuManager
             : await InitializeOtau(result); // on service or module restart
         if (!result2.IsInitialized)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "Failed initialize RTU!");
+            _logger.LLog(Logs.RtuManager, "Failed initialize RTU!", LogLevel.Error);
             return result2;
         }
 
         result2.IsMonitoringOn = _monitoringConfig.Value.IsMonitoringOn;
         result2.AcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
 
-        _logger.LLog(Logs.RtuManager.ToInt(), "RTU initialized successfully!");
+        _logger.LLog(Logs.RtuManager, "RTU initialized successfully!");
 
         _monitoringQueue.Load();
         EvaluateFrequencies();
@@ -57,7 +57,7 @@ public partial class RtuManager
 
         if (!_monitoringConfig.Value.IsMonitoringOn)
         {
-            _logger.LLog(Logs.RtuManager.ToInt(), "RTU is in MANUAL mode, disconnect OTDR");
+            _logger.LLog(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
             var unused = await _otdrManager.DisconnectOtdr();
         }
 
@@ -69,7 +69,7 @@ public partial class RtuManager
 
     public async Task<RequestAnswer> FreeOtdr()
     {
-        _logger.LLog(Logs.RtuManager.ToInt(), "RtuManager: FreeOtdr");
+        _logger.LLog(Logs.RtuManager, "RtuManager: FreeOtdr");
         var res = await _otdrManager.DisconnectOtdr();
         return new RequestAnswer(res ? ReturnCode.Ok : ReturnCode.Error);
     }
@@ -81,7 +81,7 @@ public partial class RtuManager
         _rtuGeneralConfig.Update(c => c.ServerAddress = dto.ServerAddresses!);
 
         _monitoringConfig.Update(c => c.IsMonitoringOn = false);
-        _logger.EmptyAndLog(Logs.RtuManager.ToInt(), "Initialization by the USER puts RTU into MANUAL mode.");
+        _logger.EmptyAndLog(Logs.RtuManager, "Initialization by the USER puts RTU into MANUAL mode.");
     }
 
     private void EvaluateFrequencies()

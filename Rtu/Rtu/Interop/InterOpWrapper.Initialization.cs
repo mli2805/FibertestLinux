@@ -31,7 +31,7 @@ public partial class InterOpWrapper
             var creationTime = File.GetLastWriteTime(iitOtdrLib);
             var version = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
 
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Iit_otdr.so {version} loaded successfully.");
+            _logger.LLog(Logs.RtuManager, $"Iit_otdr.so {version} loaded successfully.");
         }
         catch (Exception e)
         {
@@ -55,26 +55,26 @@ public partial class InterOpWrapper
             if (initOtdr == 0)
             {
                 var word1 = type == ConnectionTypes.FreePort ? "disconnected" : "connected";
-                _logger.LLog(Logs.RtuManager.ToInt(), $"OTDR {word1} successfully!");
+                _logger.LLog(Logs.RtuManager, $"OTDR {word1} successfully!");
                 return true;
             }
 
         }
         catch (ExternalException e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "InterOpWrapper.InitOTDR: " + e.Message);
+            _logger.LogError(Logs.RtuManager, "InterOpWrapper.InitOTDR: " + e.Message);
             return false;
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "InterOpWrapper.InitOTDR: " + e.Message);
+            _logger.LogError(Logs.RtuManager, "InterOpWrapper.InitOTDR: " + e.Message);
             return false;
         }
 
         var word = type == ConnectionTypes.FreePort ? "disconnection" : "connection";
-        _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"OTDR {word} failed! Error: {initOtdr}");
+        _logger.LogError(Logs.RtuManager, $"OTDR {word} failed! Error: {initOtdr}");
         if (initOtdr == 805)
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(),
+            _logger.LogError(Logs.RtuManager,
                 "InterOpWrapper.InitOTDR: 805 - ERROR_COM_OPEN - check otdr address or reboot RTU");
         return false;
     }

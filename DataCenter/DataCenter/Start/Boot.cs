@@ -25,12 +25,12 @@ public sealed class Boot : IHostedService
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
 
-        _logger.StartLine(Logs.DataCenter.ToInt());
+        _logger.StartLine(Logs.DataCenter);
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
-        _logger.LLog(Logs.DataCenter.ToInt(), $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
+        _logger.LLog(Logs.DataCenter, $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
-        _logger.Log(LogLevel.Information, Logs.DataCenter.ToInt(), 
+        _logger.LLog(Logs.DataCenter, 
             $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");
 
         await _eventStoreService.InitializeBothDb();
@@ -38,7 +38,7 @@ public sealed class Boot : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LLog(Logs.DataCenter.ToInt(), "Leave Fibertest Data-Center service");
+        _logger.LLog(Logs.DataCenter, "Leave Fibertest Data-Center service");
         return Task.CompletedTask;
     }
 }

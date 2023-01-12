@@ -19,7 +19,7 @@ public partial class InterOpWrapper
         if (result == 0)
             return Marshal.PtrToStringAnsi(otdrInfo);
 
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Get OTDR info error ={result}!");
+        _logger.LLog(Logs.RtuManager, $"Get OTDR info error ={result}!");
         return "";
     }
 
@@ -39,7 +39,7 @@ public partial class InterOpWrapper
 
         var result = ServiceFunction(cmd, ref reserved, ref baseSorData);
         if (result != 0)
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Set base for comparison error={result}!");
+            _logger.LLog(Logs.RtuManager, $"Set base for comparison error={result}!");
         return result == 0;
     }
 
@@ -59,7 +59,7 @@ public partial class InterOpWrapper
 
         var result = ServiceFunction(cmd, ref reserved, ref sorData);
         if (result != 0)
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"MakeAutoAnalysis error={result}!");
+            _logger.LogError(Logs.RtuManager, $"MakeAutoAnalysis error={result}!");
         return result == 0;
     }
 
@@ -71,7 +71,7 @@ public partial class InterOpWrapper
 
         var result = ServiceFunction(cmd, ref mode, ref sorData);
         if (result != 0)
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Analyze error={result}!");
+            _logger.LogError(Logs.RtuManager, $"Analyze error={result}!");
         return result == 0;
     }
 
@@ -83,7 +83,7 @@ public partial class InterOpWrapper
 
         var result = ServiceFunction(cmd, ref reserved, ref sorData);
         if (result != 0)
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"InsertIitEvents error={result}!");
+            _logger.LogError(Logs.RtuManager, $"InsertIitEvents error={result}!");
         return result == 0;
     }
 
@@ -100,7 +100,7 @@ public partial class InterOpWrapper
             var result = ServiceFunction(cmd, ref prm1, ref prm2);
             if (result != 1)
             {
-                _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"GetLinkCharacteristics error={result}!");
+                _logger.LogError(Logs.RtuManager, $"GetLinkCharacteristics error={result}!");
                 cp = new ConnectionParams();
                 return -1;
             }
@@ -117,8 +117,8 @@ public partial class InterOpWrapper
             const double lightSpeed = 0.000299792458; // km/ns
             var res = prm1 * lightSpeed / 1.4682;
 
-            _logger.LLog(Logs.RtuManager.ToInt(), $"Link characteristics:  Prm1 = {prm1} ns =>  Lmax {res:F} km");
-            _logger.LLog(Logs.RtuManager.ToInt(),
+            _logger.LLog(Logs.RtuManager, $"Link characteristics:  Prm1 = {prm1} ns =>  Lmax {res:F} km");
+            _logger.LLog(Logs.RtuManager,
                 $"reflectance {cp.reflectance} dB, splice {cp.splice} dB, snr {cp.snr_almax}");
             return res;
         }

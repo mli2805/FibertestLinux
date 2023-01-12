@@ -19,7 +19,7 @@ public class MonitoringService : BackgroundService
     {
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.LLog(Logs.RtuManager.ToInt(), $"RTU monitoring service started. Process {pid}, thread {tid}");
+        _logger.LLog(Logs.RtuManager, $"RTU monitoring service started. Process {pid}, thread {tid}");
             
         await DoWork(stoppingToken);
     }
@@ -31,7 +31,7 @@ public class MonitoringService : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
-            _logger.Log(LogLevel.Debug, Logs.RtuManager.ToInt(),  "It is a measurement thread ..." + Environment.NewLine);
+            _logger.LogDebug(Logs.RtuManager,  "It is a measurement thread ..." + Environment.NewLine);
         }
     }
 }

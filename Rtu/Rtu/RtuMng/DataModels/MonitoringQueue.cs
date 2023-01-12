@@ -50,7 +50,7 @@ public class MonitoringQueue
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Queue loading: {e.Message}");
+            _logger.LogError(Logs.RtuManager, $"Queue loading: {e.Message}");
         }
 
         return new string[0];
@@ -58,8 +58,8 @@ public class MonitoringQueue
 
     public void Load()
     {
-        _logger.TimestampWithoutMessage(Logs.RtuManager.ToInt());
-        _logger.LLog(Logs.RtuManager.ToInt(), "Monitoring queue assembling...");
+        _logger.TimestampWithoutMessage(Logs.RtuManager);
+        _logger.LLog(Logs.RtuManager, "Monitoring queue assembling...");
         Queue = new Queue<MonitoringPort>();
 
         try
@@ -78,10 +78,10 @@ public class MonitoringQueue
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Queue parsing: {e.Message}");
+            _logger.LogError(Logs.RtuManager, $"Queue parsing: {e.Message}");
         }
 
-        _logger.LLog(Logs.RtuManager.ToInt(), $"{Queue.Count} port(s) in queue.");
+        _logger.LLog(Logs.RtuManager, $"{Queue.Count} port(s) in queue.");
     }
 
     public void Save()
@@ -95,7 +95,7 @@ public class MonitoringQueue
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Queue saving: {e.Message}");
+            _logger.LogError(Logs.RtuManager, $"Queue saving: {e.Message}");
         }
     }
 
@@ -108,7 +108,7 @@ public class MonitoringQueue
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Queue saving: {e.Message}");
+            _logger.LogError(Logs.RtuManager, $"Queue saving: {e.Message}");
         }
     }
 

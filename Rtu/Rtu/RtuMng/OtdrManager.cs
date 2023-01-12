@@ -37,7 +37,7 @@ public partial class OtdrManager
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), "Failed to restore etc: " + e.Message);
+            _logger.LogError(Logs.RtuManager, "Failed to restore etc: " + e.Message);
             return new RtuInitializedDto(ReturnCode.OtdrInitializationCannotInitializeDll);
         }
 
@@ -52,13 +52,13 @@ public partial class OtdrManager
 
         result.OtdrAddress = new NetAddress(_charonIp, _otdrTcpPort);
         result.Mfid = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoMfid);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"MFID = {result.Mfid}");
+        _logger.LLog(Logs.RtuManager, $"MFID = {result.Mfid}");
         result.Mfsn = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoMfsn);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"MFSN = {result.Mfsn}");
+        _logger.LLog(Logs.RtuManager, $"MFSN = {result.Mfsn}");
         result.Omid = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoOmid);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"OMID = {result.Omid}");
+        _logger.LLog(Logs.RtuManager, $"OMID = {result.Omid}");
         result.Omsn = _interOpWrapper.GetOtdrInfo(GetOtdrInfo.ServiceCmdGetOtdrInfoOmsn);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"OMSN = {result.Omsn}");
+        _logger.LLog(Logs.RtuManager, $"OMSN = {result.Omsn}");
 
         return result;
     }
@@ -68,13 +68,13 @@ public partial class OtdrManager
         var destinationPath = Path.Combine(_iitOtdrFolder, @"etc");
         if (!Directory.Exists(destinationPath))
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't work without <{destinationPath}> folder!");
+            _logger.LogError(Logs.RtuManager, $"Can't work without <{destinationPath}> folder!");
             return false;
         }
         var sourcePath = Path.Combine(_iitOtdrFolder, "etc_default");
         if (!Directory.Exists(sourcePath))
         {
-            _logger.Log(LogLevel.Error, Logs.RtuManager.ToInt(), $"Can't work without <{sourcePath}> folder!");
+            _logger.LogError(Logs.RtuManager, $"Can't work without <{sourcePath}> folder!");
             return false;
         }
         var files = Directory.GetFiles(sourcePath);
@@ -84,14 +84,14 @@ public partial class OtdrManager
             var destFile = Path.Combine(destinationPath, sourceFile);
             File.Copy(file, destFile, true);
         }
-        _logger.LLog(Logs.RtuManager.ToInt(), "ETC folder restored successfully!");
+        _logger.LLog(Logs.RtuManager, "ETC folder restored successfully!");
         return true;
     }
 
     private async Task<bool> ConnectOtdr()
     {
         await Task.Delay(1);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Connecting to OTDR {_charonIp}:{_otdrTcpPort}...");
+        _logger.LLog(Logs.RtuManager, $"Connecting to OTDR {_charonIp}:{_otdrTcpPort}...");
         var isOtdrConnected = _interOpWrapper.InitOtdr(ConnectionTypes.Tcp, _charonIp, _otdrTcpPort);
         if (!isOtdrConnected)
             _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectOtdr);
@@ -101,7 +101,7 @@ public partial class OtdrManager
     public async Task<bool> DisconnectOtdr()
     {
         await Task.Delay(1);
-        _logger.LLog(Logs.RtuManager.ToInt(), $"Disconnecting OTDR {_charonIp}...");
+        _logger.LLog(Logs.RtuManager, $"Disconnecting OTDR {_charonIp}...");
         return _interOpWrapper.InitOtdr(ConnectionTypes.FreePort, _charonIp, _otdrTcpPort);
     }
 }

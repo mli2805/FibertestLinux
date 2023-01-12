@@ -27,7 +27,7 @@ public class MySerializer : ISerialize
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), $"Event serialization exception: {e.Message}");
+            _logger.LogError(Logs.DataCenter, $"Event serialization exception: {e.Message}");
         }
     }
 
@@ -44,7 +44,7 @@ public class MySerializer : ISerialize
         }
         catch (Exception e)
         {
-            _logger.Log(LogLevel.Error, Logs.DataCenter.ToInt(), $"Event de-serialization exception: {e.Message}");
+            _logger.LogError(Logs.DataCenter, $"Event de-serialization exception: {e.Message}");
             return default;
         }
     }
