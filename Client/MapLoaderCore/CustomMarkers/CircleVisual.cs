@@ -5,10 +5,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
-using Demo.WindowsPresentation.Controls;
 using GMap.NET.WindowsPresentation;
 
-namespace Demo.WindowsPresentation.CustomMarkers
+namespace Demo.WindowsPresentation
 {
     public class CircleVisual : FrameworkElement
     {

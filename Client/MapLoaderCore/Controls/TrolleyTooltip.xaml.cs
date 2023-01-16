@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
-using Demo.WindowsForms;
 
-namespace Demo.WindowsPresentation.Controls
+namespace Demo.WindowsPresentation
 {
     /// <summary>
     ///     Interaction logic for TrolleyTooltip.xaml

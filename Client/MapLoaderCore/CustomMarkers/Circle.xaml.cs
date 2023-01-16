@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using GMap.NET;
 
-namespace Demo.WindowsPresentation.CustomMarkers
+namespace Demo.WindowsPresentation
 {
     /// <summary>
     ///     Interaction logic for Circle.xaml

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using GMap.NET;
 using GMap.NET.MapProviders;
-using System.Net.NetworkInformation;
-
 #if !MONO
 #if SQLite
 
@@ -22,7 +20,7 @@ using System.Net.NetworkInformation;
    using SQLiteParameter = Mono.Data.Sqlite.SqliteParameter;
 #endif
 
-namespace Demo.WindowsForms
+namespace Demo.WindowsPresentation
 {
     public struct VehicleData
     {
