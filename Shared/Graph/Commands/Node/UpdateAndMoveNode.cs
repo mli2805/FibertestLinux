@@ -1,4 +1,6 @@
-﻿namespace Fibertest.Graph;
+﻿using GMap.NET;
+
+namespace Fibertest.Graph;
 
 public class UpdateAndMoveNode
 {

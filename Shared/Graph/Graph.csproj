@@ -20,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj" />
 		<ProjectReference Include="..\StringResources\StringResources.csproj" />
 		<ProjectReference Include="..\Dto\Dto.csproj" />
 		<ProjectReference Include="..\Utils\Utils.csproj" />

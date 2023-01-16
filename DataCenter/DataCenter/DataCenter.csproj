@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Dto\Dto.csproj" />
+    <ProjectReference Include="..\..\Shared\GMap.NET.Core\GMap.NET.Core.csproj" />
     <ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
     <ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
   </ItemGroup>

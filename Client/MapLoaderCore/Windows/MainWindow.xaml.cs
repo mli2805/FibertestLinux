@@ -6,10 +6,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using GMap.NET;
-using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     public partial class MainWindow
     {

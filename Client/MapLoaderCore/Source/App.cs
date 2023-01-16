@@ -2,7 +2,7 @@
 using System.Windows;
 using GMap.NET;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
    public class App : Application
    {

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using GMap.NET;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     /// <summary>
     ///     Interaction logic for Circle.xaml

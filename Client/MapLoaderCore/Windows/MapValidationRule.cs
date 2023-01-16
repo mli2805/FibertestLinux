@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.IO;
 using System.Windows.Controls;
-using GMap.NET.MapProviders;
+using GMap.NET;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     public class MapValidationRule : ValidationRule
     {

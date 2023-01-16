@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     /// <summary>
     ///     Interaction logic for Test.xaml

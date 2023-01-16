@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using GMap.NET.WindowsPresentation;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     public class CircleVisual : FrameworkElement
     {

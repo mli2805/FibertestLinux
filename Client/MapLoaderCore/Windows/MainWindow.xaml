@@ -1,7 +1,7 @@
-﻿<Window x:Class="Demo.WindowsPresentation.MainWindow"
+﻿<Window x:Class="MapLoaderCore.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:windowsPresentation="clr-namespace:Demo.WindowsPresentation"
+    xmlns:mapLoaderCore="clr-namespace:MapLoaderCore"
     Title="Map loader"
     Height="775" Width="888"
     WindowStartupLocation="CenterScreen"
@@ -16,7 +16,7 @@
                         <ComboBox.SelectedItem>
                             <Binding Path="MapProvider" ElementName="MainMap">
                                 <Binding.ValidationRules>
-                                    <windowsPresentation:MapValidationRule x:Name="Validator"/>
+                                    <mapLoaderCore:MapValidationRule x:Name="Validator"/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </ComboBox.SelectedItem>
@@ -46,7 +46,7 @@
             </StackPanel>
         </GroupBox>
          <GroupBox Name="Mapgroup" Margin="5" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
-            <windowsPresentation:Map x:Name="MainMap" Zoom="11"  MinZoom="1" />
+            <mapLoaderCore:Map x:Name="MainMap" Zoom="11"  MinZoom="1" />
         </GroupBox>
      </DockPanel>
 </Window>

@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using GMap.NET;
-using GMap.NET.MapProviders;
 #if !MONO
 #if SQLite
 
@@ -20,7 +19,7 @@ using GMap.NET.MapProviders;
    using SQLiteParameter = Mono.Data.Sqlite.SqliteParameter;
 #endif
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     public struct VehicleData
     {

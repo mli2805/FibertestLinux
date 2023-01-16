@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GMap.NET.WindowsPresentation;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     /// <summary>
     ///     Interaction logic for CustomMarkerDemo.xaml

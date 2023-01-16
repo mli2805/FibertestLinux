@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using GMap.NET.WindowsPresentation;
 
-namespace Demo.WindowsPresentation
+namespace MapLoaderCore
 {
     /// <summary>
     /// the custom map f GMapControl 
