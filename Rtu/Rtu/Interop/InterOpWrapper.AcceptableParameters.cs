@@ -6,11 +6,11 @@ namespace Fibertest.Rtu;
 
 public partial class InterOpWrapper
 {
-    public TreeOfAcceptableMeasParams? GetTreeOfAcceptableMeasParams()
+    public TreeOfAcceptableMeasParams GetTreeOfAcceptableMeasParams()
     {
         var result = new TreeOfAcceptableMeasParams();
         var units = GetArrayOfVariantsForParam(ServiceFunctionFirstParam.Unit);
-        if (units == null) return null;
+      //  if (units == null) return null;
         for (int i = 0; i < units.Length; i++)
         {
             SetParam(ServiceFunctionFirstParam.Unit, i);
@@ -23,13 +23,13 @@ public partial class InterOpWrapper
     {
         var result = new BranchOfAcceptableMeasParams();
 
-        var bcStr = GetArrayOfVariantsForParam(ServiceFunctionFirstParam.Bc);
-        result.BackscatteredCoefficient = bcStr == null ? 0 : double.Parse(bcStr[0], new CultureInfo("en-US"));
-        var riStr = GetArrayOfVariantsForParam(ServiceFunctionFirstParam.Ri);
-        result.RefractiveIndex = riStr == null ? 0 : double.Parse(riStr[0], new CultureInfo("en-US"));
+        var bcArr = GetArrayOfVariantsForParam(ServiceFunctionFirstParam.Bc);
+        result.BackscatteredCoefficient = bcArr.Length == 0 ? 0 : double.Parse(bcArr[0], new CultureInfo("en-US"));
+        var riArr = GetArrayOfVariantsForParam(ServiceFunctionFirstParam.Ri);
+        result.RefractiveIndex = riArr.Length == 0 ? 0 : double.Parse(riArr[0], new CultureInfo("en-US"));
 
         var distances = GetArrayOfVariantsForParam(ServiceFunctionFirstParam.Lmax);
-        if (distances != null)
+       // if (distances != null)
             for (int i = 0; i < distances.Length; i++)
             {
                 SetParam(ServiceFunctionFirstParam.Lmax, i);
@@ -87,7 +87,7 @@ public partial class InterOpWrapper
         });
         var leaf = unit.Distances[lmaxStr];
 
-        if (leaf.Resolutions == null || leaf.PeriodsToAverage == null || leaf.PulseDurations == null) return null;
+       // if (leaf.Resolutions == null || leaf.PeriodsToAverage == null || leaf.PulseDurations == null) return null;
 
         result.Add(new MeasParamByPosition
         {

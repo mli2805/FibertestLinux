@@ -3,8 +3,8 @@
 [Serializable]
 public class LeafOfAcceptableMeasParams
 {
-    public string[]? Resolutions;
-    public string[]? PulseDurations;
-    public string[]? PeriodsToAverage;
-    public string[]? MeasCountsToAverage;
+    public string[] Resolutions = null!;
+    public string[] PulseDurations = null!;
+    public string[] PeriodsToAverage = null!;
+    public string[] MeasCountsToAverage = null!;
 }

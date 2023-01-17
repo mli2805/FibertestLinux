@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="WpfCommonViews.IitOfficialHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:stringResources1="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             mc:Ignorable="d" 
+              d:DesignWidth="400">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5" >
+            <Grid Width="70">
+                <Image Source="pack://application:,,,/Resources/Ico/IIT.ico" Width="32"/>
+            </Grid>
+            <StackPanel Margin="0,5,35,5">
+                <TextBlock FontWeight="Bold" Text="FIBERTEST 2.0"/>
+                <TextBlock FontWeight="Bold" Text="Copyright © 2017-2022"/>
+                <TextBlock FontWeight="Bold" Text="{x:Static stringResources1:Resources.SID_Institute_of_Information_Technologies}"/>
+            </StackPanel>
+        </StackPanel>
+        <Border BorderThickness="0,2,0,0" BorderBrush="LightGray" Margin="5,0,5,10"/>
+    </StackPanel>
+</UserControl>

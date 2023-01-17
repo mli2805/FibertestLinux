@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="WpfCommonViews.RftsEventsOneLevelEeltView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             mc:Ignorable="d" d:DataContext="{d:DesignData wpfCommonViews:RftsEventsOneLevelEeltViewModel}">
+    <Grid>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Total_fiber_loss}">
+            <DockPanel>
+                <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Value__dB}" />
+                <TextBlock Margin="0,5,11,5" Text="{Binding AttenuationValue}" />
+                <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Threshold__dB}" />
+                <TextBlock Margin="0,5,11,5" Text="{Binding Threshold}" />
+                <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Deviation__dB}" />
+                <TextBlock Margin="0,5,11,5" Text="{Binding DeviationValue}" />
+                <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_State_}" />
+                <TextBlock Margin="0,5,11,5" Text="{Binding StateValue}"
+                           Foreground="{Binding StateColor}"/>
+            </DockPanel>
+        </GroupBox>
+
+    </Grid>
+</UserControl>

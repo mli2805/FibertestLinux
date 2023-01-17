@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="WpfCommonViews.RftsEventsFooterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignData wpfCommonViews:RftsEventsFooterViewModel}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <DockPanel>
+        <GroupBox Margin="5" Padding="10,0" DockPanel.Dock="Right">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5" 
+                            Visibility="{Binding LevelsContent.IsMinorExists, 
+                                Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Minor}" Width="120"/>
+                    <TextBlock Text="{Binding Minor}" 
+                               Foreground="{Binding MinorColor}" Width="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5" 
+                            Visibility="{Binding LevelsContent.IsMajorExists, 
+                                Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Major}" Width="120"/>
+                    <TextBlock Text="{Binding Major}" 
+                               Foreground="{Binding MajorColor}" Width="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5" 
+                            Visibility="{Binding LevelsContent.IsCriticalExists, 
+                                Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Critical}" Width="120"/>
+                    <TextBlock Text="{Binding Critical}" 
+                               Foreground="{Binding CriticalColor}" Width="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5" 
+                            Visibility="{Binding LevelsContent.IsUsersExists, 
+                                Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_User_s}" Width="120"/>
+                    <TextBlock Text="{Binding Users}" 
+                               Foreground="{Binding UsersColor}" Width="150"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Margin="5">
+            <StackPanel DockPanel.Dock="Left">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Trace_state}" Width="120"/>
+                    <TextBlock Text="{Binding TraceState}" 
+                               Foreground="{Binding TraceStateColor}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_ORL__dB}" Width="120"/>
+                    <TextBlock Text="{Binding Orl}"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+    </DockPanel>
+</UserControl>

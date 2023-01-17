@@ -6,7 +6,7 @@ namespace Fibertest.Rtu;
 
 public partial class InterOpWrapper
 {
-    public string? GetLineOfVariantsForParam(ServiceFunctionFirstParam param)
+    private string? GetLineOfVariantsForParam(ServiceFunctionFirstParam param)
     {
         int cmd = (int)ServiceFunctionCommand.GetParam;
         int prm1 = (int)param;
@@ -19,11 +19,11 @@ public partial class InterOpWrapper
         return Marshal.PtrToStringAnsi(unmanagedPointer);
     }
 
-    public string[]? GetArrayOfVariantsForParam(ServiceFunctionFirstParam paramCode)
+    private string[] GetArrayOfVariantsForParam(ServiceFunctionFirstParam paramCode)
     {
         string? value = GetLineOfVariantsForParam(paramCode);
         if (value == null)
-            return null;
+            return Array.Empty<string>();
 
         // if there is only one variant it will be returned without leading slash
         if (value[0] != '/')
@@ -33,7 +33,7 @@ public partial class InterOpWrapper
         return strs.Skip(1).ToArray();
     }
 
-    public bool SetParam(ServiceFunctionFirstParam param, int indexInLine)
+    private bool SetParam(ServiceFunctionFirstParam param, int indexInLine)
     {
         int cmd = (int)ServiceFunctionCommand.SetParam;
         int prm1 = (int)param;

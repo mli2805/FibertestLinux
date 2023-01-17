@@ -23,9 +23,10 @@ namespace MapLoaderCore
         {
             base.OnRender(drawingContext);
 
-            FormattedText text = new FormattedText(string.Format(CultureInfo.InvariantCulture, "{0:0.0}", Zoom) + "z, " + MapProvider, 
-                        CultureInfo.InvariantCulture, _fd, _tf, 20, Brushes.Blue);
-            drawingContext.DrawText(text, new Point(text.Height, text.Height));
+            var text = string.Format(CultureInfo.InvariantCulture, "{0:0.0}", Zoom) + "z, " + MapProvider;
+            var formattedText = new FormattedText(text, CultureInfo.InvariantCulture, _fd, _tf, 20, Brushes.Blue,
+                VisualTreeHelper.GetDpi(this).PixelsPerDip);
+            drawingContext.DrawText(formattedText, new Point(formattedText.Height, formattedText.Height));
         }
     }
 }
