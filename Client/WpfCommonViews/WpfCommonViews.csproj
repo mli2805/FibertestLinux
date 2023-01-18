@@ -1,31 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Shared\Dto\Dto.csproj" />
-    <ProjectReference Include="..\..\Shared\GMap.NET.Core\GMap.NET.Core.csproj" />
-    <ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
-    <ProjectReference Include="..\..\Shared\StringResources\StringResources.csproj" />
-    <ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Shared\Dto\Dto.csproj" />
+		<ProjectReference Include="..\..\Shared\GMap.NET.Core\GMap.NET.Core.csproj" />
+		<ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
+		<ProjectReference Include="..\..\Shared\StringResources\StringResources.csproj" />
+		<ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Utils\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Fibertest.OtdrDataFormat">
-      <HintPath>..\..\OtdrDataFormat\Fibertest.OtdrDataFormat.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="Fibertest.OtdrDataFormat">
+			<HintPath>..\..\OtdrDataFormat\Fibertest.OtdrDataFormat.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
 </Project>
