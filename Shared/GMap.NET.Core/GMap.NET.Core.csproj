@@ -34,6 +34,14 @@ https://github.com/judero01col/GMap.NET/blob/master/README.md#release-notes
     <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
     <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
   </ItemGroup>
+    
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
   <!-- <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'"> -->
   <!--   <PackageReference Include="System.Data.SqlClient"> -->
@@ -43,14 +51,6 @@ https://github.com/judero01col/GMap.NET/blob/master/README.md#release-notes
   <!--     <Version>5.0.0</Version> -->
   <!--   </PackageReference> -->
   <!-- </ItemGroup> -->
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">

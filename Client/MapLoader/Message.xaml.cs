@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MapLoaderCore
+namespace MapLoader
 {
    /// <summary>
    /// Interaction logic for Message.xaml

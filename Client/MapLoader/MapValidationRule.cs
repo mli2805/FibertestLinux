@@ -4,12 +4,12 @@ using System.IO;
 using System.Windows.Controls;
 using GMap.NET;
 
-namespace MapLoaderCore
+namespace MapLoader
 {
     public class MapValidationRule : ValidationRule
     {
         bool _userAcceptedLicenseOnce;
-        internal MainWindow Window;
+        internal MainWindow? Window;
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {

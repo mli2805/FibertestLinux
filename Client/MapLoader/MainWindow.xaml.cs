@@ -8,7 +8,7 @@ using System.Windows.Threading;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
 
-namespace MapLoaderCore
+namespace MapLoader
 {
     public partial class MainWindow
     {
@@ -200,7 +200,7 @@ namespace MapLoaderCore
                 try
                 {
                     PingReply reply = p.Send(hostNameOrAddress, timeout, buffer);
-                    pingStatus = (reply?.Status == IPStatus.Success);
+                    pingStatus = (reply.Status == IPStatus.Success);
                 }
                 catch (Exception)
                 {
