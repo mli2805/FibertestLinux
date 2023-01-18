@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>True</UseWindowsForms>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>True</UseWindowsForms>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Shared\GMap.NET.Core\GMap.NET.Core.csproj" />
-    <ProjectReference Include="..\..\Shared\GMap.NET.WindowsPresentation\GMap.NET.WindowsPresentation.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Shared\GMap.NET.Core\GMap.NET.Core.csproj" />
+		<ProjectReference Include="..\..\Shared\GMap.NET.WindowsPresentation\GMap.NET.WindowsPresentation.csproj" />
+	</ItemGroup>
 
 </Project>
