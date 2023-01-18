@@ -85,7 +85,7 @@ namespace WpfCommonViews
             await _windowManager.ShowDialogWithAssignedOwner(vm);
         }
 
-        public async void Close()
+        public async void CloseButton()
         {
             await TryCloseAsync();
         }

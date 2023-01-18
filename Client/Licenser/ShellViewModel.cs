@@ -128,7 +128,7 @@ namespace Licenser
             // PdfExposer.Show(pdfDoc, @"LicenseCertificate.pdf", new WindowManager());
         }
 
-        public async void Close()
+        public async void CloseButton()
         {
             await TryCloseAsync();
         }
