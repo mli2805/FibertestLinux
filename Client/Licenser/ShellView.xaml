@@ -1,0 +1,113 @@
+<Window x:Class="Licenser.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="25,15,25, 0" IsEnabled="{Binding IsEditable}">
+            <StackPanel Name="Id" Orientation="Horizontal" HorizontalAlignment="Right" Height="22" Visibility="Collapsed">
+                <TextBlock Width="160" Text="License ID" TextAlignment="Right" Margin="0,0,20,0" Foreground="Gray"/>
+                <TextBlock Width="300" Text="{Binding LicenseInFileModel.LicenseId}" Foreground="Gray"/>
+            </StackPanel>
+
+            <StackPanel Name="Key" Orientation="Horizontal" HorizontalAlignment="Right" Height="22" Margin="0,5, 0,20">
+                <TextBlock Width="160" Text="{x:Static stringResources:Resources.SID_License_number_}" 
+                           TextAlignment="Right" Margin="0,0,20,0" FontWeight="DemiBold" FontSize="16"/>
+                <TextBlock Width="300" Text="{Binding LicenseInFileModel.LicenseKey}"  
+                           FontWeight="DemiBold" FontSize="16" Foreground="{Binding LicenseInFileModel.LicenseKeyColor}"/>
+            </StackPanel>
+
+            <StackPanel Name="Owner" Orientation="Horizontal" Height="22" Margin="0,5"  HorizontalAlignment="Right" >
+                <TextBlock Text="{x:Static stringResources:Resources.SID_License_owner}" TextAlignment="Right" Margin="0,0,20,0"/>
+                <TextBox Width="300" Text="{Binding LicenseInFileModel.Owner}" />
+            </StackPanel>
+            <StackPanel Name="MachineKey" Orientation="Horizontal" Height="22" Margin="0,5" HorizontalAlignment="Right" 
+                        Visibility="{Binding LicenseInFileModel.IsBasic, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_License_type}" TextAlignment="Right" Margin="0,0,20,0"/>
+                <RadioButton GroupName="LicType" Width="110" Height="18" Content="{x:Static stringResources:Resources.SID_Standart}" 
+                             IsChecked="{Binding LicenseInFileModel.IsStandart}"/>
+                <RadioButton GroupName="LicType" Width="190" Height="18" Content="{x:Static stringResources:Resources.SID_With_workstation_linking}" 
+                             IsChecked="{Binding LicenseInFileModel.IsMachineKeyRequired}"/>
+                <TextBlock Width="0"/>
+            </StackPanel>
+            <StackPanel Name="Incremental" Orientation="Horizontal" Height="22" Margin="0,5"  HorizontalAlignment="Right" >
+                <TextBlock Text="{x:Static stringResources:Resources.SID_License_key_type}" TextAlignment="Right" Margin="0,0,20,0"/>
+                <RadioButton GroupName="LicKeyType" Width="110" Height="18" Content="{x:Static stringResources:Resources.SID_Basic}" 
+                             IsChecked="{Binding LicenseInFileModel.IsBasic}"/>
+                <RadioButton GroupName="LicKeyType" Width="120" Height="18" Content="{x:Static stringResources:Resources.SID_Incremental}" 
+                             IsChecked="{Binding LicenseInFileModel.IsIncremental}"/>
+                <TextBlock Width="70"/>
+            </StackPanel>
+            <StackPanel Name="Rtu" Orientation="Horizontal" Height="22" Margin="0,5" HorizontalAlignment="Right" >
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Rtu_count}" TextAlignment="Right" Margin="0,0,20,0"/>
+                <TextBox Width="100" Text="{Binding LicenseInFileModel.RtuCount, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Width="70" Margin="20, 0, 10, 0" Text="{Binding LicenseInFileModel.RtuCountTerm}"/>
+                <ComboBox Width="100" ItemsSource="{Binding LicenseInFileModel.TermUnit}" 
+                          SelectedItem="{Binding LicenseInFileModel.RtuCountTermUnit}"/>
+            </StackPanel>
+            <StackPanel Name="Client" Orientation="Horizontal" Height="22" Margin="0,5" HorizontalAlignment="Right" >
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Client_stations}" TextAlignment="Right" Margin="0,0,20,0"/>
+                <TextBox Width="100" Text="{Binding LicenseInFileModel.ClientStationCount}" />
+                <TextBox Width="70" Margin="20, 0, 10, 0" Text="{Binding LicenseInFileModel.ClientStationTerm}"/>
+                <ComboBox Width="100" ItemsSource="{Binding LicenseInFileModel.TermUnit}" 
+                          SelectedItem="{Binding LicenseInFileModel.ClientStationTermUnit}"/>
+            </StackPanel>
+            <StackPanel Name="Web" Orientation="Horizontal" Height="22" Margin="0,5" HorizontalAlignment="Right" 
+                        IsEnabled="{Binding LicenseInFileModel.IsWebClientsEnabled}" >
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Web_clients}" TextAlignment="Right" Margin="0,0,20,0"/>
+                <TextBox Width="100" Text="{Binding LicenseInFileModel.WebClientCount}" />
+                <TextBox Width="70" Margin="20, 0, 10, 0" Text="{Binding LicenseInFileModel.WebClientTerm}"/>
+                <ComboBox Width="100" ItemsSource="{Binding LicenseInFileModel.TermUnit}" 
+                          SelectedItem="{Binding LicenseInFileModel.WebClientTermUnit}"/>
+            </StackPanel>
+            <StackPanel Name="Super" Orientation="Horizontal" Height="22" Margin="0,5" HorizontalAlignment="Right" >
+                <TextBlock Text="{x:Static stringResources:Resources.SID_SuperClients}" TextAlignment="Right" 
+                           Margin="0,0,20,0"/>
+                <TextBox Width="100" Text="{Binding LicenseInFileModel.SuperClientStationCount}" />
+                <TextBox Width="70" Margin="20, 0, 10, 0" Text="{Binding LicenseInFileModel.SuperClientTerm}"/>
+                <ComboBox Width="100" ItemsSource="{Binding LicenseInFileModel.TermUnit}" 
+                          SelectedItem="{Binding LicenseInFileModel.SuperClientTermUnit}"/>
+            </StackPanel>
+
+
+            <StackPanel Name="Date" Orientation="Horizontal" Height="24" Margin="0,5" HorizontalAlignment="Right">
+                <TextBlock Width="160" Text="{x:Static stringResources:Resources.SID_Creation_date}" 
+                           TextAlignment="Right" Margin="0,0,20,0" Height="18"/>
+                <DatePicker Width="100" SelectedDate="{Binding LicenseInFileModel.CreationDate}" />
+                <TextBlock Width="200"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid HorizontalAlignment="Right" Margin="15, 20, 15, 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="{Binding LoadFromFileButtonRow}" Grid.Column="0" Name="CreateNew" 
+                    Content="{x:Static stringResources:Resources.SID_Create_new}" 
+                    Visibility="{Binding HaveRights, Converter={StaticResource BoolToVis}}" 
+                    Width="120" Height="22" Margin="5"/>
+            <Button Grid.Row="{Binding LoadFromFileButtonRow}" Grid.Column="1" Name="LoadFromFile" 
+                    Content="{x:Static stringResources:Resources.SID_Load_from_file}" Width="120" Height="22" Margin="5"/>
+            <Button Grid.Row="0" Grid.Column="2" Name="SaveAsFile" Content="{x:Static stringResources:Resources.SID_Save_as_file}" 
+                    Visibility="{Binding IsEditable, Converter={StaticResource BoolToVis}}" 
+                    Width="120" Height="22" Margin="5"/>
+            <Button Grid.Row="1" Grid.Column="1" Name="ToPdf" Content="{x:Static stringResources:Resources.SID_Pdf_certificate}"
+                    Visibility="{Binding IsEditable, Converter={StaticResource BoolToVis}}" 
+                    Width="120" Height="22" Margin="5"/>
+            <Button Grid.Row="1" Grid.Column="2"  Name="Close" Content="{x:Static stringResources:Resources.SID_Close}" 
+                    Width="120" Height="22" Margin="5"/>
+        </Grid>
+
+    </DockPanel>
+
+</Window>

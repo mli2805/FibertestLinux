@@ -4,7 +4,7 @@ public class LicenseInFile
 {
     public Guid LicenseId = Guid.NewGuid();
     public bool IsIncremental; // by default = false -> Main license
-    public string? Owner;
+    public string Owner = "";
 
     public LicenseParameterInFile RtuCount = new();
     public LicenseParameterInFile ClientStationCount = new();
