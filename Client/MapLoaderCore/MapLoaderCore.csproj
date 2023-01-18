@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
@@ -7,9 +7,8 @@
 		<Product>Demo.WindowsPresentation</Product>
 		<TargetFrameworks>net6.0-windows</TargetFrameworks>
 		<UseWPF>true</UseWPF>
-		<OutputType>WinExe</OutputType>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
-		<SignAssembly>True</SignAssembly>
+		<!-- <SignAssembly>True</SignAssembly> -->
 		<!-- <AssemblyOriginatorKeyFile>../../sn.snk</AssemblyOriginatorKeyFile> -->
 		<Prefer32Bit>false</Prefer32Bit>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -24,38 +23,6 @@
 		<OutputPath>..\..\Build\Release\</OutputPath>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net46|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net46|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net47|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net47|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
-		<NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
 		<NoWarn>1701;1702;CS0618</NoWarn>
 	</PropertyGroup>
@@ -68,11 +35,5 @@
 		<ProjectReference Include="..\..\Shared\GMap.NET.Core\GMap.NET.Core.csproj" />
 		<ProjectReference Include="..\..\Shared\GMap.NET.WindowsPresentation\GMap.NET.WindowsPresentation.csproj" />
 	</ItemGroup>
-
-	<!-- <ItemGroup> -->
-	<!--   <Compile Include="..\Demo.WindowsForms\Source\DemoStuff.cs"> -->
-	<!--     <Link>Source\DemoStuff.cs</Link> -->
-	<!--   </Compile> -->
-	<!-- </ItemGroup> -->
 
 </Project>
