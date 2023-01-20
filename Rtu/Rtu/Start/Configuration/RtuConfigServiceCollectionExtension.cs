@@ -8,7 +8,7 @@ public static class RtuConfigServiceCollectionExtension
 {
     public static IServiceCollection AddConfig(this IServiceCollection services, IConfiguration config)
     {
-        var configFile = Path.Combine(FileOperations.GetFibertestFolder(), "config/rtu.json");
+        var configFile = Path.Combine(FileOperations.GetMainFolder(), "config/rtu.json");
 
         services.ConfigureWritable<RtuGeneralConfig>(config.GetSection("General"), configFile);
         services.ConfigureWritable<CharonConfig>(config.GetSection("Charon"), configFile);
@@ -19,9 +19,9 @@ public static class RtuConfigServiceCollectionExtension
 
     public static void Configure(this IConfigurationBuilder configurationBuilder)
     {
-        var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
+        var configFile = FileOperations.GetMainFolder() +"/config/rtu.json";
 
-        ConfigUtils.Validate(configFile, new RtuConfig());
+        ConfigUtils.EnsureCreation<RtuConfig>(configFile);
         configurationBuilder.AddJsonFile(configFile, false, true);
     }
 

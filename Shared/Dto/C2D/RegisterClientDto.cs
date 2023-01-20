@@ -18,15 +18,4 @@ public class RegisterClientDto : BaseRequest
     }
 
     public override string What => "RegisterClient";
-
-}
-
-public class UnRegisterClientDto : BaseRequest
-{
-    public UnRegisterClientDto(string userName)
-    {
-        UserName = userName;
-    }
-
-    public string? UserName;
 }

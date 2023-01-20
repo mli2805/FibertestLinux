@@ -1,6 +1,5 @@
 ﻿// https://learn.microsoft.com/en-us/answers/questions/609232/how-to-save-the-updates-i-made-to-appsettings-conf.html?childToView=1092152#comment-1092152
 
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -12,6 +11,7 @@ public interface IWritableOptions<out T> : IOptions<T> where T : class, new()
 {
     void Update(Action<T> applyChanges);
 }
+
 public class WritableOptions<T> : IWritableOptions<T> where T : class, new()
 {
     private readonly IOptionsMonitor<T> _options;

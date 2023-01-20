@@ -5,10 +5,16 @@ namespace Fibertest.Utils.Setup;
 
 public static class FileOperations
 {
-    public static string GetFibertestFolder()
+    public static string GetMainFolder()
     {
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
         var assemblyPath = Path.GetDirectoryName(assemblyLocation)!;
+        return Directory.GetParent(assemblyPath)!.FullName;
+    }
+
+    public static string GetParentFolder(string filename)
+    {
+        var assemblyPath = Path.GetDirectoryName(filename)!;
         return Directory.GetParent(assemblyPath)!.FullName;
     }
 

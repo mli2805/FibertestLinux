@@ -2,7 +2,6 @@
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Grpc.Net.Client;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -10,16 +9,16 @@ namespace GrpsClientLib;
 
 public class GrpcC2RRequests
 {
-    private readonly ILogger<GrpcC2RRequests> _logger;
+    private readonly ILogger _logger;
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
 
     private string? _uri;
     private string _clientConnectionId = "";
 
-    public GrpcC2RRequests(IConfiguration config, ILogger<GrpcC2RRequests> logger)
+    public GrpcC2RRequests(IWritableConfig<ClientConfig> config, ILogger logger)
     {
         _logger = logger;
-        var dcAddress = config.GetSection("General")["DcAddress"];
+        var dcAddress = config.Value.General.ServerAddress.Main.Ip4Address;
         _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
     }
 
@@ -31,6 +30,7 @@ public class GrpcC2RRequests
     public void ChangeAddress(string dcAddress)
     {
         _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
+        _logger.LogInfo(Logs.Client, $"C2R gRPC service sends to {_uri}");
     }
 
     public async Task<TResult> SendAnyC2RRequest<T, TResult>(T dto) where T : BaseRtuRequest where TResult : RequestAnswer, new()

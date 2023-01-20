@@ -29,7 +29,7 @@ public sealed class Boot : IHostedService
         _logger.LogInfo(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
         _logger.LogInfo(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
 
-        var configFile = FileOperations.GetFibertestFolder() +"/config/rtu.json";
+        var configFile = FileOperations.GetMainFolder() +"/config/rtu.json";
         _logger.LogInfo(Logs.RtuService, $"config file: {configFile}");
         _logger.LogInfo(Logs.RtuService, 
             $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");

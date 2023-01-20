@@ -4,10 +4,17 @@ namespace Fibertest.Utils;
 
 public static class ConfigUtils
 {
-    public static void Validate<T>(string filename, T empty)
+    public static void EnsureCreation<T>(string filename) where T : new()
     {
+        var empty = new T();
+
         if (!File.Exists(filename))
+        {
+            var directoryName = Path.GetDirectoryName(filename);
+            if (!Directory.Exists(directoryName))
+                Directory.CreateDirectory(directoryName!);
             File.WriteAllText(filename, JsonConvert.SerializeObject(empty));
+        }
 
         // если не хватает какого-либо поля -
         //  при десериализации создаст со значением по умолчанию определенным в классе конфига и запишет в файл

@@ -2,7 +2,6 @@
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Grpc.Net.Client;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -10,7 +9,7 @@ namespace GrpsClientLib;
 
 public class GrpcC2DRequests
 {
-    private readonly ILogger<GrpcC2DRequests> _logger;
+    private readonly ILogger _logger;
 
     private static readonly JsonSerializerSettings JsonSerializerSettings =
         new() { TypeNameHandling = TypeNameHandling.All };
@@ -18,10 +17,10 @@ public class GrpcC2DRequests
     private string _uri;
     private string _clientConnectionId = "";
 
-    public GrpcC2DRequests(IConfiguration config, ILogger<GrpcC2DRequests> logger)
+    public GrpcC2DRequests(IWritableConfig<ClientConfig> config, ILogger logger)
     {
         _logger = logger;
-        var dcAddress = config.GetSection("General")["DcAddress"];
+        var dcAddress = config.Value.General.ServerAddress.Main.Ip4Address;
         _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
     }
 
@@ -33,6 +32,7 @@ public class GrpcC2DRequests
     public void ChangeAddress(string dcAddress)
     {
         _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
+        _logger.LogInfo(Logs.Client, $"C2D gRPC service sends to {_uri}");
     }
 
     public async Task<ClientRegisteredDto> RegisterClient(RegisterClientDto dto)
@@ -73,7 +73,7 @@ public class GrpcC2DRequests
         {
             var response = await grpcClient.SendCommandAsync(command);
             if (response == null)
-                return new ClientRegisteredDto(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "empty response" };
+                return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "empty response" };
 
             var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json);
             if (result == null)

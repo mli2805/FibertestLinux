@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using GMap.NET;
 using GMap.NET.China;
 using GMap.NET.Etc;
 using GMap.NET.Here;

@@ -15,7 +15,7 @@ namespace WpfExperiment;
 
 public class ShellViewModel : PropertyChangedBase, IShell
 {
-    private readonly ILogger<ShellViewModel> _logger;
+    private readonly ILogger _logger;
     private readonly GrpcC2DRequests _grpcC2DRequests;
     private readonly GrpcC2RRequests _grpcC2RRequests;
     public string DcAddress { get; set; } = "192.168.96.21"; // notebook
@@ -34,9 +34,15 @@ public class ShellViewModel : PropertyChangedBase, IShell
 
     public ObservableCollection<string> Lines { get; set; } = new() { " Here will be log " };
 
-    public ShellViewModel(ILogger<ShellViewModel> logger, GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests)
+    public ShellViewModel(IWritableConfig<ClientConfig> writableConfig, ILogger logger,
+        GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests)
     {
         _logger = logger;
+
+        var cul = writableConfig.Value.General.Culture;
+        _logger.LogInfo(Logs.Client, $"Found: General -> Culture: {cul}");
+        writableConfig.Update(c=>c.General.Culture = cul == "ru-RU" ? "en-US" : "ru-RU");
+
         _grpcC2DRequests = grpcC2DRequests;
         _grpcC2DRequests.SetClientConnectionId(_clientId);
         _grpcC2RRequests = grpcC2RRequests;

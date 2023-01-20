@@ -11,7 +11,7 @@ public partial class RtuManager
         await Task.Delay(1);
         try
         {
-            var fibertestPath = FileOperations.GetFibertestFolder();
+            var fibertestPath = FileOperations.GetMainFolder();
             var portDataFolder = Path.Combine(fibertestPath, @"PortData");
 
             if (!Directory.Exists(portDataFolder))

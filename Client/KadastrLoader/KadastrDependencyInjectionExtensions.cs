@@ -1,13 +1,13 @@
 ﻿using Caliburn.Micro;
+using Fibertest.Dto;
 using Fibertest.Utils;
 using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Fibertest.Dto;
 
-namespace WpfExperiment;
+namespace KadastrLoader;
 
-public static class ClientDependencyInjectionExtensions
+public static class KadastrDependencyInjectionExtensions
 {
     public static void AddMyDependencies(this SimpleContainer container)
     {
@@ -19,7 +19,7 @@ public static class ClientDependencyInjectionExtensions
 
     private static SimpleContainer AddConfig(this SimpleContainer container)
     {
-        var clientConfig = new WritableConfig<ClientConfig>("wpfExp.json");
+        var clientConfig = new WritableConfig<ClientConfig>("kadastr.json");
         container.RegisterInstance(typeof(IWritableConfig<ClientConfig>), "", clientConfig);
         return container;
     }
@@ -36,7 +36,7 @@ public static class ClientDependencyInjectionExtensions
                 .CreateLogger());
         });
 
-        Microsoft.Extensions.Logging.ILogger implementation = loggerFactory.CreateLogger<ShellViewModel>();
+        Microsoft.Extensions.Logging.ILogger implementation = loggerFactory.CreateLogger<KadastrLoaderViewModel>();
         container.RegisterInstance(typeof(Microsoft.Extensions.Logging.ILogger), "", implementation);
 
         return container;
