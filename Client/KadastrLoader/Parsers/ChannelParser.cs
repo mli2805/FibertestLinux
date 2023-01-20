@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
@@ -26,7 +25,7 @@ namespace KadastrLoader
             _grpcC2DRequests = grpcC2DRequests;
         }
 
-        public async void ParseChannels(string folder, BackgroundWorker worker)
+        public void ParseChannels(string folder, BackgroundWorker worker)
         {
             var count = 0;
             var filename = folder + @"\channels.csv";
@@ -34,13 +33,13 @@ namespace KadastrLoader
             worker.ReportProgress(0, string.Format(Resources.SID__0__lines_found_in_channels_csv, lines.Length));
             foreach (var line in lines)
             {
-                if (await ProcessOneLine(line) == null) count++;
+                if (ProcessOneLine(line) == null) count++;
             }
 
             worker.ReportProgress(0, string.Format(Resources.SID__0__channels_applied, count));
         }
 
-        private async Task<string?> ProcessOneLine(string line)
+        private string? ProcessOneLine(string line)
         {
             var fields = line.Split(';');
             if (fields.Length < 4) return "invalid line";
@@ -49,7 +48,7 @@ namespace KadastrLoader
             if (cmd == null) return "invalid line";
             _logger.LogInfo(Logs.Client, $"command create fiber {cmd.FiberId.First6()} between: {cmd.NodeId1.First6()} and {cmd.NodeId2.First6()}");
 
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = _grpcC2DRequests.SendEventSourcingCommand(cmd).Result;
             if (result.ReturnCode == ReturnCode.Error) 
                 return result.ErrorMessage;
 

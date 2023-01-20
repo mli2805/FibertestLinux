@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
@@ -24,7 +23,7 @@ namespace KadastrLoader
             _grpcC2DRequests = grpcC2DRequests;
         }
 
-        public async void ParseConpoints(string folder, BackgroundWorker worker)
+        public void ParseConpoints(string folder, BackgroundWorker worker)
         {
             var count = 0;
             var filename = folder + @"\conpoints.csv";
@@ -34,12 +33,12 @@ namespace KadastrLoader
             worker.ReportProgress(0, str);
             foreach (var line in lines)
             {
-                if (await ProcessOneLine(line) == null) count++;
+                if (ProcessOneLine(line) == null) count++;
             }
             worker.ReportProgress(0, string.Format(Resources.SID__0__conpoints_applied, count));
         }
 
-        private async Task<string?> ProcessOneLine(string line)
+        private string? ProcessOneLine(string line)
         {
             var fields = line.Split(';');
             if (fields.Length < 4) return "invalid line";
@@ -68,7 +67,7 @@ namespace KadastrLoader
             cmd.EquipmentId = Guid.NewGuid();
             cmd.Type = EquipmentType.Closure;
 
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = _grpcC2DRequests.SendEventSourcingCommand(cmd).Result;
             return result.ErrorMessage;
         }
 

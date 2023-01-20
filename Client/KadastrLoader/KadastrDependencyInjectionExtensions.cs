@@ -46,5 +46,15 @@ public static class KadastrDependencyInjectionExtensions
     {
         container.Singleton<GrpcC2RRequests>();
         container.Singleton<GrpcC2DRequests>();
+
+        container.Singleton<KadastrDbProvider>();
+        container.Singleton<KadastrDbSettings>();
+
+        container.RegisterInstance(typeof(LoadedAlready), "", new LoadedAlready());
+
+        container.Singleton<KadastrFilesParser>();
+        container.Singleton<ChannelParser>();
+        container.Singleton<WellParser>();
+        container.Singleton<ConpointParser>();
     }
 }

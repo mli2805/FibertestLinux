@@ -8,11 +8,11 @@ namespace KadastrLoader
     public class KadastrDbSettings
     {
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly ILogger<KadastrDbSettings> _logger;
+        private readonly ILogger _logger;
         private string _mysqlServerAddress = null!;
         private int _mysqlTcpPort;
 
-        public KadastrDbSettings(IWritableConfig<ClientConfig> config, ILogger<KadastrDbSettings> logger)
+        public KadastrDbSettings(IWritableConfig<ClientConfig> config, ILogger logger)
         {
             _config = config;
             _logger = logger;
@@ -28,7 +28,8 @@ namespace KadastrLoader
             _mysqlTcpPort = _config.Value.General.MysqlTcpPort;
             _logger.LogInfo(Logs.Client, $"MySqlConnectionString = {MySqlConnectionString}");
         }
-        private string MySqlConnectionString => $"server={_mysqlServerAddress};port={_mysqlTcpPort};user id=root;password=root;database=ft30kadastr";
+        // private string MySqlConnectionString => $"server=localhost;port={_mysqlTcpPort};user id=root;password=root;database=ft30kadastr";
+       private string MySqlConnectionString => $"server={_mysqlServerAddress};port={_mysqlTcpPort};user id=root;password=root;database=ft30kadastr";
 
         public DbContextOptions<KadastrDbContext> Options =>
             new DbContextOptionsBuilder<KadastrDbContext>()

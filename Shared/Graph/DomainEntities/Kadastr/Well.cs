@@ -2,7 +2,7 @@
 
 public class Well
 {
-    public int Id;
-    public int InKadastrId;
-    public Guid InFibertestId;
+    public int Id { get; set; }
+    public int InKadastrId { get; set; }
+    public Guid InFibertestId { get; set; }
 }

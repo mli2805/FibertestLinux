@@ -35,9 +35,11 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<Model>();
         return services;
     }
+
     private static IServiceCollection AddDbRepositories(this IServiceCollection services)
     {
-        services.AddSingleton<RtuStationsRepository>(); // для каждого реквеста новый
+        services.AddSingleton<RtuStationsRepository>();
+        services.AddSingleton<SorFileRepository>();
         services.AddSingleton<SnapshotRepository>();
         return services;
     }
@@ -65,6 +67,11 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<EventToLogLineParser>();
         services.AddSingleton<EventLogComposer>();
 
+        services.AddSingleton<GraphGpsCalculator>();
+
+        services.AddSingleton<BaseRefsCheckerOnServer>();
+        services.AddSingleton<BaseRefLandmarksTool>();
+        services.AddSingleton<TraceModelBuilder>();
 
         services.AddSingleton<C2RCommandsProcessor>();
         services.AddSingleton<ClientToIitRtuTransmitter>();

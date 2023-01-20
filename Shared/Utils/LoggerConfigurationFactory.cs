@@ -1,7 +1,7 @@
 ﻿using Serilog.Events;
 using Serilog;
 using System.Diagnostics;
-using System.Reflection;
+using Fibertest.Utils.Setup;
 
 namespace Fibertest.Utils;
 
@@ -45,9 +45,7 @@ public static class LoggerConfigurationFactory
 
     public static LoggerConfiguration Configure(string logLevelConstant)
     {
-        var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
-        var logFolder = Path.Combine(basePath, @"../log");
+        var logFolder = Path.Combine(FileOperations.GetMainFolder(), @"log");
 
         var template = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
         var loggerConfiguration = new LoggerConfiguration()

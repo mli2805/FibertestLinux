@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
@@ -15,12 +14,12 @@ namespace KadastrLoader
 {
     public class WellParser
     {
-        private readonly ILogger<WellParser> _logger;
+        private readonly ILogger _logger;
         private readonly KadastrDbProvider _kadastrDbProvider;
         private readonly LoadedAlready _loadedAlready;
         private readonly GrpcC2DRequests _grpcC2DRequests;
 
-        public WellParser(ILogger<WellParser> logger, KadastrDbProvider kadastrDbProvider, 
+        public WellParser(ILogger logger, KadastrDbProvider kadastrDbProvider, 
              LoadedAlready loadedAlready, GrpcC2DRequests grpcC2DRequests)
         {
             _logger = logger;
@@ -29,7 +28,7 @@ namespace KadastrLoader
             _grpcC2DRequests = grpcC2DRequests;
         }
 
-        public async void ParseWells(string folder, BackgroundWorker worker)
+        public void ParseWells(string folder, BackgroundWorker worker)
         {
             var count = 0;
             var filename = folder + @"\wells.csv";
@@ -38,13 +37,13 @@ namespace KadastrLoader
             worker.ReportProgress(0, string.Format(Resources.SID__0__lines_found_in_wells_csv, lines.Length));
             foreach (var line in lines)
             {
-                if (await ProcessOneLine(line) == null) count++;
+                if (ProcessOneLine(line) == null) count++;
             }
 
             worker.ReportProgress(0, string.Format(Resources.SID__0__wells_applied, count));
         }
 
-        private async Task<string?>  ProcessOneLine(string line)
+        private string?  ProcessOneLine(string line)
         {
             var fields = line.Split(';');
             if (fields.Length < 5) return "invalid line";
@@ -52,7 +51,6 @@ namespace KadastrLoader
             if (!int.TryParse(fields[0], out int inKadastrId)) return "invalid line";
 
             var existingWell = _loadedAlready.Wells.FirstOrDefault(w => w.InKadastrId == inKadastrId);
-            // if (existingWell != null) return "well exists already";
 
             var well = new Well()
             {
@@ -63,7 +61,7 @@ namespace KadastrLoader
             _kadastrDbProvider.AddWell(well).Wait();
 
             var cmd = CreateNodeCmd(fields, well.InFibertestId);
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = _grpcC2DRequests.SendEventSourcingCommand(cmd).Result;
             _logger.LogInfo(Logs.Client, result.ReturnCode != ReturnCode.Error
                 ? $"Well {fields[1].Trim()} added successfully."
                 : $"Failed to add well {fields[1].Trim()}.  {result.ErrorMessage}");

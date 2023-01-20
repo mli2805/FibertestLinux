@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Caliburn.Micro;
@@ -144,12 +145,12 @@ namespace KadastrLoader
         {
             var dlg = new OpenFileDialog
             {
-                InitialDirectory = FileOperations.GetMainFolder(),
+                InitialDirectory = FileOperations.GetParentFolder(FileOperations.GetMainFolder() + @"\any.file"),
                 Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
             };
             if (dlg.ShowDialog() == true)
             {
-                SelectedFolder = FileOperations.GetParentFolder(dlg.FileName);
+                SelectedFolder = Path.GetDirectoryName(dlg.FileName)!;
                 _isFolderValid = true;
                 NotifyOfPropertyChange(nameof(IsStartEnabled));
             }
