@@ -1,32 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Data\**" />
-    <EmbeddedResource Remove="Data\**" />
-    <None Remove="Data\**" />
-    <Page Remove="Data\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Data\**" />
+		<EmbeddedResource Remove="Data\**" />
+		<None Remove="Data\**" />
+		<Page Remove="Data\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Shared\Dto\Dto.csproj" />
-    <ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
-    <ProjectReference Include="..\..\Shared\StringResources\StringResources.csproj" />
-    <ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
-    <ProjectReference Include="..\GrpsClientLib\GrpsClientLib.csproj" />
-    <ProjectReference Include="..\WpfCommonViews\WpfCommonViews.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Shared\Dto\Dto.csproj" />
+		<ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
+		<ProjectReference Include="..\..\Shared\StringResources\StringResources.csproj" />
+		<ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
+		<ProjectReference Include="..\GrpsClientLib\GrpsClientLib.csproj" />
+		<ProjectReference Include="..\WpfCommonViews\WpfCommonViews.csproj" />
+	</ItemGroup>
 
 </Project>
