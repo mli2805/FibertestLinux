@@ -3494,4 +3494,10 @@ Please try again later</value>
 	<data name="SID__2___DisconnectOtdr" xml:space="preserve">
     <value>2 - DisconnectOtdr</value>
   </data>
+	<data name="SID_Iit_address" xml:space="preserve">
+		<value>220099, the Republic of Belarus, Minsk, Kazintsa st., 11A, office 304a</value>
+	</data>
+	<data name="SID_Optical_fiber_monitoring_system_software" xml:space="preserve">
+		<value>Optical fiber monitoring system software</value>
+	</data>
 </root>

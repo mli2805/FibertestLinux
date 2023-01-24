@@ -3494,4 +3494,10 @@ RTU инициализируется в данный момент!</value>
 	<data name="SID__2___DisconnectOtdr" xml:space="preserve">
 		<value>2 - Освободить OTDR</value>
 	</data>
+	<data name="SID_Iit_address" xml:space="preserve">
+		<value>220099, Республика Беларусь, г. Минск, ул. Казинца, д. 11а, офис 304а</value>
+	</data>
+	<data name="SID_Optical_fiber_monitoring_system_software" xml:space="preserve">
+		<value>Программный комплекс мониторинга оптических волокон</value>
+	</data>
 </root>

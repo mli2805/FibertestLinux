@@ -4174,6 +4174,15 @@ namespace Fibertest.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 220099, the Republic of Belarus, Minsk, Kazintsa st., 11A, office 304a.
+        /// </summary>
+        public static string SID_Iit_address {
+            get {
+                return ResourceManager.GetString("SID_Iit_address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In &quot;Without Map&quot; mode.
         /// </summary>
         public static string SID_In__Without_Map__mode {
@@ -6223,6 +6232,15 @@ namespace Fibertest.StringResources {
         public static string SID_Optical_events_report_for__0_d_____1_d_ {
             get {
                 return ResourceManager.GetString("SID_Optical_events_report_for__0_d_____1_d_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optical fiber monitoring system software.
+        /// </summary>
+        public static string SID_Optical_fiber_monitoring_system_software {
+            get {
+                return ResourceManager.GetString("SID_Optical_fiber_monitoring_system_software", resourceCulture);
             }
         }
         

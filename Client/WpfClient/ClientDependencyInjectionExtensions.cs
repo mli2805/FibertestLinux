@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Fibertest.Dto;
 using Fibertest.Utils;
 using GrpsClientLib;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,21 @@ public static class ClientDependencyInjectionExtensions
 {
     public static void AddMyDependencies(this SimpleContainer container)
     {
+        container
+            .AddConfig()
+            .AddLogging()
+            .AddOtherDependencies();
+    }
+
+    private static SimpleContainer AddConfig(this SimpleContainer container)
+    {
+        var clientConfig = new WritableConfig<ClientConfig>("kadastr.json");
+        container.RegisterInstance(typeof(IWritableConfig<ClientConfig>), "", clientConfig);
+        return container;
+    }
+
+    private static SimpleContainer AddLogging(this SimpleContainer container)
+    {
         ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.ClearProviders();
@@ -20,20 +36,15 @@ public static class ClientDependencyInjectionExtensions
                 .CreateLogger());
         });
 
-        container
-            .AddOneGroup(loggerFactory)
-            .AddLastGroup(loggerFactory);
-    }
-
-    private static SimpleContainer AddOneGroup(this SimpleContainer container, ILoggerFactory lf)
-    {
-        container.Singleton<GrpcC2RRequests>().RegisterInstance(typeof(ILogger<GrpcC2RRequests>), "", lf.CreateLogger<GrpcC2RRequests>());
+        Microsoft.Extensions.Logging.ILogger implementation = loggerFactory.CreateLogger<ShellViewModel>();
+        container.RegisterInstance(typeof(Microsoft.Extensions.Logging.ILogger), "", implementation);
 
         return container;
     }
 
-    private static void AddLastGroup(this SimpleContainer container, ILoggerFactory lf)
+    private static void AddOtherDependencies(this SimpleContainer container)
     {
-        container.Singleton<GrpcC2DRequests>().RegisterInstance(typeof(ILogger<GrpcC2DRequests>), "", lf.CreateLogger<GrpcC2DRequests>());
+        container.Singleton<GrpcC2RRequests>();
+        container.Singleton<GrpcC2DRequests>();
     }
 }

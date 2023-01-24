@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
 using Caliburn.Micro;
 
 namespace Licenser
@@ -34,8 +36,18 @@ namespace Licenser
             _container.BuildUp(instance);
         }
 
-        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e) {
+        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
+        {
+            CultureInfo.CurrentCulture = new CultureInfo("ru-RU");
+            CultureInfo.CurrentUICulture = new CultureInfo("ru-RU");
+
             DisplayRootViewForAsync<IShell>();
+        }
+
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            yield return typeof(ShellView).Assembly; // this Assembly (.exe)
+            yield return typeof(WpfCommonViews.IWaitCursor).Assembly; // WpfCommonViews
         }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Licenser": {
+      "commandName": "Project",
+      "commandLineArgs": "ihaverights"
+    }
+  }
+}

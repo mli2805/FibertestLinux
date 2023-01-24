@@ -1,0 +1,65 @@
+﻿body {
+    width: 680px;
+    margin-left: 20px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+	font-size: 16px;
+    line-height: 95%;
+}
+
+.centered {
+    text-align: center;
+}
+
+.iit {
+    font-size: 20px;
+}
+
+.address {
+    margin-top: 10px;
+}
+
+.title {
+    margin-top: 40px;
+    margin-bottom: 30px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.number0 {
+    margin-top: 30px;
+    font-size: 18px;
+}
+
+.number {
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+.parameters {
+    margin-top: 50px;
+    text-align: left;
+}
+
+
+.digital {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 100%;
+}
+.signature {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.pwdPage {
+    position: relative;
+}
+
+.pwd {
+    position: absolute;
+    top: 500px;
+    left: 320px;
+    font-size: 44px;
+    color: lightgray;
+}
+

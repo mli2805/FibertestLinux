@@ -10,12 +10,31 @@
 
 	<ItemGroup>
 		<PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+		<PackageReference Include="itext7.pdfhtml" Version="4.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
 		<ProjectReference Include="..\..\Shared\StringResources\StringResources.csproj" />
 		<ProjectReference Include="..\WpfCommonViews\WpfCommonViews.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Resources\Background.jpg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\header.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\LicenseCertificateTemplate.html">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\PasswordBackground.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\Styles.css">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

@@ -12,6 +12,16 @@ public static class FileOperations
         return Directory.GetParent(assemblyPath)!.FullName;
     }
 
+    public static void EnsureCreation(string filename, string content)
+    {
+        var path = Path.GetDirectoryName(filename);
+
+
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path!);
+        File.WriteAllText(filename, content);
+    }
+
     public static string GetParentFolder(string filename)
     {
         var assemblyPath = Path.GetDirectoryName(filename)!;

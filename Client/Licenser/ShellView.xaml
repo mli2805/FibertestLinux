@@ -101,7 +101,7 @@
             <Button Grid.Row="0" Grid.Column="2" Name="SaveAsFile" Content="{x:Static stringResources:Resources.SID_Save_as_file}" 
                     Visibility="{Binding IsEditable, Converter={StaticResource BoolToVis}}" 
                     Width="120" Height="22" Margin="5"/>
-            <Button Grid.Row="1" Grid.Column="1" Name="ToPdf" Content="{x:Static stringResources:Resources.SID_Pdf_certificate}"
+            <Button Grid.Row="1" Grid.Column="1" Name="ToPdfButton" Content="{x:Static stringResources:Resources.SID_Pdf_certificate}"
                     Visibility="{Binding IsEditable, Converter={StaticResource BoolToVis}}" 
                     Width="120" Height="22" Margin="5"/>
             <Button Grid.Row="1" Grid.Column="2"  Name="CloseButton" Content="{x:Static stringResources:Resources.SID_Close}" 
