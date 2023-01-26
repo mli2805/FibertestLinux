@@ -54,7 +54,7 @@ public class LastConnectionTimeChecker : BackgroundService
     {
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.LogInfo(Logs.DataCenter, $"Last connection checker started. Process {pid}, thread {tid}");
+        _logger.LogInfo(Logs.DataCenter, $"Last connection checker starts. Process {pid}, thread {tid}");
         await DoWork(stoppingToken);
     }
 

@@ -169,4 +169,6 @@ public class ShellViewModel : PropertyChangedBase, IShell
         await _grpcC2DRequests.UnRegisterClient(new UnRegisterClientDto(_username));
     }
 
+   
+
 }

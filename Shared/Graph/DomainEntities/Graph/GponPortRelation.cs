@@ -9,6 +9,7 @@ public class GponPortRelation
     public int SlotPosition;
     public int GponInterface;
     public Guid RtuId;
+    public RtuMaker RtuMaker;
     public OtauPortDto? OtauPortDto;
     public Guid TraceId;
 }

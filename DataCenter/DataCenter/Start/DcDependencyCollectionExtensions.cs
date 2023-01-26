@@ -21,6 +21,8 @@ public static class DcDependencyCollectionExtensions
         services.AddHostedService(x => x.GetService<Boot>());
         services.AddSingleton<LastConnectionTimeChecker>();
         services.AddHostedService(x => x.GetService<LastConnectionTimeChecker>());
+        services.AddSingleton<SnmpTrapListener>();
+        services.AddHostedService(x => x.GetService<SnmpTrapListener>());
         services.AddSingleton<MessageQueueService>();
         services.AddHostedService(x => x.GetService<MessageQueueService>());
 
@@ -72,6 +74,11 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<BaseRefsCheckerOnServer>();
         services.AddSingleton<BaseRefLandmarksTool>();
         services.AddSingleton<TraceModelBuilder>();
+
+        services.AddSingleton<TrapParser>();
+        services.AddSingleton<OutOfTurnData>();
+        services.AddSingleton<OutOfTurnRequestBuilder>();
+        services.AddSingleton<SnmpEngine2>();
 
         services.AddSingleton<C2RCommandsProcessor>();
         services.AddSingleton<ClientToIitRtuTransmitter>();
