@@ -4,7 +4,7 @@ namespace Fibertest.Graph;
 
 public class Rtu
 {
-    public Guid Id;
+    public Guid Id { get; set; }
 
     // public string? OtauId; // in VeEX RTU main OTAU has its own ID
     public string? OtdrId; // ditto
@@ -17,7 +17,7 @@ public class Rtu
     public string? Omsn;
 
     public Guid NodeId;
-    public string Title = "";
+    public string Title { get; set; } = "";
     public string? Comment;
 
     public NetAddress MainChannel = new(@"", -1);

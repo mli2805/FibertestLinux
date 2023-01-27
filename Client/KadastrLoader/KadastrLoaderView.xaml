@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:kadastrLoader="clr-namespace:KadastrLoader"
         xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
-        xmlns:wpfCommonViews="clr-namespace:WpfCommonViews;assembly=WpfCommonViews"
+        xmlns:wpfCommonViews="clr-namespace:Fibertest.WpfCommonViews;assembly=Fibertest.WpfCommonViews"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Width="600" Height="470" Left="200" Top="300"

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public interface ILicenseFileChooser
     {

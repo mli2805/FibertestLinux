@@ -5,8 +5,8 @@ public class Zone
     public Guid ZoneId;
     public bool IsDefaultZone;
 
-    public string Title;
-    public string? Comment;
+    public string Title { get; set; }
+    public string? Comment { get; set; }
 
     public Zone(string title)
     {

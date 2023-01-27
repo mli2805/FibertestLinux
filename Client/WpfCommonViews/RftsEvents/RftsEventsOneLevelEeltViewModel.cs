@@ -2,7 +2,7 @@
 using Fibertest.OtdrDataFormat;
 using Fibertest.StringResources;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public class RftsEventsOneLevelEeltViewModel
     {

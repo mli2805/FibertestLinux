@@ -5,7 +5,7 @@ using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.StringResources;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public class WaitViewModel : Screen
     {

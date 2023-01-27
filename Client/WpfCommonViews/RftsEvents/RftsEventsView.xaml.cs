@@ -1,4 +1,4 @@
-﻿namespace WpfCommonViews
+﻿namespace Fibertest.WpfCommonViews
 {
     /// <summary>
     /// Interaction logic for RftsEventsView.xaml

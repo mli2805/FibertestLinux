@@ -1,7 +1,7 @@
 ﻿using System;
 using Caliburn.Micro;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public class ServerConnectionLostViewModel : Screen
     {

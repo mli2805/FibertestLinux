@@ -6,7 +6,7 @@ using Caliburn.Micro;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public class LicenseFromFileDecoder
     {

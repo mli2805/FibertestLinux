@@ -2,13 +2,13 @@
 
 public class TceS
 {
-    public Guid Id = Guid.NewGuid();
-    public string Title = "";
-    public TceTypeStruct TceTypeStruct;
-    public string Ip = @"0.0.0.0";
-    public List<TceSlot> Slots = new();
-    public bool ProcessSnmpTraps;
-    public string Comment = "";
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public string Title { get; set; } = "";
+    public TceTypeStruct TceTypeStruct { get; set; }
+    public string Ip { get; set; } = @"0.0.0.0";
+    public List<TceSlot> Slots { get; set; } = new();
+    public bool ProcessSnmpTraps { get; set; }
+    public string Comment { get; set; } = "";
 
     public TceS()
     {

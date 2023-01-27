@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Fibertest.StringResources;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public static class MessageTypeExt
     {

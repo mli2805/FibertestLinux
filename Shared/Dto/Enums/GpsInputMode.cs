@@ -1,4 +1,4 @@
-﻿namespace Fibertest.Graph;
+﻿namespace Fibertest.Dto;
 
 public enum GpsInputMode
 {

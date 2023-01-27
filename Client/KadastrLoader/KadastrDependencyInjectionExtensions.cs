@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using Fibertest.WpfCommonViews;
 using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -44,6 +45,8 @@ public static class KadastrDependencyInjectionExtensions
 
     private static void AddOtherDependencies(this SimpleContainer container)
     {
+        container.PerRequest<IWaitCursor, WaitCursor>();
+
         container.Singleton<GrpcC2RRequests>();
         container.Singleton<GrpcC2DRequests>();
 

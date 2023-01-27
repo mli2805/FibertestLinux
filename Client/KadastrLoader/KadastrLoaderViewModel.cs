@@ -9,6 +9,7 @@ using Fibertest.Dto;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.Utils.Setup;
+using Fibertest.WpfCommonViews;
 using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
@@ -19,6 +20,7 @@ namespace KadastrLoader
     {
         private ILogger _logger;
         private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly SimpleContainer _container;
         private readonly LoadedAlready _loadedAlready;
         private readonly KadastrDbProvider _kadastrDbProvider;
         private readonly KadastrFilesParser _kadastrFilesParser;
@@ -76,14 +78,15 @@ namespace KadastrLoader
 
         public ObservableCollection<string> ProgressLines { get; set; } = new ObservableCollection<string>();
 
-        public KadastrLoaderViewModel(IWritableConfig<ClientConfig> config, ILogger logger, 
-            GrpcC2DRequests grpcC2DRequests,
+        public KadastrLoaderViewModel(IWritableConfig<ClientConfig> config, ILogger logger,
+            GrpcC2DRequests grpcC2DRequests, SimpleContainer container,
             LoadedAlready loadedAlready, KadastrDbProvider kadastrDbProvider,
             KadastrFilesParser kadastrFilesParser)
         {
             _logger = logger;
             _logger.LogInfo(Logs.Client, "We are in c-tor");
             _grpcC2DRequests = grpcC2DRequests;
+            _container = container;
             ServerIp = config.Value.General.ServerAddress.Main.Ip4Address;
             _grpcC2DRequests.ChangeAddress(ServerIp);
             _loadedAlready = loadedAlready;
@@ -111,12 +114,16 @@ namespace KadastrLoader
         {
             try
             {
-                _kadastrDbProvider.Init();
-                _loadedAlready.Wells = await _kadastrDbProvider.GetWells();
-                _loadedAlready.Conpoints = await _kadastrDbProvider.GetConpoints();
-                var count = _loadedAlready.Wells.Count;
-                KadastrMessage = string.Format(Resources.SID_Nodes_loaded_from_Kadastr_so_far___0_, count);
-                NotifyOfPropertyChange(nameof(IsStartEnabled));
+                using (_container.GetInstance<IWaitCursor>())
+                {
+                    _kadastrDbProvider.Init();
+                    _loadedAlready.Wells = await _kadastrDbProvider.GetWells();
+                    _loadedAlready.Conpoints = await _kadastrDbProvider.GetConpoints();
+                    var count = _loadedAlready.Wells.Count;
+                    KadastrMessage = string.Format(Resources.SID_Nodes_loaded_from_Kadastr_so_far___0_, count);
+                    NotifyOfPropertyChange(nameof(IsStartEnabled));
+                }
+               
                 return true;
             }
             catch (Exception e)

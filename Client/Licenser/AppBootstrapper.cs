@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using Caliburn.Micro;
+using Fibertest.WpfCommonViews;
 
 namespace Licenser
 {
@@ -47,7 +48,7 @@ namespace Licenser
         protected override IEnumerable<Assembly> SelectAssemblies()
         {
             yield return typeof(ShellView).Assembly; // this Assembly (.exe)
-            yield return typeof(WpfCommonViews.IWaitCursor).Assembly; // WpfCommonViews
+            yield return typeof(IWaitCursor).Assembly; // WpfCommonViews
         }
     }
 }

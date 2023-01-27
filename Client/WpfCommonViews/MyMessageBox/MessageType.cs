@@ -1,4 +1,4 @@
-﻿namespace WpfCommonViews
+﻿namespace Fibertest.WpfCommonViews
 {
     public enum MessageType
     {

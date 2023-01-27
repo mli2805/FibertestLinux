@@ -1,9 +1,6 @@
-﻿namespace GMap.NET
+﻿namespace Fibertest.Dto
 {
-    /// <summary>
-    ///     tile access mode
-    /// </summary>
-    public enum AccessMode
+    public enum AccessModeFt
     {
         /// <summary>
         ///     access only server

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Fibertest.StringResources;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public static class LongOperationExt
     {

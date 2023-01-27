@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public class ScrollToBottomOnAddBehavior : Behavior<ListView>
     {

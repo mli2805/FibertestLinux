@@ -4,7 +4,7 @@ using System.Windows.Threading;
 using Fibertest.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public class SoundManager
     {

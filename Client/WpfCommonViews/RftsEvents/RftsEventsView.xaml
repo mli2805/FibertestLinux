@@ -1,10 +1,10 @@
-﻿<Window x:Class="WpfCommonViews.RftsEventsView"
+﻿<Window x:Class="Fibertest.WpfCommonViews.RftsEventsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
-        xmlns:wpfCommonViews="clr-namespace:WpfCommonViews"
+        xmlns:wpfCommonViews="clr-namespace:Fibertest.WpfCommonViews"
         mc:Ignorable="d"
         Width="736" WindowStartupLocation="CenterOwner" SizeToContent="Height"
         d:DataContext="{d:DesignData wpfCommonViews:RftsEventsViewModel}">

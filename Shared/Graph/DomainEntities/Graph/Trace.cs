@@ -5,7 +5,7 @@ namespace Fibertest.Graph;
 public class Trace
 {
     public Guid TraceId;
-    public string Title = String.Empty;
+    public string Title { get; set; } = String.Empty;
     public Guid RtuId; // it's better to store than search through the RTU list
 
     public FiberState State = FiberState.NotJoined;

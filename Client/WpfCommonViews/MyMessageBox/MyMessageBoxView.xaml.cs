@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     /// <summary>
     /// Interaction logic for MyMessageBoxView.xaml

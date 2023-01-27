@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public static class FocusExtension
     {

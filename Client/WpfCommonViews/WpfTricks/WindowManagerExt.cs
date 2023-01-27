@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public static class WindowManagerExt
     {

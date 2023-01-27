@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public class OneLevelTableContent
     {

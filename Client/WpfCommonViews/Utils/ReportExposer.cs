@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Caliburn.Micro;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     public static class ReportExt
     {

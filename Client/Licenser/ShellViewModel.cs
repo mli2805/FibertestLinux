@@ -4,9 +4,9 @@ using System.IO;
 using Caliburn.Micro;
 using Fibertest.Graph;
 using Fibertest.Utils.Setup;
+using Fibertest.WpfCommonViews;
 using iText.Html2pdf;
 using Microsoft.Win32;
-using WpfCommonViews;
 
 namespace Licenser
 {

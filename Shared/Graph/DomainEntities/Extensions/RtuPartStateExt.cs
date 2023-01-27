@@ -19,21 +19,6 @@ public static class RtuPartStateExt
         }
     }
 
-    //public static Brush GetBrush(this RtuPartState state, bool isForeground)
-    //{
-    //    switch (state)
-    //    {
-    //        case RtuPartState.Broken:
-    //            return Brushes.Red;
-    //        case RtuPartState.NotSetYet:
-    //            return isForeground ? Brushes.LightGray : Brushes.Transparent;
-    //        case RtuPartState.Ok:
-    //            return isForeground ? Brushes.Black : Brushes.Transparent;
-    //        default:
-    //            return isForeground ? Brushes.Black : Brushes.Transparent;
-    //    }
-    //}
-
     public static string? GetPathToPictogram(this RtuPartState state)
     {
         switch (state)

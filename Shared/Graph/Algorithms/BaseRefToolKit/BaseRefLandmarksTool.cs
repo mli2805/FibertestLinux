@@ -43,7 +43,7 @@ namespace Fibertest.Graph
 
         private void InsertLandmarks(OtdrDataKnownBlocks sorData, TraceModelForBaseRef model)
         {
-            var newLandmarks = new Landmark[model.EquipArray.Length];
+            var newLandmarks = new OtdrDataFormat.Landmark[model.EquipArray.Length];
 
             var oldLandmarkIndex = 0;
             for (var i = 0; i < model.EquipArray.Length; i++)
@@ -54,7 +54,7 @@ namespace Fibertest.Graph
                     oldLandmarkIndex++;
                 }
                 else
-                    newLandmarks[i] = new Landmark() { Code = LandmarkCode.Manhole };
+                    newLandmarks[i] = new OtdrDataFormat.Landmark() { Code = LandmarkCode.Manhole };
             }
 
             sorData.LinkParameters.LandmarkBlocks = newLandmarks;

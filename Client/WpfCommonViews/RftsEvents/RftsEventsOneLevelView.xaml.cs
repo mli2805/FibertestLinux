@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace WpfCommonViews
+namespace Fibertest.WpfCommonViews
 {
     /// <summary>
     /// Interaction logic for RftsEventsOneLevelView.xaml

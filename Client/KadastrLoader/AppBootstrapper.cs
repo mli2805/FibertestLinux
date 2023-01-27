@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Caliburn.Micro;
 
 namespace KadastrLoader
@@ -16,6 +17,8 @@ namespace KadastrLoader
 
         protected override void Configure() {
             _container = new SimpleContainer();
+
+            _container.RegisterInstance(typeof(SimpleContainer), "", _container);
 
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
@@ -38,6 +41,11 @@ namespace KadastrLoader
 
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e) {
             DisplayRootViewForAsync<IShell>();
+        }
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            yield return typeof(KadastrLoaderView).Assembly; // this Assembly (.exe)
+            yield return typeof(Fibertest.WpfCommonViews.RftsEventsView).Assembly; // WpfCommonViews
         }
     }
 }
