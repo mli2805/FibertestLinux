@@ -7,7 +7,7 @@ namespace Fibertest.CharonLib;
 
 public partial class Charon
 {
-    private readonly IOptions<CharonConfig> _config;
+    private readonly CharonConfig _config;
     private readonly ILogger _logger;
     private readonly SerialPortManager _serialPort;
 
@@ -32,15 +32,15 @@ public partial class Charon
 
     private ILogger<Charon> _lll;
 
-    public Charon(NetAddress netAddress, bool isMainCharon, IOptions<CharonConfig> config, ILogger logger, SerialPortManager serialPort)
+    public Charon(NetAddress netAddress, bool isMainCharon, CharonConfig config, ILogger logger, SerialPortManager serialPort)
     {
         _config = config;
         _logger = logger;
         _serialPort = serialPort;
-        _connectionTimeout = config.Value.ConnectionTimeout != 0 ? config.Value.ConnectionTimeout : 5;
-        _readTimeout = config.Value.ReadTimeout != 0 ? config.Value.ReadTimeout : 2;
-        _writeTimeout = config.Value.WriteTimeout != 0 ? config.Value.WriteTimeout : 2;
-        _pauseBetweenCommands = config.Value.PauseBetweenCommandsMs != 0 ? config.Value.PauseBetweenCommandsMs : 200;
+        _connectionTimeout = config.ConnectionTimeout;
+        _readTimeout = config.ReadTimeout;
+        _writeTimeout = config.WriteTimeout;
+        _pauseBetweenCommands = config.PauseBetweenCommandsMs;
         NetAddress = netAddress;
         IsMainCharon = isMainCharon;
 

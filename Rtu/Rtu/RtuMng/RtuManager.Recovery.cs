@@ -81,7 +81,7 @@ public partial class RtuManager
 
         _logger.LogInfo(Logs.RtuService, $"Mikrotik {damagedOtau.Ip} reboot N{damagedOtau.RebootAttempts}");
         _logger.LogInfo(Logs.RtuManager, $"Reboot attempt N{damagedOtau.RebootAttempts}");
-        var connectionTimeout = _fullConfig.Value.ConnectionTimeout;
+        var connectionTimeout = _fullConfig.Value.Charon.ConnectionTimeout;
         try
         {
             MikrotikInBop.ConnectAndReboot(_logger, Logs.RtuManager.ToInt(), damagedOtau.Ip, connectionTimeout);

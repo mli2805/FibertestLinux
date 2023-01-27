@@ -18,17 +18,17 @@ public enum LedDisplayCode : byte
 
 public class SerialPortManager
 {
-    private readonly ILogger<SerialPortManager> _logger;
+    private readonly ILogger _logger;
     private readonly string _comPortName;
     private readonly int _comPortSpeed;
     private readonly int _pauseAfterReset;
 
-    public SerialPortManager(IOptions<CharonConfig> config, ILogger<SerialPortManager> logger)
+    public SerialPortManager(CharonConfig config, ILogger logger)
     {
         _logger = logger;
-        _comPortName = config.Value.ComPortName;
-        _comPortSpeed = config.Value.ComPortSpeed;
-        _pauseAfterReset = config.Value.PauseAfterReset != 0 ? config.Value.PauseAfterReset : 5;
+        _comPortName = config.ComPortName;
+        _comPortSpeed = config.ComPortSpeed;
+        _pauseAfterReset = config.PauseAfterReset;
     }
 
     public ReturnCode ResetCharon()

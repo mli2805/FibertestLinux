@@ -7,5 +7,6 @@ public class ClientConfig
     public OtdrParametersConfig OtdrParameters { get; set; } = new OtdrParametersConfig();
 
     public ClientMiscellaneousConfig Miscellaneous { get; set; } = new ClientMiscellaneousConfig();
+    public CharonConfig CharonConfig { get; set; } = new CharonConfig();
 }
 
