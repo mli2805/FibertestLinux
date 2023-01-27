@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.StringResources;
@@ -20,7 +21,7 @@ namespace KadastrLoader
     {
         private ILogger _logger;
         private readonly GrpcC2DRequests _grpcC2DRequests;
-        private readonly SimpleContainer _container;
+        private readonly ILifetimeScope _globalScope;
         private readonly LoadedAlready _loadedAlready;
         private readonly KadastrDbProvider _kadastrDbProvider;
         private readonly KadastrFilesParser _kadastrFilesParser;
@@ -79,14 +80,14 @@ namespace KadastrLoader
         public ObservableCollection<string> ProgressLines { get; set; } = new ObservableCollection<string>();
 
         public KadastrLoaderViewModel(IWritableConfig<ClientConfig> config, ILogger logger,
-            GrpcC2DRequests grpcC2DRequests, SimpleContainer container,
+            GrpcC2DRequests grpcC2DRequests, ILifetimeScope globalScope,
             LoadedAlready loadedAlready, KadastrDbProvider kadastrDbProvider,
             KadastrFilesParser kadastrFilesParser)
         {
             _logger = logger;
             _logger.LogInfo(Logs.Client, "We are in c-tor");
             _grpcC2DRequests = grpcC2DRequests;
-            _container = container;
+            _globalScope = globalScope;
             ServerIp = config.Value.General.ServerAddress.Main.Ip4Address;
             _grpcC2DRequests.ChangeAddress(ServerIp);
             _loadedAlready = loadedAlready;
@@ -106,24 +107,25 @@ namespace KadastrLoader
 
         public async void CheckConnect()
         {
-            _isDataCenterReady = await RegisterClientOnDataCenter();
-            _isDbReady = await ConnectKadastrDb();
-            NotifyOfPropertyChange(nameof(IsStartEnabled));
+            using (_globalScope.Resolve<IWaitCursor>())
+            {
+                _isDataCenterReady = await RegisterClientOnDataCenter();
+                _isDbReady = await ConnectKadastrDb();
+                NotifyOfPropertyChange(nameof(IsStartEnabled));
+            }
+
         }
         private async Task<bool> ConnectKadastrDb()
         {
             try
             {
-                using (_container.GetInstance<IWaitCursor>())
-                {
-                    _kadastrDbProvider.Init();
-                    _loadedAlready.Wells = await _kadastrDbProvider.GetWells();
-                    _loadedAlready.Conpoints = await _kadastrDbProvider.GetConpoints();
-                    var count = _loadedAlready.Wells.Count;
-                    KadastrMessage = string.Format(Resources.SID_Nodes_loaded_from_Kadastr_so_far___0_, count);
-                    NotifyOfPropertyChange(nameof(IsStartEnabled));
-                }
-               
+                _kadastrDbProvider.Init();
+                _loadedAlready.Wells = await _kadastrDbProvider.GetWells();
+                _loadedAlready.Conpoints = await _kadastrDbProvider.GetConpoints();
+                var count = _loadedAlready.Wells.Count;
+                KadastrMessage = string.Format(Resources.SID_Nodes_loaded_from_Kadastr_so_far___0_, count);
+                NotifyOfPropertyChange(nameof(IsStartEnabled));
+
                 return true;
             }
             catch (Exception e)

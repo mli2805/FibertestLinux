@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Markup;
+using Autofac;
 using Caliburn.Micro;
+using Fibertest.WpfCommonViews;
+using Microsoft.Xaml.Behaviors.Input;
+
 
 namespace KadastrLoader
 {
     public class AppBootstrapper : BootstrapperBase
     {
-        private SimpleContainer _container;
+        private ILifetimeScope _container;
 
 #pragma warning disable CS8618
         public AppBootstrapper() {
@@ -15,37 +23,49 @@ namespace KadastrLoader
             Initialize();
         }
 
-        protected override void Configure() {
-            _container = new SimpleContainer();
-
-            _container.RegisterInstance(typeof(SimpleContainer), "", _container);
-
-            _container.Singleton<IWindowManager, WindowManager>();
-            _container.Singleton<IEventAggregator, EventAggregator>();
-            _container.PerRequest<IShell, KadastrLoaderViewModel>();
-
-            _container.AddMyDependencies();
-        }
+        protected override void Configure()  { }
 
         protected override object GetInstance(Type service, string key) {
-            return _container.GetInstance(service, key);
+            return string.IsNullOrWhiteSpace(key) ?
+                _container.Resolve(service) :
+                _container.ResolveNamed(key, service);
         }
 
-        protected override IEnumerable<object> GetAllInstances(Type service) {
-            return _container.GetAllInstances(service);
+        protected override IEnumerable<object>? GetAllInstances(Type service) {
+            return _container.Resolve(typeof(IEnumerable<>).MakeGenericType(service)) as IEnumerable<object>;
         }
 
         protected override void BuildUp(object instance) {
-            _container.BuildUp(instance);
+            _container.InjectProperties(instance);
         }
 
-        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e) {
+        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e) 
+        {
+            SomeInitialActions();
+
             DisplayRootViewForAsync<IShell>();
         }
+
+        private void SomeInitialActions()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterModule<AutofacKadastr>();
+            _container = builder.Build();
+
+            var cultureInfo = new CultureInfo("ru-RU") { NumberFormat = { NumberDecimalSeparator = @"." } };
+            // Ensure the current culture passed into bindings 
+            // is the OS culture. By default, WPF uses en-US 
+            // as the culture, regardless of the system settings.
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(
+                    XmlLanguage.GetLanguage(cultureInfo.IetfLanguageTag)));
+        }
+
         protected override IEnumerable<Assembly> SelectAssemblies()
         {
             yield return typeof(KadastrLoaderView).Assembly; // this Assembly (.exe)
-            yield return typeof(Fibertest.WpfCommonViews.RftsEventsView).Assembly; // WpfCommonViews
+            yield return typeof(RftsEventsView).Assembly; // WpfCommonViews
         }
     }
 }
