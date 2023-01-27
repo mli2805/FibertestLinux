@@ -1,88 +1,87 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Media;
-
+﻿
 namespace GMap.NET.WindowsPresentation
 {
+    using System.ComponentModel;
+    using System.Windows;
+    using GMap.NET;
+    using System.Windows.Media;
+    using System;
+
     /// <summary>
-    ///     GMap.NET marker
+    /// GMap.NET marker
     /// </summary>
     public class GMapMarker : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public Guid Id { get; set; }
 
+        public Brush Color { get; set; }
+
+        public double StrokeThickness { get; set; }
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         protected void OnPropertyChanged(PropertyChangedEventArgs name)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, name);
-            }
+            PropertyChanged?.Invoke(this, name);
         }
 
-        UIElement _shape;
-        static readonly PropertyChangedEventArgs ShapePropertyChangedEventArgs = new PropertyChangedEventArgs(nameof(Shape));
+        UIElement shape;
+        static readonly PropertyChangedEventArgs Shape_PropertyChangedEventArgs = new PropertyChangedEventArgs("Shape");
 
         /// <summary>
-        ///     marker visual
+        /// marker visual
         /// </summary>
         public UIElement Shape
         {
-            get
-            {
-                return _shape;
-            }
+            get { return shape; }
             set
             {
-                if (_shape != value)
+                if (shape != value)
                 {
-                    _shape = value;
-                    OnPropertyChanged(ShapePropertyChangedEventArgs);
-
+                    shape = value;
+                    OnPropertyChanged(Shape_PropertyChangedEventArgs);
                     UpdateLocalPosition();
                 }
             }
         }
 
-        private PointLatLng _position;
+        
 
+        private PointLatLng position;
         /// <summary>
-        ///     coordinate of marker
+        /// coordinate of marker
         /// </summary>
         public PointLatLng Position
         {
-            get
-            {
-                return _position;
-            }
+            get { return position; }
             set
             {
-                if (_position != value)
+                if (position != value)
                 {
-                    _position = value;
+                    position = value;
                     UpdateLocalPosition();
                 }
             }
         }
 
-        GMapControl _map;
+        public bool IsHighlighting { get; set; }
 
+        GMapControl map;
         /// <summary>
-        ///     the map of this marker
+        /// the map of this marker
         /// </summary>
         public GMapControl Map
         {
             get
             {
-                if (Shape != null && _map == null)
+                if (Shape != null && map == null)
                 {
                     DependencyObject visual = Shape;
                     while (visual != null && !(visual is GMapControl))
@@ -90,118 +89,99 @@ namespace GMap.NET.WindowsPresentation
                         visual = VisualTreeHelper.GetParent(visual);
                     }
 
-                    _map = visual as GMapControl;
+                    map = visual as GMapControl;
                 }
 
-                return _map;
+                return map;
             }
-            internal set
-            {
-                _map = value;
-            }
+            internal set { map = value; }
         }
 
         /// <summary>
-        ///     custom object
+        /// custom object
         /// </summary>
         public object Tag;
 
-        Point _offset;
-
+        System.Windows.Point offset;
         /// <summary>
-        ///     offset of marker
+        /// offset of marker
         /// </summary>
-        public Point Offset
+        public System.Windows.Point Offset
         {
-            get
-            {
-                return _offset;
-            }
+            get { return offset; }
             set
             {
-                if (_offset != value)
+                if (offset != value)
                 {
-                    _offset = value;
+                    offset = value;
                     UpdateLocalPosition();
                 }
             }
         }
 
-        int _localPositionX;
+        static readonly PropertyChangedEventArgs LocalPositionX_PropertyChangedEventArgs = new PropertyChangedEventArgs("LocalPositionX");
 
-        static readonly PropertyChangedEventArgs LocalPositionXPropertyChangedEventArgs =
-            new PropertyChangedEventArgs(nameof(LocalPositionX));
-
+        int localPositionX;
         /// <summary>
-        ///     local X position of marker
+        /// local X position of marker
         /// </summary>
         public int LocalPositionX
         {
-            get
-            {
-                return _localPositionX;
-            }
+            get { return localPositionX; }
             internal set
             {
-                if (_localPositionX != value)
+                if (localPositionX != value)
                 {
-                    _localPositionX = value;
-                    OnPropertyChanged(LocalPositionXPropertyChangedEventArgs);
+                    localPositionX = value;
+                    OnPropertyChanged(LocalPositionX_PropertyChangedEventArgs);
                 }
             }
         }
 
-        int _localPositionY;
+        static readonly PropertyChangedEventArgs LocalPositionY_PropertyChangedEventArgs = new PropertyChangedEventArgs("LocalPositionY");
 
-        static readonly PropertyChangedEventArgs LocalPositionYPropertyChangedEventArgs =
-            new PropertyChangedEventArgs(nameof(LocalPositionY));
-
+        int localPositionY;
         /// <summary>
-        ///     local Y position of marker
+        /// local Y position of marker
         /// </summary>
         public int LocalPositionY
         {
-            get
-            {
-                return _localPositionY;
-            }
+            get { return localPositionY; }
             internal set
             {
-                if (_localPositionY != value)
+                if (localPositionY != value)
                 {
-                    _localPositionY = value;
-                    OnPropertyChanged(LocalPositionYPropertyChangedEventArgs);
+                    localPositionY = value;
+                    OnPropertyChanged(LocalPositionY_PropertyChangedEventArgs);
                 }
             }
         }
 
-        int _zIndex;
+        static readonly PropertyChangedEventArgs ZIndex_PropertyChangedEventArgs = new PropertyChangedEventArgs("ZIndex");
 
-        static readonly PropertyChangedEventArgs ZIndexPropertyChangedEventArgs =
-            new PropertyChangedEventArgs(nameof(ZIndex));
+        int zIndex;
 
         /// <summary>
-        ///     the index of Z, render order
+        /// the index of Z, render order
         /// </summary>
         public int ZIndex
         {
-            get
-            {
-                return _zIndex;
-            }
+            get { return zIndex; }
             set
             {
-                if (_zIndex != value)
+                if (zIndex != value)
                 {
-                    _zIndex = value;
-                    OnPropertyChanged(ZIndexPropertyChangedEventArgs);
+                    zIndex = value;
+                    OnPropertyChanged(ZIndex_PropertyChangedEventArgs);
                 }
             }
         }
 
-        public GMapMarker(PointLatLng pos)
+        public GMapMarker(Guid id, PointLatLng pos, bool isHighlighting)
         {
+            Id = id;
             Position = pos;
+            IsHighlighting = isHighlighting;
         }
 
         internal GMapMarker()
@@ -209,47 +189,45 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        ///     calls Dispose on shape if it implements IDisposable, sets shape to null and clears route
+        /// calls Dispose on shape if it implements IDisposable, sets shape to null and clears route
         /// </summary>
         public virtual void Clear()
         {
-            var s = Shape as IDisposable;
+            var s = (Shape as IDisposable);
             if (s != null)
             {
                 s.Dispose();
                 s = null;
             }
-
             Shape = null;
         }
 
         /// <summary>
-        ///     updates marker position, internal access usualy
+        /// updates marker position, internal access usually
         /// </summary>
         void UpdateLocalPosition()
         {
             if (Map != null)
             {
-                var p = Map.FromLatLngToLocal(Position);
+                GPoint p = Map.FromLatLngToLocal(Position);
                 p.Offset(-(long)Map.MapTranslateTransform.X, -(long)Map.MapTranslateTransform.Y);
 
-                LocalPositionX = (int)(p.X + (long)Offset.X);
-                LocalPositionY = (int)(p.Y + (long)Offset.Y);
+                LocalPositionX = (int)(p.X + (long)(Offset.X));
+                LocalPositionY = (int)(p.Y + (long)(Offset.Y));
             }
         }
 
         /// <summary>
-        ///     forces to update local marker  position
-        ///     dot not call it if you don't really need to ;}
+        /// forces to update local marker  position
+        /// dot not call it if you don't really need to ;}
         /// </summary>
         /// <param name="m"></param>
         internal void ForceUpdateLocalPosition(GMapControl m)
         {
             if (m != null)
             {
-                _map = m;
+                map = m;
             }
-
             UpdateLocalPosition();
         }
     }

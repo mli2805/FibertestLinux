@@ -1,4 +1,5 @@
-﻿using Fibertest.Dto;
+﻿using Fibertest.CharonLib;
+using Fibertest.Dto;
 using Fibertest.Utils;
 
 namespace Fibertest.Rtu;

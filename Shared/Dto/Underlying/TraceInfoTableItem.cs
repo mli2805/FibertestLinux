@@ -2,8 +2,8 @@
 
 public class TraceInfoTableItem
 {
-    public string? NodeType;
-    public int Count;
+    public string? NodeType { get; set; }
+    public int Count { get; set; }
 
     // WCF data transfer needs parameterless constructor
     public TraceInfoTableItem()

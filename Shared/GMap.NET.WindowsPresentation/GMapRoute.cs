@@ -1,29 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
 
 namespace GMap.NET.WindowsPresentation
 {
+    using System.Collections.Generic;
+    using System.Windows.Shapes;
+
     public interface IShapable
     {
-        List<PointLatLng> Points
-        {
-            get;
-            set;
-        }
-
-        Path CreatePath(List<Point> localPath, bool addBlurEffect);
+        void RegenerateShape(GMapControl map);
     }
 
     public class GMapRoute : GMapMarker, IShapable
     {
-        public List<PointLatLng> Points { get; set; }
+        public readonly List<PointLatLng> Points = new List<PointLatLng>();
+        public Guid LeftId { get; set; }
+        public Guid RightId { get; set; }
 
-        public GMapRoute(IEnumerable<PointLatLng> points)
+        private int _askContextMenu;
+        public int AskContextMenu
         {
-            Points = new List<PointLatLng>(points);
+            get { return _askContextMenu; }
+            set
+            {
+                _askContextMenu = value;
+                OnPropertyChanged("AskContextMenu");
+            }
+        }
+
+        public ContextMenu ContextMenu { get; set; }
+
+        public GMapRoute(Guid id, Guid leftId, Guid rightId, Brush color, double thickness, IEnumerable<PointLatLng> points, GMapControl map)
+        {
+            Id = id;
+            LeftId = leftId;
+            RightId = rightId;
+            Color = color;
+            StrokeThickness = thickness;
+            Points.AddRange(points);
+            RegenerateShape(map);
         }
 
         public override void Clear()
@@ -33,50 +51,33 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        ///     creates path from list of points, for performance set addBlurEffect to false
+        /// regenerates shape of route
         /// </summary>
-        /// <returns></returns>
-        public virtual Path CreatePath(List<Point> localPath, bool addBlurEffect)
+        public virtual void RegenerateShape(GMapControl map)
         {
-            // Create a StreamGeometry to use to specify myPath.
-            var geometry = new StreamGeometry();
+            if (map == null) return;
 
-            using (var ctx = geometry.Open())
+            Map = map;
+
+            if (Points.Count > 1)
             {
-                ctx.BeginFigure(localPath[0], false, false);
-                // Draw a line to the next specified point.
-                ctx.PolyLineTo(localPath, true, true);
+                Position = Points[0];
+
+//                var localPath = new List<Point>(Points.Count) { new Point(0, 0) };
+                var offset = Map.FromLatLngToLocal(Points[0]);
+                GPoint p = Map.FromLatLngToLocal(Points[1]);
+                var ppp = new Point(p.X - offset.X, p.Y - offset.Y);
+
+//                localPath.Add(ppp);
+
+//                File.AppendAllText(@"c:\temp\gmaproute.txt",
+//                   $"{DateTime.Now}    0 ; 0 ; {ppp.X} ; {ppp.Y} ;" + Environment.NewLine);
+
+                Shape = new Line() { X1 = 0, Y1 = 0, X2 = ppp.X, Y2 = ppp.Y, Stroke = Color, StrokeThickness = StrokeThickness };
             }
-
-            // Freeze the geometry (make it unmodifiable)
-            // for additional performance benefits.
-            geometry.Freeze();
-            // Create a path to draw a geometry with.
-            var myPath = new Path();
-            {
-                // Specify the shape of the Path using the StreamGeometry.
-                myPath.Data = geometry;
-
-                if (addBlurEffect)
-                {
-                    var ef = new BlurEffect();
-                    {
-                        ef.KernelType = KernelType.Gaussian;
-                        ef.Radius = 3.0;
-                        ef.RenderingBias = RenderingBias.Performance;
-                    }
-                    myPath.Effect = ef;
-                }
-
-                myPath.Stroke = Brushes.Navy;
-                myPath.StrokeThickness = 5;
-                myPath.StrokeLineJoin = PenLineJoin.Round;
-                myPath.StrokeStartLineCap = PenLineCap.Triangle;
-                myPath.StrokeEndLineCap = PenLineCap.Square;
-                myPath.Opacity = 0.6;
-                myPath.IsHitTestVisible = false;
-            }
-            return myPath;
+            else
+                Shape = null;
         }
+
     }
 }

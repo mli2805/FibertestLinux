@@ -28,7 +28,7 @@ public class Fiber
             States.Remove(traceId);
     }
 
-    public readonly List<Guid> HighLights = new();
+    public List<Guid> HighLights = new();
 
     public void SetLightOnOff(Guid traceId, bool light)
     {

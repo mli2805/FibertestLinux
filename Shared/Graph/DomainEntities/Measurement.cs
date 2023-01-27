@@ -5,7 +5,7 @@ namespace Fibertest.Graph;
 public class Measurement
 {
     public DateTime MeasurementTimestamp;
-    public DateTime EventRegistrationTimestamp;
+    public DateTime EventRegistrationTimestamp { get; set; }
     public Guid RtuId;
     public Guid TraceId;
     public BaseRefType BaseRefType;
@@ -18,5 +18,5 @@ public class Measurement
     public string? Comment;
     public List<AccidentOnTraceV2> Accidents = new();
 
-    public int SorFileId;
+    public int SorFileId { get; set; }
 }

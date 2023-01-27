@@ -13,7 +13,7 @@ public struct TceTypeStruct
     public int SlotCount => SlotPositions.Length;
     public int[] SlotPositions;
     public int GponInterfaceNumerationFrom;
-    public string? Comment;
+    public string? Comment { get; set; }
 
     public string TypeTitle => $@"{Maker} {Model} {SoftwareVersion}";
 }

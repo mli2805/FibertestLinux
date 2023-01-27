@@ -1,4 +1,4 @@
-﻿namespace Fibertest.Rtu;
+﻿namespace Fibertest.CharonLib;
 
 public enum CharonOperationResult
 {

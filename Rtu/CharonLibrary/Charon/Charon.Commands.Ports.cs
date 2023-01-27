@@ -1,7 +1,7 @@
 ﻿using Fibertest.Dto;
 using Fibertest.Utils;
 
-namespace Fibertest.Rtu;
+namespace Fibertest.CharonLib;
 
 public partial class Charon
 {

@@ -1,201 +1,150 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-
-namespace GMap.NET.WindowsPresentation
+﻿namespace GMap.NET.WindowsPresentation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Globalization;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Effects;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Shapes;
+    using System.Windows.Threading;
+    using System.Diagnostics;
+    using GMap.NET;
+    using GMap.NET.Internals;
+    using GMap.NET.MapProviders;
+    using GMap.NET.Projections;
+
     /// <summary>
-    ///     GMap.NET control for Windows Presentation
+    /// GMap.NET control for Windows Presentation
     /// </summary>
     public partial class GMapControl : ItemsControl, Interface, IDisposable
     {
+        public bool IsInGisVisibleMode { get; set; }
+
         #region DependencyProperties and related stuff
 
+        public System.Windows.Point MapPoint
+        {
+            get
+            {
+                return (System.Windows.Point)GetValue(MapPointProperty);
+            }
+            set
+            {
+                SetValue(MapPointProperty, value);
+            }
+        }
+
+
+        // Using a DependencyProperty as the backing store for point.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MapPointProperty =
+               DependencyProperty.Register("MapPoint", typeof(System.Windows.Point), typeof(GMapControl), new PropertyMetadata(new Point(), OnMapPointPropertyChanged));
+
+
+        private static void OnMapPointPropertyChanged(DependencyObject source,
+        DependencyPropertyChangedEventArgs e)
+        {
+            Point temp = (Point)e.NewValue;
+            (source as GMapControl).Position = new PointLatLng(temp.X, temp.Y);
+        }
+
+        public static readonly DependencyProperty MapProviderProperty = DependencyProperty.Register("MapProvider", typeof(GMapProvider), typeof(GMapControl), new UIPropertyMetadata(EmptyProvider.Instance, new PropertyChangedCallback(MapProviderPropertyChanged)));
+
         /// <summary>
-        ///     type of map
+        /// type of map
         /// </summary>
         [Browsable(false)]
         public GMapProvider MapProvider
         {
-            get { return GetValue(MapProviderProperty) as GMapProvider; }
-            set { SetValue(MapProviderProperty, value); }
+            get
+            {
+                return GetValue(MapProviderProperty) as GMapProvider;
+            }
+            set
+            {
+                SetValue(MapProviderProperty, value);
+            }
         }
 
-        public Point MapPoint
+        private static void MapProviderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get { return (Point)GetValue(MapPointProperty); }
-            set { SetValue(MapPointProperty, value); }
+            GMapControl map = (GMapControl)d;
+            if (map != null && e.NewValue != null)
+            {
+                Debug.WriteLine("MapType: " + e.OldValue + " -> " + e.NewValue);
+
+                RectLatLng viewarea = map.SelectedArea;
+                if (viewarea != RectLatLng.Empty)
+                {
+                    map.Position = new PointLatLng(viewarea.Lat - viewarea.HeightLat / 2, viewarea.Lng + viewarea.WidthLng / 2);
+                }
+                else
+                {
+                    viewarea = map.ViewArea;
+                }
+
+                map.Core.Provider = e.NewValue as GMapProvider;
+
+                map.Copyright = null;
+                if (!string.IsNullOrEmpty(map.Core.Provider.Copyright))
+                {
+                    map.Copyright = new FormattedText(map.Core.Provider.Copyright, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("GenericSansSerif"), 9, Brushes.Navy);
+                }
+
+                if (map.Core.IsStarted && map.Core.zoomToArea)
+                {
+                    // restore zoomrect as close as possible
+                    if (viewarea != RectLatLng.Empty && viewarea != map.ViewArea)
+                    {
+                        int bestZoom = map.Core.GetMaxZoomToFitRect(viewarea);
+                        if (bestZoom > 0 && map.Zoom != bestZoom)
+                        {
+                            map.Zoom = bestZoom;
+                        }
+                    }
+                }
+            }
         }
 
-        public static readonly DependencyProperty CenterPositionProperty = DependencyProperty.Register("CenterPosition",
-            typeof(PointLatLng),
-            typeof(GMapControl),
-            new UIPropertyMetadata(new PointLatLng(),
-                CenterPositionPropertyChanged));
-
-        // Using a DependencyProperty as the backing store for point.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MapPointProperty = DependencyProperty.Register("MapPoint",
-            typeof(Point),
-            typeof(GMapControl),
-            new PropertyMetadata(new Point(),
-                OnMapPointPropertyChanged));
-
-        private static void OnMapPointPropertyChanged(DependencyObject source,
-            DependencyPropertyChangedEventArgs e)
-        {
-            var temp = (Point)e.NewValue;
-            (source as GMapControl).Position = new PointLatLng(temp.X, temp.Y);
-        }
-
-        public static readonly DependencyProperty MapProviderProperty = DependencyProperty.Register("MapProvider",
-            typeof(GMapProvider),
-            typeof(GMapControl),
-            new UIPropertyMetadata(EmptyProvider.Instance,
-                MapProviderPropertyChanged));
-
-
-        public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom",
-            typeof(double),
-            typeof(GMapControl),
-            new UIPropertyMetadata(0.0,
-                ZoomPropertyChanged,
-                OnCoerceZoom));
+        public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register("Zoom", typeof(double), typeof(GMapControl), new UIPropertyMetadata(0.0, new PropertyChangedCallback(ZoomPropertyChanged), new CoerceValueCallback(OnCoerceZoom)));
 
         /// <summary>
-        ///     The zoom x property
-        /// </summary>
-        public static readonly DependencyProperty ZoomXProperty = DependencyProperty.Register("ZoomX",
-            typeof(double),
-            typeof(GMapControl),
-            new UIPropertyMetadata(0.0,
-                ZoomXPropertyChanged,
-                OnCoerceZoom));
-
-        /// <summary>
-        ///     The zoom y property
-        /// </summary>
-        public static readonly DependencyProperty ZoomYProperty = DependencyProperty.Register("ZoomY",
-            typeof(double),
-            typeof(GMapControl),
-            new UIPropertyMetadata(0.0,
-                ZoomYPropertyChanged,
-                OnCoerceZoom));
-
-        /// <summary>
-        ///     The multi touch enabled property
-        /// </summary>
-        public static readonly DependencyProperty MultiTouchEnabledProperty = DependencyProperty.Register(
-            "MultiTouchEnabled",
-            typeof(bool),
-            typeof(GMapControl),
-            new PropertyMetadata(false, OnMultiTouchEnabledChanged));
-
-        /// <summary>
-        ///     The touch enabled property
-        /// </summary>
-        public static readonly DependencyProperty TouchEnabledProperty = DependencyProperty.Register("TouchEnabled",
-            typeof(bool),
-            typeof(GMapControl),
-            new PropertyMetadata(false));
-
-
-        /// <summary>
-        ///     map zoom
+        /// map zoom
         /// </summary>
         [Category("GMap.NET")]
         public double Zoom
         {
-            get { return (double)GetValue(ZoomProperty); }
-            set { SetValue(ZoomProperty, value); }
-        }
-
-        /// <summary>
-        ///     Map Zoom X
-        /// </summary>
-        [Category("GMap.NET")]
-        public double ZoomX
-        {
-            get { return (double)GetValue(ZoomXProperty); }
-            set { SetValue(ZoomXProperty, value); }
-        }
-
-        /// <summary>
-        ///     Map Zoom Y
-        /// </summary>
-        [Category("GMap.NET")]
-        public double ZoomY
-        {
-            get { return (double)GetValue(ZoomYProperty); }
-            set { SetValue(ZoomYProperty, value); }
-        }
-
-        [Category("GMap.NET")]
-        public PointLatLng CenterPosition
-        {
-            get { return (PointLatLng)GetValue(CenterPositionProperty); }
-            set { SetValue(CenterPositionProperty, value); }
-        }
-
-        /// <summary>
-        ///     Specifies, if a floating map scale is displayed using a
-        ///     stretched, or a narrowed map.
-        ///     If <code>ScaleMode</code> is <code>ScaleDown</code>,
-        ///     then a scale of 12.3 is displayed using a map zoom level of 13
-        ///     resized to the lower level. If the parameter is <code>ScaleUp</code> ,
-        ///     then the same scale is displayed using a zoom level of 12 with an
-        ///     enlarged scale. If the value is <code>Dynamic</code>, then until a
-        ///     remainder of 0.25 <code>ScaleUp</code> is applied, for bigger
-        ///     remainders <code>ScaleDown</code>.
-        /// </summary>
-        [Category("GMap.NET")]
-        [Description("map scale type")]
-        public ScaleModes ScaleMode
-        {
-            get { return _scaleMode; }
+            get
+            {
+                return (double)(GetValue(ZoomProperty));
+            }
             set
             {
-                _scaleMode = value;
-                InvalidateVisual();
+                SetValue(ZoomProperty, value);
             }
-        }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether [multi touch enabled].
-        /// </summary>
-        /// <value><c>true</c> if [multi touch enabled]; otherwise, <c>false</c>.</value>
-        [Category("GMap.NET")]
-        [Description("Enable pinch map zoom")]
-        public bool MultiTouchEnabled
-        {
-            get { return (bool)GetValue(MultiTouchEnabledProperty); }
-            set { SetValue(MultiTouchEnabledProperty, value); }
         }
 
         private static object OnCoerceZoom(DependencyObject o, object value)
         {
-            var map = o as GMapControl;
-
+            GMapControl map = o as GMapControl;
             if (map != null)
             {
                 double result = (double)value;
-
                 if (result > map.MaxZoom)
+                {
                     result = map.MaxZoom;
-
+                }
                 if (result < map.MinZoom)
+                {
                     result = map.MinZoom;
+                }
 
                 return result;
             }
@@ -205,83 +154,49 @@ namespace GMap.NET.WindowsPresentation
             }
         }
 
+        private ScaleModes scaleMode = ScaleModes.Integer;
+
         /// <summary>
-        ///     Centers the position property changed.
+        /// Specifies, if a floating map scale is displayed using a 
+        /// stretched, or a narrowed map.
+        /// If <code>ScaleMode</code> is <code>ScaleDown</code>,
+        /// then a scale of 12.3 is displayed using a map zoom level of 13
+        /// resized to the lower level. If the parameter is <code>ScaleUp</code> ,
+        /// then the same scale is displayed using a zoom level of 12 with an
+        /// enlarged scale. If the value is <code>Dynamic</code>, then until a
+        /// remainder of 0.25 <code>ScaleUp</code> is applied, for bigger
+        /// remainders <code>ScaleDown</code>.
         /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
-        private static void CenterPositionPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        [Category("GMap.NET")]
+        [Description("map scale type")]
+        public ScaleModes ScaleMode
         {
-            var gmapControl = obj as GMapControl;
-
-            if (gmapControl != null && e.NewValue is PointLatLng)
+            get
             {
-                gmapControl.CenterPosition = gmapControl.Position = (PointLatLng)e.NewValue;
+                return scaleMode;
+            }
+            set
+            {
+                scaleMode = value;
+                InvalidateVisual();
             }
         }
 
-        private static void MapProviderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ZoomPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var map = (GMapControl)d;
-
-            if (map != null && e.NewValue != null)
+            GMapControl map = (GMapControl)d;
+            if (map != null && map.MapProvider.Projection != null)
             {
-                Debug.WriteLine("MapType: " + e.OldValue + " -> " + e.NewValue);
+                double value = (double)e.NewValue;
 
-                var viewarea = map.SelectedArea;
-
-                if (viewarea != RectLatLng.Empty)
-                {
-                    map.Position = new PointLatLng(viewarea.Lat - viewarea.HeightLat / 2,
-                        viewarea.Lng + viewarea.WidthLng / 2);
-                }
-                else
-                {
-                    viewarea = map.ViewArea;
-                }
-
-                map._core.Provider = e.NewValue as GMapProvider;
-
-                map._copyright = null;
-
-                if (!string.IsNullOrEmpty(map._core.Provider.Copyright))
-                {
-                    map._copyright = new FormattedText(map._core.Provider.Copyright,
-                        CultureInfo.CurrentUICulture,
-                        FlowDirection.LeftToRight,
-                        new Typeface("GenericSansSerif"),
-                        9,
-                        Brushes.Navy);
-                }
-
-                if (map._core.IsStarted && map._core.ZoomToArea)
-                {
-                    // restore zoomrect as close as possible
-                    if (viewarea != RectLatLng.Empty && viewarea != map.ViewArea)
-                    {
-                        int bestZoom = map._core.GetMaxZoomToFitRect(viewarea);
-
-                        if (bestZoom > 0 && map.Zoom != bestZoom)
-                            map.Zoom = bestZoom;
-                    }
-                }
-            }
-        }
-
-        private static void ZoomPropertyChanged(GMapControl mapControl, double value, double oldValue,
-            ZoomMode zoomMode)
-        {
-            if (mapControl != null && mapControl.MapProvider.Projection != null)
-            {
-                Debug.WriteLine("Zoom: " + oldValue + " -> " + value);
+                Debug.WriteLine("Zoom: " + e.OldValue + " -> " + value);
 
                 double remainder = value % 1;
-
-                if (mapControl.ScaleMode != ScaleModes.Integer && remainder != 0 && mapControl.ActualWidth > 0)
+                if (map.ScaleMode != ScaleModes.Integer && remainder != 0 && map.ActualWidth > 0)
                 {
                     bool scaleDown;
 
-                    switch (mapControl.ScaleMode)
+                    switch (map.ScaleMode)
                     {
                         case ScaleModes.ScaleDown:
                             scaleDown = true;
@@ -301,306 +216,267 @@ namespace GMap.NET.WindowsPresentation
 
                     double scaleValue = Math.Pow(2d, remainder);
                     {
-                        if (mapControl.MapScaleTransform == null)
+                        if (map.MapScaleTransform == null)
                         {
-                            mapControl.MapScaleTransform = mapControl._lastScaleTransform;
+                            map.MapScaleTransform = map.lastScaleTransform;
                         }
+                        map.MapScaleTransform.ScaleX = scaleValue;
+                        map.MapScaleTransform.ScaleY = scaleValue;
 
-                        if (zoomMode == ZoomMode.XY || zoomMode == ZoomMode.X)
-                        {
-                            mapControl.MapScaleTransform.ScaleX = scaleValue;
-                            mapControl._core.ScaleX = 1 / scaleValue;
-                            mapControl.MapScaleTransform.CenterX = mapControl.ActualWidth / 2;
-                        }
+                        map.Core.scaleX = 1 / scaleValue;
+                        map.Core.scaleY = 1 / scaleValue;
 
-                        if (zoomMode == ZoomMode.XY || zoomMode == ZoomMode.Y)
-                        {
-                            mapControl.MapScaleTransform.ScaleY = scaleValue;
-                            mapControl._core.ScaleY = 1 / scaleValue;
-                            mapControl.MapScaleTransform.CenterY = mapControl.ActualHeight / 2;
-                        }
+                        map.MapScaleTransform.CenterX = map.ActualWidth / 2;
+                        map.MapScaleTransform.CenterY = map.ActualHeight / 2;
                     }
 
-                    mapControl._core.Zoom = Convert.ToInt32(scaleDown ? Math.Ceiling(value) : value - remainder);
+                    map.Core.Zoom = Convert.ToInt32(scaleDown ? Math.Ceiling(value) : value - remainder);
                 }
                 else
                 {
-                    mapControl.MapScaleTransform = null;
-
-                    if (zoomMode == ZoomMode.XY || zoomMode == ZoomMode.X)
-                        mapControl._core.ScaleX = 1;
-
-                    if (zoomMode == ZoomMode.XY || zoomMode == ZoomMode.Y)
-                        mapControl._core.ScaleY = 1;
-
-                    mapControl._core.Zoom = (int)Math.Floor(value);
+                    map.MapScaleTransform = null;
+                    map.Core.scaleX = 1;
+                    map.Core.scaleY = 1;
+                    map.Core.Zoom = (int)Math.Floor(value);
                 }
 
-                if (mapControl.IsLoaded)
+                if (map.IsLoaded)
                 {
-                    mapControl.ForceUpdateOverlays();
-                    mapControl.InvalidateVisual(true);
+                    map.ForceUpdateOverlays();
+                    map.InvalidateVisual(true);
                 }
             }
         }
 
-        /// <summary>
-        ///     Zooms the property changed.
-        /// </summary>
-        /// <param name="d">The d.</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
-        private static void ZoomPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ZoomPropertyChanged((GMapControl)d, (double)e.NewValue, (double)e.OldValue, ZoomMode.XY);
-        }
-
-        /// <summary>
-        ///     Zooms the x property changed.
-        /// </summary>
-        /// <param name="d">The d.</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
-        private static void ZoomXPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ZoomPropertyChanged((GMapControl)d, (double)e.NewValue, (double)e.OldValue, ZoomMode.X);
-        }
-
-        /// <summary>
-        ///     Zooms the y property changed.
-        /// </summary>
-        /// <param name="d">The d.</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
-        private static void ZoomYPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ZoomPropertyChanged((GMapControl)d, (double)e.NewValue, (double)e.OldValue, ZoomMode.Y);
-        }
-
-        /// <summary>
-        ///     Handles the <see cref="E:MultiTouchEnabledChanged" /> event.
-        /// </summary>
-        /// <param name="d">The d.</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
-        private static void OnMultiTouchEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var mapControl = (GMapControl)d;
-            mapControl.MultiTouchEnabled = (bool)e.NewValue;
-            mapControl.IsManipulationEnabled = (bool)e.NewValue;
-        }
-
-        /// <summary>
-        ///     is touch control enabled
-        /// </summary>
-        /// <value><c>true</c> if [touch enabled]; otherwise, <c>false</c>.</value>
-        [Obsolete("Touch Enabled is deprecated, please use MultiTouchEnabled")]
-        public bool TouchEnabled
-        {
-            get { return (bool)GetValue(TouchEnabledProperty); }
-            set { SetValue(TouchEnabledProperty, value); }
-        }
-
-        readonly ScaleTransform _lastScaleTransform = new ScaleTransform();
-
-        private ScaleModes _scaleMode = ScaleModes.Integer;
+        readonly ScaleTransform lastScaleTransform = new ScaleTransform();
 
         #endregion
 
-        readonly Core _core = new Core();
+        readonly Core Core = new Core();
+        //GRect region;
+        delegate void MethodInvoker();
+        PointLatLng selectionStart;
+        PointLatLng selectionEnd;
+        Typeface tileTypeface = new Typeface("Arial");
+        bool showTileGridLines = false;
 
-        PointLatLng _selectionStart;
-        PointLatLng _selectionEnd;
-        readonly Typeface _tileTypeface = new Typeface("Arial");
-        bool _showTileGridLines;
-
-        private FormattedText _copyright;
+        FormattedText Copyright;
 
         /// <summary>
-        ///     enables filling empty tiles using lower level images
+        /// enables filling empty tiles using lower level images
         /// </summary>
         [Browsable(false)]
         public bool FillEmptyTiles
         {
-            get { return _core.FillEmptyTiles; }
-            set { _core.FillEmptyTiles = value; }
+            get
+            {
+                return Core.fillEmptyTiles;
+            }
+            set
+            {
+                Core.fillEmptyTiles = value;
+            }
         }
 
         /// <summary>
-        ///     max zoom
-        /// </summary>
+        /// max zoom
+        /// </summary>         
         [Category("GMap.NET")]
         [Description("maximum zoom level of map")]
         public int MaxZoom
         {
-            get { return _core.MaxZoom; }
-            set { _core.MaxZoom = value; }
+            get
+            {
+                return Core.maxZoom;
+            }
+            set
+            {
+                Core.maxZoom = value;
+            }
         }
 
         /// <summary>
-        ///     min zoom
-        /// </summary>
+        /// min zoom
+        /// </summary>      
         [Category("GMap.NET")]
         [Description("minimum zoom level of map")]
         public int MinZoom
         {
-            get { return _core.MinZoom; }
-            set { _core.MinZoom = value; }
+            get
+            {
+                return Core.minZoom;
+            }
+            set
+            {
+                Core.minZoom = value;
+            }
         }
 
         /// <summary>
-        ///     pen for empty tile borders
+        /// pen for empty tile borders
         /// </summary>
         public Pen EmptyTileBorders = new Pen(Brushes.White, 1.0);
 
         /// <summary>
-        ///     pen for Selection
+        /// pen for Selection
         /// </summary>
         public Pen SelectionPen = new Pen(Brushes.Blue, 2.0);
 
         /// <summary>
-        ///     background of selected area
+        /// background of selected area
         /// </summary>
-        public Brush SelectedAreaFill =
-            new SolidColorBrush(Color.FromArgb(33, Colors.RoyalBlue.R, Colors.RoyalBlue.G, Colors.RoyalBlue.B));
+        public Brush SelectedAreaFill = new SolidColorBrush(Color.FromArgb(33, Colors.RoyalBlue.R, Colors.RoyalBlue.G, Colors.RoyalBlue.B));
 
         /// <summary>
-        ///     pen for empty tile background
+        /// /// <summary>
+        /// pen for empty tile background
         /// </summary>
-        public Brush EmptyTileBrush = Brushes.Navy;
+        public Brush EmptytileBrush = Brushes.Navy;
 
         /// <summary>
-        ///     text on empty tiles
-        /// </summary>        
-        public FormattedText EmptyTileText =
-            new FormattedText("We are sorry, but we don't\nhave imagery at this zoom\n     level for this region.",
-                CultureInfo.CurrentUICulture,
-                FlowDirection.LeftToRight,
-                new Typeface("Arial"),
-                16,
-                Brushes.Blue);
+        /// text on empty tiles
+        /// </summary>
+        public FormattedText EmptyTileText = new FormattedText("We are sorry, but we don't\nhave imagery at this zoom\n     level for this region.", System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Arial"), 16, Brushes.Blue);
 
         /// <summary>
-        ///     map zooming type for mouse wheel
+        /// map zooming type for mouse wheel
         /// </summary>
         [Category("GMap.NET")]
         [Description("map zooming type for mouse wheel")]
         public MouseWheelZoomType MouseWheelZoomType
         {
-            get { return _core.MouseWheelZoomType; }
-            set { _core.MouseWheelZoomType = value; }
+            get
+            {
+                return Core.MouseWheelZoomType;
+            }
+            set
+            {
+                Core.MouseWheelZoomType = value;
+            }
         }
 
         /// <summary>
-        ///     enable map zoom on mouse wheel
+        /// enable map zoom on mouse wheel
         /// </summary>
         [Category("GMap.NET")]
         [Description("enable map zoom on mouse wheel")]
         public bool MouseWheelZoomEnabled
         {
-            get { return _core.MouseWheelZoomEnabled; }
-            set { _core.MouseWheelZoomEnabled = value; }
+            get
+            {
+                return Core.MouseWheelZoomEnabled;
+            }
+            set
+            {
+                Core.MouseWheelZoomEnabled = value;
+            }
         }
 
         /// <summary>
-        ///     map dragg button
+        /// map drag button
         /// </summary>
-        [Category("GMap.NET")] public MouseButton DragButton = MouseButton.Right;
+        [Category("GMap.NET")]
+        public MouseButton DragButton = MouseButton.Left;
 
         /// <summary>
-        ///     use circle for selection
+        /// use circle for selection
         /// </summary>
         public bool SelectionUseCircle = false;
 
         /// <summary>
-        ///     shows tile gridlines
+        /// shows tile gridlines
         /// </summary>
         [Category("GMap.NET")]
         public bool ShowTileGridLines
         {
-            get { return _showTileGridLines; }
+            get
+            {
+                return showTileGridLines;
+            }
             set
             {
-                _showTileGridLines = value;
+                showTileGridLines = value;
                 InvalidateVisual();
             }
         }
 
         /// <summary>
-        ///     retry count to get tile
+        /// retry count to get tile 
         /// </summary>
         [Browsable(false)]
         public int RetryLoadTile
         {
-            get { return _core.RetryLoadTile; }
-            set { _core.RetryLoadTile = value; }
+            get
+            {
+                return Core.RetryLoadTile;
+            }
+            set
+            {
+                Core.RetryLoadTile = value;
+            }
         }
 
         /// <summary>
-        ///     how many levels of tiles are staying decompresed in memory
+        /// how many levels of tiles are staying decompresed in memory
         /// </summary>
         [Browsable(false)]
-        public int LevelsKeepInMemory
+        public int LevelsKeepInMemmory
         {
-            get { return _core.LevelsKeepInMemory; }
-            set { _core.LevelsKeepInMemory = value; }
+            get
+            {
+                return Core.LevelsKeepInMemmory;
+            }
+
+            set
+            {
+                Core.LevelsKeepInMemmory = value;
+            }
         }
 
         /// <summary>
-        ///     current selected area in map
+        /// current selected area in map
         /// </summary>
-        private RectLatLng _selectedArea;
+        private RectLatLng selectedArea;
 
         [Browsable(false)]
         public RectLatLng SelectedArea
         {
-            get { return _selectedArea; }
+            get
+            {
+                return selectedArea;
+            }
             set
             {
-                _selectedArea = value;
+                selectedArea = value;
                 InvalidateVisual();
             }
         }
 
         /// <summary>
-        ///     map boundaries
+        /// is touch control enabled
+        /// </summary>
+        public bool TouchEnabled = true;
+
+        /// <summary>
+        /// map boundaries
         /// </summary>
         public RectLatLng? BoundsOfMap = null;
 
         /// <summary>
-        ///     occurs when mouse selection is changed
-        /// </summary>
+        /// occurs when mouse selection is changed
+        /// </summary>        
         public event SelectionChange OnSelectionChange;
-
-        private static readonly DependencyPropertyKey MarkersKey
-            = DependencyProperty.RegisterReadOnly("Markers",
-                typeof(ObservableCollection<GMapMarker>),
-                typeof(GMapControl),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    OnMarkersPropChanged));
-
-        public static readonly DependencyProperty MarkersProperty = MarkersKey.DependencyProperty;
+        public event TraceDefiningCancelled OnTraceDefiningCancelled;
 
         /// <summary>
-        ///     List of markers
+        /// list of markers
         /// </summary>
-        public ObservableCollection<GMapMarker> Markers
-        {
-            get { return (ObservableCollection<GMapMarker>)GetValue(MarkersProperty); }
-            private set { SetValue(MarkersKey, value); }
-        }
-
-        private static void OnMarkersPropChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((GMapControl)d).OnMarkersPropChanged(e);
-        }
-
-        private void OnMarkersPropChanged(DependencyPropertyChangedEventArgs e)
-        {
-        }
+        public readonly ObservableCollection<GMapMarker> Markers = new ObservableCollection<GMapMarker>();
 
         /// <summary>
-        ///     current markers overlay offset
+        /// current markers overlay offset
         /// </summary>
         internal readonly TranslateTransform MapTranslateTransform = new TranslateTransform();
-
         internal readonly TranslateTransform MapOverlayTranslateTransform = new TranslateTransform();
 
         internal ScaleTransform MapScaleTransform = new ScaleTransform();
@@ -608,43 +484,49 @@ namespace GMap.NET.WindowsPresentation
 
         protected bool DesignModeInConstruct
         {
-            get { return DesignerProperties.GetIsInDesignMode(this); }
+            get
+            {
+                return System.ComponentModel.DesignerProperties.GetIsInDesignMode(this);
+            }
         }
 
-        Canvas _mapCanvas;
+        Canvas mapCanvas = null;
 
         /// <summary>
-        ///     markers overlay
+        /// markers overlay
         /// </summary>
         internal Canvas MapCanvas
         {
             get
             {
-                if (_mapCanvas == null)
+                if (mapCanvas == null)
                 {
-                    if (VisualChildrenCount > 0)
+                    if (this.VisualChildrenCount > 0)
                     {
-                        var border = VisualTreeHelper.GetChild(this, 0) as Border;
-                        var items = border.Child as ItemsPresenter;
-                        var target = VisualTreeHelper.GetChild(items, 0);
-                        _mapCanvas = target as Canvas;
+                        Border border = VisualTreeHelper.GetChild(this, 0) as Border;
+                        ItemsPresenter items = border.Child as ItemsPresenter;
+                        DependencyObject target = VisualTreeHelper.GetChild(items, 0);
+                        mapCanvas = target as Canvas;
 
-                        _mapCanvas.RenderTransform = MapTranslateTransform;
+                        mapCanvas.RenderTransform = MapTranslateTransform;
                     }
                 }
 
-                return _mapCanvas;
+                return mapCanvas;
             }
         }
 
         public GMaps Manager
         {
-            get { return GMaps.Instance; }
+            get
+            {
+                return GMaps.Instance;
+            }
         }
 
-        static DataTemplate _dataTemplateInstance;
-        static ItemsPanelTemplate _itemsPanelTemplateInstance;
-        static Style _styleInstance;
+        static DataTemplate DataTemplateInstance;
+        static ItemsPanelTemplate ItemsPanelTemplateInstance;
+        static Style StyleInstance;
 
         public GMapControl()
         {
@@ -653,7 +535,6 @@ namespace GMap.NET.WindowsPresentation
                 #region -- templates --
 
                 #region -- xaml --
-
                 //  <ItemsControl Name="figures">
                 //    <ItemsControl.ItemTemplate>
                 //        <DataTemplate>
@@ -672,113 +553,105 @@ namespace GMap.NET.WindowsPresentation
                 //        </Style>
                 //    </ItemsControl.ItemContainerStyle>
                 //</ItemsControl> 
-
                 #endregion
 
-                if (_dataTemplateInstance == null)
+                if (DataTemplateInstance == null)
                 {
-                    _dataTemplateInstance = new DataTemplate(typeof(GMapMarker));
+                    DataTemplateInstance = new DataTemplate(typeof(GMapMarker));
                     {
-                        var fef = new FrameworkElementFactory(typeof(ContentPresenter));
+                        FrameworkElementFactory fef = new FrameworkElementFactory(typeof(ContentPresenter));
                         fef.SetBinding(ContentPresenter.ContentProperty, new Binding("Shape"));
-                        _dataTemplateInstance.VisualTree = fef;
+                        DataTemplateInstance.VisualTree = fef;
                     }
                 }
+                ItemTemplate = DataTemplateInstance;
 
-                ItemTemplate = _dataTemplateInstance;
-
-                if (_itemsPanelTemplateInstance == null)
+                if (ItemsPanelTemplateInstance == null)
                 {
                     var factoryPanel = new FrameworkElementFactory(typeof(Canvas));
                     {
-                        factoryPanel.SetValue(Panel.IsItemsHostProperty, true);
+                        factoryPanel.SetValue(Canvas.IsItemsHostProperty, true);
 
-                        _itemsPanelTemplateInstance = new ItemsPanelTemplate();
+                        ItemsPanelTemplateInstance = new ItemsPanelTemplate();
                         {
-                            _itemsPanelTemplateInstance.VisualTree = factoryPanel;
+                            ItemsPanelTemplateInstance.VisualTree = factoryPanel;
                         }
                     }
                 }
+                ItemsPanel = ItemsPanelTemplateInstance;
 
-                ItemsPanel = _itemsPanelTemplateInstance;
-
-                if (_styleInstance == null)
+                if (StyleInstance == null)
                 {
-                    _styleInstance = new Style();
+                    StyleInstance = new Style();
                     {
-                        _styleInstance.Setters.Add(new Setter(Canvas.LeftProperty, new Binding("LocalPositionX")));
-                        _styleInstance.Setters.Add(new Setter(Canvas.TopProperty, new Binding("LocalPositionY")));
-                        _styleInstance.Setters.Add(new Setter(Panel.ZIndexProperty, new Binding("ZIndex")));
+                        StyleInstance.Setters.Add(new Setter(Canvas.LeftProperty, new Binding("LocalPositionX")));
+                        StyleInstance.Setters.Add(new Setter(Canvas.TopProperty, new Binding("LocalPositionY")));
+                        StyleInstance.Setters.Add(new Setter(Canvas.ZIndexProperty, new Binding("ZIndex")));
                     }
                 }
-
-                ItemContainerStyle = _styleInstance;
-
+                ItemContainerStyle = StyleInstance;
                 #endregion
-
-                Markers = new ObservableCollection<GMapMarker>();
 
                 ClipToBounds = true;
                 SnapsToDevicePixels = true;
 
-                _core.SystemType = "WindowsPresentation";
+                Core.SystemType = "WindowsPresentation";
 
-                _core.RenderMode = RenderMode.WPF;
+                Core.RenderMode = GMap.NET.RenderMode.WPF;
 
-                _core.OnMapZoomChanged += ForceUpdateOverlays;
-                _core.OnCurrentPositionChanged += CoreOnCurrentPositionChanged;
-                Loaded += GMapControl_Loaded;
-                Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
-                SizeChanged += GMapControl_SizeChanged;
+                Core.OnMapZoomChanged += new MapZoomChanged(ForceUpdateOverlays);
+                Loaded += new RoutedEventHandler(GMapControl_Loaded);
+                Dispatcher.ShutdownStarted += new EventHandler(Dispatcher_ShutdownStarted);
+                SizeChanged += new SizeChangedEventHandler(GMapControl_SizeChanged);
 
                 // by default its internal property, feel free to use your own
                 if (ItemsSource == null)
+                {
                     ItemsSource = Markers;
+                }
 
-                _core.Zoom = (int)(double)ZoomProperty.DefaultMetadata.DefaultValue;
+                Core.Zoom = (int)((double)ZoomProperty.DefaultMetadata.DefaultValue);
             }
-        }
-
-        private void CoreOnCurrentPositionChanged(PointLatLng pointLatLng)
-        {
-            Position = pointLatLng;
         }
 
         static GMapControl()
         {
             GMapImageProxy.Enable();
+#if !PocketPC
             GMaps.Instance.SQLitePing();
+#endif
         }
 
-        void InvalidatorEngage(object sender, ProgressChangedEventArgs e)
+        void invalidatorEngage(object sender, ProgressChangedEventArgs e)
         {
             base.InvalidateVisual();
         }
 
         /// <summary>
-        ///     enque built-in thread safe invalidation
+        /// enque built-in thread safe invalidation
         /// </summary>
         public new void InvalidateVisual()
         {
-            if (_core.Refresh != null)
-                _core.Refresh.Set();
+            if (Core.Refresh != null)
+            {
+                Core.Refresh.Set();
+            }
         }
 
         /// <summary>
-        ///     Invalidates the rendering of the element, and forces a complete new layout
-        ///     pass. System.Windows.UIElement.OnRender(System.Windows.Media.DrawingContext)
-        ///     is called after the layout cycle is completed. If not forced enques built-in thread safe invalidation
+        /// Invalidates the rendering of the element, and forces a complete new layout
+        /// pass. System.Windows.UIElement.OnRender(System.Windows.Media.DrawingContext)
+        /// is called after the layout cycle is completed. If not forced enques built-in thread safe invalidation
         /// </summary>
         /// <param name="forced"></param>
         public void InvalidateVisual(bool forced)
         {
             if (forced)
             {
-                lock (_core.InvalidationLock)
+                lock (Core.invalidationLock)
                 {
-                    _core.LastInvalidation = DateTime.Now;
+                    Core.lastInvalidation = DateTime.Now;
                 }
-
                 base.InvalidateVisual();
             }
             else
@@ -801,81 +674,43 @@ namespace GMap.NET.WindowsPresentation
             }
         }
 
-        public void InitializeForBackgroundRendering(int width, int height)
-        {
-            Width = width;
-            Height = height;
-
-            if (!_core.IsStarted)
-            {
-                if (_lazyEvents)
-                {
-                    _lazyEvents = false;
-
-                    if (_lazySetZoomToFitRect.HasValue)
-                    {
-                        SetZoomToFitRect(_lazySetZoomToFitRect.Value);
-                        _lazySetZoomToFitRect = null;
-                    }
-                }
-
-                _core.OnMapOpen();
-                ForceUpdateOverlays();
-            }
-
-            _core.OnMapSizeChanged(width, height);
-
-            if (_core.IsStarted)
-            {
-                if (IsRotated)
-                {
-                    UpdateRotationMatrix();
-                }
-
-                ForceUpdateOverlays();
-            }
-
-            UpdateLayout();
-        }
-
         /// <summary>
-        ///     inits core system
+        /// inits core system
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void GMapControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!_core.IsStarted)
+            if (!Core.IsStarted)
             {
-                if (_lazyEvents)
+                if (lazyEvents)
                 {
-                    _lazyEvents = false;
+                    lazyEvents = false;
 
-                    if (_lazySetZoomToFitRect.HasValue)
+                    if (lazySetZoomToFitRect.HasValue)
                     {
-                        SetZoomToFitRect(_lazySetZoomToFitRect.Value);
-                        _lazySetZoomToFitRect = null;
+                        SetZoomToFitRect(lazySetZoomToFitRect.Value);
+                        lazySetZoomToFitRect = null;
                     }
                 }
-
-                _core.OnMapOpen().ProgressChanged += InvalidatorEngage;
+                Core.OnMapOpen().ProgressChanged += new ProgressChangedEventHandler(invalidatorEngage);
                 ForceUpdateOverlays();
 
                 if (Application.Current != null)
                 {
-                    _loadedApp = Application.Current;
+                    loadedApp = Application.Current;
 
-                    _loadedApp.Dispatcher.Invoke(DispatcherPriority.ApplicationIdle,
-                        new Action(delegate()
-                            {
-                                _loadedApp.SessionEnding += Current_SessionEnding;
-                            }
-                        ));
+                    loadedApp.Dispatcher.Invoke(DispatcherPriority.ApplicationIdle,
+                       new Action(delegate ()
+                       {
+                           loadedApp.SessionEnding += new SessionEndingCancelEventHandler(Current_SessionEnding);
+                       }
+                       ));
                 }
             }
         }
 
-        Application _loadedApp;
+        Application loadedApp;
 
         void Current_SessionEnding(object sender, SessionEndingCancelEventArgs e)
         {
@@ -888,20 +723,20 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        ///     recalculates size
+        /// recalculates size
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void GMapControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var constraint = e.NewSize;
+            System.Windows.Size constraint = e.NewSize;
 
             // 50px outside control
             //region = new GRect(-50, -50, (int)constraint.Width + 100, (int)constraint.Height + 100);
 
-            _core.OnMapSizeChanged((int)constraint.Width, (int)constraint.Height);
+            Core.OnMapSizeChanged((int)constraint.Width, (int)constraint.Height);
 
-            if (_core.IsStarted)
+            if (Core.IsStarted)
             {
                 if (IsRotated)
                 {
@@ -917,42 +752,6 @@ namespace GMap.NET.WindowsPresentation
             ForceUpdateOverlays(ItemsSource);
         }
 
-        /// <summary>
-        ///     regenerates shape of route
-        /// </summary>
-        public virtual void RegenerateShape(IShapable s)
-        {
-            var marker = s as GMapMarker;
-
-            if (s.Points != null && s.Points.Count > 1)
-            {
-                marker.Position = s.Points[0];
-                var localPath = new List<Point>(s.Points.Count);
-                var offset = FromLatLngToLocal(s.Points[0]);
-
-                foreach (var i in s.Points)
-                {
-                    var p = FromLatLngToLocal(i);
-                    localPath.Add(new Point(p.X - offset.X, p.Y - offset.Y));
-                }
-
-                var shape = s.CreatePath(localPath, true);
-
-                if (marker.Shape is Path)
-                {
-                    (marker.Shape as Path).Data = shape.Data;
-                }
-                else
-                {
-                    marker.Shape = shape;
-                }
-            }
-            else
-            {
-                marker.Shape = null;
-            }
-        }
-
         void ForceUpdateOverlays(System.Collections.IEnumerable items)
         {
             using (Dispatcher.DisableProcessing())
@@ -966,16 +765,17 @@ namespace GMap.NET.WindowsPresentation
                         i.ForceUpdateLocalPosition(this);
 
                         if (i is IShapable)
-                            RegenerateShape(i as IShapable);
+                        {
+                            (i as IShapable).RegenerateShape(this);
+                        }
                     }
                 }
             }
-
             InvalidateVisual();
         }
 
         /// <summary>
-        ///     updates markers overlay offset
+        /// updates markers overlay offset
         /// </summary>
         void UpdateMarkersOffset()
         {
@@ -983,19 +783,18 @@ namespace GMap.NET.WindowsPresentation
             {
                 if (MapScaleTransform != null)
                 {
-                    var tp = MapScaleTransform.Transform(new Point(_core.RenderOffset.X,
-                        _core.RenderOffset.Y));
+                    var tp = MapScaleTransform.Transform(new System.Windows.Point(Core.renderOffset.X, Core.renderOffset.Y));
                     MapOverlayTranslateTransform.X = tp.X;
                     MapOverlayTranslateTransform.Y = tp.Y;
 
                     // map is scaled already
-                    MapTranslateTransform.X = _core.RenderOffset.X;
-                    MapTranslateTransform.Y = _core.RenderOffset.Y;
+                    MapTranslateTransform.X = Core.renderOffset.X;
+                    MapTranslateTransform.Y = Core.renderOffset.Y;
                 }
                 else
                 {
-                    MapTranslateTransform.X = _core.RenderOffset.X;
-                    MapTranslateTransform.Y = _core.RenderOffset.Y;
+                    MapTranslateTransform.X = Core.renderOffset.X;
+                    MapTranslateTransform.Y = Core.renderOffset.Y;
 
                     MapOverlayTranslateTransform.X = MapTranslateTransform.X;
                     MapOverlayTranslateTransform.Y = MapTranslateTransform.Y;
@@ -1006,7 +805,7 @@ namespace GMap.NET.WindowsPresentation
         public Brush EmptyMapBackground = Brushes.WhiteSmoke;
 
         /// <summary>
-        ///     render map in WPF
+        /// render map in WPF
         /// </summary>
         /// <param name="g"></param>
         void DrawMap(DrawingContext g)
@@ -1016,22 +815,20 @@ namespace GMap.NET.WindowsPresentation
                 return;
             }
 
-            _core.TileDrawingListLock.AcquireReaderLock();
-            _core.Matrix.EnterReadLock();
-
+            Core.tileDrawingListLock.AcquireReaderLock();
+            Core.Matrix.EnterReadLock();
             try
             {
-                foreach (var tilePoint in _core.TileDrawingList)
+                foreach (var tilePoint in Core.tileDrawingList)
                 {
-                    _core.TileRect.Location = tilePoint.PosPixel;
-                    _core.TileRect.OffsetNegative(_core.CompensationOffset);
+                    Core.tileRect.Location = tilePoint.PosPixel;
+                    Core.tileRect.OffsetNegative(Core.compensationOffset);
 
                     //if(region.IntersectsWith(Core.tileRect) || IsRotated)
                     {
                         bool found = false;
 
-                        var t = _core.Matrix.GetTileWithNoLock(_core.Zoom, tilePoint.PosXY);
-
+                        Tile t = Core.Matrix.GetTileWithNoLock(Core.Zoom, tilePoint.PosXY);
                         if (t.NotEmpty)
                         {
                             foreach (GMapImage img in t.Overlays)
@@ -1041,11 +838,7 @@ namespace GMap.NET.WindowsPresentation
                                     if (!found)
                                         found = true;
 
-                                    var imgRect = new Rect(_core.TileRect.X + 0.6,
-                                        _core.TileRect.Y + 0.6,
-                                        _core.TileRect.Width + 0.6,
-                                        _core.TileRect.Height + 0.6);
-
+                                    var imgRect = new Rect(Core.tileRect.X + 0.6, Core.tileRect.Y + 0.6, Core.tileRect.Width + 0.6, Core.tileRect.Height + 0.6);
                                     if (!img.IsParent)
                                     {
                                         g.DrawImage(img.Img, imgRect);
@@ -1054,11 +847,7 @@ namespace GMap.NET.WindowsPresentation
                                     {
                                         // TODO: move calculations to loader thread
                                         var geometry = new RectangleGeometry(imgRect);
-                                        var parentImgRect =
-                                            new Rect(_core.TileRect.X - _core.TileRect.Width * img.Xoff + 0.6,
-                                                _core.TileRect.Y - _core.TileRect.Height * img.Yoff + 0.6,
-                                                _core.TileRect.Width * img.Ix + 0.6,
-                                                _core.TileRect.Height * img.Ix + 0.6);
+                                        var parentImgRect = new Rect(Core.tileRect.X - Core.tileRect.Width * img.Xoff + 0.6, Core.tileRect.Y - Core.tileRect.Height * img.Yoff + 0.6, Core.tileRect.Width * img.Ix + 0.6, Core.tileRect.Height * img.Ix + 0.6);
 
                                         g.PushClip(geometry);
                                         g.DrawImage(img.Img, parentImgRect);
@@ -1071,32 +860,23 @@ namespace GMap.NET.WindowsPresentation
                         else if (FillEmptyTiles && MapProvider.Projection is MercatorProjection)
                         {
                             #region -- fill empty tiles --
-
                             int zoomOffset = 1;
-                            var parentTile = Tile.Empty;
-                            long ix = 0;
+                            Tile parentTile = Tile.Empty;
+                            long Ix = 0;
 
-                            while (!parentTile.NotEmpty && zoomOffset < _core.Zoom && zoomOffset <= LevelsKeepInMemory)
+                            while (!parentTile.NotEmpty && zoomOffset < Core.Zoom && zoomOffset <= LevelsKeepInMemmory)
                             {
-                                ix = (long)Math.Pow(2, zoomOffset);
-                                parentTile = _core.Matrix.GetTileWithNoLock(_core.Zoom - zoomOffset++,
-                                    new GPoint((int)(tilePoint.PosXY.X / ix), (int)(tilePoint.PosXY.Y / ix)));
+                                Ix = (long)Math.Pow(2, zoomOffset);
+                                parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++, new GMap.NET.GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
                             }
 
                             if (parentTile.NotEmpty)
                             {
-                                long xOff = Math.Abs(tilePoint.PosXY.X - parentTile.Pos.X * ix);
-                                long yOff = Math.Abs(tilePoint.PosXY.Y - parentTile.Pos.Y * ix);
+                                long Xoff = Math.Abs(tilePoint.PosXY.X - (parentTile.Pos.X * Ix));
+                                long Yoff = Math.Abs(tilePoint.PosXY.Y - (parentTile.Pos.Y * Ix));
 
-                                var geometry =
-                                    new RectangleGeometry(new Rect(_core.TileRect.X + 0.6,
-                                        _core.TileRect.Y + 0.6,
-                                        _core.TileRect.Width + 0.6,
-                                        _core.TileRect.Height + 0.6));
-                                var parentImgRect = new Rect(_core.TileRect.X - _core.TileRect.Width * xOff + 0.6,
-                                    _core.TileRect.Y - _core.TileRect.Height * yOff + 0.6,
-                                    _core.TileRect.Width * ix + 0.6,
-                                    _core.TileRect.Height * ix + 0.6);
+                                var geometry = new RectangleGeometry(new Rect(Core.tileRect.X + 0.6, Core.tileRect.Y + 0.6, Core.tileRect.Width + 0.6, Core.tileRect.Height + 0.6));
+                                var parentImgRect = new Rect(Core.tileRect.X - Core.tileRect.Width * Xoff + 0.6, Core.tileRect.Y - Core.tileRect.Height * Yoff + 0.6, Core.tileRect.Width * Ix + 0.6, Core.tileRect.Height * Ix + 0.6);
 
                                 // render tile 
                                 {
@@ -1117,83 +897,46 @@ namespace GMap.NET.WindowsPresentation
 
                                 geometry = null;
                             }
-
                             #endregion
                         }
 
                         // add text if tile is missing
                         if (!found)
                         {
-                            lock (_core.FailedLoads)
+                            lock (Core.FailedLoads)
                             {
-                                var lt = new LoadTask(tilePoint.PosXY, _core.Zoom);
+                                var lt = new LoadTask(tilePoint.PosXY, Core.Zoom);
 
-                                if (_core.FailedLoads.ContainsKey(lt))
+                                if (Core.FailedLoads.ContainsKey(lt))
                                 {
-                                    g.DrawRectangle(EmptyTileBrush,
-                                        EmptyTileBorders,
-                                        new Rect(_core.TileRect.X,
-                                            _core.TileRect.Y,
-                                            _core.TileRect.Width,
-                                            _core.TileRect.Height));
+                                    g.DrawRectangle(EmptytileBrush, EmptyTileBorders, new Rect(Core.tileRect.X, Core.tileRect.Y, Core.tileRect.Width, Core.tileRect.Height));
 
-                                    var ex = _core.FailedLoads[lt];
+                                    var ex = Core.FailedLoads[lt];
+                                    FormattedText TileText = new FormattedText("Exception: " + ex.Message, System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 14, Brushes.Red);
+                                    TileText.MaxTextWidth = Core.tileRect.Width - 11;
 
-                                    var tileText = new FormattedText("Exception: " + ex.Message,
-                                        CultureInfo.CurrentUICulture,
-                                        FlowDirection.LeftToRight,
-                                        _tileTypeface,
-                                        14,
-                                        Brushes.Red);
+                                    g.DrawText(TileText, new System.Windows.Point(Core.tileRect.X + 11, Core.tileRect.Y + 11));
 
-                                    tileText.MaxTextWidth = _core.TileRect.Width - 11;
-
-                                    g.DrawText(tileText, new Point(_core.TileRect.X + 11, _core.TileRect.Y + 11));
-
-                                    g.DrawText(EmptyTileText,
-                                        new Point(
-                                            _core.TileRect.X + _core.TileRect.Width / 2 - EmptyTileText.Width / 2,
-                                            _core.TileRect.Y + _core.TileRect.Height / 2 - EmptyTileText.Height / 2));
+                                    g.DrawText(EmptyTileText, new System.Windows.Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - EmptyTileText.Height / 2));
                                 }
                             }
                         }
 
                         if (ShowTileGridLines)
                         {
-                            g.DrawRectangle(null,
-                                EmptyTileBorders,
-                                new Rect(_core.TileRect.X,
-                                    _core.TileRect.Y,
-                                    _core.TileRect.Width,
-                                    _core.TileRect.Height));
+                            g.DrawRectangle(null, EmptyTileBorders, new Rect(Core.tileRect.X, Core.tileRect.Y, Core.tileRect.Width, Core.tileRect.Height));
 
-                            if (tilePoint.PosXY == _core.CenterTileXYLocation)
+                            if (tilePoint.PosXY == Core.centerTileXYLocation)
                             {
-                                var tileText = new FormattedText("CENTER:" + tilePoint.ToString(),
-                                    CultureInfo.CurrentUICulture,
-                                    FlowDirection.LeftToRight,
-                                    _tileTypeface,
-                                    16,
-                                    Brushes.Red);
-                                tileText.MaxTextWidth = _core.TileRect.Width;
-                                g.DrawText(tileText,
-                                    new Point(
-                                        _core.TileRect.X + _core.TileRect.Width / 2 - EmptyTileText.Width / 2,
-                                        _core.TileRect.Y + _core.TileRect.Height / 2 - tileText.Height / 2));
+                                FormattedText TileText = new FormattedText("CENTER:" + tilePoint.ToString(), System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 16, Brushes.Red);
+                                TileText.MaxTextWidth = Core.tileRect.Width;
+                                g.DrawText(TileText, new System.Windows.Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - TileText.Height / 2));
                             }
                             else
                             {
-                                var tileText = new FormattedText("TILE: " + tilePoint.ToString(),
-                                    CultureInfo.CurrentUICulture,
-                                    FlowDirection.LeftToRight,
-                                    _tileTypeface,
-                                    16,
-                                    Brushes.Red);
-                                tileText.MaxTextWidth = _core.TileRect.Width;
-                                g.DrawText(tileText,
-                                    new Point(
-                                        _core.TileRect.X + _core.TileRect.Width / 2 - EmptyTileText.Width / 2,
-                                        _core.TileRect.Y + _core.TileRect.Height / 2 - tileText.Height / 2));
+                                FormattedText TileText = new FormattedText("TILE: " + tilePoint.ToString(), System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 16, Brushes.Red);
+                                TileText.MaxTextWidth = Core.tileRect.Width;
+                                g.DrawText(TileText, new System.Windows.Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - TileText.Height / 2));
                             }
                         }
                     }
@@ -1201,13 +944,13 @@ namespace GMap.NET.WindowsPresentation
             }
             finally
             {
-                _core.Matrix.LeaveReadLock();
-                _core.TileDrawingListLock.ReleaseReaderLock();
+                Core.Matrix.LeaveReadLock();
+                Core.tileDrawingListLock.ReleaseReaderLock();
             }
         }
 
         /// <summary>
-        ///     gets image of the current view
+        /// gets image of the current view
         /// </summary>
         /// <returns></returns>
         public ImageSource ToImageSource()
@@ -1215,29 +958,23 @@ namespace GMap.NET.WindowsPresentation
             FrameworkElement obj = this;
 
             // Save current canvas transform
-            var transform = obj.LayoutTransform;
+            Transform transform = obj.LayoutTransform;
             obj.LayoutTransform = null;
 
             // fix margin offset as well
-            var margin = obj.Margin;
-            obj.Margin = new Thickness(0,
-                0,
-                margin.Right - margin.Left,
-                margin.Bottom - margin.Top);
+            Thickness margin = obj.Margin;
+            obj.Margin = new Thickness(0, 0,
+            margin.Right - margin.Left, margin.Bottom - margin.Top);
 
             // Get the size of canvas
-            var size = new Size(obj.ActualWidth, obj.ActualHeight);
+            Size size = new Size(obj.ActualWidth, obj.ActualHeight);
 
             // force control to Update
             obj.Measure(size);
             obj.Arrange(new Rect(size));
 
-            var bmp = new RenderTargetBitmap(
-                (int)size.Width,
-                (int)size.Height,
-                96,
-                96,
-                PixelFormats.Pbgra32);
+            RenderTargetBitmap bmp = new RenderTargetBitmap(
+            (int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
 
             bmp.Render(obj);
 
@@ -1254,23 +991,148 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        ///     sets zoom to max to fit rect
+        /// creates path from list of points, for performance set addBlurEffect to false
+        /// </summary>
+        /// <param name="pl"></param>
+        /// <returns></returns>
+        public virtual Path CreateRoutePath(List<Point> localPath, Brush color, double thickness)
+        {
+            return CreateRoutePath(localPath, color, thickness, false);
+        }
+
+        /// <summary>
+        /// creates path from list of points, for performance set addBlurEffect to false
+        /// </summary>
+        /// <param name="pl"></param>
+        /// <returns></returns>
+        public virtual Path CreateRoutePath(List<Point> localPath, Brush color, double thickness, bool addBlurEffect)
+        {
+            // Create a StreamGeometry to use to specify myPath.
+            StreamGeometry geometry = new StreamGeometry();
+
+            using (StreamGeometryContext ctx = geometry.Open())
+            {
+                ctx.BeginFigure(localPath[0], false, false);
+
+                // Draw a line to the next specified point.
+                ctx.PolyLineTo(localPath, true, true);
+            }
+
+            // Freeze the geometry (make it unmodifiable)
+            // for additional performance benefits.
+            geometry.Freeze();
+
+            // Create a path to draw a geometry with.
+            Path myPath = new Path();
+            {
+                // Specify the shape of the Path using the StreamGeometry.
+                myPath.Data = geometry;
+
+                if (addBlurEffect)
+                {
+                    BlurEffect ef = new BlurEffect();
+                    {
+                        ef.KernelType = KernelType.Gaussian;
+                        ef.Radius = 3.0;
+                        ef.RenderingBias = RenderingBias.Performance;
+                    }
+
+                    myPath.Effect = ef;
+                }
+
+                myPath.Stroke = color;
+                myPath.StrokeThickness = thickness;
+                myPath.StrokeLineJoin = PenLineJoin.Round;
+                myPath.StrokeStartLineCap = PenLineCap.Triangle;
+                myPath.StrokeEndLineCap = PenLineCap.Square;
+
+                myPath.Opacity = 1;
+                myPath.IsHitTestVisible = true;
+            }
+            return myPath;
+        }
+
+        /// <summary>
+        /// creates path from list of points, for performance set addBlurEffect to false
+        /// </summary>
+        /// <param name="pl"></param>
+        /// <returns></returns>
+        public virtual Path CreatePolygonPath(List<Point> localPath)
+        {
+            return CreatePolygonPath(localPath, false);
+        }
+
+        /// <summary>
+        /// creates path from list of points, for performance set addBlurEffect to false
+        /// </summary>
+        /// <param name="pl"></param>
+        /// <returns></returns>
+        public virtual Path CreatePolygonPath(List<Point> localPath, bool addBlurEffect)
+        {
+            // Create a StreamGeometry to use to specify myPath.
+            StreamGeometry geometry = new StreamGeometry();
+
+            using (StreamGeometryContext ctx = geometry.Open())
+            {
+                ctx.BeginFigure(localPath[0], true, true);
+
+                // Draw a line to the next specified point.
+                ctx.PolyLineTo(localPath, true, true);
+            }
+
+            // Freeze the geometry (make it unmodifiable)
+            // for additional performance benefits.
+            geometry.Freeze();
+
+            // Create a path to draw a geometry with.
+            Path myPath = new Path();
+            {
+                // Specify the shape of the Path using the StreamGeometry.
+                myPath.Data = geometry;
+
+                if (addBlurEffect)
+                {
+                    BlurEffect ef = new BlurEffect();
+                    {
+                        ef.KernelType = KernelType.Gaussian;
+                        ef.Radius = 3.0;
+                        ef.RenderingBias = RenderingBias.Performance;
+                    }
+
+                    myPath.Effect = ef;
+                }
+
+                myPath.Stroke = Brushes.MidnightBlue;
+                myPath.StrokeThickness = 5;
+                myPath.StrokeLineJoin = PenLineJoin.Round;
+                myPath.StrokeStartLineCap = PenLineCap.Triangle;
+                myPath.StrokeEndLineCap = PenLineCap.Square;
+
+                myPath.Fill = Brushes.AliceBlue;
+
+                myPath.Opacity = 0.6;
+                myPath.IsHitTestVisible = false;
+            }
+            return myPath;
+        }
+
+        /// <summary>
+        /// sets zoom to max to fit rect
         /// </summary>
         /// <param name="rect">area</param>
         /// <returns></returns>
         public bool SetZoomToFitRect(RectLatLng rect)
         {
-            if (_lazyEvents)
+            if (lazyEvents)
             {
-                _lazySetZoomToFitRect = rect;
+                lazySetZoomToFitRect = rect;
             }
             else
             {
-                int maxZoom = _core.GetMaxZoomToFitRect(rect);
+                int maxZoom = Core.GetMaxZoomToFitRect(rect);
                 if (maxZoom > 0)
                 {
-                    var center =
-                        new PointLatLng(rect.Lat - rect.HeightLat / 2, rect.Lng + rect.WidthLng / 2);
+                    PointLatLng center = new PointLatLng(rect.Lat - (rect.HeightLat / 2), rect.Lng + (rect.WidthLng / 2));
                     Position = center;
 
                     if (maxZoom > MaxZoom)
@@ -1278,7 +1140,7 @@ namespace GMap.NET.WindowsPresentation
                         maxZoom = MaxZoom;
                     }
 
-                    if (_core.Zoom != maxZoom)
+                    if (Core.Zoom != maxZoom)
                     {
                         Zoom = maxZoom;
                     }
@@ -1286,21 +1148,20 @@ namespace GMap.NET.WindowsPresentation
                     return true;
                 }
             }
-
             return false;
         }
 
-        RectLatLng? _lazySetZoomToFitRect;
-        bool _lazyEvents = true;
+        RectLatLng? lazySetZoomToFitRect = null;
+        bool lazyEvents = true;
 
         /// <summary>
-        ///     sets to max zoom to fit all markers and centers them in map
+        /// sets to max zoom to fit all markers and centers them in map
         /// </summary>
-        /// <param name="zIndex">z index or null to check all</param>
+        /// <param name="ZIndex">z index or null to check all</param>
         /// <returns></returns>
-        public bool ZoomAndCenterMarkers(int? zIndex)
+        public bool ZoomAndCenterMarkers(int? ZIndex)
         {
-            var rect = GetRectOfAllMarkers(zIndex);
+            RectLatLng? rect = GetRectOfAllMarkers(ZIndex);
             if (rect.HasValue)
             {
                 return SetZoomToFitRect(rect.Value);
@@ -1310,11 +1171,11 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        ///     gets rectangle with all objects inside
+        /// gets rectangle with all objects inside
         /// </summary>
-        /// <param name="zIndex">z index or null to check all</param>
+        /// <param name="ZIndex">z index or null to check all</param>
         /// <returns></returns>
-        public RectLatLng? GetRectOfAllMarkers(int? zIndex)
+        public RectLatLng? GetRectOfAllMarkers(int? ZIndex)
         {
             RectLatLng? ret = null;
 
@@ -1322,17 +1183,22 @@ namespace GMap.NET.WindowsPresentation
             double top = double.MinValue;
             double right = double.MinValue;
             double bottom = double.MaxValue;
-            IEnumerable<GMapMarker> overlays;
+            IEnumerable<GMapMarker> Overlays;
 
-            overlays = zIndex.HasValue
-                ? ItemsSource.Cast<GMapMarker>().Where(p => p != null && p.ZIndex == zIndex)
-                : ItemsSource.Cast<GMapMarker>();
-
-            if (overlays != null)
+            if (ZIndex.HasValue)
             {
-                foreach (var m in overlays)
+                Overlays = ItemsSource.Cast<GMapMarker>().Where(p => p != null && p.ZIndex == ZIndex);
+            }
+            else
+            {
+                Overlays = ItemsSource.Cast<GMapMarker>();
+            }
+
+            if (Overlays != null)
+            {
+                foreach (var m in Overlays)
                 {
-                    if (m.Shape != null && m.Shape.Visibility == Visibility.Visible)
+                    if (m.Shape != null && m.Shape.Visibility == System.Windows.Visibility.Visible)
                     {
                         // left
                         if (m.Position.Lng < left)
@@ -1361,8 +1227,7 @@ namespace GMap.NET.WindowsPresentation
                 }
             }
 
-            if (left != double.MaxValue && right != double.MinValue && top != double.MinValue &&
-                bottom != double.MaxValue)
+            if (left != double.MaxValue && right != double.MinValue && top != double.MinValue && bottom != double.MaxValue)
             {
                 ret = RectLatLng.FromLTRB(left, top, right, bottom);
             }
@@ -1371,7 +1236,7 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        ///     offset position in pixels
+        /// offset position in pixels
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -1381,18 +1246,18 @@ namespace GMap.NET.WindowsPresentation
             {
                 if (IsRotated)
                 {
-                    var p = new Point(x, y);
-                    p = _rotationMatrixInvert.Transform(p);
+                    Point p = new Point(x, y);
+                    p = rotationMatrixInvert.Transform(p);
                     x = (int)p.X;
                     y = (int)p.Y;
 
-                    _core.DragOffset(new GPoint(x, y));
+                    Core.DragOffset(new GPoint(x, y));
 
                     ForceUpdateOverlays();
                 }
                 else
                 {
-                    _core.DragOffset(new GPoint(x, y));
+                    Core.DragOffset(new GPoint(x, y));
 
                     UpdateMarkersOffset();
                     InvalidateVisual(true);
@@ -1400,69 +1265,75 @@ namespace GMap.NET.WindowsPresentation
             }
         }
 
-        readonly RotateTransform _rotationMatrix = new RotateTransform();
-        GeneralTransform _rotationMatrixInvert = new RotateTransform();
+        readonly RotateTransform rotationMatrix = new RotateTransform();
+        GeneralTransform rotationMatrixInvert = new RotateTransform();
 
         /// <summary>
-        ///     updates rotation matrix
+        /// updates rotation matrix
         /// </summary>
         void UpdateRotationMatrix()
         {
-            var center = new Point(ActualWidth / 2.0, ActualHeight / 2.0);
+            System.Windows.Point center = new System.Windows.Point(ActualWidth / 2.0, ActualHeight / 2.0);
 
-            _rotationMatrix.Angle = -Bearing;
-            _rotationMatrix.CenterY = center.Y;
-            _rotationMatrix.CenterX = center.X;
+            rotationMatrix.Angle = -Bearing;
+            rotationMatrix.CenterY = center.Y;
+            rotationMatrix.CenterX = center.X;
 
-            _rotationMatrixInvert = _rotationMatrix.Inverse;
+            rotationMatrixInvert = rotationMatrix.Inverse;
         }
 
         /// <summary>
-        ///     returs true if map bearing is not zero
-        /// </summary>
+        /// returs true if map bearing is not zero
+        /// </summary>         
         public bool IsRotated
         {
-            get { return _core.IsRotated; }
+            get
+            {
+                return Core.IsRotated;
+            }
         }
 
         /// <summary>
-        ///     bearing for rotation of the map
+        /// bearing for rotation of the map
         /// </summary>
         [Category("GMap.NET")]
         public float Bearing
         {
-            get { return _core.Bearing; }
+            get
+            {
+                return Core.bearing;
+            }
             set
             {
-                if (_core.Bearing != value)
+                if (Core.bearing != value)
                 {
-                    bool resize = _core.Bearing == 0;
-                    _core.Bearing = value;
+                    bool resize = Core.bearing == 0;
+                    Core.bearing = value;
 
                     UpdateRotationMatrix();
 
                     if (value != 0 && value % 360 != 0)
                     {
-                        _core.IsRotated = true;
+                        Core.IsRotated = true;
 
-                        if (_core.TileRectBearing.Size == _core.TileRect.Size)
+                        if (Core.tileRectBearing.Size == Core.tileRect.Size)
                         {
-                            _core.TileRectBearing = _core.TileRect;
-                            _core.TileRectBearing.Inflate(1, 1);
+                            Core.tileRectBearing = Core.tileRect;
+                            Core.tileRectBearing.Inflate(1, 1);
                         }
                     }
                     else
                     {
-                        _core.IsRotated = false;
-                        _core.TileRectBearing = _core.TileRect;
+                        Core.IsRotated = false;
+                        Core.tileRectBearing = Core.tileRect;
                     }
 
                     if (resize)
                     {
-                        _core.OnMapSizeChanged((int)ActualWidth, (int)ActualHeight);
+                        Core.OnMapSizeChanged((int)ActualWidth, (int)ActualHeight);
                     }
 
-                    if (_core.IsStarted)
+                    if (Core.IsStarted)
                     {
                         ForceUpdateOverlays();
                     }
@@ -1471,47 +1342,46 @@ namespace GMap.NET.WindowsPresentation
         }
 
         /// <summary>
-        ///     apply transformation if in rotation mode
+        /// apply transformation if in rotation mode
         /// </summary>
-        Point ApplyRotation(double x, double y)
+        System.Windows.Point ApplyRotation(double x, double y)
         {
-            var ret = new Point(x, y);
+            System.Windows.Point ret = new System.Windows.Point(x, y);
 
             if (IsRotated)
             {
-                ret = _rotationMatrix.Transform(ret);
+                ret = rotationMatrix.Transform(ret);
             }
 
             return ret;
         }
 
         /// <summary>
-        ///     apply transformation if in rotation mode
+        /// apply transformation if in rotation mode
         /// </summary>
-        Point ApplyRotationInversion(double x, double y)
+        System.Windows.Point ApplyRotationInversion(double x, double y)
         {
-            var ret = new Point(x, y);
+            System.Windows.Point ret = new System.Windows.Point(x, y);
 
             if (IsRotated)
             {
-                ret = _rotationMatrixInvert.Transform(ret);
+                ret = rotationMatrixInvert.Transform(ret);
             }
 
             return ret;
         }
 
         #region UserControl Events
-
         protected override void OnRender(DrawingContext drawingContext)
         {
-            if (!_core.IsStarted)
+            if (!Core.IsStarted)
                 return;
 
             drawingContext.DrawRectangle(EmptyMapBackground, null, new Rect(RenderSize));
 
             if (IsRotated)
             {
-                drawingContext.PushTransform(_rotationMatrix);
+                drawingContext.PushTransform(rotationMatrix);
 
                 if (MapScaleTransform != null)
                 {
@@ -1544,8 +1414,8 @@ namespace GMap.NET.WindowsPresentation
                         DrawMap(drawingContext);
 
 #if DEBUG
-                        drawingContext.DrawLine(_virtualCenterCrossPen, new Point(-20, 0), new Point(20, 0));
-                        drawingContext.DrawLine(_virtualCenterCrossPen, new Point(0, -20), new Point(0, 20));
+                        drawingContext.DrawLine(VirtualCenterCrossPen, new Point(-20, 0), new Point(20, 0));
+                        drawingContext.DrawLine(VirtualCenterCrossPen, new Point(0, -20), new Point(0, 20));
 #endif
                     }
                     drawingContext.Pop();
@@ -1557,8 +1427,8 @@ namespace GMap.NET.WindowsPresentation
                     {
                         DrawMap(drawingContext);
 #if DEBUG
-                        drawingContext.DrawLine(_virtualCenterCrossPen, new Point(-20, 0), new Point(20, 0));
-                        drawingContext.DrawLine(_virtualCenterCrossPen, new Point(0, -20), new Point(0, 20));
+                        drawingContext.DrawLine(VirtualCenterCrossPen, new Point(-20, 0), new Point(20, 0));
+                        drawingContext.DrawLine(VirtualCenterCrossPen, new Point(0, -20), new Point(0, 20));
 #endif
                     }
                     drawingContext.Pop();
@@ -1568,8 +1438,8 @@ namespace GMap.NET.WindowsPresentation
             // selection
             if (!SelectedArea.IsEmpty)
             {
-                var p1 = FromLatLngToLocal(SelectedArea.LocationTopLeft);
-                var p2 = FromLatLngToLocal(SelectedArea.LocationRightBottom);
+                GPoint p1 = FromLatLngToLocal(SelectedArea.LocationTopLeft);
+                GPoint p2 = FromLatLngToLocal(SelectedArea.LocationRightBottom);
 
                 long x1 = p1.X;
                 long y1 = p1.Y;
@@ -1578,33 +1448,21 @@ namespace GMap.NET.WindowsPresentation
 
                 if (SelectionUseCircle)
                 {
-                    drawingContext.DrawEllipse(SelectedAreaFill,
-                        SelectionPen,
-                        new Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2),
-                        (x2 - x1) / 2,
-                        (y2 - y1) / 2);
+                    drawingContext.DrawEllipse(SelectedAreaFill, SelectionPen, new System.Windows.Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2), (x2 - x1) / 2, (y2 - y1) / 2);
                 }
                 else
                 {
-                    drawingContext.DrawRoundedRectangle(SelectedAreaFill,
-                        SelectionPen,
-                        new Rect(x1, y1, x2 - x1, y2 - y1),
-                        5,
-                        5);
+                    drawingContext.DrawRoundedRectangle(SelectedAreaFill, SelectionPen, new Rect(x1, y1, x2 - x1, y2 - y1), 5, 5);
                 }
             }
 
             if (ShowCenter)
             {
-                drawingContext.DrawLine(CenterCrossPen,
-                    new Point(ActualWidth / 2 - 5, ActualHeight / 2),
-                    new Point(ActualWidth / 2 + 5, ActualHeight / 2));
-                drawingContext.DrawLine(CenterCrossPen,
-                    new Point(ActualWidth / 2, ActualHeight / 2 - 5),
-                    new Point(ActualWidth / 2, ActualHeight / 2 + 5));
+                drawingContext.DrawLine(CenterCrossPen, new System.Windows.Point((ActualWidth / 2) - 5, ActualHeight / 2), new System.Windows.Point((ActualWidth / 2) + 5, ActualHeight / 2));
+                drawingContext.DrawLine(CenterCrossPen, new System.Windows.Point(ActualWidth / 2, (ActualHeight / 2) - 5), new System.Windows.Point(ActualWidth / 2, (ActualHeight / 2) + 5));
             }
 
-            if (_renderHelperLine)
+            if (renderHelperLine)
             {
                 var p = Mouse.GetPosition(this);
 
@@ -1614,9 +1472,9 @@ namespace GMap.NET.WindowsPresentation
 
             #region -- copyright --
 
-            if (_copyright != null)
+            if (Copyright != null && IsInGisVisibleMode)
             {
-                drawingContext.DrawText(_copyright, new Point(5, ActualHeight - _copyright.Height - 5));
+                drawingContext.DrawText(Copyright, new System.Windows.Point(5, ActualHeight - Copyright.Height - 5));
             }
 
             #endregion
@@ -1628,23 +1486,26 @@ namespace GMap.NET.WindowsPresentation
         public bool ShowCenter = true;
 
 #if DEBUG
-        readonly Pen _virtualCenterCrossPen = new Pen(Brushes.Blue, 1);
+        readonly Pen VirtualCenterCrossPen = new Pen(Brushes.Blue, 1);
 #endif
 
-        HelperLineOptions _helperLineOption = HelperLineOptions.DontShow;
+        HelperLineOptions helperLineOption = HelperLineOptions.DontShow;
 
         /// <summary>
-        ///     draw lines at the mouse pointer position
+        /// draw lines at the mouse pointer position
         /// </summary>
         [Browsable(false)]
         public HelperLineOptions HelperLineOption
         {
-            get { return _helperLineOption; }
+            get
+            {
+                return helperLineOption;
+            }
             set
             {
-                _helperLineOption = value;
-                _renderHelperLine = _helperLineOption == HelperLineOptions.ShowAlways;
-                if (_core.IsStarted)
+                helperLineOption = value;
+                renderHelperLine = (helperLineOption == HelperLineOptions.ShowAlways);
+                if (Core.IsStarted)
                 {
                     InvalidateVisual();
                 }
@@ -1652,7 +1513,7 @@ namespace GMap.NET.WindowsPresentation
         }
 
         public Pen HelperLinePen = new Pen(Brushes.Blue, 1);
-        bool _renderHelperLine;
+        bool renderHelperLine = false;
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
@@ -1660,8 +1521,8 @@ namespace GMap.NET.WindowsPresentation
 
             if (HelperLineOption == HelperLineOptions.ShowOnModifierKey)
             {
-                _renderHelperLine = !(e.IsUp && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt));
-                if (!_renderHelperLine)
+                renderHelperLine = !(e.IsUp && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt));
+                if (!renderHelperLine)
                 {
                     InvalidateVisual();
                 }
@@ -1674,124 +1535,131 @@ namespace GMap.NET.WindowsPresentation
 
             if (HelperLineOption == HelperLineOptions.ShowOnModifierKey)
             {
-                _renderHelperLine = e.IsDown && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt);
-                if (_renderHelperLine)
+                renderHelperLine = e.IsDown && (e.Key == Key.LeftShift || e.SystemKey == Key.LeftAlt);
+                if (renderHelperLine)
                 {
                     InvalidateVisual();
                 }
             }
+
+            if (e.Key == Key.Escape)
+            {
+                if (IsInFiberCreationMode)
+                {
+                    Markers.Remove(Markers.Single(m => m.Id == FiberUnderCreation));
+                    FiberUnderCreation = Guid.Empty;
+                    Cursor = cursorBefore;
+                    IsInFiberCreationMode = false;
+                }
+            }
         }
+
+
 
         /// <summary>
-        ///     Reverses MouseWheel zooming direction
+        /// reverses MouseWheel zooming direction
         /// </summary>
-        public static readonly DependencyProperty InvertedMouseWheelZoomingProperty = DependencyProperty.Register(
-            "InvertedMouseWheelZooming",
-            typeof(bool),
-            typeof(GMapControl),
-            new PropertyMetadata(false));
-
-        public bool InvertedMouseWheelZooming
-        {
-            get { return (bool)GetValue(InvertedMouseWheelZoomingProperty); }
-            set { SetValue(InvertedMouseWheelZoomingProperty, value); }
-        }
+        public bool InvertedMouseWheelZooming = false;
 
         /// <summary>
-        ///     Lets you zoom by MouseWheel even when pointer is in area of marker
+        /// lets you zoom by MouseWheel even when pointer is in area of marker
         /// </summary>
-        public static readonly DependencyProperty IgnoreMarkerOnMouseWheelProperty = DependencyProperty.Register(
-            "IgnoreMarkerOnMouseWheel",
-            typeof(bool),
-            typeof(GMapControl),
-            new PropertyMetadata(false));
-
-        public bool IgnoreMarkerOnMouseWheel
-        {
-            get { return (bool)GetValue(IgnoreMarkerOnMouseWheelProperty); }
-            set { SetValue(IgnoreMarkerOnMouseWheelProperty, value); }
-        }
+        public bool IgnoreMarkerOnMouseWheel = true;
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
 
-            if (MouseWheelZoomEnabled && (IsMouseDirectlyOver || IgnoreMarkerOnMouseWheel) && !_core.IsDragging)
+            if (MouseWheelZoomEnabled && (IsMouseDirectlyOver || IgnoreMarkerOnMouseWheel) && !Core.IsDragging)
             {
-                var p = e.GetPosition(this);
+                Cursor = Cursors.Wait;
 
+                System.Windows.Point p = e.GetPosition(this);
                 if (MapScaleTransform != null)
-                {
                     p = MapScaleTransform.Inverse.Transform(p);
-                }
 
                 p = ApplyRotationInversion(p.X, p.Y);
 
-                if (_core.MouseLastZoom.X != (int)p.X && _core.MouseLastZoom.Y != (int)p.Y)
+                if (Core.mouseLastZoom.X != (int)p.X && Core.mouseLastZoom.Y != (int)p.Y)
                 {
                     if (MouseWheelZoomType == MouseWheelZoomType.MousePositionAndCenter)
                     {
-                        Position = FromLocalToLatLng((int)p.X, (int)p.Y);
+                        Core.position = FromLocalToLatLng((int)p.X, (int)p.Y);
                     }
                     else if (MouseWheelZoomType == MouseWheelZoomType.ViewCenter)
                     {
-                        Position = FromLocalToLatLng((int)ActualWidth / 2, (int)ActualHeight / 2);
+                        Core.position = FromLocalToLatLng((int)ActualWidth / 2, (int)ActualHeight / 2);
                     }
                     else if (MouseWheelZoomType == MouseWheelZoomType.MousePositionWithoutCenter)
                     {
-                        Position = FromLocalToLatLng((int)p.X, (int)p.Y);
+                        Core.position = FromLocalToLatLng((int)p.X, (int)p.Y);
                     }
 
-                    _core.MouseLastZoom.X = (int)p.X;
-                    _core.MouseLastZoom.Y = (int)p.Y;
+                    Core.mouseLastZoom.X = (int)p.X;
+                    Core.mouseLastZoom.Y = (int)p.Y;
                 }
 
                 // set mouse position to map center
                 if (MouseWheelZoomType != MouseWheelZoomType.MousePositionWithoutCenter)
                 {
-                    var ps =
-                        PointToScreen(new Point(ActualWidth / 2, ActualHeight / 2));
+                    System.Windows.Point ps = PointToScreen(new System.Windows.Point(ActualWidth / 2, ActualHeight / 2));
                     Stuff.SetCursorPos((int)ps.X, (int)ps.Y);
                 }
 
-                _core.MouseWheelZooming = true;
+                Core.MouseWheelZooming = true;
 
                 if (e.Delta > 0)
                 {
                     if (!InvertedMouseWheelZooming)
-                    {
-                        Zoom = (int)Zoom + 1;
-                    }
+                        Zoom = ((int)Zoom) + 1;
                     else
-                    {
-                        Zoom = (int)(Zoom + 0.99) - 1;
-                    }
+                        Zoom = ((int)(Zoom + 0.99)) - 1;
                 }
                 else
                 {
                     if (InvertedMouseWheelZooming)
-                    {
-                        Zoom = (int)Zoom + 1;
-                    }
+                        Zoom = ((int)Zoom) + 1;
                     else
-                    {
-                        Zoom = (int)(Zoom + 0.99) - 1;
-                    }
+                        Zoom = ((int)(Zoom + 0.99)) - 1;
                 }
 
-                _core.MouseWheelZooming = false;
+                Core.MouseWheelZooming = false;
+                Cursor = cursorBefore;
             }
         }
 
-        bool _isSelected;
+        bool isSelected = false;
+
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
 
-            if (CanDragMap && e.ChangedButton == DragButton)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                var p = e.GetPosition(this);
+                if (IsInFiberCreationMode)
+                {
+                    Markers.Remove(Markers.Single(m => m.Id == FiberUnderCreation));
+                    FiberUnderCreation = Guid.Empty;
+                    Cursor = cursorBefore;
+                    IsInFiberCreationMode = false;
+                }
+                else
+                {
+                    if (!isSelected)
+                    {
+                        Point p = e.GetPosition(this);
+                        isSelected = true;
+                        SelectedArea = RectLatLng.Empty;
+                        selectionEnd = PointLatLng.Empty;
+                        selectionStart = FromLocalToLatLng((int)p.X, (int)p.Y);
+                    }
+                }
+            }
+
+            if (CanDragMap && e.ChangedButton == DragButton && Keyboard.Modifiers != ModifierKeys.Shift)
+            {
+                Point p = e.GetPosition(this);
 
                 if (MapScaleTransform != null)
                 {
@@ -1800,64 +1668,94 @@ namespace GMap.NET.WindowsPresentation
 
                 p = ApplyRotationInversion(p.X, p.Y);
 
-                _core.MouseDown.X = (int)p.X;
-                _core.MouseDown.Y = (int)p.Y;
+                Core.mouseDown.X = (int)p.X;
+                Core.mouseDown.Y = (int)p.Y;
 
                 InvalidateVisual();
             }
-            else
-            {
-                if (!_isSelected)
-                {
-                    var p = e.GetPosition(this);
-                    _isSelected = true;
-                    SelectedArea = RectLatLng.Empty;
-                    _selectionEnd = PointLatLng.Empty;
-                    _selectionStart = FromLocalToLatLng((int)p.X, (int)p.Y);
-                }
-            }
+            //            else
+            //            {
+            //                if (!isSelected)
+            //                {
+            //                    Point p = e.GetPosition(this);
+            //                    isSelected = true;
+            //                    SelectedArea = RectLatLng.Empty;
+            //                    selectionEnd = PointLatLng.Empty;
+            //                    selectionStart = FromLocalToLatLng((int)p.X, (int)p.Y);
+            //                }
+            //            }
         }
 
-        int _onMouseUpTimestamp;
+        int onMouseUpTimestamp = 0;
 
+        public Point ContextMenuPoint { get; set; }
+
+        public new ContextMenu ContextMenu { get; set; }
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            base.OnMouseUp(e);
-
-            if (_isSelected)
+            if (e.ChangedButton == MouseButton.Right)
             {
-                _isSelected = false;
-            }
-
-            if (_core.IsDragging)
-            {
-                if (IsDragging)
+                ContextMenuPoint = e.GetPosition(this);
+                ContextMenu contextMenu = null;
+                if (RouteUnderMouse != Guid.Empty)
                 {
-                    _onMouseUpTimestamp = e.Timestamp & Int32.MaxValue;
-                    IsDragging = false;
-                    Debug.WriteLine("IsDragging = " + IsDragging);
-                    Cursor = _cursorBefore;
-                    Mouse.Capture(null);
+                    var route = (GMapRoute)Markers.FirstOrDefault(m => m.Id == RouteUnderMouse);
+                    if (route != null)
+                    {
+//                        Console.WriteLine($"route id {route.Id}");
+                        route.AskContextMenu++;
+                        contextMenu = route.ContextMenu;
+                    }
+//                    Console.WriteLine($"marker with id {RouteUnderMouse} not found");
+                }
+                else
+                {
+                    //                    contextMenu = FindResource("MapContextMenu") as ContextMenu;
+                    contextMenu = ContextMenu;
                 }
 
-                _core.EndDrag();
+                if (contextMenu == null) return;
+                ContextMenuCapturedRoute = RouteUnderMouse;
+                contextMenu.IsOpen = true;
+            }
+
+
+            if (isSelected)
+                isSelected = false;
+            if (IsInTraceDefiningMode)
+            {
+                IsInTraceDefiningMode = false;
+                OnTraceDefiningCancelled?.Invoke();
+            }
+
+            if (Core.IsDragging)
+            {
+                if (isDragging)
+                {
+                    onMouseUpTimestamp = e.Timestamp & Int32.MaxValue;
+                    isDragging = false;
+                    Debug.WriteLine("IsDragging = " + isDragging);
+                    Cursor = cursorBefore;
+                    Mouse.Capture(null);
+                }
+                Core.EndDrag();
 
                 if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
                 {
-                    if (_core.LastLocationInBounds.HasValue)
+                    if (Core.LastLocationInBounds.HasValue)
                     {
-                        Position = _core.LastLocationInBounds.Value;
+                        Position = Core.LastLocationInBounds.Value;
                     }
                 }
             }
             else
             {
-                if (e.ChangedButton == DragButton)
+                if (e.ChangedButton == DragButton) // Left
                 {
-                    _core.MouseDown = GPoint.Empty;
+                    Core.mouseDown = GPoint.Empty;
                 }
 
-                if (!_selectionEnd.IsEmpty && !_selectionStart.IsEmpty)
+                if (!selectionEnd.IsEmpty && !selectionStart.IsEmpty)
                 {
                     bool zoomtofit = false;
 
@@ -1873,120 +1771,205 @@ namespace GMap.NET.WindowsPresentation
                     InvalidateVisual();
                 }
             }
+
+            base.OnMouseUp(e);
         }
 
-        Cursor _cursorBefore = Cursors.Arrow;
+        public bool IsInFiberCreationMode { get; set; } = false;
+        public bool IsInTraceDefiningMode { get; set; } = false;
+        public bool IsFiberWithNodes { get; set; } = false;
+        public GMapMarker StartNode { get; set; }
+        public Guid FiberUnderCreation { get; set; } = Guid.Empty;
+        public Guid DistanceFiberUnderCreation { get; set; } = Guid.Empty;
+
+        Cursor cursorBefore = Cursors.Arrow;
+
+        private void StartDistanceMeasurement()
+        {
+            StartNode = null;
+            var dd = new GMapMarker(Guid.NewGuid(), new PointLatLng(), false);
+        }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
-            // wpf generates to many events if mouse is over some visual
-            // and OnMouseUp is fired, wtf, anyway...
-            // http://greatmaps.codeplex.com/workitem/16013
-            if ((e.Timestamp & Int32.MaxValue) - _onMouseUpTimestamp < 55)
+            if (IsInFiberCreationMode)
             {
-                Debug.WriteLine("OnMouseMove skipped: " + ((e.Timestamp & Int32.MaxValue) - _onMouseUpTimestamp) + "ms");
+                if (FiberUnderCreation == Guid.Empty)
+                    FiberUnderCreation = Guid.NewGuid();
+                else
+                    Markers.Remove(Markers.Single(m => m.Id == FiberUnderCreation));
+
+                var mousePoint = e.GetPosition(this);
+                Markers.Add(new GMapRoute(FiberUnderCreation, StartNode.Id, Guid.Empty, Brushes.Black, 1,
+                    new List<PointLatLng>() { StartNode.Position, FromLocalToLatLng(GetPointFromPosition(mousePoint)) }, this));
                 return;
             }
 
-            if (!_core.IsDragging && !_core.MouseDown.IsEmpty)
+            if (!Core.IsDragging && !Core.mouseDown.IsEmpty)
             {
-                var p = e.GetPosition(this);
-
-                if (MapScaleTransform != null)
-                {
-                    p = MapScaleTransform.Inverse.Transform(p);
-                }
-
-                p = ApplyRotationInversion(p.X, p.Y);
-
-                // cursor has moved beyond drag tolerance
-                if (e.LeftButton == MouseButtonState.Pressed && DragButton == MouseButton.Left ||
-                    e.RightButton == MouseButtonState.Pressed && DragButton == MouseButton.Right)
-                {
-                    if (Math.Abs(p.X - _core.MouseDown.X) * 2 >= SystemParameters.MinimumHorizontalDragDistance ||
-                        Math.Abs(p.Y - _core.MouseDown.Y) * 2 >= SystemParameters.MinimumVerticalDragDistance)
-                    {
-                        _core.BeginDrag(_core.MouseDown);
-                    }
-                }
+                if (HasCursorMovedBeyondDragTolerance(GetPointFromPosition(e.GetPosition(this))))
+                    BeginDrag();
             }
 
-            if (_core.IsDragging)
+            if (Core.IsDragging)
             {
-                if (!IsDragging)
-                {
-                    IsDragging = true;
-                    Debug.WriteLine("IsDragging = " + IsDragging);
-                    _cursorBefore = Cursor;
-                    Cursor = Cursors.SizeAll;
-                    Mouse.Capture(this);
-                }
-
-                if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
-                {
-                    // ...
-                }
-                else
-                {
-                    var p = e.GetPosition(this);
-
-                    if (MapScaleTransform != null)
-                    {
-                        p = MapScaleTransform.Inverse.Transform(p);
-                    }
-
-                    p = ApplyRotationInversion(p.X, p.Y);
-
-                    _core.MouseCurrent.X = (int)p.X;
-                    _core.MouseCurrent.Y = (int)p.Y;
-                    {
-                        _core.Drag(_core.MouseCurrent);
-                    }
-
-                    if (IsRotated || _scaleMode != ScaleModes.Integer)
-                    {
-                        ForceUpdateOverlays();
-                    }
-                    else
-                    {
-                        UpdateMarkersOffset();
-                    }
-                }
-
-                InvalidateVisual(true);
+                DragTo(e);
+            }
+            else if (isSelected && !selectionStart.IsEmpty &&
+                     (Keyboard.Modifiers == ModifierKeys.Shift || Keyboard.Modifiers == ModifierKeys.Alt ||
+                      DisableAltForSelection))
+            {
+                UpdateSelectedAreaRect(e);
             }
             else
             {
-                if (_isSelected && !_selectionStart.IsEmpty &&
-                    (Keyboard.Modifiers == ModifierKeys.Shift || Keyboard.Modifiers == ModifierKeys.Alt ||
-                     DisableAltForSelection))
-                {
-                    var p = e.GetPosition(this);
-                    _selectionEnd = FromLocalToLatLng((int)p.X, (int)p.Y);
-                    {
-                        var p1 = _selectionStart;
-                        var p2 = _selectionEnd;
+                RouteUnderMouse = IsMouseOverRoute(GetPointFromPosition(e.GetPosition(this)));
 
-                        double x1 = Math.Min(p1.Lng, p2.Lng);
-                        double y1 = Math.Max(p1.Lat, p2.Lat);
-                        double x2 = Math.Max(p1.Lng, p2.Lng);
-                        double y2 = Math.Min(p1.Lat, p2.Lat);
-
-                        SelectedArea = new RectLatLng(y1, x1, x2 - x1, y1 - y2);
-                    }
-                }
-
-                if (_renderHelperLine)
-                {
+                if (renderHelperLine)
                     InvalidateVisual(true);
+            }
+        }
+
+        public Guid ContextMenuCapturedRoute { get; set; }
+
+        private Guid _routeUnderMouse;
+        public Guid RouteUnderMouse
+        {
+            get { return _routeUnderMouse; }
+            set
+            {
+                if (_routeUnderMouse != value)
+                {
+                    _routeUnderMouse = value;
+                    Cursor = value != Guid.Empty ? Cursors.Hand : Cursors.Arrow;
                 }
             }
         }
 
+        private Guid IsMouseOverRoute(Point mousePoint)
+        {
+            foreach (var marker in Markers)
+            {
+                if (!(marker is GMapRoute))
+                    continue;
+                var fiber = marker as GMapRoute;
+                if (fiber.Id == FiberUnderCreation || fiber.Id == DistanceFiberUnderCreation)
+                    continue;
+                var point1 = Core.FromLatLngToLocal(fiber.Points[0]);
+                var point2 = Core.FromLatLngToLocal(fiber.Points[1]);
+                if (IsSegmentContainsPoint(mousePoint, point1, point2) ||
+                    IsSegmentContainsPoint(TransformXtoY(mousePoint), TransformXtoY(point1), TransformXtoY(point2)))
+                    return marker.Id;
+            }
+            return Guid.Empty;
+        }
+
+        private bool IsSegmentContainsPoint(Point mouse, GPoint p1, GPoint p2)
+        {
+            return IsLineContainsPoint(mouse, p1, p2) && IsPointSeesSegment(mouse, p1, p2);
+        }
+
+        private GPoint TransformXtoY(GPoint p) { return new GPoint(p.Y, p.X); }
+        private Point TransformXtoY(Point p) { return new Point(p.Y, p.X); }
+
         /// <summary>
-        ///     if true, selects area just by holding mouse and moving
+        /// 
+        /// </summary>
+        /// <param name="mouse"></param>
+        /// <param name="p1">координаты конца отрезка</param>
+        /// <param name="p2">координаты конца отрезка</param>
+        /// <returns></returns>
+        private bool IsLineContainsPoint(Point mouse, GPoint p1, GPoint p2)
+        {
+            const double tolerance = 5;
+
+            if ((p1.X - p2.X) == 0)
+                return Math.Abs(mouse.X - p1.X) < tolerance;
+
+            double b = (p2.Y * p1.X - p1.Y * p2.X) / (double)(p1.X - p2.X);
+            if (p1.X == 0)
+                p1.X = 1;
+            double k = (p1.Y - b) / p1.X;
+
+            var lineY = k * mouse.X + b;
+            return Math.Abs(mouse.Y - lineY) < tolerance;
+        }
+
+        private bool IsPointSeesSegment(Point mouse, GPoint p1, GPoint p2)
+        {
+            const double tolerance = 2;
+
+            var xMin = Math.Min(p1.X, p2.X) - tolerance;
+            var xMax = Math.Max(p1.X, p2.X) + tolerance;
+            var yMin = Math.Min(p1.Y, p2.Y) - tolerance;
+            var yMax = Math.Max(p1.Y, p2.Y) + tolerance;
+
+            return (mouse.X > xMin && mouse.X < xMax &&
+                    mouse.Y > yMin && mouse.Y < yMax);
+        }
+
+        private void UpdateSelectedAreaRect(MouseEventArgs e)
+        {
+            System.Windows.Point p = e.GetPosition(this);
+            selectionEnd = FromLocalToLatLng((int)p.X, (int)p.Y);
+
+            double x1 = Math.Min(selectionStart.Lng, selectionEnd.Lng);
+            double y1 = Math.Max(selectionStart.Lat, selectionEnd.Lat);
+            double x2 = Math.Max(selectionStart.Lng, selectionEnd.Lng);
+            double y2 = Math.Min(selectionStart.Lat, selectionEnd.Lat);
+
+            SelectedArea = new RectLatLng(y1, x1, x2 - x1, y1 - y2);
+        }
+
+        private void DragTo(MouseEventArgs e)
+        {
+            if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
+            {
+                // ...
+            }
+            else
+            {
+                Point p = GetPointFromPosition(e.GetPosition(this));
+                Core.mouseCurrent.X = (int)p.X;
+                Core.mouseCurrent.Y = (int)p.Y;
+
+                Core.Drag(Core.mouseCurrent);
+
+                if (IsRotated || scaleMode != ScaleModes.Integer)
+                    ForceUpdateOverlays();
+                else
+                    UpdateMarkersOffset();
+            }
+            InvalidateVisual(true);
+        }
+
+        public Point GetPointFromPosition(Point p)
+        {
+            if (MapScaleTransform != null)
+                p = MapScaleTransform.Inverse.Transform(p);
+            p = ApplyRotationInversion(p.X, p.Y);
+            return p;
+        }
+
+        private void BeginDrag()
+        {
+            Core.BeginDrag(Core.mouseDown);
+            isDragging = true;
+            Debug.WriteLine("IsDragging = " + isDragging);
+            cursorBefore = Cursor;
+            Cursor = Cursors.SizeAll;
+            Mouse.Capture(this);
+        }
+
+        private bool HasCursorMovedBeyondDragTolerance(Point p)
+        {
+            return Math.Abs(p.X - Core.mouseDown.X) * 2 >= SystemParameters.MinimumHorizontalDragDistance || Math.Abs(p.Y - Core.mouseDown.Y) * 2 >= SystemParameters.MinimumVerticalDragDistance;
+        }
+
+        /// <summary>
+        /// if true, selects area just by holding mouse and moving
         /// </summary>
         public bool DisableAltForSelection = false;
 
@@ -1996,7 +1979,7 @@ namespace GMap.NET.WindowsPresentation
 
             if (TouchEnabled && CanDragMap && !e.InAir)
             {
-                var p = e.GetPosition(this);
+                Point p = e.GetPosition(this);
 
                 if (MapScaleTransform != null)
                 {
@@ -2005,8 +1988,8 @@ namespace GMap.NET.WindowsPresentation
 
                 p = ApplyRotationInversion(p.X, p.Y);
 
-                _core.MouseDown.X = (int)p.X;
-                _core.MouseDown.Y = (int)p.Y;
+                Core.mouseDown.X = (int)p.X;
+                Core.mouseDown.Y = (int)p.Y;
 
                 InvalidateVisual();
             }
@@ -2018,35 +2001,34 @@ namespace GMap.NET.WindowsPresentation
 
             if (TouchEnabled)
             {
-                if (_isSelected)
+                if (isSelected)
                 {
-                    _isSelected = false;
+                    isSelected = false;
                 }
 
-                if (_core.IsDragging)
+                if (Core.IsDragging)
                 {
-                    if (IsDragging)
+                    if (isDragging)
                     {
-                        _onMouseUpTimestamp = e.Timestamp & Int32.MaxValue;
-                        IsDragging = false;
-                        Debug.WriteLine("IsDragging = " + IsDragging);
-                        Cursor = _cursorBefore;
+                        onMouseUpTimestamp = e.Timestamp & Int32.MaxValue;
+                        isDragging = false;
+                        Debug.WriteLine("IsDragging = " + isDragging);
+                        Cursor = cursorBefore;
                         Mouse.Capture(null);
                     }
-
-                    _core.EndDrag();
+                    Core.EndDrag();
 
                     if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
                     {
-                        if (_core.LastLocationInBounds.HasValue)
+                        if (Core.LastLocationInBounds.HasValue)
                         {
-                            Position = _core.LastLocationInBounds.Value;
+                            Position = Core.LastLocationInBounds.Value;
                         }
                     }
                 }
                 else
                 {
-                    _core.MouseDown = GPoint.Empty;
+                    Core.mouseDown = GPoint.Empty;
                     InvalidateVisual();
                 }
             }
@@ -2061,16 +2043,15 @@ namespace GMap.NET.WindowsPresentation
                 // wpf generates to many events if mouse is over some visual
                 // and OnMouseUp is fired, wtf, anyway...
                 // http://greatmaps.codeplex.com/workitem/16013
-                if ((e.Timestamp & Int32.MaxValue) - _onMouseUpTimestamp < 55)
+                if ((e.Timestamp & Int32.MaxValue) - onMouseUpTimestamp < 55)
                 {
-                    Debug.WriteLine("OnMouseMove skipped: " + ((e.Timestamp & Int32.MaxValue) - _onMouseUpTimestamp) +
-                                    "ms");
+                    Debug.WriteLine("OnMouseMove skipped: " + ((e.Timestamp & Int32.MaxValue) - onMouseUpTimestamp) + "ms");
                     return;
                 }
 
-                if (!_core.IsDragging && !_core.MouseDown.IsEmpty)
+                if (!Core.IsDragging && !Core.mouseDown.IsEmpty)
                 {
-                    var p = e.GetPosition(this);
+                    Point p = e.GetPosition(this);
 
                     if (MapScaleTransform != null)
                     {
@@ -2080,20 +2061,19 @@ namespace GMap.NET.WindowsPresentation
                     p = ApplyRotationInversion(p.X, p.Y);
 
                     // cursor has moved beyond drag tolerance
-                    if (Math.Abs(p.X - _core.MouseDown.X) * 2 >= SystemParameters.MinimumHorizontalDragDistance ||
-                        Math.Abs(p.Y - _core.MouseDown.Y) * 2 >= SystemParameters.MinimumVerticalDragDistance)
+                    if (Math.Abs(p.X - Core.mouseDown.X) * 2 >= SystemParameters.MinimumHorizontalDragDistance || Math.Abs(p.Y - Core.mouseDown.Y) * 2 >= SystemParameters.MinimumVerticalDragDistance)
                     {
-                        _core.BeginDrag(_core.MouseDown);
+                        Core.BeginDrag(Core.mouseDown);
                     }
                 }
 
-                if (_core.IsDragging)
+                if (Core.IsDragging)
                 {
-                    if (!IsDragging)
+                    if (!isDragging)
                     {
-                        IsDragging = true;
-                        Debug.WriteLine("IsDragging = " + IsDragging);
-                        _cursorBefore = Cursor;
+                        isDragging = true;
+                        Debug.WriteLine("IsDragging = " + isDragging);
+                        cursorBefore = Cursor;
                         Cursor = Cursors.SizeAll;
                         Mouse.Capture(this);
                     }
@@ -2104,7 +2084,7 @@ namespace GMap.NET.WindowsPresentation
                     }
                     else
                     {
-                        var p = e.GetPosition(this);
+                        Point p = e.GetPosition(this);
 
                         if (MapScaleTransform != null)
                         {
@@ -2113,10 +2093,10 @@ namespace GMap.NET.WindowsPresentation
 
                         p = ApplyRotationInversion(p.X, p.Y);
 
-                        _core.MouseCurrent.X = (int)p.X;
-                        _core.MouseCurrent.Y = (int)p.Y;
+                        Core.mouseCurrent.X = (int)p.X;
+                        Core.mouseCurrent.Y = (int)p.Y;
                         {
-                            _core.Drag(_core.MouseCurrent);
+                            Core.Drag(Core.mouseCurrent);
                         }
 
                         if (IsRotated)
@@ -2128,387 +2108,7 @@ namespace GMap.NET.WindowsPresentation
                             UpdateMarkersOffset();
                         }
                     }
-
                     InvalidateVisual();
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Called when the <see cref="E:System.Windows.UIElement.ManipulationDelta" /> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
-        protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
-        {
-            base.OnManipulationDelta(e);
-
-            if (MultiTouchEnabled && !TouchEnabled)
-            {
-                var touchPoints = e.Manipulators.ToArray();
-                var element = e.Source as FrameworkElement;
-
-                if (element != null)
-                {
-                    var delta = e.DeltaManipulation;
-
-                    if (touchPoints.Length == 1)
-                    {
-                        SingleTouchPanMap(new Point(delta.Translation.X, delta.Translation.Y));
-                    }
-                    else if (touchPoints.Length >= 2)
-                    {
-                        var centerOfTouchPoints = e.ManipulationOrigin;
-                        ZoomX *= delta.Scale.X;
-                        ZoomY *= delta.Scale.Y;
-                    }
-
-                    e.Handled = true;
-                }
-            }
-        }
-
-        protected override void OnManipulationStarted(ManipulationStartedEventArgs e)
-        {
-            base.OnManipulationStarted(e);
-
-            if (MultiTouchEnabled && !TouchEnabled)
-            {
-                _core.MouseDown.X = 0;
-                _core.MouseDown.Y = 0;
-                _core.touchCurrent.X = 0;
-                _core.touchCurrent.Y = 0;
-            }
-        }
-
-        /// <summary>
-        ///     Singles the touch pan map.
-        /// </summary>
-        /// <param name="deltaPoint">The delta point.</param>
-        protected virtual void SingleTouchPanMap(Point deltaPoint)
-        {
-            if (MultiTouchEnabled && !TouchEnabled) // redundent check in case this is invoked outside of the manipulation events
-            {
-                deltaPoint = ApplyRotationInversion(deltaPoint.X, deltaPoint.Y);
-
-                _core.touchCurrent.X += (int)deltaPoint.X;
-                _core.touchCurrent.Y += (int)deltaPoint.Y;
-
-                if (!_core.IsDragging)
-                {
-                    // cursor has moved beyond drag tolerance
-                    if (Math.Abs(deltaPoint.X - _core.MouseDown.X) * 2 >=
-                        SystemParameters.MinimumHorizontalDragDistance ||
-                        Math.Abs(deltaPoint.Y - _core.MouseDown.Y) * 2 >= SystemParameters.MinimumVerticalDragDistance)
-                    {
-                        _core.BeginDrag(_core.MouseDown);
-                    }
-                }
-                else if (_core.IsDragging)
-                {
-                    if (!IsDragging)
-                    {
-                        IsDragging = true;
-                        Debug.WriteLine("IsDragging = " + IsDragging);
-                        _cursorBefore = Cursor;
-                        Cursor = Cursors.SizeAll;
-                        Mouse.Capture(this);
-                    }
-
-                    if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
-                    {
-                        // ...
-                    }
-                    else
-                    {
-                        _core.Drag(_core.touchCurrent);
-
-                        if (IsRotated)
-                        {
-                            ForceUpdateOverlays();
-                        }
-                        else
-                        {
-                            UpdateMarkersOffset();
-                        }
-                    }
-
-                    InvalidateVisual();
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Called when the <see cref="E:System.Windows.UIElement.ManipulationCompleted" /> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
-        protected override void OnManipulationCompleted(ManipulationCompletedEventArgs e)
-        {
-            base.OnManipulationCompleted(e);
-
-            if (MultiTouchEnabled && !TouchEnabled)
-            {
-                var touchPoints = e.Manipulators.ToArray();
-                if (true)
-                {
-                    // add bool to starting for single touch vs multi touch
-                    if (_isSelected)
-                    {
-                        _isSelected = false;
-                    }
-
-                    if (_core.IsDragging)
-                    {
-                        if (IsDragging)
-                        {
-                            _onMouseUpTimestamp = e.Timestamp & Int32.MaxValue;
-                            IsDragging = false;
-                            Debug.WriteLine("IsDragging = " + IsDragging);
-                            Cursor = _cursorBefore;
-                            Mouse.Capture(null);
-                        }
-
-                        _core.EndDrag();
-
-                        if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
-                        {
-                            if (_core.LastLocationInBounds.HasValue)
-                            {
-                                Position = _core.LastLocationInBounds.Value;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        _core.MouseDown = GPoint.Empty;
-                        InvalidateVisual();
-                    }
-                }
-            }
-        }
-
-        int _change;
-        private Dictionary<int, Point> movingPoints = new Dictionary<int, Point>();
-
-        private double calcdist(double x1, double y1, double x2, double y2)
-        {
-            return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
-        }
-
-        protected override void OnTouchDown(TouchEventArgs e)
-        {
-            base.OnTouchDown(e);
-
-            if (MultiTouchEnabled)
-            {
-                var touchpoint = e.GetTouchPoint(this);
-                var point = new Point();
-                point.X = touchpoint.Position.X;
-                point.Y = touchpoint.Position.Y;
-                movingPoints[e.TouchDevice.Id] = point;
-
-                if (movingPoints.Count == 0)
-                {
-                    if (MapScaleTransform != null)
-                    {
-                        point = MapScaleTransform.Inverse.Transform(point);
-                    }
-
-                    point = ApplyRotationInversion(point.X, point.Y);
-                    _core.MouseDown.X = (int)point.X;
-                    _core.MouseDown.Y = (int)point.Y;
-                    InvalidateVisual();
-                }
-            }
-        }
-
-        protected override void OnTouchMove(TouchEventArgs e)
-        {
-            base.OnTouchMove(e);
-
-            if (MultiTouchEnabled)
-            {
-                if (movingPoints.Count == 1)
-                {
-                    if (movingPoints.Keys.Contains(e.TouchDevice.Id))
-                    {
-                        if ((e.Timestamp & Int32.MaxValue) - _onMouseUpTimestamp < 55)
-                        {
-                            Debug.WriteLine("OnMouseMove skipped: " +
-                                            ((e.Timestamp & Int32.MaxValue) - _onMouseUpTimestamp) + "ms");
-                            return;
-                        }
-
-                        if (!_core.IsDragging)
-                        {
-                            var touchpoint = e.GetTouchPoint(this);
-                            var p = new Point();
-                            p.X = touchpoint.Position.X;
-                            p.Y = touchpoint.Position.Y;
-
-                            if (MapScaleTransform != null)
-                            {
-                                p = MapScaleTransform.Inverse.Transform(p);
-                            }
-
-                            p = ApplyRotationInversion(p.X, p.Y);
-
-                            // cursor has moved beyond drag tolerance
-                            if (Math.Abs(p.X - movingPoints[e.TouchDevice.Id].X) * 2 >=
-                                SystemParameters.MinimumHorizontalDragDistance ||
-                                Math.Abs(p.Y - movingPoints[e.TouchDevice.Id].Y) * 2 >=
-                                SystemParameters.MinimumVerticalDragDistance)
-                            {
-                                var gp = new GPoint();
-                                gp.X = (int)movingPoints[e.TouchDevice.Id].X;
-                                gp.Y = (int)movingPoints[e.TouchDevice.Id].Y;
-                                _core.BeginDrag(gp);
-                            }
-                        }
-
-                        if (_core.IsDragging)
-                        {
-                            if (!IsDragging)
-                            {
-                                IsDragging = true;
-                                Debug.WriteLine("IsDragging = " + IsDragging);
-                                _cursorBefore = Cursor;
-                                Cursor = Cursors.SizeAll;
-                                Mouse.Capture(this);
-                            }
-
-                            if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
-                            {
-                                // ...
-                            }
-                            else
-                            {
-                                var touchpoint = e.GetTouchPoint(this);
-                                var p = new Point();
-                                p.X = touchpoint.Position.X;
-                                p.Y = touchpoint.Position.Y;
-
-                                if (MapScaleTransform != null)
-                                {
-                                    p = MapScaleTransform.Inverse.Transform(p);
-                                }
-
-                                p = ApplyRotationInversion(p.X, p.Y);
-
-                                _core.MouseCurrent.X = (int)p.X;
-                                _core.MouseCurrent.Y = (int)p.Y;
-                                {
-                                    _core.Drag(_core.MouseCurrent);
-                                }
-
-                                if (IsRotated)
-                                {
-                                    ForceUpdateOverlays();
-                                }
-                                else
-                                {
-                                    UpdateMarkersOffset();
-                                }
-                            }
-
-                            InvalidateVisual();
-                        }
-                    }
-                }
-                else if (movingPoints.Count == 2)
-                {
-                    if (movingPoints.Keys.Contains(e.TouchDevice.Id))
-                    {
-                        var point1 = new Point();
-                        var point2 = new Point();
-                        double nowdistance = 0;
-                        double predistance = 0;
-                        int count = 0;
-
-                        foreach (var item in movingPoints)
-                        {
-                            if (count == 0)
-                                point1 = item.Value;
-                            else
-                                point2 = item.Value;
-                            count++;
-                        }
-
-                        predistance = calcdist(point1.X, point1.Y, point2.X, point2.Y);
-                        var touchpoint = e.GetTouchPoint(this);
-                        var npoint = new Point();
-                        npoint.X = touchpoint.Position.X;
-                        npoint.Y = touchpoint.Position.Y;
-
-                        if (movingPoints[e.TouchDevice.Id] == point1)
-                        {
-                            nowdistance = calcdist(npoint.X, npoint.Y, point2.X, point2.Y);
-                        }
-                        else
-                        {
-                            nowdistance = calcdist(npoint.X, npoint.Y, point1.X, point1.Y);
-                        }
-
-                        //movingPoints[e.TouchDevice.Id] = npoint;
-                        if (_change <= 2)
-                        {
-                            if (nowdistance - predistance > 10)
-                            {
-                                Zoom += 0.5;
-                                _change++;
-                            }
-                            else if (nowdistance - predistance < -10)
-                            {
-                                Zoom -= 0.5;
-                                _change++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        protected override void OnTouchUp(TouchEventArgs e)
-        {
-            base.OnTouchUp(e);
-
-            if (MultiTouchEnabled && !TouchEnabled)
-            {
-                _change = 0;
-                movingPoints.Remove(e.TouchDevice.Id);
-
-                if (true) // add bool to starting for single touch vs multi touch
-                {
-                    if (_isSelected)
-                    {
-                        _isSelected = false;
-                    }
-
-                    if (_core.IsDragging)
-                    {
-                        if (IsDragging)
-                        {
-                            _onMouseUpTimestamp = e.Timestamp & Int32.MaxValue;
-                            IsDragging = false;
-                            Debug.WriteLine("IsDragging = " + IsDragging);
-                            Cursor = _cursorBefore;
-                            Mouse.Capture(null);
-                        }
-
-                        _core.EndDrag();
-
-                        if (BoundsOfMap.HasValue && !BoundsOfMap.Value.Contains(Position))
-                        {
-                            if (_core.LastLocationInBounds.HasValue)
-                            {
-                                Position = _core.LastLocationInBounds.Value;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        _core.MouseDown = GPoint.Empty;
-                        InvalidateVisual();
-                    }
                 }
             }
         }
@@ -2518,30 +2118,23 @@ namespace GMap.NET.WindowsPresentation
         #region IGControl Members
 
         /// <summary>
-        ///     Call it to empty tile cache & reload tiles
+        /// Call it to empty tile cache & reload tiles
         /// </summary>
         public void ReloadMap()
         {
-            _core.ReloadMap();
+            Core.ReloadMap();
         }
-
-#if !NETFRAMEWORK
-        public Task ReloadMapAsync()
-        {
-            return _core.ReloadMapAsync();
-        }
-#endif
 
         /// <summary>
-        ///     sets position using geocoder
+        /// sets position using geocoder
         /// </summary>
         /// <param name="keys"></param>
         /// <returns></returns>
         public GeoCoderStatusCode SetPositionByKeywords(string keys)
         {
-            var status = GeoCoderStatusCode.UNKNOWN_ERROR;
+            GeoCoderStatusCode status = GeoCoderStatusCode.Unknow;
 
-            var gp = MapProvider as GeocodingProvider;
+            GeocodingProvider gp = MapProvider as GeocodingProvider;
             if (gp == null)
             {
                 gp = GMapProviders.OpenStreetMap as GeocodingProvider;
@@ -2550,7 +2143,7 @@ namespace GMap.NET.WindowsPresentation
             if (gp != null)
             {
                 var pt = gp.GetPoint(keys, out status);
-                if (status == GeoCoderStatusCode.OK && pt.HasValue)
+                if (status == GeoCoderStatusCode.G_GEO_SUCCESS && pt.HasValue)
                 {
                     Position = pt.Value;
                 }
@@ -2559,67 +2152,44 @@ namespace GMap.NET.WindowsPresentation
             return status;
         }
 
-        /// <summary>
-        ///     gets position using geocoder
-        /// </summary>
-        /// <param name="keys"></param>
-        /// <returns></returns>
-        public PointLatLng GetPositionByKeywords(string keys)
+        public PointLatLng FromLocalToLatLng(Point p)
         {
-            var status = GeoCoderStatusCode.UNKNOWN_ERROR;
-
-            var gp = MapProvider as GeocodingProvider;
-            if (gp == null)
-            {
-                gp = GMapProviders.OpenStreetMap as GeocodingProvider;
-            }
-
-            if (gp != null)
-            {
-                var pt = gp.GetPoint(keys, out status);
-                if (status == GeoCoderStatusCode.OK && pt.HasValue)
-                {
-                    return pt.Value;
-                }
-            }
-
-            return new PointLatLng();
+            return FromLocalToLatLng((int)p.X, (int)p.Y);
         }
-
         public PointLatLng FromLocalToLatLng(int x, int y)
         {
             if (MapScaleTransform != null)
             {
-                var tp = MapScaleTransform.Inverse.Transform(new Point(x, y));
+                var tp = MapScaleTransform.Inverse.Transform(new System.Windows.Point(x, y));
                 x = (int)tp.X;
                 y = (int)tp.Y;
             }
 
             if (IsRotated)
             {
-                var f = _rotationMatrixInvert.Transform(new Point(x, y));
+                var f = rotationMatrixInvert.Transform(new System.Windows.Point(x, y));
 
                 x = (int)f.X;
                 y = (int)f.Y;
             }
 
-            return _core.FromLocalToLatLng(x, y);
+            return Core.FromLocalToLatLng(x, y);
         }
 
         public GPoint FromLatLngToLocal(PointLatLng point)
         {
-            var ret = _core.FromLatLngToLocal(point);
+            GPoint ret = Core.FromLatLngToLocal(point);
 
             if (MapScaleTransform != null)
             {
-                var tp = MapScaleTransform.Transform(new Point(ret.X, ret.Y));
+                var tp = MapScaleTransform.Transform(new System.Windows.Point(ret.X, ret.Y));
                 ret.X = (int)tp.X;
                 ret.Y = (int)tp.Y;
             }
 
             if (IsRotated)
             {
-                var f = _rotationMatrix.Transform(new Point(ret.X, ret.Y));
+                var f = rotationMatrix.Transform(new System.Windows.Point(ret.X, ret.Y));
 
                 ret.X = (int)f.X;
                 ret.Y = (int)f.Y;
@@ -2703,54 +2273,61 @@ namespace GMap.NET.WindowsPresentation
             return false;
         }
 
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register(
-            "Position",
-            typeof(PointLatLng),
-            typeof(GMapControl),
-            new FrameworkPropertyMetadata(default(PointLatLng),
-                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                PositionChangedCallBack));
-
         /// <summary>
-        ///     Current coordinates of the map center
+        /// current coordinates of the map center
         /// </summary>
         [Browsable(false)]
         public PointLatLng Position
         {
-            get { return (PointLatLng)GetValue(PositionProperty); }
-            set { SetValue(PositionProperty, value); }
-        }
-
-        private static void PositionChangedCallBack(DependencyObject source,
-            DependencyPropertyChangedEventArgs e)
-        {
-            ((GMapControl)source).PositionChanged(e);
-        }
-
-        private void PositionChanged(DependencyPropertyChangedEventArgs e)
-        {
-            _core.Position = Position;
-            if (_core.IsStarted)
+            get
             {
-                ForceUpdateOverlays();
+                return Core.Position;
+            }
+            set
+            {
+                Core.Position = value;
+
+                if (Core.IsStarted)
+                {
+                    ForceUpdateOverlays();
+                }
             }
         }
+
 
         [Browsable(false)]
         public GPoint PositionPixel
         {
-            get { return _core.PositionPixel; }
+            get
+            {
+                return Core.PositionPixel;
+            }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
         public string CacheLocation
         {
-            get { return CacheLocator.Location; }
-            set { CacheLocator.Location = value; }
+            get
+            {
+                return CacheLocator.Location;
+            }
+            set
+            {
+                CacheLocator.Location = value;
+            }
         }
 
-        [Browsable(false)] public bool IsDragging { get; private set; }
+        bool isDragging = false;
+
+        [Browsable(false)]
+        public bool IsDragging
+        {
+            get
+            {
+                return isDragging;
+            }
+        }
 
         [Browsable(false)]
         public RectLatLng ViewArea
@@ -2759,16 +2336,15 @@ namespace GMap.NET.WindowsPresentation
             {
                 if (!IsRotated)
                 {
-                    return _core.ViewArea;
+                    return Core.ViewArea;
                 }
-                else if (_core.Provider.Projection != null)
+                else if (Core.Provider.Projection != null)
                 {
                     var p = FromLocalToLatLng(0, 0);
                     var p2 = FromLocalToLatLng((int)Width, (int)Height);
 
                     return RectLatLng.FromLTRB(p.Lng, p.Lat, p2.Lng, p2.Lat);
                 }
-
                 return RectLatLng.Empty;
             }
         }
@@ -2776,13 +2352,22 @@ namespace GMap.NET.WindowsPresentation
         [Category("GMap.NET")]
         public bool CanDragMap
         {
-            get { return _core.CanDragMap; }
-            set { _core.CanDragMap = value; }
+            get
+            {
+                return Core.CanDragMap;
+            }
+            set
+            {
+                Core.CanDragMap = value;
+            }
         }
 
-        public RenderMode RenderMode
+        public GMap.NET.RenderMode RenderMode
         {
-            get { return RenderMode.WPF; }
+            get
+            {
+                return GMap.NET.RenderMode.WPF;
+            }
         }
 
         #endregion
@@ -2791,70 +2376,110 @@ namespace GMap.NET.WindowsPresentation
 
         public event PositionChanged OnPositionChanged
         {
-            add { _core.OnCurrentPositionChanged += value; }
-            remove { _core.OnCurrentPositionChanged -= value; }
+            add
+            {
+                Core.OnCurrentPositionChanged += value;
+            }
+            remove
+            {
+                Core.OnCurrentPositionChanged -= value;
+            }
         }
 
         public event TileLoadComplete OnTileLoadComplete
         {
-            add { _core.OnTileLoadComplete += value; }
-            remove { _core.OnTileLoadComplete -= value; }
+            add
+            {
+                Core.OnTileLoadComplete += value;
+            }
+            remove
+            {
+                Core.OnTileLoadComplete -= value;
+            }
         }
 
         public event TileLoadStart OnTileLoadStart
         {
-            add { _core.OnTileLoadStart += value; }
-            remove { _core.OnTileLoadStart -= value; }
+            add
+            {
+                Core.OnTileLoadStart += value;
+            }
+            remove
+            {
+                Core.OnTileLoadStart -= value;
+            }
         }
 
         public event MapDrag OnMapDrag
         {
-            add { _core.OnMapDrag += value; }
-            remove { _core.OnMapDrag -= value; }
+            add
+            {
+                Core.OnMapDrag += value;
+            }
+            remove
+            {
+                Core.OnMapDrag -= value;
+            }
         }
 
         public event MapZoomChanged OnMapZoomChanged
         {
-            add { _core.OnMapZoomChanged += value; }
-            remove { _core.OnMapZoomChanged -= value; }
+            add
+            {
+                Core.OnMapZoomChanged += value;
+            }
+            remove
+            {
+                Core.OnMapZoomChanged -= value;
+            }
         }
 
         /// <summary>
-        ///     occures on map type changed
+        /// occures on map type changed
         /// </summary>
         public event MapTypeChanged OnMapTypeChanged
         {
-            add { _core.OnMapTypeChanged += value; }
-            remove { _core.OnMapTypeChanged -= value; }
+            add
+            {
+                Core.OnMapTypeChanged += value;
+            }
+            remove
+            {
+                Core.OnMapTypeChanged -= value;
+            }
         }
 
         /// <summary>
-        ///     occurs on empty tile displayed
+        /// occurs on empty tile displayed
         /// </summary>
         public event EmptyTileError OnEmptyTileError
         {
-            add { _core.OnEmptyTileError += value; }
-            remove { _core.OnEmptyTileError -= value; }
+            add
+            {
+                Core.OnEmptyTileError += value;
+            }
+            remove
+            {
+                Core.OnEmptyTileError -= value;
+            }
         }
-
         #endregion
 
         #region IDisposable Members
 
         public virtual void Dispose()
         {
-            if (_core.IsStarted)
+            if (Core.IsStarted)
             {
-                _core.OnMapZoomChanged -= ForceUpdateOverlays;
-                Loaded -= GMapControl_Loaded;
-                Dispatcher.ShutdownStarted -= Dispatcher_ShutdownStarted;
-                SizeChanged -= GMapControl_SizeChanged;
-                if (_loadedApp != null)
+                Core.OnMapZoomChanged -= new MapZoomChanged(ForceUpdateOverlays);
+                Loaded -= new RoutedEventHandler(GMapControl_Loaded);
+                Dispatcher.ShutdownStarted -= new EventHandler(Dispatcher_ShutdownStarted);
+                SizeChanged -= new SizeChangedEventHandler(GMapControl_SizeChanged);
+                if (loadedApp != null)
                 {
-                    _loadedApp.SessionEnding -= Current_SessionEnding;
+                    loadedApp.SessionEnding -= new SessionEndingCancelEventHandler(Current_SessionEnding);
                 }
-
-                _core.OnMapClose();
+                Core.OnMapClose();
             }
         }
 
@@ -2871,47 +2496,26 @@ namespace GMap.NET.WindowsPresentation
     public enum ScaleModes
     {
         /// <summary>
-        ///     no scaling
+        /// no scaling
         /// </summary>
         Integer,
 
         /// <summary>
-        ///     scales to fractional level using a stretched tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
+        /// scales to fractional level using a stretched tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
         /// </summary>
         ScaleUp,
 
         /// <summary>
-        ///     scales to fractional level using a narrowed tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
+        /// scales to fractional level using a narrowed tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
         /// </summary>
         ScaleDown,
 
         /// <summary>
-        ///     scales to fractional level using a combination both stretched and narrowed tiles, any issues ->
-        ///     http://greatmaps.codeplex.com/workitem/16046
+        /// scales to fractional level using a combination both stretched and narrowed tiles, any issues -> http://greatmaps.codeplex.com/workitem/16046
         /// </summary>
         Dynamic
     }
 
-    /// <summary>
-    ///     Enum ZoomMode
-    /// </summary>
-    public enum ZoomMode
-    {
-        /// <summary>
-        ///     Only update X coordinates
-        /// </summary>
-        X,
-
-        /// <summary>
-        ///     Only update Y coordinates
-        /// </summary>
-        Y,
-
-        /// <summary>
-        ///     Updates both the X and Y coordinates
-        /// </summary>
-        XY
-    }
-
-    public delegate void SelectionChange(RectLatLng selection, bool zoomToFit);
+    public delegate void SelectionChange(RectLatLng Selection, bool ZoomToFit);
+    public delegate void TraceDefiningCancelled();
 }

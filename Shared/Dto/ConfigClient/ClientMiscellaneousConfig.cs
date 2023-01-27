@@ -3,6 +3,7 @@
 public class ClientMiscellaneousConfig
 {
     public string PathToSor { get; set; } = string.Empty;
+    public string RtuDefualtIp { get; set; } = "192.168.96.";
     public GpsInputMode GpsInputMode { get; set; } = GpsInputMode.DegreesMinutesAndSeconds;
     public GraphVisibilityLevel GraphVisibilityLevel { get; set; } = GraphVisibilityLevel.AllDetails;
     public bool DoNotSignalAboutSuspicion { get; set; } = false;
