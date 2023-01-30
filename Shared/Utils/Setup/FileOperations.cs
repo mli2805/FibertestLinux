@@ -28,6 +28,13 @@ public static class FileOperations
         return Directory.GetParent(assemblyPath)!.FullName;
     }
 
+    public static string GetReflectInClient()
+    {
+        var rootPath = GetMainFolder();
+        return rootPath + @"\RftsReflect\Reflect.exe";
+    }
+
+
     public static bool DirectoryCopyWithDecorations(string sourceDirName, string destDirName,
         BackgroundWorker worker)
     {

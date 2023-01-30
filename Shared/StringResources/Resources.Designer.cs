@@ -4273,6 +4273,15 @@ namespace Fibertest.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initialize RTU and Synchronize base refs.
+        /// </summary>
+        public static string SID_Initialize_and_synch {
+            get {
+                return ResourceManager.GetString("SID_Initialize_and_synch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Initialize main otau.
         /// </summary>
         public static string SID_Initialize_main_otau {
@@ -7817,6 +7826,15 @@ namespace Fibertest.StringResources {
         public static string SID_Send_messages {
             get {
                 return ResourceManager.GetString("SID_Send_messages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending base refs for port {0}.
+        /// </summary>
+        public static string SID_Sending_base_refs_for_port__0_ {
+            get {
+                return ResourceManager.GetString("SID_Sending_base_refs_for_port__0_", resourceCulture);
             }
         }
         

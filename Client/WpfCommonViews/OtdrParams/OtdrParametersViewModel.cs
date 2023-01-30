@@ -10,10 +10,11 @@ namespace Fibertest.WpfCommonViews
     public class OtdrParametersViewModel : PropertyChangedBase
     {
         private TreeOfAcceptableMeasParams _treeOfAcceptableMeasParams = null!;
-        private IWritableOptions<OtdrParametersConfig> _config = null!;
+        private IWritableConfig<OtdrParametersConfig> _config = null!;
         public OtdrParametersModel Model { get; set; } = null!;
 
-        public void Initialize(TreeOfAcceptableMeasParams treeOfAcceptableMeasParams, IWritableOptions<OtdrParametersConfig> config)
+        public void Initialize(TreeOfAcceptableMeasParams treeOfAcceptableMeasParams, 
+            IWritableConfig<OtdrParametersConfig> config)
         {
             _treeOfAcceptableMeasParams = treeOfAcceptableMeasParams;
             _config = config;

@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.TceSlotsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" 
+             Width="1170" Height="590"
+             d:DataContext="{d:DesignInstance wpfClient:TceSlotsViewModel}">
+    <GroupBox Header="{x:Static stringResources:Resources.SID_Slots}" Margin="5" >
+        <TabControl DockPanel.Dock="Top" Margin="0, 5" ItemsSource="{Binding Slots}" 
+                SelectedItem="{Binding SelectedSlot, Mode=TwoWay}">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="wpfClient:SlotViewModel">
+                    <DockPanel>
+                        <TextBlock Text="{Binding Title}"  Width="50" TextAlignment="Center"/>
+                    </DockPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="wpfClient:SlotViewModel">
+                    <wpfClient:SlotView/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </GroupBox>
+
+</UserControl>

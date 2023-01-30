@@ -1,0 +1,52 @@
+﻿<Window x:Class="Fibertest.WpfClient.LogOperationsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        Title="LogOperationsView" SizeToContent="Height" Width="400" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:LogOperationsViewModel}">
+    <StackPanel Margin="5">
+        <CheckBox Margin="15,5" Content="{x:Static stringResources:Resources.SID_All_operations}" IsChecked="{Binding IsAll}"/>
+        <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+
+            <StackPanel Margin="5">
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Client_started}" Margin="5" IsChecked="{Binding IsClientStarted, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Client_exited}" Margin="5" IsChecked="{Binding IsClientExited, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Client_s_connection_lost}" Margin="5" IsChecked="{Binding IsClientConnectionLost, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_User_to_workstation_linking_set}" Margin="5" IsChecked="{Binding IsUsersMachineKeyAssigned, Mode=TwoWay}"/>
+                <Separator/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_RTU_added}" Margin="5" IsChecked="{Binding IsRtuAdded, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_RTU_updated}" Margin="5" IsChecked="{Binding IsRtuUpdated, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_RTU_initialized2}" Margin="5" IsChecked="{Binding IsRtuInitialized, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_RTU_removed}" Margin="5" IsChecked="{Binding IsRtuRemoved, Mode=TwoWay}"/>
+                <Separator/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Trace_added}" Margin="5" IsChecked="{Binding IsTraceAdded, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Trace_updated}" Margin="5" IsChecked="{Binding IsTraceUpdated, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Trace_attached}" Margin="5" IsChecked="{Binding IsTraceAttached, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Trace_detached}" Margin="5" IsChecked="{Binding IsTraceDetached, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Trace_cleaned}" Margin="5" IsChecked="{Binding IsTraceCleaned, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Trace_removed}" Margin="5" IsChecked="{Binding IsTraceRemoved, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Base_ref_assigned}" Margin="5" IsChecked="{Binding IsBaseRefAssigned, Mode=TwoWay}"/>
+                <Separator/>
+                <CheckBox Content="TCE added" Margin="5" IsChecked="{Binding IsTceAdded, Mode=TwoWay}"/>
+                <CheckBox Content="TCE updated" Margin="5" IsChecked="{Binding IsTceUpdated, Mode=TwoWay}"/>
+                <CheckBox Content="TCE removed" Margin="5" IsChecked="{Binding IsTceRemoved, Mode=TwoWay}"/>
+                <Separator/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Monitoring_settings_changed}" Margin="5" IsChecked="{Binding IsMonitoringSettingsChanged, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Monitoring_started}" Margin="5" IsChecked="{Binding IsMonitoringStarted, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Monitoring_stopped}" Margin="5" IsChecked="{Binding IsMonitoringStopped, Mode=TwoWay}"/>
+                <Separator/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Measurement_updated}" Margin="5" IsChecked="{Binding IsMeasurementUpdated, Mode=TwoWay}"/>
+                <Separator/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Events_and_reflectogram_removal}" Margin="5" IsChecked="{Binding IsEventsAndSorsRemoved, Mode=TwoWay}"/>
+                <CheckBox Content="{x:Static stringResources:Resources.SID_Db_restructuring}" Margin="5" IsChecked="{Binding IsSnapshotMade, Mode=TwoWay}"/>
+            </StackPanel>
+        </Border>
+        <StackPanel Orientation="Horizontal" Margin="5,15,5,10" HorizontalAlignment="Center">
+            <Button Content="{x:Static stringResources:Resources.SID_Ok}" Width="100" Margin="5" Name="Ok" IsDefault="True" IsCancel="True" />
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -1,0 +1,128 @@
+﻿<Window x:Class="Fibertest.WpfClient.TraceInfoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:dto="clr-namespace:Fibertest.Dto;assembly=Fibertest.Dto"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        FocusManager.FocusedElement="{Binding ElementName=TraceTitleTextbox}"
+        SizeToContent="Height" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        d:DataContext="{d:DesignData TraceInfoViewModel}"
+        cal:Message.Attach="[Gesture Ctrl+F11] = [DevReport]">
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBox}" x:Key="TextBoxValidationStyle">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, 
+                   Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Information}" Margin="5">
+            <StackPanel Margin="5">
+                <DockPanel>
+                    <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Title}" Width="55"/>
+                    <TextBox Name="TraceTitleTextbox" Margin="5" TabIndex="0" IsEnabled="{Binding IsEditEnabled}" Style="{StaticResource TextBoxValidationStyle}"
+                             Text="{Binding Title, ValidatesOnDataErrors=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             />
+                </DockPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="ID" Margin="5" Width="55"/>
+                    <TextBlock Margin="5" Text="{Binding Model.TraceId}" HorizontalAlignment="Right" Foreground="DarkGray"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="5" Text="RTU" />
+                    <TextBlock Margin="5" Text="{Binding Model.RtuTitle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="5" Text="Port" />
+                    <TextBlock Margin="5" Text="{Binding Model.PortNumber}" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Equipment}" Margin="5">
+            <ItemsControl ItemsSource="{Binding Model.EquipmentsRows}" Margin="5,5,5,10">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="dto:TraceInfoTableItem">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" Width="220" HorizontalAlignment="Right" Text="{Binding NodeType}" />
+                            <TextBlock Margin="5" Text="{Binding Count}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Nodes}" Margin="5">
+            <ItemsControl ItemsSource="{Binding Model.NodesRows}" Margin="5,5,5,10">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="dto:TraceInfoTableItem">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" Width="220" HorizontalAlignment="Right" Text="{Binding NodeType}" />
+                            <TextBlock Margin="5" Text="{Binding Count}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+        <TextBlock Margin="20,0" Foreground="LightGray" TextWrapping="Wrap" 
+                   Visibility="{Binding Model.AdjustmentPointsLineVisibility}" Text="{Binding Model.AdjustmentPointsLine}"/>
+
+        <GroupBox Margin="5" Header="{x:Static stringResources:Resources.SID_Telecommunications_equipment}">
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Title}" Width="90"/>
+                    <TextBlock Text="{Binding RelationModel.TceTitle}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Type}" Width="90"/>
+                    <TextBlock Text="{Binding RelationModel.TceType}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Slot}" Width="90"/>
+                    <TextBlock Text="{Binding RelationModel.SlotPositionStr}" Width="40"/>
+                </StackPanel>
+          <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Interface_No}" Width="90"/>
+                    <TextBlock Text="{Binding RelationModel.GponInterfaceNumberStr}"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Margin="5" Visibility="{Binding LengthVisibility}">
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Physical_length}" Width="220"/>
+                    <TextBlock Text="{Binding Model.PhysicalLength}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Optical_length}" Width="220"/>
+                    <TextBlock Text="{Binding Model.OpticalLength}"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Trace_monitoring_mode}" Margin="5">
+            <StackPanel Orientation="Horizontal" Margin="5" IsEnabled="{Binding IsEditEnabled}">
+                <RadioButton GroupName="1" Name="Dark" Margin="30,5,5,5" Content="{x:Static stringResources:Resources.SID_Dark_OF}"
+                             IsChecked="{Binding Model.IsTraceModeDark, Mode=TwoWay}"/>
+                <RadioButton GroupName="1" Name="Light" Margin="30,5,5,5" Content="{x:Static stringResources:Resources.SID_Light_OF}" 
+                             IsChecked="{Binding Model.IsTraceModeLight, Mode=TwoWay}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Comment}" Margin="5">
+            <TextBox Margin="5,10" Text="{Binding Model.Comment}" TextWrapping="Wrap" IsEnabled="{Binding IsEditEnabled}"/>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Margin="15,15"  IsEnabled="{Binding IsButtonsEnabled}">
+            <Button Name="Save" Height="25" Width="100" Margin="5" Content="{x:Static stringResources:Resources.SID_Save}" 
+                    IsEnabled="{Binding IsButtonSaveEnabled}" TabIndex="1" IsDefault="True" />
+            <Button Name="Cancel" Height="25" Width="100"  IsCancel="True"
+                    Content="{x:Static stringResources:Resources.SID_Cancel}"/>
+        </StackPanel>
+
+    </StackPanel>
+</Window>

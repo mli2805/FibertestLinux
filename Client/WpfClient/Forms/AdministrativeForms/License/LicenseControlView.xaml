@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.LicenseControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="20, 5">
+
+            <TextBlock Text="{x:Static stringResources:Resources.SID_License_number_}"/>
+            <TextBlock Text="{Binding License.LicenseKey}" FontWeight="DemiBold" FontSize="16" HorizontalAlignment="Center" 
+                       Margin="0,0,0,20" Background="Azure"/>
+
+            <StackPanel Name="Owner" Orientation="Horizontal"  HorizontalAlignment="Right">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_License_owner}" Margin="5,0, 5,5"/>
+                <TextBlock Text="{Binding License.Owner}" Margin="5,1,15,5" Background="Azure" Width="270" TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <StackPanel Name="LicenseType" Orientation="Horizontal" Height="22" Margin="0"  HorizontalAlignment="Right" IsEnabled="False"
+                        Visibility="{Binding IsBasic, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_License_type}" TextAlignment="Right" Margin="0,0,10,0"/>
+
+                <RadioButton GroupName="LicType" Width="110" Height="18" Content="{x:Static stringResources:Resources.SID_Standart}" 
+                             IsChecked="{Binding IsStandart, Mode=OneWay}"/>
+                <RadioButton GroupName="LicType" Width="160" Height="18" Content="{x:Static stringResources:Resources.SID_With_workstation_linking}" 
+                             IsChecked="{Binding License.IsMachineKeyRequired, Mode=OneWay}"/>
+                <TextBlock Width="15"/>
+            </StackPanel>
+
+             <StackPanel Name="LicenseKeyType" Orientation="Horizontal" Height="22" Margin="0"  HorizontalAlignment="Right" IsEnabled="False">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_License_key_type}" TextAlignment="Right" Margin="0,0,10,0"/>
+
+                <RadioButton GroupName="LicKeyType" Width="110" Height="18" Content="{x:Static stringResources:Resources.SID_Basic}" 
+                             IsChecked="{Binding IsBasic, Mode=OneWay}"/>
+                <RadioButton GroupName="LicKeyType" Width="120" Height="18" Content="{x:Static stringResources:Resources.SID_Incremental}" 
+                             IsChecked="{Binding License.IsIncremental, Mode=OneWay}"/>
+                <TextBlock Width="55"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Rtu_count}" Margin="5,0,5,5"/>
+                <TextBlock Text="{Binding License.RtuCount}" Background="Azure" Margin="5,1,15,5" Width="270"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Client_stations}" Margin="5,0,5,5"/>
+                <TextBlock Text="{Binding License.ClientStationCount}" Background="Azure" Margin="5,1,15,5" Width="270"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Web_clients}" Margin="5,0,5,5"/>
+                <TextBlock Text="{Binding License.WebClientCount}" Background="Azure" Margin="5,1,15,5" Width="270"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_SuperClients}" Margin="5,0,5,5"/>
+                <TextBlock Text="{Binding License.SuperClientStationCount}" Background="Azure" Margin="5,1,15,5" Width="270"/>
+            </StackPanel>
+          
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Creation_date}" Margin="5,0,5,5"/>
+                <TextBlock Text="{Binding License.CreationDate, StringFormat=dd.MM.yyyy}" Background="Azure" Margin="5,1,15,5" Width="270"/>
+            </StackPanel>
+
+        </StackPanel>
+    </DockPanel>
+
+</UserControl>

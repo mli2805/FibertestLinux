@@ -17,9 +17,6 @@
     using System.Windows.Threading;
     using System.Diagnostics;
     using GMap.NET;
-    using GMap.NET.Internals;
-    using GMap.NET.MapProviders;
-    using GMap.NET.Projections;
 
     /// <summary>
     /// GMap.NET control for Windows Presentation

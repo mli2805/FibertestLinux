@@ -10,4 +10,16 @@ public class DataCenterConfig
     public SmtpConfig Smtp { get; set; } = new SmtpConfig();
     public SnmpConfig Snmp { get; set; } = new SnmpConfig();
     public WebApiConfig WebApi { get; set; } = new WebApiConfig();
+
+    public void FillIn(DataCenterConfig other)
+    {
+        General = other.General;
+        ServerTimeouts = other.ServerTimeouts;
+        EventSourcing = other.EventSourcing;
+        Mysql = other.Mysql;
+        Broadcast = other.Broadcast;
+        Smtp = other.Smtp;
+        Snmp = other.Snmp;
+        WebApi = other.WebApi;
+    }
 }

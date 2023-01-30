@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.MapUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance wpfClient:GraphReadModel}" 
+             Loaded="UserControl_Loaded" KeyDown="UserControl_KeyDown" PreviewKeyDown="UserControl_PreviewKeyDown">
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" Height="25" BorderBrush="DarkGray" BorderThickness="0,1,0,0">
+            <StatusBarItem>
+                <TextBlock Text="{Binding MainMap.MouseCurrentCoorsString}" Margin="5,0,5,0" />
+            </StatusBarItem>
+           <StatusBarItem>
+                <TextBlock Text="{Binding MainMap.NodeCountString}" Margin="5,0,20,0" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding MainMap.MeasuredDistance}"/>
+            </StatusBarItem>
+        </StatusBar>
+        <wpfClient:Map x:Name="MainMap" MinZoom="1"/>
+    </DockPanel>
+</UserControl>

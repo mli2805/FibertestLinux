@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.OneLandmarkView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance wpfClient:OneLandmarkViewModel}"
+             cal:Bind.ModelWithoutContext="{Binding .}" >
+    <GroupBox DockPanel.Dock="Bottom" Header="{x:Static stringResources:Resources.SID_Landmark}" Margin="5,0,5,15">
+        <DockPanel IsEnabled="{Binding }" >
+            <StackPanel DockPanel.Dock="Bottom" Margin="5,5,0,0" Orientation="Horizontal">
+                <Button Width="132" Height="25" Margin="5" Name="Apply" Content="{x:Static stringResources:Resources.SID_Apply}" 
+                        IsEnabled="{Binding HasPrivileges}"/>
+                <Button Width="132" Height="25" Margin="5" Name="CancelChanges" Content="{x:Static stringResources:Resources.SID_Cancel_changes}" 
+                        IsEnabled="{Binding HasPrivileges}"/>
+                <Button Width="132" Height="25" Margin="5" Name="ShowLandmarkOnMap" Content="{x:Static stringResources:Resources.SID_Show_on_map}"/>
+                <Button Width="132" Height="25" Margin="5" Name="ShowReflectogram" Content="{x:Static stringResources:Resources.SID_Reflectogram}" 
+                        IsEnabled="{Binding IsFromBaseRef}"/>
+            </StackPanel>
+            <GroupBox DockPanel.Dock="Right" Header="{x:Static stringResources:Resources.SID_GPS_coordinates}"  
+                      Visibility="{Binding GisVisibility}" IsEnabled="{Binding HasPrivileges}">
+                <wpfClient:GpsInputSmallView DataContext="{Binding GpsInputSmallViewModel}"/>
+            </GroupBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="{x:Static stringResources:Resources.SID_Node}" Margin="5,0" 
+                          IsEnabled="{Binding HasPrivileges}">
+                    <StackPanel>
+                        <TextBox Margin="5" Height="25" Text="{Binding SelectedLandmark.NodeTitle}"/>
+                        <TextBox Margin="5" Height="25" Text="{Binding SelectedLandmark.NodeComment}" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Header="{x:Static stringResources:Resources.SID_Equipment}" Margin="5,0" IsEnabled ="{Binding IsEquipmentEnabled}">
+                    <StackPanel>
+                        <TextBox Margin="5" Height="25" Text="{Binding SelectedLandmark.EquipmentTitle}"/>
+                        <ComboBox Margin="5" Height="25" ItemsSource="{Binding ComboItems}" SelectedItem="{Binding SelectedEquipmentTypeItem}" />
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </DockPanel>
+    </GroupBox>
+
+</UserControl>

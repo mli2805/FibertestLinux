@@ -10,4 +10,5 @@ public class ClientMiscellaneousConfig
     public int MaxCableReserve { get; set; } = 200;
     public int MeasurementTimeoutMs { get; set; } = 60000;
     public int VeexLineParamsTimeoutMs { get; set; } = 2000;
+    public bool CouldUserDoOptimizationUpToToday { get; set; }
 }

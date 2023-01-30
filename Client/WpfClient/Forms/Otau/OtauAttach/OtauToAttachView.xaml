@@ -1,0 +1,52 @@
+﻿<Window x:Class="Fibertest.WpfClient.OtauToAttachView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:client="clr-namespace:Iit.Fibertest.Client"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:OtauToAttachViewModel}">
+    <StackPanel>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Attach_to}" Margin="5">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="RTU:"/>
+                    <TextBlock Text="{Binding RtuTitle}" Margin="5,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Port1}"/>
+                    <TextBlock Text="{Binding RtuPortNumber}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Additional_optical_switch}" Margin="5">
+            <wpfClient:NetAddressInputView Margin="5,10" DataContext="{Binding NetAddressInputViewModel}"/>
+        </GroupBox>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Information}" Margin="5">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Serial}" Margin="5"/>
+                    <TextBlock Text="{Binding OtauSerial}" Margin="5,5,35,5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Port_count}" Margin="5"/>
+                    <TextBlock Text="{Binding OtauPortCount}" Margin="5,5,0,5"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Attachment}" Margin="5">
+            <StackPanel>
+                <TextBlock Text="{Binding AttachmentProgress}" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Margin="15,10">
+            <Button Name="AttachOtau" Content="{x:Static stringResources:Resources.SID_Attach}" 
+                    Width="100" Margin="5" IsEnabled="{Binding IsButtonsEnabled}"/>
+            <Button Name="Close" Content="{x:Static stringResources:Resources.SID_Close}" 
+                    Width="90" Margin="5" IsEnabled="{Binding IsButtonsEnabled}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

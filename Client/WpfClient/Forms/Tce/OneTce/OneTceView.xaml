@@ -1,0 +1,25 @@
+﻿<Window x:Class="Fibertest.WpfClient.OneTceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:client="clr-namespace:Iit.Fibertest.Client"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:OneTceViewModel}">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Margin="5,10,5,10" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Name="ExportToPdf" Content="{x:Static stringResources:Resources.SID_Export_to_pdf}" Margin="5,5,155,5" Width="160"/>
+            <Button Name="ButtonSaveAndClose" Content="{x:Static stringResources:Resources.SID_Save_and_close}" 
+                    IsEnabled="{Binding IsSaveEnabled}" Margin="5" Width="160"/>
+            <Button Name="ButtonSave" Content="{x:Static stringResources:Resources.SID_Save}" IsDefault="True" 
+                    IsEnabled="{Binding IsSaveEnabled}" Margin="5" Width="160"/>
+            <Button Name="Cancel" Content="{x:Static stringResources:Resources.SID_Cancel}" IsCancel="True" Margin="5" Width="160"/>
+        </StackPanel>
+        <wpfClient:TceInfoView DataContext="{Binding TceInfoViewModel}"/>
+        <wpfClient:TceSlotsView DataContext="{Binding TceSlotsViewModel}"/>
+        <StackPanel/>
+    </DockPanel>
+</Window>

@@ -266,7 +266,10 @@ public partial class RtuManager
 
     private MonitoringResultDto CreateDto(MoniResult moniResult, MonitoringPort monitoringPort)
     {
-        var otauPortDto = new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon, monitoringPort.CharonSerial);
+        var otauPortDto = new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon)
+        {
+            Serial =  monitoringPort.CharonSerial
+        };
         var portWithTraceDto = new PortWithTraceDto(otauPortDto, monitoringPort.TraceId);
         var dto = new MonitoringResultDto(
                 _id, DateTime.Now, portWithTraceDto, moniResult.BaseRefType, moniResult.GetAggregatedResult())

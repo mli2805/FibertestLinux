@@ -1,0 +1,48 @@
+﻿<Window x:Class="Fibertest.WpfClient.SmtpSettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance wpfClient:SmtpSettingsViewModel}"
+        Width="450" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <StackPanel Margin="5" IsEnabled="{Binding IsEditEnabled}">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Margin="5,0,5,10" Foreground="Gray" Width="300"
+                       Text="{x:Static stringResources:Resources.SID_If_you_use_Gmail}"
+                       TextWrapping="Wrap" TextAlignment="Center" />
+            <TextBlock DockPanel.Dock="Bottom" Margin="5" Foreground="Gray" Text="{x:Static stringResources:Resources.SID_e_g_smtp_server}"
+                       TextAlignment="Center" />
+            <TextBlock DockPanel.Dock="Left" Margin="5" Text="SMTP host" Width="120" />
+            <TextBox Margin="5" Text="{Binding SmtpHost}" />
+        </DockPanel>
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Margin="5" Foreground="Gray" Text="{x:Static stringResources:Resources.SID_usually_smtp_port}"
+                       TextAlignment="Center" />
+            <TextBlock DockPanel.Dock="Left" Margin="5" Text="SMTP port" Width="120" />
+            <TextBox Margin="5" Text="{Binding SmtpPort}" />
+        </DockPanel>
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Margin="5" Foreground="Gray" Text="{x:Static stringResources:Resources.SID_e_g_postbox}"
+                       TextAlignment="Center" />
+            <TextBlock DockPanel.Dock="Left" Margin="5" Text="Mail from" Width="120" />
+            <TextBox Margin="5" Text="{Binding MailFrom}" />
+        </DockPanel>
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Margin="5" Foreground="Gray" Text="" TextAlignment="Center" />
+            <TextBlock DockPanel.Dock="Left" Margin="5" Text="Mail password" Width="120" />
+            <TextBox Margin="5" Text="{Binding MailFromPassword}" />
+        </DockPanel>
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Margin="5" Foreground="Gray" Text="{x:Static stringResources:Resources.SID_usually_smtp_timeout}"
+                       TextAlignment="Center" />
+            <TextBlock DockPanel.Dock="Left" Margin="5" Text="SMTP timeout in ms" Width="120" />
+            <TextBox Margin="5" Text="{Binding SmtpTimeoutMs}" />
+        </DockPanel>
+        <StackPanel Orientation="Horizontal" Margin="5,25" HorizontalAlignment="Center">
+            <Button Width="120" Margin="5" Name="Save" Content="{x:Static stringResources:Resources.SID_Save}"/>
+            <Button Width="120" Margin="5" Name="Cancel" Content="{x:Static stringResources:Resources.SID_Cancel}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -1,0 +1,170 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.TreeOfRtuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:testBench="clr-namespace:Iit.Fibertest.Client"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" 
+             cal:Bind.ModelWithoutContext="{Binding .}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="MenuSeparatorTemplate">
+            <Separator />
+        </ControlTemplate>
+        <Style x:Key="ContextMenuItemStyle" TargetType="{x:Type MenuItem}">
+            <Setter Property="Header" Value="{Binding Header}"/>
+            <Setter Property="ItemsSource" Value="{Binding Children}"/>
+            <Setter Property="CommandParameter" Value="{Binding CommandParameter}"/>
+            <Setter Property="Command" Value="{Binding Command}" />
+            <Setter Property="IsChecked" Value="{Binding IsChecked, Mode=TwoWay}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding }" Value="{x:Null}">
+                    <Setter Property="Template" Value="{StaticResource MenuSeparatorTemplate}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Image x:Key="PortsPlus" Source="../../../Resources/Buttons/ShowPorts.png" Width="16" Height="16"/>
+        <Image x:Key="PortsMinus" Source="../../../Resources/Buttons/HidePorts.png" Width="16" Height="16"/>
+        <Style TargetType="{x:Type ToggleButton}" x:Key="MyToggleButtonStyle">
+            <Setter Property="Content" Value="{DynamicResource PortsMinus}" />
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Content" Value="{DynamicResource PortsPlus}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Background="AliceBlue">
+            <Border DockPanel.Dock="Right" Margin="1" Visibility="{Binding SuspicionVisibility}" 
+                    BorderBrush="Black" BorderThickness="1"  CornerRadius="1" >
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Suspicion_off}" Margin="10,2,10,0"/>
+            </Border>
+            <ToolBarTray DockPanel.Dock="Left" Background="AliceBlue">
+                <ToolBar Name="ExpandBar"  Background="AliceBlue">
+                    <Button Name="Expand" Background="Transparent" BorderThickness="0" Width="20" Height="20"
+                            Click="Expand_Click"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor" Margin="0,0,0,1"
+                            VerticalAlignment="Bottom">
+                        <Image Source="../../../Resources/Buttons/Expand.png" Width="16" Height="16" />
+                    </Button>
+                    <Button Name="Collapse" Background="Transparent" BorderThickness="0" Width="20" Height="20"
+                            Click="Collapse_Click"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor">
+                        <Image Source="../../../Resources/Buttons/Collapse.png" Width="16" Height="16" />
+                    </Button>
+                    <ToggleButton Name="ChangeFreePortsVisibility" Background="Transparent" BorderThickness="0"
+                                  Width="20" Height="20"
+                                  Style="{StaticResource MyToggleButtonStyle}"
+                                  RenderOptions.BitmapScalingMode="NearestNeighbor">
+                    </ToggleButton>
+                </ToolBar>
+                <ToolBar Background="AliceBlue">
+                    <TextBox Text="{Binding TextToFind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" />
+                    <TextBlock Text="{Binding Found}" Width="50" Height="22" Margin="3,0" Padding="8,2,0,0"
+                               Background="Azure" HorizontalAlignment="Center" />
+                    <Button Name="ClearButton" Background="Transparent" BorderThickness="0" Width="20" Height="20"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor">
+                        <Image Source="../../../Resources/Buttons/CloseChildren.png" Width="16" Height="16" />
+                    </Button>
+                </ToolBar>
+            </ToolBarTray>
+        </DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" Height="25">
+            <StatusBarItem Width="40" Background="White">
+                <Button Name="CloseChildren" Background="Transparent" BorderThickness="0" Width="20" Height="20" 
+                        RenderOptions.BitmapScalingMode="NearestNeighbor">
+                    <Image Source="../../../Resources/Buttons/CloseChildren.png" Width="16" Height="16"/>
+                </Button>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding TreeOfRtuModel.Statistics}" Margin="5,0,0,0"/>
+            </StatusBarItem>
+        </StatusBar>
+        <TreeView ItemsSource="{Binding TreeOfRtuModel.Tree}" Name="MainTreeView" Padding="3,7,0,0"
+                  Background="Transparent" Foreground="Black" HorizontalAlignment="Stretch"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  VirtualizingStackPanel.IsVirtualizing="True">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#f0f0ff" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="GhostWhite" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
+                <HierarchicalDataTemplate DataType="{x:Type wpfClient:RtuLeaf}" 
+                                          ItemsSource="{Binding ChildrenImpresario.EffectiveChildren}">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu 
+                                ItemContainerStyle="{StaticResource ContextMenuItemStyle}" 
+                                ItemsSource="{Binding MyContextMenu}"/>
+                        </StackPanel.ContextMenu>
+                        <Image Source="{Binding MonitoringPictogram}" Height="12" Width="12" Margin="0,0,4,0" 
+                               ToolTip="{x:Static stringResources:Resources.SID_Monitoring_mode}" />
+                        <Image Source="{Binding BopPictogram}" Height="12" Width="12" Margin="0,0,4,0" 
+                               ToolTip="{x:Static stringResources:Resources.SID_BOP_state}"/>
+                        <Image Source="{Binding MainChannelPictogram}" Height="12" Width="12" Margin="0,0,4,0" 
+                               ToolTip="{x:Static stringResources:Resources.SID_Main_channel}"/>
+                        <Image Source="{Binding ReserveChannelPictogram}" Height="12" Width="12" Margin="0,0,4,0" 
+                               ToolTip="{x:Static stringResources:Resources.SID_Reserve_channel}"/>
+                        <TextBlock Text="{Binding Name}" Foreground="{Binding Color}" Background="{Binding BackgroundBrush}" 
+                                   Margin="0,0,20,0" MinWidth="200"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type wpfClient:OtauLeaf}" 
+                                          ItemsSource="{Binding ChildrenImpresario.EffectiveChildren}">
+                    <StackPanel Orientation="Horizontal" Margin="85,0,0,0">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu 
+                                ItemContainerStyle="{StaticResource ContextMenuItemStyle}" 
+                                ItemsSource="{Binding MyContextMenu}"/>
+                        </StackPanel.ContextMenu>
+                        <Image Source="{Binding OtauStatePictogram}" Height="12" Width="12" Margin="0,0,4,0" ToolTip="Otau state"/>
+                        <TextBlock Text="{Binding Name}" Foreground="{Binding Color}" Margin="0,0,20,0" MinWidth="200"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type wpfClient:TraceLeaf}">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu 
+                                ItemContainerStyle="{StaticResource ContextMenuItemStyle}" 
+                                ItemsSource="{Binding MyContextMenu}"/>
+                        </StackPanel.ContextMenu>
+                        <TextBlock Width="{Binding LeftMargin}"/>
+                        <Image Source="{Binding BaseRefsSet.MonitoringPictogram}" Height="12" Width="12" 
+                               Margin="0,0,4,0" Visibility="{Binding IconsVisibility}" 
+                               ToolTip="{x:Static stringResources:Resources.SID_Monitoring_mode}"/>
+                        <Image Source="{Binding TraceTceRelationPictogram}" Height="12" Width="12" Margin="0,0,4,0" 
+                               Visibility="{Binding IconsVisibility}" 
+                               ToolTip="TCE - trace link"/>
+                        <Image Source="{Binding TraceStatePictogram}" Height="12" Width="12" Margin="0,0,4,0" 
+                               Visibility="{Binding IconsVisibility}" 
+                               ToolTip="{x:Static stringResources:Resources.SID_Trace_state}"/>
+                        <TextBlock Text="{Binding Name}" Foreground="{Binding Color}" Background="{Binding BackgroundBrush}" 
+                                   Margin="0,0,20,0" MinWidth="200"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type wpfClient:PortLeaf}">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu 
+                                ItemContainerStyle="{StaticResource ContextMenuItemStyle}" 
+                                ItemsSource="{Binding MyContextMenu}"/>
+                        </StackPanel.ContextMenu>
+                        <TextBlock Width="{Binding LeftMargin}"/>
+                        <TextBlock Text="{Binding Name}" Foreground="{Binding Color}" Margin="0,0,20,0" MinWidth="200"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+    </DockPanel>
+</UserControl>

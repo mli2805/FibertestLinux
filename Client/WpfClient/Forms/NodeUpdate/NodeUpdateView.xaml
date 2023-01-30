@@ -1,0 +1,118 @@
+﻿<Window x:Class="Fibertest.WpfClient.NodeUpdateView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:client="clr-namespace:Iit.Fibertest.Client"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        cal:Bind.ModelWithoutContext="{Binding .}"
+        SizeToContent="Height" Width="600" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:NodeUpdateViewModel}"
+        FocusManager.FocusedElement="{Binding ElementName=TextBoxTitle}">
+    <DockPanel>
+        <GroupBox DockPanel.Dock="Top" Margin="5" Header="{x:Static stringResources:Resources.SID_Node}"  IsEnabled="{Binding IsEditEnabled}">
+            <StackPanel>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Left" Margin="5" Text="{x:Static stringResources:Resources.SID_Title}" />
+                    <TextBox Margin="5" Name="TextBoxTitle" 
+                             Text="{Binding Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+                </DockPanel>
+                <DockPanel Visibility="{Binding GisVisibility}">
+                    <TextBlock DockPanel.Dock="Left" Margin="5"
+                               Text="{x:Static stringResources:Resources.SID_Coordinates}" />
+                    <ComboBox DockPanel.Dock="Right" Height="22" Width="150" Margin="0,0,5,0"
+                              ItemsSource="{Binding GpsInputModeComboItems}"
+                              SelectedItem="{Binding SelectedGpsInputModeComboItem, Mode=TwoWay}" />
+                    <TextBlock Margin="5" Text="{Binding Coors}" />
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Left" Margin="5" Text="{x:Static stringResources:Resources.SID_Comment}" />
+                    <TextBox Margin="5" Text="{Binding Comment}" />
+                </DockPanel>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="5,15,5,5">
+            <Button Name="Save" Height="25" Width="100" Margin="5"
+                    Content="{x:Static stringResources:Resources.SID_Save}"
+                    IsEnabled="{Binding IsButtonSaveEnabled}" IsDefault="True"/>
+            <Button Name="Cancel" Height="25" Width="100" Content="{x:Static stringResources:Resources.SID_Cancel}" IsCancel="True"/>
+        </StackPanel>
+        <GroupBox DockPanel.Dock="Bottom" Margin="5" Header="{x:Static stringResources:Resources.SID_Traces_in_node}">
+            <ListBox Height="110" Margin="5" SelectionMode="Single"
+                     ItemsSource="{Binding TracesInNode}"
+                     SelectedItem="{Binding SelectedTrace}">
+                <ListBox.ContextMenu>
+                    <ContextMenu >
+                        <MenuItem Header="{x:Static stringResources:Resources.SID_Highlight_trace}" 
+                                  cal:Message.Attach="ShowTrace"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+        </GroupBox>
+        <GroupBox Margin="5" Header="{x:Static stringResources:Resources.SID_In_node_are_placed_}"  
+                  IsEnabled="{Binding IsEditEnabled}">
+            <DockPanel Name="Header" Margin="0,5,0,0">
+                <Grid DockPanel.Dock="Top" Background="AliceBlue" Height="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="35" />
+                        <ColumnDefinition Width="35" />
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderThickness="0,0,1,0" BorderBrush="Black" />
+                    <Border Grid.Column="1" BorderThickness="0,0,1,0" BorderBrush="Black" />
+                    <Border Grid.Column="2" BorderThickness="0,0,1,0" BorderBrush="Black" />
+                    <Border Grid.Column="3" BorderThickness="0,0,1,0" BorderBrush="Black" />
+                    <Border Grid.Column="4" BorderThickness="0,0,1,0" BorderBrush="Black" />
+                    <Label Grid.Column="0" Content="{x:Static stringResources:Resources.SID_Title}" Margin="0,-5,0,0" />
+                    <Label Grid.Column="1" Content="{x:Static stringResources:Resources.SID_Type}" Margin="0,-5,0,0" />
+                    <Label Grid.Column="2" Content="{x:Static stringResources:Resources.SID_Left}" Margin="0,-5,0,0" />
+                    <Label Grid.Column="3" Content="{x:Static stringResources:Resources.SID_Right}" Margin="0,-5,0,0" />
+                    <Label Grid.Column="4" Content="{x:Static stringResources:Resources.SID_Comment}" Margin="0,-5,0,0" />
+                    <Label Grid.Column="5" Content="{x:Static stringResources:Resources.SID_Traces}" Margin="0,-5,0,0" />
+                </Grid>
+                <ListBox MinHeight="80" ItemsSource="{Binding EquipmentsInNode}" BorderThickness="0">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{x:Static stringResources:Resources.SID_Add_Equipment}" cal:Message.Attach="AddEquipment" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="wpfClient:ItemOfEquipmentTableModel">
+                            <Grid>
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static stringResources:Resources.SID_Update}" cal:Message.Attach="UpdateEquipment" />
+                                        <MenuItem Header="{x:Static stringResources:Resources.SID_Remove}" cal:Message.Attach="RemoveEquipment"
+                                                  IsEnabled="{Binding IsRemoveEnabled}" />
+                                        <Separator />
+                                        <MenuItem Header="{x:Static stringResources:Resources.SID_Add_Equipment}" cal:Message.Attach="AddEquipment" />
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="30" />
+                                    <ColumnDefinition Width="30" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Title}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Type}" />
+                                <TextBlock Grid.Column="2" Text="{Binding CableReserveLeft}" />
+                                <TextBlock Grid.Column="3" Text="{Binding CableReserveRight}" />
+                                <TextBlock Grid.Column="4" Text="{Binding Comment}" />
+                                <TextBlock Grid.Column="5" Text="{Binding Traces}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </GroupBox>
+    </DockPanel>
+</Window>

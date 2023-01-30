@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.TraceStateSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             mc:Ignorable="d" d:DataContext="{d:DesignData TraceStateSelectionViewModel}">
+    <GroupBox Header="{x:Static stringResources:Resources.SID_Trace_state}" Margin="5">
+        <StackPanel Margin="5">
+            <CheckBox Content="{Binding FiberBreakContext}" IsChecked="{Binding IsFiberBreakChecked}" Margin="5"/>
+            <CheckBox Content="{Binding NoFiberContext}" IsChecked="{Binding IsNoFiberChecked}" Margin="5"/>
+            <CheckBox Content="{Binding CriticalContext}" IsChecked="{Binding IsCriticalChecked}" Margin="5"/>
+            <CheckBox Content="{Binding MajorContext}" IsChecked="{Binding IsMajorChecked}" Margin="5"/>
+            <CheckBox Content="{Binding MinorContext}" IsChecked="{Binding IsMinorChecked}" Margin="5"/>
+            <CheckBox Content="{Binding UserContext}" IsChecked="{Binding IsUserChecked}" Margin="5"/>
+        </StackPanel>
+    </GroupBox>
+</UserControl>

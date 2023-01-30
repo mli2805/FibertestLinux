@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.OpticalEventsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" 
+             cal:Bind.ModelWithoutContext="{Binding .}" d:DesignWidth="900"
+             d:DataContext="{d:DesignInstance wpfClient:OpticalEventsViewModel}">
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Height="20" Margin="0,10,0,0" Text="{Binding TableTitle}" HorizontalAlignment="Center" FontSize="12" FontWeight="Bold"/>
+        <TextBlock DockPanel.Dock="Bottom" Margin="5,0,5,5" Height="20" Background="AliceBlue" Text="{Binding SelectedRow.Comment}"/>
+        <DataGrid DockPanel.Dock="Top"  Margin="5" ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRow, Mode=TwoWay}" 
+                  AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" CanUserSortColumns="False"
+                  SelectionChanged="OnSelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Event_Id}" Binding="{Binding SorFileId}" Width="70"/>
+                <DataGridTextColumn Binding="{Binding MeasurementTimestamp}" Width="120">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Measurement_termination_timestamp}" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding EventRegistrationTimestamp}" Width="120">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Event_timestamp}" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding RtuTitle}" Width="200*">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate >
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Width="10000" Height="1"/>
+                                <TextBlock DockPanel.Dock="Top" Text="RTU" TextAlignment="Center"  Margin="0,0,0,5"/>
+                                <Button Content="{Binding Path= DataContext.RtuFilterNow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" 
+                                        cal:Message.Attach="ShowRtuFilter" HorizontalAlignment="Stretch" Height="23"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Trace}" Binding="{Binding TraceTitle}" Width="200*"/>
+
+                <DataGridTemplateColumn Width="120">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Width="10000" Height="1"/>
+                                <TextBlock DockPanel.Dock="Top" Margin="0,0,0,5" Text="{x:Static stringResources:Resources.SID_State}" 
+                                           TextAlignment="Center"/>
+                                <ComboBox Height="23" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding Path=DataContext.TraceStateFilters, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" 
+                                          SelectedItem="{Binding Path=DataContext.SelectedTraceStateFilter, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Mode=TwoWay}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Background" Value="{Binding (wpfClient:OpticalEventModel.BaseRefTypeBrush)}" />
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type wpfClient:OpticalEventModel}">
+                            <TextBlock Text="{Binding TraceStateOnScreen}" TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="120">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <DockPanel >
+                                <TextBlock DockPanel.Dock="Top" Width="10000" Height="1"/>
+                                <TextBlock DockPanel.Dock="Top" Margin="0,0,0,5" Text="{x:Static stringResources:Resources.SID_Event_status}"
+                                           TextAlignment="Center"/>
+                                <ComboBox Height="23" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding Path=DataContext.EventStatusFilters, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" 
+                                          SelectedItem="{Binding Path=DataContext.SelectedEventStatusFilter, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Mode=TwoWay}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Background" Value="{Binding (wpfClient:OpticalEventModel.EventStatusBrush)}" />
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type wpfClient:OpticalEventModel}">
+                            <TextBlock Text="{Binding EventStatusInTable}" TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding StatusChangedTimestamp}" Width="120">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Status_assignment_time}" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding StatusChangedByUser}" Width="120">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Status_changed_by}" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="GhostWhite" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
+            </DataGrid.Resources>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static stringResources:Resources.SID_Show_reflectogram}" cal:Message.Attach="[Event Click] = [Action ShowReflectogram(1)]"/>
+                    <MenuItem Header="{x:Static stringResources:Resources.SID_Show_ref_and_base}" cal:Message.Attach="[Event Click] = [Action ShowReflectogram(2)]"/>
+                    <MenuItem Header="{x:Static stringResources:Resources.SID_Save_reflectogram_as}" cal:Message.Attach="[Event Click] = [Action SaveReflectogramAs('true')]"/>
+                    <MenuItem Header="{x:Static stringResources:Resources.SID_Save_ref_and_base_as}" cal:Message.Attach="[Event Click] = [Action SaveReflectogramAs('false')]"/>
+                    <Separator />
+                    <MenuItem Header="{x:Static stringResources:Resources.SID_Rfts_Events}" cal:Message.Attach="[Event Click] = [Action ShowRftsEvents]"/>
+                    <MenuItem Header="{x:Static stringResources:Resources.SID_Trace_state_Event_status}" cal:Message.Attach="[Event Click] = [Action ShowTraceState]"/>
+                    <MenuItem Visibility="{Binding ForDev}" Header="Recalculate accidents" 
+                              cal:Message.Attach="[Event Click] = [Action RecalculateAccidents]"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+        <DockPanel/>
+    </DockPanel>
+</UserControl>

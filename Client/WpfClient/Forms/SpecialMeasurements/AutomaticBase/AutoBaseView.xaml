@@ -1,0 +1,29 @@
+﻿<Window x:Class="Fibertest.WpfClient.AutoBaseView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:client="clr-namespace:Iit.Fibertest.Client"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" Top="20" Left="720" Loaded="Window_Loaded" ResizeMode="NoResize"
+        d:DataContext="{d:DesignData AutoBaseViewModel}">
+    <DockPanel >
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" 
+                    IsEnabled="{Binding OneMeasurementExecutor.Model.IsEnabled}"  Margin="0,10">
+            <Button Name="Start" Content="{x:Static stringResources:Resources.SID_Start}" IsDefault="True" Margin="5" Width="100" Height="22"/>
+            <Button Name="Close" Content="{x:Static stringResources:Resources.SID_Close}" IsCancel="True" Margin="5" Width="100" Height="22"/>
+        </StackPanel>
+
+        <wpfClient:OtdrParametersTemplatesView DockPanel.Dock="Top"
+                                            DataContext="{Binding OneMeasurementExecutor.Model.OtdrParametersTemplatesViewModel}" />
+        <wpfClient:AutoAnalysisParamsView DockPanel.Dock="Top"  DataContext="{Binding OneMeasurementExecutor.Model.AutoAnalysisParamsViewModel}"/>
+        <CheckBox DockPanel.Dock="Top"  Margin="25, 15,5,15" IsChecked="{Binding IsShowRef}"
+                  Content="{x:Static stringResources:Resources.SID_Show_reflectogram_on_completion}" />
+        <wpfClient:MeasurementProgressView DockPanel.Dock="Top" Margin="5,5"
+                                            DataContext="{Binding OneMeasurementExecutor.Model.MeasurementProgressViewModel}" 
+                                            />
+        <StackPanel/>
+    </DockPanel>
+</Window>

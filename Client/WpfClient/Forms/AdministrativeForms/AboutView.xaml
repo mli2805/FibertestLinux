@@ -1,0 +1,49 @@
+﻿<Window x:Class="Fibertest.WpfClient.AboutView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfCommonViews="clr-namespace:Fibertest.WpfCommonViews;assembly=Fibertest.WpfCommonViews"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="Height" Width="590" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:AboutViewModel}">
+    <StackPanel>
+        <wpfCommonViews:IitOfficialHeader/>
+        <StackPanel Margin="25,5,25,5">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Data_center_software_version}" Width="160"/>
+                <TextBlock Margin="10,0,0,0" Text="{Binding ServerVersion}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Client_software_version}"  Width="160"/>
+                <TextBlock Margin="10,0,0,5" Text="{Binding ClientVersion}"/>
+            </StackPanel>
+            <Border BorderBrush="Gray" BorderThickness="0,1,0,0"/>
+            <!-- <TextBlock Text="{x:Static stringResources:Resources.SID_RTUs_software_version}"  -->
+                       <!-- Width="160" HorizontalAlignment="Left" Margin="5,10"/> -->
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Title}" Width="160" HorizontalAlignment="Left" Margin="5,10"/>
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Model}" Width="100" HorizontalAlignment="Left" Margin="5,10"/>
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Serial}" Width="110" TextAlignment="Right" Margin="10"/>
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Version}" HorizontalAlignment="Left" Margin="5,10"/>
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"  Margin="0,0,0,20" MaxHeight="140">
+                <ItemsControl ItemsSource="{Binding Rtus}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="wpfClient:RtuLine">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Title}" Width="160" Margin="5,0" Height="20"/>
+                                <TextBlock Text="{Binding Model}" Width="100" Margin="5,0"/>
+                                <TextBlock Text="{Binding Serial}" Width="110" Margin="10,0" TextAlignment="Right"/>
+                                <TextBlock Text="{Binding Version}"  Margin="5,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <Button Content="{x:Static stringResources:Resources.SID_Close}" Name="Close" Width="100" Margin="5,15,5,10"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

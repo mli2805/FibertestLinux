@@ -1,0 +1,15 @@
+﻿<Window x:Class="Fibertest.WpfClient.LeaveAppView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignData LeaveAppViewModel}">
+   <StackPanel Margin="5,20,5,0">
+       <TextBlock Text="{Binding Line1}" Margin="20,5" TextAlignment="Center"/>
+       <TextBlock Text="{Binding Line2}" Margin="5" TextAlignment="Center"/>
+       <Button Content="{x:Static stringResources:Resources.SID_Exit_application}" Width="150" Margin="5,40,5,20" Name="ExitApp"/>
+   </StackPanel>
+</Window>

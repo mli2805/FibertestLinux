@@ -1,0 +1,58 @@
+﻿<Window x:Class="Fibertest.WpfClient.GisSettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="Height" Width="450" Left="300" Top="250"  ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:GisSettingsViewModel}">
+    <StackPanel Margin="5" >
+        <Border Margin="5" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5" IsEnabled="{Binding IsRoot}">
+            <StackPanel Margin="0,10,0,0">
+                <StackPanel >
+                    <TextBlock FontSize="18" Text="{Binding GisModeMessage}" HorizontalAlignment="Center" Margin="5,10"/>
+                    <Button DockPanel.Dock="Right" Name="ChangeMode" Content="{x:Static stringResources:Resources.SID_Change_mode}" 
+                            Width="200" Height="23" Margin="5" IsDefault="True" />
+                </StackPanel>
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Switches_mode_for_all_clients}" Margin="5,3"
+                           HorizontalAlignment="Center" Foreground="DarkSlateGray" />
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Switches_mode_for_all2}" Margin="5,3"
+                           HorizontalAlignment="Center" Foreground="DarkSlateGray" />
+                <TextBlock Text="{x:Static stringResources:Resources.SID_Switches_mode_for_all3}" Margin="5,3"
+                           HorizontalAlignment="Center" Foreground="DarkSlateGray" />
+            </StackPanel>
+        </Border>
+        <Border Margin="5,0" IsEnabled="{Binding IsInWithoutMapMode}" Visibility="{Binding SecondBoxVisibility}" 
+                BorderThickness="1" BorderBrush="LightGray" CornerRadius="5">
+            <CheckBox IsChecked="{Binding IsMapTemporarilyVisibleInThisClient}" Margin="5,15,5,5" HorizontalAlignment="Center">
+                <TextBox Text="{x:Static stringResources:Resources.SID_Show_map_temporarily}" TextWrapping="Wrap" BorderThickness="0"
+                           Margin="3,0" TextAlignment="Center" IsReadOnly="True" />
+            </CheckBox>
+        </Border>
+        <Border Margin="5,5,5,0" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Visibility="{Binding ThirdBoxVisibility}" >
+            <StackPanel Margin="15,0,0,0">
+               
+                <StackPanel Orientation="Horizontal" Margin="5,10" >
+                    <ComboBox ItemsSource="{Binding MapProviders}" SelectedItem="{Binding SelectedProvider}"
+                              Width="120" />
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Choose_map_provider}" Margin="15,2" />
+                </StackPanel></StackPanel>
+        </Border>
+        <Border Margin="5" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Visibility="{Binding ThirdBoxVisibility}" >
+            <StackPanel Margin="15,0">
+                <StackPanel Orientation="Horizontal" Margin="5,10" >
+                    <ComboBox ItemsSource="{Binding AccessModes}" SelectedItem="{Binding SelectedAccessMode}"
+                              Width="120" />
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Choose_map_access_mode}" Margin="15,2" />
+                </StackPanel>
+                <Separator></Separator>
+                <TextBlock Text="{x:Static stringResources:Resources.SID_The_changes_will_be_applied_after_application_restart}" Margin="5"/>
+            </StackPanel>
+        </Border>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,25,5,5">
+            <Button Content="{x:Static stringResources:Resources.SID_Close}" Width="100" Margin="5" IsCancel="True" />
+        </StackPanel>
+    </StackPanel>
+</Window>

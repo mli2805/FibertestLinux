@@ -1,0 +1,65 @@
+﻿<Window x:Class="Fibertest.WpfClient.BaseRefsAssignView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        mc:Ignorable="d"
+        SizeToContent="Height" WindowStartupLocation="CenterOwner" Width="350" ResizeMode="NoResize"
+        d:DataContext="{d:DesignData BaseRefsAssignViewModel}">
+    <StackPanel IsEnabled="{Binding IsEditEnabled}">
+        <GroupBox Margin="5" Header="{x:Static stringResources:Resources.SID_Trace_information}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5,0">
+                    <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Trace}"/>
+                    <TextBlock Margin="5" Text="{Binding TraceTitle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5,0">
+                    <TextBlock Margin="5" Text="RTU" />
+                    <TextBlock Margin="5" Text="{Binding RtuTitle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
+                    <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Port}" />
+                    <TextBlock Margin="5" Text="{Binding TracePortOnRtu}" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Margin="5" Header="{x:Static stringResources:Resources.SID_Base_reflectograms}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5,10,0,5">
+                    <Button Name="GetPathToPrecise" Margin="5,0,0,0" Padding="0,-5,0,0" Background="White" 
+                            Height="25" Width="25" Content=". . ." VerticalAlignment="Top" Tag="1"/>
+                    <Button Name="ClearPathToPrecise" Margin="5,0,0,0" Padding="0,-5,0,0" Background="White" 
+                            Height="25" Width="25" Content="X" VerticalContentAlignment="Center" Tag="1" HorizontalAlignment="Right"/>
+                    <TextBlock Margin="5,5,0,0" Text="{x:Static stringResources:Resources.SID_Precise_base_ref}" />
+                </StackPanel>
+                <TextBox Margin="5,0" Height="30" Text="{Binding PreciseBaseFilename}" />
+
+                <StackPanel Orientation="Horizontal" Margin="5,10,0,5">
+                    <Button Name="GetPathToFast" Margin="5,0,0,0" Padding="0,-5,0,0" Background="White" 
+                            Height="25" Width="25" Content=". . ." Tag="2"/>
+                    <Button Name="ClearPathToFast" Margin="5,0,0,0" Padding="0,-5,0,0" Background="White" 
+                            Height="25" Width="25" Content="X" Tag="2" HorizontalAlignment="Right"/>
+                    <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Fast_base_ref}" />
+                </StackPanel>
+                <TextBox Margin="5,0" Height="30" Text="{Binding FastBaseFilename}" />
+
+                <StackPanel Orientation="Horizontal" Margin="5,10,0,5">
+                    <Button Name="GetPathToAdditional" Margin="5,0,0,0" Padding="0,-5,0,0" Background="White" 
+                            Height="25" Width="25" Content=". . ." Tag="3"/>
+                    <Button Name="ClearPathToAdditional" Margin="5,0,0,0" Padding="0,-5,0,0" Background="White" 
+                            Height="25" Width="25" Content="X" Tag="3" HorizontalAlignment="Right"/>
+                    <TextBlock Margin="5" Text="{x:Static stringResources:Resources.SID_Second_base_ref}" />
+                </StackPanel>
+                <TextBox Margin="5,0,5,10" Height="30" Text="{Binding AdditionalBaseFilename}" />
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel Orientation="Horizontal" Margin="5,5,5,10">
+            <Button Name="Save" Height="25" Width="100" Margin="5" Content="{x:Static stringResources:Resources.SID_Save}" 
+                    IsEnabled="{Binding IsButtonSaveEnabled}"/>
+            <Button Name="Cancel" Height="25" Width="100" Content="{x:Static stringResources:Resources.SID_Cancel}" IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

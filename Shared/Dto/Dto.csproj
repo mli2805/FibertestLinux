@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj" />
 	  <ProjectReference Include="..\StringResources\StringResources.csproj" />
 	</ItemGroup>
 

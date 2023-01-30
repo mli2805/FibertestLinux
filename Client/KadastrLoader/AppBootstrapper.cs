@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Markup;
 using Autofac;
 using Caliburn.Micro;
 using Fibertest.WpfCommonViews;
-using Microsoft.Xaml.Behaviors.Input;
 
 
 namespace KadastrLoader

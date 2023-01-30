@@ -1,16 +1,17 @@
 ﻿using Fibertest.StringResources;
+using GMap.NET;
 
 namespace Fibertest.Graph;
 
-public static class AccessModeFtExt
+public static class AccessModeExt
 {
-    public static string ToLocalizedString(this Dto.AccessModeFt accessMode)
+    public static string ToLocalizedString(this AccessMode accessMode)
     {
         switch (accessMode)
         {
-            case Dto.AccessModeFt.ServerOnly:
+            case AccessMode.ServerOnly:
                 return Resources.SID_Server_only;
-            case Dto.AccessModeFt.CacheOnly:
+            case AccessMode.CacheOnly:
                 return Resources.SID_Cache_only;
             //     case AccessModeFt.ServerAndCache:
             default:
@@ -18,21 +19,21 @@ public static class AccessModeFtExt
         }
     }
 
-    public static Dto.AccessModeFt FromEnumConstant(string str)
+    public static AccessMode FromEnumConstant(string str)
     {
         if (str == @"ServerOnly")
-            return Dto.AccessModeFt.ServerOnly;
+            return AccessMode.ServerOnly;
         if (str == @"CacheOnly")
-            return Dto.AccessModeFt.CacheOnly;
-        return Dto.AccessModeFt.ServerAndCache;
+            return AccessMode.CacheOnly;
+        return AccessMode.ServerAndCache;
     } 
         
-    public static Dto.AccessModeFt FromLocalizedString(string localizedString)
+    public static AccessMode FromLocalizedString(string localizedString)
     {
         if (localizedString == Resources.SID_Server_only)
-            return Dto.AccessModeFt.ServerOnly;
+            return AccessMode.ServerOnly;
         if (localizedString == Resources.SID_Cache_only)
-            return Dto.AccessModeFt.CacheOnly;
-        return Dto.AccessModeFt.ServerAndCache;
+            return AccessMode.CacheOnly;
+        return AccessMode.ServerAndCache;
     }
 }

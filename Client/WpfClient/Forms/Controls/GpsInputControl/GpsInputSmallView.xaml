@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.GpsInputSmallView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" 
+             d:DesignHeight="180" d:DesignWidth="400" d:DataContext="{d:DesignInstance wpfClient:GpsInputSmallViewModel}">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+            <TextBlock Text="{x:Static stringResources:Resources.SID_Latitude}" VerticalAlignment="Center" Width="55" Margin="5" ToolTip="-90..90"/>
+            <wpfClient:OneCoorView Margin="5" DataContext="{Binding OneCoorViewModelLatitude}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+            <TextBlock Text="{x:Static stringResources:Resources.SID_Longitude}" VerticalAlignment="Center" Width="55" Margin="5" ToolTip="-180..180"/>
+            <wpfClient:OneCoorView Margin="5" DataContext="{Binding OneCoorViewModelLongitude}"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.MainMenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance wpfClient:MainMenuViewModel}">
+    <Grid>
+        <Menu Margin="10,-1,0,11" FontSize="14" Background="White" VerticalAlignment="Center">
+            <MenuItem Header="{x:Static stringResources:Resources.SID_Administrative}">
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Responsibility_zones}" 
+                          cal:Message.Attach="LaunchResponsibilityZonesView"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Users}" cal:Message.Attach="LaunchUserListView()"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Responsibility_zones_settings}" 
+                          cal:Message.Attach="LaunchObjectsToZonesView"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static stringResources:Resources.SID_Reports}">
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Monitoring_system_components}" cal:Message.Attach="LaunchComponentsReport"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Optical_events_report}" cal:Message.Attach="LaunchOpticalEventsReport"/>
+                <Separator/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Event_log}" cal:Message.Attach="LaunchEventLogView"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static stringResources:Resources.SID_Tools}" >
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Database_optimization}" cal:Message.Attach="LaunchCleaningView"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Graph_of_traces_optimization}" cal:Message.Attach="LaunchGraphOptimizationView"/>
+                <Separator Visibility="{Binding ToolsMenuVisibility}"/>
+                <MenuItem Header="Export events to file" cal:Message.Attach="ExportEvents" Visibility="{Binding ToolsMenuVisibility}"/>
+                <MenuItem Header="Import RTU from folder" cal:Message.Attach="ImportRtuFromFolder" Visibility="{Binding ToolsMenuVisibility}"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Telecommunications_equipment}" 
+                          cal:Message.Attach="LaunchTcesView"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static stringResources:Resources.SID_Settings}">
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Gis_settings}" cal:Message.Attach="LaunchGisSettingsView"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Graph_visibility_settings}" cal:Message.Attach="LaunchGraphVisibilitySettingsView"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Client_settings}" cal:Message.Attach="LaunchClientSettingsView"/>
+                <Separator/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_E_mail_settings}" cal:Message.Attach="LaunchSmtpSettingsView"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_SMS_settings}" cal:Message.Attach="LaunchSmsSettingsView"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_SNMP_settings}" cal:Message.Attach="LaunchSnmpSettingsView"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static stringResources:Resources.SID_Help}">
+                <MenuItem Header="{x:Static stringResources:Resources.SID_Users_guide}" cal:Message.Attach="ShowUsersGuide"/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_License}" cal:Message.Attach="LaunchLicenseView"/>
+                <Separator/>
+                <MenuItem Header="{x:Static stringResources:Resources.SID_About}" cal:Message.Attach="LaunchAboutView"/>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</UserControl>

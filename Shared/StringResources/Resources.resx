@@ -3500,4 +3500,10 @@ Please try again later</value>
 	<data name="SID_Optical_fiber_monitoring_system_software" xml:space="preserve">
 		<value>Optical fiber monitoring system software</value>
 	</data>
+	<data name="SID_Initialize_and_synch" xml:space="preserve">
+		<value>Initialize RTU and Synchronize base refs</value>
+	</data>
+	<data name="SID_Sending_base_refs_for_port__0_" xml:space="preserve">
+		<value>Sending base refs for port {0}</value>
+	</data>
 </root>

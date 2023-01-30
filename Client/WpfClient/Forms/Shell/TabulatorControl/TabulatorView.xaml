@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.TabulatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance wpfClient:TabulatorViewModel}">
+    <TabControl Height="35" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}" FontSize="14">
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Resources/LeftPanel/RedSquare.png" 
+                           Visibility="{Binding IsThereActualOpticalEventsPictogram}" Height="12" Width="12" Margin="0,0,4,0" />
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Optical_events}" Margin="5,0,20,0" />
+                </StackPanel>
+            </TabItem.Header>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Resources/LeftPanel/RedSquare.png" 
+                           Visibility="{Binding IsThereActualNetworkEventsPictogram}" Height="12" Width="12" Margin="0,0,4,0" />
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Network_events}" Margin="5,0,20,0"/>
+                </StackPanel>
+            </TabItem.Header>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Resources/LeftPanel/RedSquare.png" 
+                           Visibility ="{Binding IsThereActualBopEventsPictogram}"  Height="12" Width="12" Margin="0,0,4,0" />
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Network_events_Bop}" Margin="5,0,20,0"/>
+                </StackPanel>
+            </TabItem.Header>
+        </TabItem>
+        <TabItem >
+            <TabItem.Header>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Left" Text="{x:Static stringResources:Resources.SID_Gis}" Margin="10,4,30,0"/>
+                    <Button DockPanel.Dock="Right" cal:Message.Attach="ExtinguishAll" Width="50" Margin="5,0,0,0" 
+                            Background="WhiteSmoke" Visibility="{Binding MapVisibility}">
+                        <Button.Content>
+                            <ContentControl>
+                                <Image Name="Icon" Source="../../../Resources/Buttons/Extinguish.png"  
+                                       VerticalAlignment="Center" HorizontalAlignment="Center" Width="22" Height="22"  />
+                            </ContentControl>
+                        </Button.Content>
+                    </Button>
+                    <Button  cal:Message.Attach="ShowAllGraph" Width="30" Margin="5,0,0,0" Content="++" Visibility="{Binding ButtonVisibility}"/>
+                    <ComboBox Margin="5,0,0,0" FontSize="14" VerticalContentAlignment="Center" Visibility="{Binding MapVisibility}"
+                              ItemsSource="{Binding GraphReadModel.GraphVisibilityItems}" 
+                              SelectedItem="{Binding GraphReadModel.SelectedGraphVisibilityItem}"/>
+                </DockPanel>
+            </TabItem.Header>
+        </TabItem>
+        <TabItem Visibility="Collapsed"/>
+    </TabControl>
+
+</UserControl>

@@ -1,0 +1,32 @@
+﻿<Window x:Class="Fibertest.WpfClient.LicenseView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfCommonViews="clr-namespace:Fibertest.WpfCommonViews;assembly=Fibertest.WpfCommonViews"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:LicenseViewModel}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+    <StackPanel>
+        <wpfCommonViews:IitOfficialHeader/>
+        <ListView Margin="5" ItemsSource="{Binding Licenses}" 
+                  SelectedItem="{Binding SelectedLicense}" 
+                  Visibility="{Binding IsListVisible, 
+                    Converter={StaticResource BoolToVis}}">
+
+        </ListView>
+        <wpfClient:LicenseControlView DataContext="{Binding LicenseControlViewModel }"/>
+        <DockPanel  Margin="10,0">
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10,5,5,10" HorizontalAlignment="Center">
+                <Button Name="ApplyLicFile" Content="{x:Static stringResources:Resources.SID_I_have_a_license_file}" 
+                        Width="180" Margin="5" IsEnabled="{Binding IsApplyLicenseEnabled}" />
+                <Button Name="Close" Content="{x:Static stringResources:Resources.SID_Close}" IsCancel="True" Width="80" Margin="5"/>
+            </StackPanel>
+        </DockPanel>
+    </StackPanel>
+</Window>

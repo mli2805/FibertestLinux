@@ -1,0 +1,41 @@
+﻿<Window x:Class="Fibertest.WpfClient.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        xmlns:wpfCommonViews1="clr-namespace:Fibertest.WpfCommonViews;assembly=Fibertest.WpfCommonViews"
+        mc:Ignorable="d"
+        Width="420" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:LoginViewModel}" 
+        FocusManager.FocusedElement="{Binding ElementName=UsernameTextBox}">
+    <StackPanel>
+        <wpfCommonViews1:IitOfficialHeader/>
+        <StackPanel HorizontalAlignment="Center">
+            <DockPanel Margin="0,5,0,0">
+                <Button DockPanel.Dock="Right" Name="Login" Content="{x:Static stringResources:Resources.SID_Login}" 
+                            IsDefault="True" IsEnabled="{Binding IsButtonEnabled}"
+                            Margin="10,0,0,0" Width="80" KeyboardNavigation.TabIndex="2"/>
+                <TextBox Name="UsernameTextBox" DockPanel.Dock="Right" 
+                         Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" 
+                         Width="130" Margin="10,0,0,0" Height="22"
+                              KeyboardNavigation.TabIndex="0"/>
+                <TextBlock Text="{x:Static stringResources:Resources.SID_User}" TextAlignment="Right" VerticalAlignment="Center"/>
+            </DockPanel>
+            <DockPanel Margin="0,7,0,0">
+                <Button DockPanel.Dock="Right" Name="ChooseServer" Content="{x:Static stringResources:Resources.SID_Server}" 
+                        Margin="10,0,0,0" Width="80" KeyboardNavigation.TabIndex="3"/>
+                <wpfClient:PasswordView DataContext="{Binding PasswordViewModel}" 
+                                     HorizontalAlignment="Right" 
+                                     KeyboardNavigation.TabNavigation="Local"
+                                     KeyboardNavigation.TabIndex="1"/>
+            </DockPanel>
+          
+        </StackPanel>
+        <Button Width="1" Height="1"  Name="Cancel" IsCancel="True"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20">
+            <TextBlock Text="{Binding Status}" Background="AliceBlue" MaxWidth="400" 
+                       Padding="10,0" TextWrapping="Wrap"/>
+        </StackPanel>  </StackPanel>
+</Window>

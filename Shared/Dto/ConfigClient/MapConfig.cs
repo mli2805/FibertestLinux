@@ -1,4 +1,6 @@
-﻿namespace Fibertest.Dto;
+﻿using GMap.NET;
+
+namespace Fibertest.Dto;
 
 public class MapConfig
 {
@@ -13,6 +15,6 @@ public class MapConfig
     public int ThresholdZoom { get; set; } = 16;
     public double ScreenPartAsMargin { get; set; } = 0.1;
 
-    public AccessModeFt MapAccessMode { get; set; } = AccessModeFt.ServerAndCache;
+    public AccessMode MapAccessMode { get; set; } = AccessMode.ServerAndCache;
     public string GMapProvider { get; set; } = @"OpenStreetMap";
 }

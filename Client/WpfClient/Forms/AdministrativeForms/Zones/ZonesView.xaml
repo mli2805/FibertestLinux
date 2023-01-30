@@ -1,0 +1,55 @@
+﻿<Window x:Class="Fibertest.WpfClient.ZonesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        cal:Bind.ModelWithoutContext="{Binding .}"
+        mc:Ignorable="d"
+        Height="300" SizeToContent="Width" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:ZonesViewModel}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button DockPanel.Dock="Right" Name="Close" Content="{x:Static stringResources:Resources.SID_Close}" IsDefault="True" Width="100" Margin="0,20,30,15"/>
+            <Button Visibility="Hidden" />
+        </DockPanel>
+        <DockPanel>
+            <Grid DockPanel.Dock="Top" Background="AliceBlue" Height="20" Margin="5,5,-5,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" BorderThickness="0,0,1,0" BorderBrush="Black" />
+                <Border Grid.Column="1" BorderThickness="0,0,1,0" BorderBrush="Black" />
+                <Label Grid.Column="0" Content="{x:Static stringResources:Resources.SID_Title}" Margin="0,-5,0,0" />
+                <Label Grid.Column="1" Content="{x:Static stringResources:Resources.SID_Comment}" Margin="0,-5,0,0" />
+            </Grid>
+            <ListBox ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedZone, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                        <MenuItem Header="{x:Static stringResources:Resources.SID_Update}" cal:Message.Attach="UpdateZone" />
+                        <MenuItem Header="{x:Static stringResources:Resources.SID_Remove}" cal:Message.Attach="RemoveZone" IsEnabled="{Binding IsRemoveEnabled}" />
+                        <Separator />
+                        <MenuItem Header="{x:Static stringResources:Resources.SID_Add}" cal:Message.Attach="AddZone" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="0,0,0,1" BorderBrush="LightGray">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="300" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Title}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Comment}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        </DockPanel>
+    </DockPanel>
+</Window>

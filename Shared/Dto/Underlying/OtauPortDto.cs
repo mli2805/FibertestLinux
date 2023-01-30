@@ -5,16 +5,17 @@ public class OtauPortDto
     public string? OtauId; // in VeEX RTU main OTAU has its own ID, for MAK it is a RTU ID
     public NetAddress NetAddress = new NetAddress();
     public int OpticalPort;
-    public string Serial;
+    public string? Serial;
     public bool IsPortOnMainCharon;
     public int MainCharonPort; // only for additional otau - port of main otau this otau is connected to
 
-    public OtauPortDto(int opticalPort, bool isPortOnMainCharon, string serial)
+    public OtauPortDto(int opticalPort, bool isPortOnMainCharon)
     {
         OpticalPort = opticalPort;
         IsPortOnMainCharon = isPortOnMainCharon;
-        Serial = serial;
     }
+
+   
 
     public OtauPortDto Clone()
     {

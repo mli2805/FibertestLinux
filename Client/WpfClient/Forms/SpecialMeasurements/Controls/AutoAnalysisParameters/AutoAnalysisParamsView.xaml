@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.AutoAnalysisParamsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" d:DataContext="{d:DesignData AutoParametersViewModel}"
+             cal:Bind.ModelWithoutContext="{Binding .}"
+             >
+    <StackPanel IsEnabled="{Binding IsEnabled}">
+        <GroupBox BorderBrush="Gray" BorderThickness="1" Margin="5" >
+            <GroupBox.Header>
+                <CheckBox IsChecked="{Binding SearchNewEvents}"
+                          Content="{x:Static stringResources:Resources.SID_Event_detection_thresholds}" />
+            </GroupBox.Header>
+            <StackPanel Margin="0,10,40,5" IsEnabled="{Binding SearchNewEvents}">
+                <TextBlock DockPanel.Dock="Top" TextAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"
+                           Width="380" Margin="5, 0, 5, 10"
+                           Text="{x:Static stringResources:Resources.SID_ThresholdsAttention}" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Splice_loss_dB}" Margin="5" />
+                    <TextBox Width="80" Margin="5">
+                        <TextBox.Text>
+                            <Binding Path="AutoLt" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                                     ConverterCulture="en-US">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Reflectance_dB}" Margin="5" />
+                    <TextBox Width="80" Margin="5">
+                        <TextBox.Text>
+                            <Binding Path="AutoRt" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                                     ConverterCulture="en-US">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <Button Content="{x:Static stringResources:Resources.SID_Save}" Name="SaveInAllTemplates"
+                            Margin="5" Width="100" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox></StackPanel>
+</UserControl>

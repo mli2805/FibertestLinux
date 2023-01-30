@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.CommonStatusBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance wpfClient:CommonStatusBarViewModel}">
+    <UserControl.Resources>
+        <Style x:Key="TextBlockBlinking" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <EventTrigger  RoutedEvent="Binding.TargetUpdated">
+                    <BeginStoryboard>
+                        <Storyboard Duration="0:0:1.2" RepeatBehavior="5x" >
+                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                            BeginTime="0:0:0.6" From="Black" To="Transparent" Duration="0:0:0.05"/>
+                            <ColorAnimation Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                            BeginTime="0:0:0.3" From="Transparent" To="Black" Duration="0:0:0.05"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <StatusBar Height="28" BorderBrush="DarkGray" BorderThickness="1" Background="Transparent" Margin="2">
+        <StatusBarItem HorizontalAlignment="Center">
+            <TextBlock Text="{Binding StatusBarMessage2, NotifyOnTargetUpdated=True}" HorizontalAlignment="Center" 
+                       Margin="5,0,20,0" Foreground="Transparent" FontWeight="Bold" Style="{StaticResource TextBlockBlinking}"/>
+        </StatusBarItem>
+    </StatusBar>
+</UserControl>

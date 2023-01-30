@@ -1,0 +1,21 @@
+﻿<Window x:Class="Fibertest.WpfClient.OtdrParametersThroughServerSetterView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:client="clr-namespace:Iit.Fibertest.Client"
+        xmlns:wpfCommonViews="clr-namespace:Fibertest.WpfCommonViews;assembly=Fibertest.WpfCommonViews"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" 
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance wpfClient:OtdrParametersThroughServerSetterViewModel}">
+    <StackPanel>
+        <wpfCommonViews:OtdrParametersView DataContext="{Binding OtdrParametersViewModel}"/>
+        <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+            <Button Name="Measure" Content="{x:Static stringResources:Resources.SID_Measure}" IsDefault="True" Margin="5" Width="100" Height="22"/>
+            <Button Name="Close" Content="{x:Static stringResources:Resources.SID_Close}" IsCancel="True" Margin="5" Width="100" Height="22"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

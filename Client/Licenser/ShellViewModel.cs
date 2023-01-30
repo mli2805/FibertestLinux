@@ -3,9 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Caliburn.Micro;
 using Fibertest.Graph;
-using Fibertest.Utils.Setup;
 using Fibertest.WpfCommonViews;
-using iText.Html2pdf;
 using Microsoft.Win32;
 
 namespace Licenser
@@ -126,29 +124,18 @@ namespace Licenser
         public void ToPdfButton()
         {
             var htmlContent = LicenseInFileModel.CreateHtmlReport();
+            if (htmlContent == null) return;
 
-            var reportFileName = FileOperations.GetMainFolder() + $@"\temp\Certificate-{DateTime.Now:yyyy-MM-dd-hh-mm-ss}.html";
-            File.WriteAllText(reportFileName, htmlContent);
-            Process.Start(new ProcessStartInfo() { FileName = reportFileName, UseShellExecute = true });
+            // var htmlFilename = htmlContent.SaveHtml("Certificate");
+            // Process.Start(new ProcessStartInfo() { FileName = htmlFilename, UseShellExecute = true });
 
-            var pdfFileName = iTextToPdf(htmlContent!);
+            var pdfFileName = htmlContent.SaveHtmlAsPdf("Certificate");
             Process.Start(new ProcessStartInfo() { FileName = pdfFileName, UseShellExecute = true });
         }
-
-        private string iTextToPdf(string htmlString)
-        {
-            var pdfFileName = FileOperations.GetMainFolder() + $@"\temp\Certificate-{DateTime.Now:yyyy-MM-dd-hh-mm-ss}.pdf";
-            using var stream = new MemoryStream();
-            HtmlConverter.ConvertToPdf(htmlString, stream, new ConverterProperties());
-            File.WriteAllBytes(pdfFileName, stream.ToArray());
-            return pdfFileName;
-        }
-
 
         public async void CloseButton()
         {
             await TryCloseAsync();
         }
     }
-
 }

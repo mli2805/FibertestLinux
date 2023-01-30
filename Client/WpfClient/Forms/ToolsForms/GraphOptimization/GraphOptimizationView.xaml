@@ -1,0 +1,23 @@
+﻿<Window x:Class="Fibertest.WpfClient.GraphOptimizationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        mc:Ignorable="d" Width="450" SizeToContent="Height" WindowStartupLocation="CenterOwner"
+        d:DataContext="{d:DesignData GraphOptimizationViewModel}">
+    <StackPanel Margin="25, 20">
+        <TextBlock Text="{x:Static stringResources:Resources.SID_Remove_unused}" Margin="5" TextAlignment="Center" FontWeight="Bold"/>
+        <TextBlock Text="{x:Static stringResources:Resources.SID_Remove_unused_explanation}" Margin="5,10" TextAlignment="Center" TextWrapping="Wrap"/>
+        <Border Margin="15" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
+            <StackPanel Margin="0, 5">
+                <TextBlock Text="{Binding NodeCountStr}" Margin="25, 5"/>
+                <TextBlock Text="{Binding FiberCountStr}" Margin="25, 5"/>
+            </StackPanel>
+        </Border>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,20, 5,0">
+            <Button Name="Remove" Content="{x:Static stringResources:Resources.SID_Remove}" Width="100" Margin="5" IsEnabled="{Binding IsEnabled}"/>
+            <Button Name="Cancel" Content="{x:Static stringResources:Resources.SID_Cancel}" Width="100" Margin="5"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

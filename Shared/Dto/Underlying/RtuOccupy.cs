@@ -35,9 +35,8 @@ public class OccupyRtuDto
     public Guid RtuId;
     public RtuOccupationState State;
 
-    public OccupyRtuDto(string connectionId, Guid rtuId, RtuOccupationState state)
+    public OccupyRtuDto(Guid rtuId, RtuOccupationState state)
     {
-        ConnectionId = connectionId;
         RtuId = rtuId;
         State = state;
     }

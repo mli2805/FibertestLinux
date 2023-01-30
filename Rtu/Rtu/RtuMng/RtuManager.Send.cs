@@ -41,7 +41,10 @@ public partial class RtuManager
             PortWithTraceDto = monitoringPort == null
                 ? null
                 : new PortWithTraceDto(
-                    new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon, monitoringPort.CharonSerial),
+                    new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon)
+                    {
+                        Serial = monitoringPort.CharonSerial
+                    },
                     monitoringPort.TraceId),
             BaseRefType = baseRefType,
         };

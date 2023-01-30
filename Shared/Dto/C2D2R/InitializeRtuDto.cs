@@ -11,6 +11,7 @@ public class InitializeRtuDto : BaseRtuRequest
     public DoubleAddress RtuAddresses = new DoubleAddress();
 
     public bool IsFirstInitialization;
+    public bool IsSynchronizationRequired;
 
     // RTU properties after previous initialization
     public string? Serial;

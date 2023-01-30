@@ -1,0 +1,124 @@
+﻿<Window x:Class="Fibertest.WpfClient.MonitoringSettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:client="clr-namespace:Iit.Fibertest.Client"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" MinHeight="520" MinWidth="650" MaxWidth="768" WindowStartupLocation="CenterScreen" 
+        d:DataContext="{d:DesignInstance wpfClient:MonitoringSettingsViewModel}" 
+        KeyDown="Window_KeyDown" Loaded="Window_Loaded">
+    <Window.Resources>
+        <wpfClient:FrequencyConverter x:Key="FrConverter"/>
+    </Window.Resources>
+    <DockPanel IsEnabled="{Binding IsEditEnabled}">
+        <DockPanel DockPanel.Dock="Right" Width="200" Margin="5">
+            <GroupBox Header="{x:Static stringResources:Resources.SID_Precise}" DockPanel.Dock="Top">
+                <StackPanel Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Measurement_frequency}" Margin="5,0,0,0"/>
+                    <ComboBox Margin="5" ItemsSource="{Binding Model.Frequencies.PreciseMeasFreqs}" 
+                              SelectedItem="{Binding Model.Frequencies.SelectedPreciseMeasFreq}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource FrConverter}, ConverterParameter=0}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Save_frequency}" Margin="5,0,0,0"/>
+                    <ComboBox Margin="5" ItemsSource="{Binding Model.Frequencies.PreciseSaveFreqs}" SelectedItem="{Binding Model.Frequencies.SelectedPreciseSaveFreq}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource FrConverter}, ConverterParameter=1}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="{x:Static stringResources:Resources.SID_Fast}" DockPanel.Dock="Top">
+                <StackPanel Margin="5">
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Measurement_frequency}" Margin="5,0,0,0"/>
+                    <ComboBox Margin="5" ItemsSource="{Binding Model.Frequencies.FastMeasFreq}" SelectedItem="{Binding Model.Frequencies.SelectedFastMeasFreq}"/>
+                    <TextBlock Text="{x:Static stringResources:Resources.SID_Save_frequency}" Margin="5,0,0,0"/>
+                    <ComboBox Margin="5" ItemsSource="{Binding Model.Frequencies.FastSaveFreqs}" SelectedItem="{Binding Model.Frequencies.SelectedFastSaveFreq}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource FrConverter}, ConverterParameter=1}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="{x:Static stringResources:Resources.SID_Cycle_full_time}" DockPanel.Dock="Top">
+                <TextBlock Margin="5" Text="{Binding Model.CycleTime}"/>
+            </GroupBox>
+            <GroupBox Header="{x:Static stringResources:Resources.SID_Monitoring_mode}" DockPanel.Dock="Top">
+                <StackPanel>
+                    <RadioButton Content="{x:Static stringResources:Resources.SID_Automatic}" IsChecked="{Binding Model.IsMonitoringOn}" Margin="5"/>
+                    <RadioButton Content="{x:Static stringResources:Resources.SID_Manual}" IsChecked="{Binding Model.IsMonitoringOff, Mode=OneWay}" Margin="5"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox DockPanel.Dock="Top" Margin="0,5">
+                <DockPanel Margin="0,5,0,0" >
+                    <TextBlock DockPanel.Dock="Bottom" Margin="0,5,0,0" Background="AliceBlue" Height="40"
+                           Text="{Binding MessageProp}" TextWrapping="Wrap" />
+                    <Button Name="Apply" Height="25" Width="80" IsEnabled="{Binding IsButtonsEnabled}"
+                        Content="{x:Static stringResources:Resources.SID_Apply}" Margin="5" DockPanel.Dock="Left"/>
+
+                    <Button Name="Close" Height="25" Width="80" IsEnabled="{Binding IsButtonsEnabled}"
+                        Content="{x:Static stringResources:Resources.SID_Close}" 
+                        Margin="5" IsCancel="True" DockPanel.Dock="Right"/>
+                    <StackPanel></StackPanel>
+                </DockPanel>
+            </GroupBox>
+            <StackPanel></StackPanel>
+        </DockPanel>
+        <TabControl DockPanel.Dock="Left" Margin="5" 
+                    ItemsSource="{Binding Model.Charons}" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="wpfClient:MonitoringCharonModel">
+                    <DockPanel>
+                        <TextBlock Text="{Binding Title}" Margin="10,0"/>
+                    </DockPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="wpfClient:MonitoringCharonModel">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" IsEnabled="{Binding IsEditEnabled}">
+                        <StackPanel>
+                            <DockPanel Margin="10,0" Name="Header">
+                                <CheckBox Margin="7,2,0,0" DockPanel.Dock="Left"  IsChecked="{Binding GroupenCheck}" />
+                                <TextBlock Text="N" DockPanel.Dock="Left" Width="18" TextAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Text="{x:Static stringResources:Resources.SID_Fast___Precise}" 
+                                           DockPanel.Dock="Right"  TextAlignment="Right" FontWeight="Bold"/>
+                                <TextBlock Text="{x:Static stringResources:Resources.SID_Trace_title}" TextAlignment="Center" FontWeight="Bold"/>
+                            </DockPanel>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding Ports}" Margin="10,5,5,10" >
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="wpfClient:MonitoringPortModel">
+                                            <DockPanel >
+                                                <Border DockPanel.Dock="Left" BorderBrush="LightGray" BorderThickness="1" Margin="0,3">
+                                                    <CheckBox Margin="5,2" IsChecked="{Binding IsIncluded, Mode=TwoWay}" VerticalAlignment="Center"
+                                                          Content="{Binding PortNumber}" Width="40" IsEnabled="{Binding IsCheckboxEnabled}"/>
+                                                </Border>
+                                                <Border DockPanel.Dock="Right" BorderBrush="LightGray" BorderThickness="1" Margin="0,3">
+                                                    <TextBlock Margin="5,1" Width="70" Text="{Binding Duration}"/>
+                                                </Border>
+                                                <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,3">
+                                                    <TextBlock  Margin="5,1" Text="{Binding TraceTitle}" TextWrapping="Wrap" 
+                                                                Foreground="{Binding TraceTitleBrush}"/>
+                                                </Border>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </DockPanel>
+</Window>

@@ -1,0 +1,38 @@
+﻿<Window x:Class="Fibertest.WpfClient.TraceStepByStepView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:client="clr-namespace:Iit.Fibertest.Client"
+        xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:wpfCommonViews="clr-namespace:Fibertest.WpfCommonViews;assembly=Fibertest.WpfCommonViews"
+        xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:visualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
+        mc:Ignorable="d" Top="100" Left="50" ResizeMode="NoResize"
+        Height="600" Width="340" d:DataContext="{d:DesignInstance wpfClient:TraceStepByStepViewModel}" Loaded="Window_Loaded">
+    <DockPanel>
+        <StackPanel DockPanel.Dock=" Bottom" Margin="0,5"  IsEnabled="{Binding IsButtonsEnabled}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Name="SemiautomaticMode" Content="{x:Static stringResources:Resources.SID_Go_to_the_fork}" Margin="5,5" Width="300"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Name="StepForward" Content="{x:Static stringResources:Resources.SID_Step_forward}" Margin="5,5" Width="95"/>
+                <Button Name="StepBackward" Content="{x:Static stringResources:Resources.SID_Step_backward}" Margin="5,5" Width="90"/>
+                <Button Name="CancelStep" Content="{x:Static stringResources:Resources.SID_Cancel_step}" Margin="5,5" Width="95"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Name="Accept" Content="{x:Static stringResources:Resources.SID_Accept}" Margin="5,5" Width="145"/>
+                <Button Name="Cancel" Content="{x:Static stringResources:Resources.SID_Cancel}" Margin="5,5" Width="145"/>
+            </StackPanel>
+        </StackPanel>
+       
+        <ListView ItemsSource="{Binding Steps}" Margin="5">
+            <b:Interaction.Behaviors>
+                <wpfCommonViews:ScrollToBottomOnAddBehavior />
+            </b:Interaction.Behaviors>
+        </ListView>
+    </DockPanel>
+</Window>
+

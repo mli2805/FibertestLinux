@@ -41,7 +41,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
 
         var cul = writableConfig.Value.General.Culture;
         _logger.LogInfo(Logs.Client, $"Found: General -> Culture: {cul}");
-        writableConfig.Update(c=>c.General.Culture = cul == "ru-RU" ? "en-US" : "ru-RU");
+        writableConfig.Update(c => c.General.Culture = cul == "ru-RU" ? "en-US" : "ru-RU");
 
         _grpcC2DRequests = grpcC2DRequests;
         _grpcC2DRequests.SetClientConnectionId(_clientId);
@@ -79,11 +79,11 @@ public class ShellViewModel : PropertyChangedBase, IShell
         var res2 = await _grpcC2DRequests.SendEventSourcingCommand(cmd2);
         if (res2.ReturnCode != ReturnCode.Ok) return;
         var fiberId = cmd2.FiberId;
-        
-        var cmd3 = new AddTrace(_traceId, _rtuId, 
-            new List<Guid>() {_rtuNodeId, nodeId}, 
-            new List<Guid>(){_rtuId, equipmentId}, 
-            new List<Guid>(){fiberId});
+
+        var cmd3 = new AddTrace(_traceId, _rtuId,
+            new List<Guid>() { _rtuNodeId, nodeId },
+            new List<Guid>() { _rtuId, equipmentId },
+            new List<Guid>() { fiberId });
         var res3 = await _grpcC2DRequests.SendEventSourcingCommand(cmd3);
         Lines.Add($"Add trace: {res3.ReturnCode}");
     }
@@ -91,7 +91,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
     public async void AttachTrace()
     {
         _grpcC2DRequests.ChangeAddress(DcAddress);
-        var cmd = new AttachTrace(_traceId, new OtauPortDto(1, true, "68613"));
+        var cmd = new AttachTrace(_traceId, new OtauPortDto(1, true) { Serial = "68613" });
         var res = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         Lines.Add($"Attach trace: {res.ReturnCode}");
     }
@@ -106,7 +106,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
             new() { Id = Guid.NewGuid(), BaseRefType = BaseRefType.Fast, SorBytes = bytes},
         };
         var dto = new AssignBaseRefsDto(_rtuId, RtuMaker.IIT, _traceId, baseRefDtos, new List<int>());
-        dto.OtauPortDto = new OtauPortDto(1, true, "68613");
+        dto.OtauPortDto = new OtauPortDto(1, true) { Serial = "68613" };
         var res = await _grpcC2RRequests.SendAnyC2RRequest<AssignBaseRefsDto, BaseRefAssignedDto>(dto);
         Lines.Add($"Assign Base Refs: {res.ReturnCode}");
     }
@@ -114,7 +114,7 @@ public class ShellViewModel : PropertyChangedBase, IShell
     public async void InitializeRtu()
     {
         _grpcC2RRequests.ChangeAddress(DcAddress);
-        _logger.LogInfo(Logs.Client,Resources.SID_long_operation_please_wait);
+        _logger.LogInfo(Logs.Client, Resources.SID_long_operation_please_wait);
         var dto = new InitializeRtuDto(_rtuId, RtuMaker.IIT);
         dto.RtuAddresses.Main = new NetAddress(RtuAddress, TcpPorts.RtuListenTo);
 
@@ -169,6 +169,6 @@ public class ShellViewModel : PropertyChangedBase, IShell
         await _grpcC2DRequests.UnRegisterClient(new UnRegisterClientDto(_username));
     }
 
-   
+
 
 }

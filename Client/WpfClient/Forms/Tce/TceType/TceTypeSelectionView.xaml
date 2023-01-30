@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.TceTypeSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:client="clr-namespace:Iit.Fibertest.Client"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance wpfClient:TceTypeSelectionViewModel}">
+    <ListView DockPanel.Dock="Top" ItemsSource="{Binding TceTypes}" 
+              SelectedItem="{Binding SelectedType}" Margin="1" >
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="{x:Static stringResources:Resources.SID_Type}" Width="120" DisplayMemberBinding="{Binding Model}"/>
+                <GridViewColumn Header="{x:Static stringResources:Resources.SID_Version}" Width="240" DisplayMemberBinding="{Binding SoftwareVersion}"/>
+                <GridViewColumn Header="{x:Static stringResources:Resources.SID_Slot_count}" Width="80" DisplayMemberBinding="{Binding SlotCount}"/>
+                <GridViewColumn Header="{x:Static stringResources:Resources.SID_Comment}" Width="240" 
+                                DisplayMemberBinding="{Binding Comment}"/>
+            </GridView>
+        </ListView.View>
+    </ListView>
+</UserControl>

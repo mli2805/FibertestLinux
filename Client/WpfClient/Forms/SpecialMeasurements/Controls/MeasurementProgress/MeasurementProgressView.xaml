@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Fibertest.WpfClient.MeasurementProgressView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
+             mc:Ignorable="d">
+    <GroupBox Header="{x:Static stringResources:Resources.SID_Current_operation}" BorderBrush="Gray" BorderThickness="1" Background="White" Width="450">
+        <StackPanel>
+            <TextBlock Margin="20,20,10,10" Text="{Binding Message1}" FontWeight="Bold"/>
+            <TextBlock Margin="20,0,10,20" Text="{Binding Message}" FontWeight="Bold"/>
+            <ProgressBar Margin="10, 10, 10, 20" Height="18" IsIndeterminate="{Binding IsProgressBarRunning}"/>
+        </StackPanel>
+    </GroupBox>
+ 
+</UserControl>
