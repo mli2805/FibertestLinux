@@ -18,7 +18,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly ILogger<TraceContentChoiceViewModel> _logger; 
+        private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private readonly IWindowManager _windowManager;
@@ -45,7 +45,7 @@ namespace Fibertest.WpfClient
         public bool ShouldWeContinue { get; set; }
 
         public TraceContentChoiceViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config,
-            ILogger<TraceContentChoiceViewModel> logger, Model readModel, IWcfServiceDesktopC2D c2DWcfManager,
+            ILogger logger, Model readModel, IWcfServiceDesktopC2D c2DWcfManager,
             IWindowManager windowManager, EquipmentOfChoiceModelFactory equipmentOfChoiceModelFactory)
         {
             _globalScope = globalScope;

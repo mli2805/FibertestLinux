@@ -8,14 +8,14 @@ namespace Fibertest.WpfClient
 {
     public class Heartbeater
     {
-        private readonly ILogger<Heartbeater> _logger; 
+        private readonly ILogger _logger; 
         private readonly IWcfServiceDesktopC2D _wcfConnection;
         private readonly CurrentUser _currentUser;
         private readonly int _heartbeatRate;
         private Thread _heartbeaterThread;
         public CancellationTokenSource CancellationTokenSource { get; set; }
 
-        public Heartbeater(IWritableConfig<ClientConfig> config, ILogger<Heartbeater> logger, 
+        public Heartbeater(IWritableConfig<ClientConfig> config, ILogger logger, 
             IWcfServiceDesktopC2D wcfConnection, CurrentUser currentUser)
         {
             _logger = logger;

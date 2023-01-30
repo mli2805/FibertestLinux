@@ -23,7 +23,7 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private readonly IWcfServiceCommonC2D _wcfServiceCommonC2D;
         private readonly IWcfServiceDesktopC2D _wcfServiceDesktopC2D;
-        private readonly ILogger<RtuInitializeModel> _logger; 
+        private readonly ILogger _logger; 
         private readonly CommonStatusBarViewModel _commonStatusBarViewModel;
 
         private bool _isIdle;
@@ -55,7 +55,7 @@ namespace Fibertest.WpfClient
 
         public RtuInitializeViewModel(ILifetimeScope globalScope, CurrentUser currentUser, Model readModel,
             IWindowManager windowManager, IWcfServiceCommonC2D wcfServiceCommonC2D, IWcfServiceDesktopC2D wcfServiceDesktopC2D,
-            ILogger<RtuInitializeModel> logger, RtuLeaf rtuLeaf, CommonStatusBarViewModel commonStatusBarViewModel)
+            ILogger logger, RtuLeaf rtuLeaf, CommonStatusBarViewModel commonStatusBarViewModel)
         {
             _globalScope = globalScope;
             _currentUser = currentUser;

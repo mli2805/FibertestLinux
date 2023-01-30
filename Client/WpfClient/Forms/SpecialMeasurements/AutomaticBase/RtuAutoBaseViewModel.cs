@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
     public class RtuAutoBaseViewModel : Screen
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly ILogger<RtuAutoBaseViewModel> _logger; 
+        private readonly ILogger _logger; 
         private readonly CurrentUser _currentUser;
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly Model _readModel;
@@ -64,7 +64,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public RtuAutoBaseViewModel(ILifetimeScope globalScope, ILogger<RtuAutoBaseViewModel> logger, CurrentUser currentUser,
+        public RtuAutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, CurrentUser currentUser,
             IDispatcherProvider dispatcherProvider, Model readModel, IWindowManager windowManager,
             IWcfServiceDesktopC2D desktopC2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,
             FailedAutoBasePdfProvider failedAutoBasePdfProvider,

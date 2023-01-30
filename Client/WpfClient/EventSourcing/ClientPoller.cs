@@ -44,7 +44,7 @@ namespace Fibertest.WpfClient
         private readonly IDispatcherProvider _dispatcherProvider;
         private int _exceptionCount;
         private readonly int _exceptionCountLimit;
-        private readonly ILogger<ClientPoller> _logger; 
+        private readonly ILogger _logger; 
         private readonly EventArrivalNotifier _eventArrivalNotifier;
         private readonly int _pollingRate;
         public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -75,7 +75,7 @@ namespace Fibertest.WpfClient
             BopStateViewsManager bopStateViewsManager, NetworkEventsDoubleViewModel networkEventsDoubleViewModel,
             BopNetworkEventsDoubleViewModel bopNetworkEventsDoubleViewModel, LandmarksViewsManager landmarksViewsManager,
 
-            ILogger<ClientPoller> logger, IWritableConfig<ClientConfig> config, EventArrivalNotifier eventArrivalNotifier)
+            ILogger logger, IWritableConfig<ClientConfig> config, EventArrivalNotifier eventArrivalNotifier)
         {
             _wcfConnection = wcfConnection;
             _windowManager = windowManager;

@@ -9,7 +9,7 @@ namespace Fibertest.WpfClient
 {
     public class ModelLoader
     {
-        private readonly ILogger<ModelLoader> _logger; 
+        private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private readonly GraphReadModel _graphReadModel;
@@ -18,7 +18,7 @@ namespace Fibertest.WpfClient
         private readonly NetworkEventsDoubleViewModel _networkEventsDoubleViewModel;
         private readonly BopNetworkEventsDoubleViewModel _bopNetworkEventsDoubleViewModel;
 
-        public ModelLoader(ILogger<ModelLoader> logger, Model readModel, IWcfServiceDesktopC2D c2DWcfManager, GraphReadModel graphReadModel,
+        public ModelLoader(ILogger logger, Model readModel, IWcfServiceDesktopC2D c2DWcfManager, GraphReadModel graphReadModel,
             ZoneEventsOnTreeExecutor zoneEventsOnTreeExecutor,
             OpticalEventsDoubleViewModel opticalEventsDoubleViewModel,
             NetworkEventsDoubleViewModel networkEventsDoubleViewModel,

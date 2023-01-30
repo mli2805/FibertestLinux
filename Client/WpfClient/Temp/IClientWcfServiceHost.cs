@@ -4,4 +4,11 @@
     {
         void StartWcfListener();
     }
+
+    public class ClientWcfService : IClientWcfServiceHost
+    {
+        public void StartWcfListener()
+        {
+        }
+    }
 }

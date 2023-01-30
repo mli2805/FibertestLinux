@@ -8,10 +8,10 @@ namespace Fibertest.WpfClient
 {
     public class MeasurementInterrupter
     {
-        private readonly ILogger<MeasurementInterrupter> _logger; 
+        private readonly ILogger _logger; 
         private readonly IWcfServiceCommonC2D _c2RWcfManager;
 
-        public MeasurementInterrupter(ILogger<MeasurementInterrupter> logger, IWcfServiceCommonC2D c2RWcfManager)
+        public MeasurementInterrupter(ILogger logger, IWcfServiceCommonC2D c2RWcfManager)
         {
             _logger = logger;
             _c2RWcfManager = c2RWcfManager;

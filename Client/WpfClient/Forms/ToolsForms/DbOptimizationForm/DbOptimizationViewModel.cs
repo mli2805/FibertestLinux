@@ -15,7 +15,7 @@ namespace Fibertest.WpfClient
     public class DbOptimizationViewModel : Screen
     {
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly ILogger<DbOptimizationViewModel> _logger; 
+        private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
         private readonly IWcfServiceDesktopC2D _c2DWcfManager;
@@ -25,7 +25,7 @@ namespace Fibertest.WpfClient
 
         public DbOptimizationModel Model { get; set; } = new DbOptimizationModel();
 
-        public DbOptimizationViewModel(IWritableConfig<ClientConfig> config, ILogger<DbOptimizationViewModel> logger, Model readModel, 
+        public DbOptimizationViewModel(IWritableConfig<ClientConfig> config, ILogger logger, Model readModel, 
             CurrentUser currentUser, 
             IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager)
         {

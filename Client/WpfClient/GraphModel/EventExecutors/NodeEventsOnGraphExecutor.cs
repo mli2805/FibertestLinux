@@ -13,11 +13,11 @@ namespace Fibertest.WpfClient
 {
     public class NodeEventsOnGraphExecutor
     {
-        private readonly ILogger<NodeEventsOnGraphExecutor> _logger;
+        private readonly ILogger _logger;
         private readonly GraphReadModel _graphModel;
         private readonly ILifetimeScope _globalScope;
 
-        public NodeEventsOnGraphExecutor(ILogger<NodeEventsOnGraphExecutor> logger, GraphReadModel graphModel, ILifetimeScope globalScope)
+        public NodeEventsOnGraphExecutor(ILogger logger, GraphReadModel graphModel, ILifetimeScope globalScope)
         {
             _logger = logger;
             _graphModel = graphModel;

@@ -8,7 +8,7 @@ namespace Fibertest.WpfCommonViews
 {
     public class SoundManager
     {
-        private readonly ILogger<SoundManager> _logger;
+        private readonly ILogger _logger;
         private MediaPlayer _alertPlayer = null!;
         private DispatcherTimer _alertTimer = null!;
 
@@ -16,7 +16,7 @@ namespace Fibertest.WpfCommonViews
 
         private int _alertCounter;
 
-        public SoundManager(ILogger<SoundManager> logger)
+        public SoundManager(ILogger logger)
         {
             _logger = logger;
             InitializeAlertPlayer();

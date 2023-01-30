@@ -13,7 +13,7 @@ namespace Fibertest.WpfClient
     public class BopStateViewsManager
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly ILogger<BopStateViewsManager> _logger; 
+        private readonly ILogger _logger; 
         private readonly IWindowManager _windowManager;
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
@@ -23,7 +23,7 @@ namespace Fibertest.WpfClient
             new Dictionary<Guid, BopStateViewModel>();
 
 
-        public BopStateViewsManager(ILifetimeScope globalScope, ILogger<BopStateViewsManager> logger, IWindowManager windowManager,
+        public BopStateViewsManager(ILifetimeScope globalScope, ILogger logger, IWindowManager windowManager,
             Model readModel, CurrentUser currentUser, ChildrenViews childrenViews)
         {
             _globalScope = globalScope;

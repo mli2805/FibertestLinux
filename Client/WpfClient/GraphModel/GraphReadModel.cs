@@ -43,7 +43,7 @@ namespace Fibertest.WpfClient
         public Model ReadModel { get; }
         public readonly ILifetimeScope GlobalScope;
         public readonly IWritableConfig<ClientConfig> Config;
-        public ILogger<GraphReadModel> Logger { get; private set; }
+        public ILogger Logger { get; private set; }
 
         public GraphReadModelData Data { get; set; } = new GraphReadModelData();
         public List<Trace> ForcedTraces { get; set; } = new List<Trace>();
@@ -63,7 +63,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public GraphReadModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger<GraphReadModel> logger,
+        public GraphReadModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger,
             CurrentGis currentGis, CurrentUser currentUser,
             CommonStatusBarViewModel commonStatusBarViewModel,
             GrmNodeRequests grmNodeRequests, GrmEquipmentRequests grmEquipmentRequests,

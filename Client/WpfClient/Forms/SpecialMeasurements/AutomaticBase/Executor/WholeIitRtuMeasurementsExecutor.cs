@@ -9,7 +9,7 @@ namespace Fibertest.WpfClient
 {
     public class WholeIitRtuMeasurementsExecutor : IWholeRtuMeasurementsExecutor
     {
-        private readonly ILogger<WholeIitRtuMeasurementsExecutor> _logger; 
+        private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IDispatcherProvider _dispatcherProvider;
@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
 
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
-        public WholeIitRtuMeasurementsExecutor(IWritableConfig<ClientConfig> config, ILogger<WholeIitRtuMeasurementsExecutor> logger,
+        public WholeIitRtuMeasurementsExecutor(IWritableConfig<ClientConfig> config, ILogger logger,
             CurrentUser currentUser, Model readModel,
             IWcfServiceCommonC2D c2DWcfCommonManager, IDispatcherProvider dispatcherProvider,
             AutoAnalysisParamsViewModel autoAnalysisParamsViewModel,

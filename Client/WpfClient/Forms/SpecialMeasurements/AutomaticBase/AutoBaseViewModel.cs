@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
     public class AutoBaseViewModel : Screen
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly ILogger<AutoBaseViewModel> _logger; 
+        private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
         private readonly IDispatcherProvider _dispatcherProvider;
@@ -29,7 +29,7 @@ namespace Fibertest.WpfClient
         public IOneMeasurementExecutor OneMeasurementExecutor { get; set; }
         public bool IsShowRef { get; set; }
 
-        public AutoBaseViewModel(ILifetimeScope globalScope, ILogger<AutoBaseViewModel> logger, Model readModel, 
+        public AutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, Model readModel, 
             IWindowManager windowManager, IDispatcherProvider dispatcherProvider,
             ReflectogramManager reflectogramManager)
         {

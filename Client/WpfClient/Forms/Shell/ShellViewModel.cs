@@ -22,7 +22,7 @@ namespace Fibertest.WpfClient
         private readonly Heartbeater _heartbeater;
         private readonly ClientPoller _clientPoller;
         private readonly ModelLoader _modelLoader;
-        private readonly ILogger<ShellViewModel> _logger; 
+        private readonly ILogger _logger; 
         private readonly CurrentClientConfiguration _currentClientConfiguration;
         private readonly CurrentUser _currentUser;
         private readonly DataCenterConfig _currentDatacenterParameters;
@@ -43,7 +43,7 @@ namespace Fibertest.WpfClient
         public NetworkEventsDoubleViewModel NetworkEventsDoubleViewModel { get; }
         public BopNetworkEventsDoubleViewModel BopNetworkEventsDoubleViewModel { get; }
 
-        public ShellViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger<ShellViewModel> logger, 
+        public ShellViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger, 
             CurrentClientConfiguration currentClientConfiguration, CurrentUser currentUser,
             DataCenterConfig currentDatacenterParameters, CommandLineParameters commandLineParameters,
             IClientWcfServiceHost host, IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,

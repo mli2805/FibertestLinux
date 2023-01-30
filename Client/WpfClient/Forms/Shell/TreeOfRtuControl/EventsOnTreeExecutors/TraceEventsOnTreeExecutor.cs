@@ -19,12 +19,12 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly TreeOfRtuModel _treeOfRtuModel;
-        private readonly ILogger<TraceEventsOnTreeExecutor> _logger; 
+        private readonly ILogger _logger; 
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
 
         public TraceEventsOnTreeExecutor(ILifetimeScope globalScope, TreeOfRtuModel treeOfRtuModel, 
-            ILogger<TraceEventsOnTreeExecutor> logger, CurrentUser currentUser, Model readModel)
+            ILogger logger, CurrentUser currentUser, Model readModel)
         {
             _globalScope = globalScope;
             _treeOfRtuModel = treeOfRtuModel;

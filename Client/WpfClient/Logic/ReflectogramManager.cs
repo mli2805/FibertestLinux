@@ -16,13 +16,13 @@ namespace Fibertest.WpfClient
     public class ReflectogramManager
     {
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly ILogger<ReflectogramManager> _logger;
+        private readonly ILogger _logger;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
 
         private string _tempSorFile;
 
-        public ReflectogramManager(IWritableConfig<ClientConfig> config, ILogger<ReflectogramManager> logger, 
+        public ReflectogramManager(IWritableConfig<ClientConfig> config, ILogger logger, 
              IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)
         {
             _config = config;

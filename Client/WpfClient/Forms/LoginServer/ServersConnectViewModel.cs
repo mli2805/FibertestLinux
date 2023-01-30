@@ -14,7 +14,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly ILogger<ServersConnectViewModel> _logger; 
+        private readonly ILogger _logger; 
         public string NewServerTitle { get; set; }
 
         public Visibility NewServerTitleVisibility
@@ -93,7 +93,7 @@ namespace Fibertest.WpfClient
         }
 
         public ServersConnectViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, 
-            ILogger<ServersConnectViewModel> logger)
+            ILogger logger)
         {
             _globalScope = globalScope;
             _config = config;

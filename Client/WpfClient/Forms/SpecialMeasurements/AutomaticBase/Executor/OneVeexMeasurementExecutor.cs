@@ -12,7 +12,7 @@ namespace Fibertest.WpfClient
 {
     public class OneVeexMeasurementExecutor : IOneMeasurementExecutor
     {
-        private readonly ILogger<OneVeexMeasurementExecutor> _logger; 
+        private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IDispatcherProvider _dispatcherProvider;
@@ -23,7 +23,7 @@ namespace Fibertest.WpfClient
         private Trace _trace;
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
-        public OneVeexMeasurementExecutor(IWritableConfig<ClientConfig> config, ILogger<OneVeexMeasurementExecutor> logger, CurrentUser currentUser, Model readModel,
+        public OneVeexMeasurementExecutor(IWritableConfig<ClientConfig> config, ILogger logger, CurrentUser currentUser, Model readModel,
             IWcfServiceCommonC2D c2DWcfCommonManager, IDispatcherProvider dispatcherProvider,
             AutoAnalysisParamsViewModel autoAnalysisParamsViewModel,
             VeexMeasurementTool veexMeasurementTool,

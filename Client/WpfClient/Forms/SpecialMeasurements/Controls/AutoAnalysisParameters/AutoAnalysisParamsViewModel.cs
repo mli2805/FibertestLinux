@@ -16,7 +16,7 @@ namespace Fibertest.WpfClient
 {
     public class AutoAnalysisParamsViewModel : PropertyChangedBase, IDataErrorInfo
     {
-        private readonly ILogger<AutoAnalysisParamsViewModel> _logger; 
+        private readonly ILogger _logger; 
         private readonly IWindowManager _windowManager;
         private string _autoLt;
         private string _autoRt;
@@ -67,7 +67,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public AutoAnalysisParamsViewModel(ILogger<AutoAnalysisParamsViewModel> logger, IWindowManager windowManager)
+        public AutoAnalysisParamsViewModel(ILogger logger, IWindowManager windowManager)
         {
             _logger = logger;
             _windowManager = windowManager;

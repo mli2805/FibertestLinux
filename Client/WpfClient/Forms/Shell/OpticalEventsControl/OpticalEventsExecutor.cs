@@ -9,11 +9,11 @@ namespace Fibertest.WpfClient
 {
     public class OpticalEventsExecutor
     {
-        private readonly ILogger<OpticalEventsExecutor> _logger; 
+        private readonly ILogger _logger; 
         private readonly OpticalEventsDoubleViewModel _opticalEventsDoubleViewModel;
         private readonly SystemState _systemState;
 
-        public OpticalEventsExecutor(ILogger<OpticalEventsExecutor> logger, OpticalEventsDoubleViewModel opticalEventsDoubleViewModel, SystemState systemState)
+        public OpticalEventsExecutor(ILogger logger, OpticalEventsDoubleViewModel opticalEventsDoubleViewModel, SystemState systemState)
         {
             _logger = logger;
             _opticalEventsDoubleViewModel = opticalEventsDoubleViewModel;

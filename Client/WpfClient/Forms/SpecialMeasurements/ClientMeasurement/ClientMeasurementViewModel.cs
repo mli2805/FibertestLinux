@@ -18,7 +18,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<OtdrParametersConfig> _config;
-        private readonly ILogger<ClientMeasurementViewModel> _logger;
+        private readonly ILogger _logger;
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly MeasurementInterrupter _measurementInterrupter;
@@ -58,7 +58,7 @@ namespace Fibertest.WpfClient
         }
 
         public ClientMeasurementViewModel(ILifetimeScope globalScope, IWritableConfig<OtdrParametersConfig> config, 
-            ILogger<ClientMeasurementViewModel> logger,
+            ILogger logger,
             CurrentUser currentUser, Model readModel, MeasurementInterrupter measurementInterrupter,
             IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager,
             VeexMeasurementTool veexMeasurementTool,

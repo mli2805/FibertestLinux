@@ -22,14 +22,14 @@ namespace Fibertest.WpfClient
 {
     public class EventsOnTreeExecutor
     {
-        private readonly ILogger<EventsOnTreeExecutor> _logger; 
+        private readonly ILogger _logger; 
         private readonly RtuEventsOnTreeExecutor _rtuEventsOnTreeExecutor;
         private readonly InitializeRtuEventOnTreeExecutor _initializeRtuEventOnTreeExecutor;
         private readonly TraceEventsOnTreeExecutor _traceEventsOnTreeExecutor;
         private readonly EchoEventsOnTreeExecutor _echoEventsOnTreeExecutor;
         private readonly ZoneEventsOnTreeExecutor _zoneEventsOnTreeExecutor;
 
-        public EventsOnTreeExecutor(ILogger<EventsOnTreeExecutor> logger,
+        public EventsOnTreeExecutor(ILogger logger,
             RtuEventsOnTreeExecutor rtuEventsOnTreeExecutor, InitializeRtuEventOnTreeExecutor initializeRtuEventOnTreeExecutor,
             TraceEventsOnTreeExecutor traceEventsOnTreeExecutor, EchoEventsOnTreeExecutor echoEventsOnTreeExecutor,
             ZoneEventsOnTreeExecutor zoneEventsOnTreeExecutor)
