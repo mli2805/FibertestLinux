@@ -8,10 +8,10 @@ namespace Fibertest.WpfClient
         IWcfServiceCommonC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp);
         // C2D
         
-        Task<ClientRegisteredDto> RegisterClientAsync(RegisterClientDto dto);
+        // Task<ClientRegisteredDto> RegisterClientAsync(RegisterClientDto dto);
         Task<RequestAnswer> SetRtuOccupationState(OccupyRtuDto dto);
-        Task<RequestAnswer> RegisterHeartbeat(string connectionId);
-        Task<int> UnregisterClientAsync(UnRegisterClientDto dto);
+        // Task<RequestAnswer> RegisterHeartbeat(string connectionId);
+        // Task<int> UnregisterClientAsync(UnRegisterClientDto dto);
         Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto);
 
         // C2D2R

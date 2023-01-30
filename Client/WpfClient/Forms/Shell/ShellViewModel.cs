@@ -11,6 +11,7 @@ using Fibertest.Dto;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -28,6 +29,7 @@ namespace Fibertest.WpfClient
         private readonly DataCenterConfig _currentDatacenterParameters;
         private readonly CommandLineParameters _commandLineParameters;
         private readonly IClientWcfServiceHost _host;
+        private readonly GrpcC2DRequests? _grpcC2DRequests;
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly IWcfServiceDesktopC2D _c2DWcfManager;
@@ -46,7 +48,9 @@ namespace Fibertest.WpfClient
         public ShellViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger, 
             CurrentClientConfiguration currentClientConfiguration, CurrentUser currentUser,
             DataCenterConfig currentDatacenterParameters, CommandLineParameters commandLineParameters,
-            IClientWcfServiceHost host, IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,
+            IClientWcfServiceHost host, 
+            GrpcC2DRequests grpcC2DRequests,
+            IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,
             IWcfServiceInSuperClient c2SWcfManager,
             GraphReadModel graphReadModel, IWindowManager windowManager,
             LoginViewModel loginViewModel,
@@ -83,6 +87,7 @@ namespace Fibertest.WpfClient
             _currentDatacenterParameters = currentDatacenterParameters;
             _commandLineParameters = commandLineParameters;
             _host = host;
+            _grpcC2DRequests = grpcC2DRequests;
         }
 
 
@@ -263,13 +268,11 @@ namespace Fibertest.WpfClient
             _clientPollerCts.Cancel();
             _logger.LogInfo(Logs.Client, @"Client application finished.");
 
-            if (_c2DWcfManager == null)
+            if (_grpcC2DRequests == null)
                 return true;
             else
             {
-                await _commonC2DWcfManager
-                    .UnregisterClientAsync(new UnRegisterClientDto(_currentUser.UserName) 
-                        { ConnectionId = _currentUser.ConnectionId })
+                await _grpcC2DRequests.UnRegisterClient(new UnRegisterClientDto(_currentUser.UserName))
                     .ContinueWith(ttt => { Environment.Exit(Environment.ExitCode); });
             }
 

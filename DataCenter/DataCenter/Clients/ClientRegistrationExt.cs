@@ -9,7 +9,7 @@ public static class ClientRegistrationExt
     {
         var result = new ClientRegisteredDto(ReturnCode.ClientRegisteredSuccessfully);
 
-        result.ConnectionId = dto.ConnectionId;
+        result.ConnectionId = dto.ClientConnectionId;
 
         result.UserId = user.UserId;
         result.Role = user.Role;

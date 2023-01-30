@@ -51,7 +51,7 @@ public class C2DService : c2d.c2dBase
 
             if (!(request is RegisterClientDto))
             {
-                var client = _clientCollection.Get(request.ConnectionId);
+                var client = _clientCollection.Get(request.ClientConnectionId);
                 if (client == null)
                     return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
             }
@@ -71,6 +71,7 @@ public class C2DService : c2d.c2dBase
     {
         return JsonConvert.DeserializeObject(json, JsonSerializerSettings) switch
         {
+            CheckServerConnectionDto dto => dto,
             RegisterClientDto dto => dto,
             RegisterHeartbeatDto dto => dto,
             SetRtuOccupationDto dto => dto,

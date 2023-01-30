@@ -101,7 +101,7 @@ namespace Fibertest.WpfClient
             IsButtonsEnabled = false;
             var dto = new AttachTraceDto()
             {
-                ConnectionId = _currentUser.ConnectionId,
+                ClientConnectionId = _currentUser.ConnectionId,
                 RtuMaker = _rtu.RtuMaker,
                 TraceId = SelectedTrace.TraceId,
                 OtauPortDto = _otauPortDto,

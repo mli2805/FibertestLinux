@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto
 {
-    public class CheckServerConnectionDto
+    public class CheckServerConnectionDto : BaseRequest
     {
         public string? ClientIp;
     }

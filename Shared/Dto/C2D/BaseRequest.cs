@@ -2,7 +2,7 @@
 
 public class BaseRequest
 {
-    public string ConnectionId = "";
+    public string ClientConnectionId = "";
 
     
     public virtual string What => "BaseRequest";

@@ -7,6 +7,7 @@ namespace Fibertest.WpfClient
     public interface IWcfServiceDesktopC2D
     {
         IWcfServiceDesktopC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp);
+
         Task<bool> SendHeartbeat(HeartbeatDto dto);
         Task<bool> CheckServerConnection(CheckServerConnectionDto dto);
         Task<DiskSpaceDto> GetDiskSpaceGb();

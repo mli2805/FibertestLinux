@@ -8,6 +8,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -18,6 +19,7 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private readonly IMachineKeyProvider _machineKeyProvider;
         private readonly NoLicenseAppliedViewModel _noLicenseAppliedViewModel;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly SecurityAdminConfirmationViewModel _securityAdminConfirmationViewModel;
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger; 
@@ -67,6 +69,7 @@ namespace Fibertest.WpfClient
         public LoginViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger,
             IWindowManager windowManager, SecurityAdminConfirmationViewModel securityAdminConfirmationViewModel,
             IMachineKeyProvider machineKeyProvider, NoLicenseAppliedViewModel noLicenseAppliedViewModel,
+            GrpcC2DRequests grpcC2DRequests,
             IWcfServiceDesktopC2D desktopC2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,
             CurrentUser currentUser, CurrentGis currentGis, DataCenterConfig currentDatacenterParameters)
         {
@@ -74,6 +77,7 @@ namespace Fibertest.WpfClient
             _windowManager = windowManager;
             _machineKeyProvider = machineKeyProvider;
             _noLicenseAppliedViewModel = noLicenseAppliedViewModel;
+            _grpcC2DRequests = grpcC2DRequests;
             _securityAdminConfirmationViewModel = securityAdminConfirmationViewModel;
             _config = config;
             _logger = logger;
@@ -156,7 +160,7 @@ namespace Fibertest.WpfClient
 
             _sendDto = new RegisterClientDto(username, password.GetHashString()!)
             {
-                ConnectionId = connectionId,
+                ClientConnectionId = connectionId,
                 MachineKey = _machineKeyProvider.Get(),
                 IsUnderSuperClient = isUnderSuperClient,
                 Addresses = new DoubleAddress() { Main = _clientAddress, HasReserveAddress = false }
@@ -204,7 +208,7 @@ namespace Fibertest.WpfClient
         {
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                return await _commonC2DWcfManager.RegisterClientAsync(dto);
+                return await _grpcC2DRequests.RegisterClient(dto);
             }
         }
 

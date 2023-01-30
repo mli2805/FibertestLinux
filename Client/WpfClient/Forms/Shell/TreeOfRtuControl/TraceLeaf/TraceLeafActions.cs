@@ -128,7 +128,7 @@ namespace Fibertest.WpfClient
             var detachTraceDto = new DetachTraceDto
             {
                 TraceId = traceLeaf.Id,
-                ConnectionId = _currentUser.ConnectionId,
+                ClientConnectionId = _currentUser.ConnectionId,
             };
 
             var result = await _c2DCommonWcf.DetachTraceAsync(detachTraceDto);

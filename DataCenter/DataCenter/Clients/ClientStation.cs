@@ -24,7 +24,7 @@ public class ClientStation
 
     public ClientStation(RegisterClientDto dto, User user)
     {
-        ConnectionId = dto.ConnectionId;
+        ConnectionId = dto.ClientConnectionId;
 
         UserId = user.UserId;
         UserName = dto.UserName;

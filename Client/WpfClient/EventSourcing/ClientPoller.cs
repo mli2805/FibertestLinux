@@ -134,7 +134,7 @@ namespace Fibertest.WpfClient
         public async Task<int> EventSourcingTick()
         {
             string[] events = await _wcfConnection.GetEvents(
-                new GetEventsDto() { Revision = CurrentEventNumber, ConnectionId = _currentUser.ConnectionId });
+                new GetEventsDto() { Revision = CurrentEventNumber, ClientConnectionId = _currentUser.ConnectionId });
 
             if (events == null)
             {

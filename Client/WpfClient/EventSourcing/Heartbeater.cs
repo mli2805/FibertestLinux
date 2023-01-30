@@ -35,7 +35,7 @@ namespace Fibertest.WpfClient
         {
             while (!CancellationTokenSource.IsCancellationRequested)
             {
-                await _wcfConnection.SendHeartbeat(new HeartbeatDto(){ConnectionId = _currentUser.ConnectionId});
+                await _wcfConnection.SendHeartbeat(new HeartbeatDto(){ClientConnectionId = _currentUser.ConnectionId});
                 Thread.Sleep(TimeSpan.FromMilliseconds(_heartbeatRate));
             }
             _logger.LogInfo(Logs.Client,@"Leaving Heartbeats...");

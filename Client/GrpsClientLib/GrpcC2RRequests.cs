@@ -47,7 +47,7 @@ public class GrpcC2RRequests
         var grpcClient = new c2r.c2rClient(grpcChannel);
 
         var command = new c2rCommand()
-        { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
+            { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
         try
         {

@@ -5,6 +5,7 @@ using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -13,8 +14,8 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly CurrentUser _currentUser;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
-        private readonly IWcfServiceCommonC2D _c2RWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2RRequests _grpcC2RRequests;
         private readonly NetAddressForConnectionTest _netAddressForConnectionTest;
         private bool? _result;
         private NetAddressInputViewModel _netAddressInputViewModel;
@@ -44,14 +45,14 @@ namespace Fibertest.WpfClient
         }
 
         public NetAddressTestViewModel(ILifetimeScope globalScope, CurrentUser currentUser, IWindowManager windowManager,
-            IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D c2RWcfManager, 
+            GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests,
             NetAddressForConnectionTest netAddressForConnectionTest)
         {
             _globalScope = globalScope;
             _currentUser = currentUser;
             _windowManager = windowManager;
-            _c2DWcfManager = c2DWcfManager;
-            _c2RWcfManager = c2RWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2RRequests = grpcC2RRequests;
             _netAddressForConnectionTest = netAddressForConnectionTest;
             NetAddressInputViewModel = new NetAddressInputViewModel(netAddressForConnectionTest.Address, currentUser.Role <= Role.Root);
             IsButtonEnabled = currentUser.Role <= Role.Operator;
@@ -100,7 +101,7 @@ namespace Fibertest.WpfClient
                     NetAddress = NetAddressInputViewModel.GetNetAddress().Clone()
                 };
 
-                var resultDto = await _c2RWcfManager.CheckRtuConnectionAsync(dto);
+                var resultDto = await _grpcC2RRequests.SendAnyC2RRequest<CheckRtuConnectionDto, RtuConnectionCheckedDto>(dto);
                 if (resultDto.IsConnectionSuccessful && dto.NetAddress.Port != resultDto.NetAddress.Port)
                 {
                     NetAddressInputViewModel = 
@@ -115,9 +116,9 @@ namespace Fibertest.WpfClient
                     HasReserveAddress = false,
                     Main = NetAddressInputViewModel.GetNetAddress().Clone()
                 };
-                _c2DWcfManager.SetServerAddresses(addressForTesting, "", "");
-                return await _c2DWcfManager
-                    .CheckServerConnection(new CheckServerConnectionDto());
+                _grpcC2DRequests.ChangeAddress(addressForTesting);
+                var serverAnswer = await _grpcC2DRequests.SendAnyC2DRequest<CheckServerConnectionDto, RequestAnswer>(new CheckServerConnectionDto());
+                return serverAnswer.ReturnCode == ReturnCode.Ok;
             }
         }
     }
