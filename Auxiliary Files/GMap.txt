@@ -1,0 +1,10 @@
+Взяты свежие dll
+Убраны таргеты кроме .net6
+билдится под вин и линукс
+
+Подложил из Ft20
+ Core.cs - internal поля сделаны public
+ GMapMarker
+ GMapRoute
+ GMapControl
+ 
