@@ -98,6 +98,8 @@ public class C2DService : c2d.c2dBase
             RegisterClientDto dto => dto,
             RegisterHeartbeatDto dto => dto,
             SetRtuOccupationDto dto => dto,
+
+            GetEventsDto dto => dto,
             _ => null
         };
     }

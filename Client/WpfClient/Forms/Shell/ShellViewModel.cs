@@ -32,8 +32,6 @@ namespace Fibertest.WpfClient
         private readonly GrpcC2DRequests? _grpcC2DRequests;
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
-        private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly IWcfServiceInSuperClient _c2SWcfManager;
 
         public GraphReadModel GraphReadModel { get; set; }
@@ -50,7 +48,6 @@ namespace Fibertest.WpfClient
             DataCenterConfig currentDatacenterParameters, CommandLineParameters commandLineParameters,
             IClientWcfServiceHost host, 
             GrpcC2DRequests grpcC2DRequests,
-            IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,
             IWcfServiceInSuperClient c2SWcfManager,
             GraphReadModel graphReadModel, IWindowManager windowManager,
             LoginViewModel loginViewModel,
@@ -73,8 +70,6 @@ namespace Fibertest.WpfClient
             BopNetworkEventsDoubleViewModel = bopNetworkEventsDoubleViewModel;
             _globalScope = globalScope;
             _config = config;
-            _c2DWcfManager = c2DWcfManager;
-            _commonC2DWcfManager = commonC2DWcfManager;
             _c2SWcfManager = c2SWcfManager;
             _windowManager = windowManager;
             _loginViewModel = loginViewModel;
@@ -107,7 +102,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _backgroundMessage;
+        private string _backgroundMessage = null!;
         public string BackgroundMessage
         {
             get => _backgroundMessage;
@@ -129,7 +124,8 @@ namespace Fibertest.WpfClient
             ((App)Application.Current).ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             var postfix = _commandLineParameters.IsUnderSuperClientStart ? _commandLineParameters.ClientOrdinal.ToString() : "";
-            _logger.LogInfo(Logs.Client,@"Client application started!");
+            // _logFile.AssignFile($@"client{postfix}.log");
+            _logger.LogInfo(Logs.Client,$@"Client application {postfix} started!");
 
             if (_commandLineParameters.IsUnderSuperClientStart)
             {
@@ -141,7 +137,7 @@ namespace Fibertest.WpfClient
                     _commandLineParameters.ConnectionId, true, _commandLineParameters.ClientOrdinal);
             }
             else
-                _windowManager.ShowDialogWithAssignedOwner(_loginViewModel);
+               await _windowManager.ShowDialogWithAssignedOwner(_loginViewModel);
 
             ((App)Application.Current).ShutdownMode = ShutdownMode.OnMainWindowClose;
 
@@ -184,7 +180,9 @@ namespace Fibertest.WpfClient
 
         private async Task<bool> CheckFreeSpaceThreshold()
         {
-            var driveInfo = await _c2DWcfManager.GetDiskSpaceGb();
+            var dto = new GetDiskSpaceDto();
+            var driveInfo = await _grpcC2DRequests!.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
+                // await _c2DWcfManager.GetDiskSpaceGb();
             var totalSize = $@"Database drive's size: {driveInfo.TotalSize:0.0}Gb";
             var freeSpace = $@"free space: {driveInfo.AvailableFreeSpace:0.0}Gb";
             var dataSize = $@"database size: {driveInfo.DataSize:0.0}Gb";
@@ -245,8 +243,7 @@ namespace Fibertest.WpfClient
         {
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                _clientPoller.CancellationTokenSource = _clientPollerCts;
-                _clientPoller.Start(); // graph events including monitoring results events
+                _clientPoller.Start(_clientPollerCts.Token); // graph events including monitoring results events
 
                 _host.StartWcfListener(); // Accepts only monitoring step messages and client's measurement results
             }
@@ -272,7 +269,7 @@ namespace Fibertest.WpfClient
             else
             {
                 await _grpcC2DRequests.UnRegisterClient(new UnRegisterClientDto(_currentUser.UserName))
-                    .ContinueWith(ttt => { Environment.Exit(Environment.ExitCode); });
+                    .ContinueWith(_ => { Environment.Exit(Environment.ExitCode); });
             }
 
             return true;

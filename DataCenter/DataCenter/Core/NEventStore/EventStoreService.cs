@@ -185,7 +185,7 @@ public class EventStoreService
         return msg;
     }
 
-    public string[] GetEvents(int revision)
+    public EventsDto GetEvents(int revision)
     {
         try
         {
@@ -196,16 +196,16 @@ public class EventStoreService
                 .Select(x => JsonConvert.SerializeObject(x, JsonSerializerSettings))
                 .Take(_eventsPortion) // it depends on tcp buffer size and performance of clients' pc
                 .ToArray();
-            return events;
+            return new EventsDto() { ReturnCode = ReturnCode.Ok, Events = events};
         }
         catch (StreamNotFoundException)
         {
-            return Array.Empty<string>();
+            return new EventsDto() { ReturnCode = ReturnCode.Error, Events = Array.Empty<string>() };
         }
         catch (Exception e)
         {
             _logger.LogError(Logs.DataCenter, e.Message);
-            return Array.Empty<string>();
+            return new EventsDto() { ReturnCode = ReturnCode.Error, Events = Array.Empty<string>() };
         }
     }
 }

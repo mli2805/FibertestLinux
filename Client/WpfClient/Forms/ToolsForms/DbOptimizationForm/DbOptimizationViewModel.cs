@@ -8,6 +8,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -18,7 +19,7 @@ namespace Fibertest.WpfClient
         private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
 
         public bool IsInProgress { get; set; }
@@ -26,21 +27,22 @@ namespace Fibertest.WpfClient
         public DbOptimizationModel Model { get; set; } = new DbOptimizationModel();
 
         public DbOptimizationViewModel(IWritableConfig<ClientConfig> config, ILogger logger, Model readModel, 
-            CurrentUser currentUser, 
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager)
+            CurrentUser currentUser, GrpcC2DRequests grpcC2DRequests,
+            IWindowManager windowManager)
         {
             _config = config;
             _logger = logger;
             _readModel = readModel;
             _currentUser = currentUser;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
         }
 
         public async Task Initialize()
         {
-            var drive = await _c2DWcfManager.GetDiskSpaceGb();
-            if (drive == null)
+            var dto = new GetDiskSpaceDto();
+            var drive = await _grpcC2DRequests.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
+            if (drive.ReturnCode != ReturnCode.Ok)
             {
                 _logger.LogError(Logs.Client,@"GetDiskSpaceGb error");
                 return;
@@ -84,8 +86,8 @@ namespace Fibertest.WpfClient
                 {
                     UpTo = DateTime.Today,
                 };
-            var result = await _c2DWcfManager.SendCommandAsObj(cmd);
-            if (!string.IsNullOrEmpty(result))
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            if (result.ReturnCode != ReturnCode.Ok)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, Resources.SID_DB_optimization__ + result);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);

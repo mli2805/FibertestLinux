@@ -8,9 +8,9 @@ namespace Fibertest.WpfClient
     {
         // IWcfServiceDesktopC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp);
 
-        Task<bool> SendHeartbeat(HeartbeatDto dto);
-        Task<bool> CheckServerConnection(CheckServerConnectionDto dto);
-        Task<DiskSpaceDto> GetDiskSpaceGb();
+        // Task<bool> SendHeartbeat(HeartbeatDto dto);
+        // Task<bool> CheckServerConnection(CheckServerConnectionDto dto);
+        // Task<DiskSpaceDto> GetDiskSpaceGb();
         Task<int> ExportEvents();
 
         #region Event sourcing
@@ -41,20 +41,20 @@ namespace Fibertest.WpfClient
         //     throw new System.NotImplementedException();
         // }
 
-        public Task<bool> SendHeartbeat(HeartbeatDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<bool> SendHeartbeat(HeartbeatDto dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
-        public Task<bool> CheckServerConnection(CheckServerConnectionDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<bool> CheckServerConnection(CheckServerConnectionDto dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
-        public Task<DiskSpaceDto> GetDiskSpaceGb()
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<DiskSpaceDto> GetDiskSpaceGb()
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<int> ExportEvents()
         {

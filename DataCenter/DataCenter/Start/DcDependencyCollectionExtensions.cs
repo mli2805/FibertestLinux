@@ -66,6 +66,7 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<EventsQueue>();
         services.AddSingleton<CommandAggregator>();
         services.AddSingleton<EventStoreService>();
+        services.AddSingleton<DiskSpaceProvider>();
 
         services.AddSingleton<EventToLogLineParser>();
         services.AddSingleton<EventLogComposer>();

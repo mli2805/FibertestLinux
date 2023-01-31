@@ -53,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Other\" />
     <Folder Include="PON\" />
   </ItemGroup>
 

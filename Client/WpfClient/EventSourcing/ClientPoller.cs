@@ -8,6 +8,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using NEventStore;
 using Newtonsoft.Json;
@@ -19,7 +20,7 @@ namespace Fibertest.WpfClient
         private static readonly JsonSerializerSettings JsonSerializerSettings =
             new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
-        private readonly IWcfServiceDesktopC2D _wcfConnection;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private readonly Model _readModel;
         private readonly ServerConnectionLostViewModel _serverConnectionLostViewModel;
@@ -40,14 +41,12 @@ namespace Fibertest.WpfClient
         private readonly BopStateViewsManager _bopStateViewsManager;
         private readonly BopNetworkEventsDoubleViewModel _bopNetworkEventsDoubleViewModel;
         private readonly LandmarksViewsManager _landmarksViewsManager;
-        private Thread _pollerThread;
         private readonly IDispatcherProvider _dispatcherProvider;
         private int _exceptionCount;
         private readonly int _exceptionCountLimit;
         private readonly ILogger _logger; 
         private readonly EventArrivalNotifier _eventArrivalNotifier;
         private readonly int _pollingRate;
-        public CancellationTokenSource CancellationTokenSource { get; set; }
 
         private int _currentEventNumber;
         public int CurrentEventNumber
@@ -61,7 +60,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ClientPoller(IWcfServiceDesktopC2D wcfConnection, IDispatcherProvider dispatcherProvider,
+        public ClientPoller(GrpcC2DRequests grpcC2DRequests, IDispatcherProvider dispatcherProvider,
             IWindowManager windowManager, Model readModel,
             ServerConnectionLostViewModel serverConnectionLostViewModel,
             IWcfServiceInSuperClient c2SWcfManager, SystemState systemState, CurrentUser currentUser,
@@ -77,7 +76,7 @@ namespace Fibertest.WpfClient
 
             ILogger logger, IWritableConfig<ClientConfig> config, EventArrivalNotifier eventArrivalNotifier)
         {
-            _wcfConnection = wcfConnection;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
             _readModel = readModel;
             _serverConnectionLostViewModel = serverConnectionLostViewModel;
@@ -105,19 +104,19 @@ namespace Fibertest.WpfClient
             _exceptionCountLimit = config.Value.General.FailedPollsLimit;
         }
 
-        public void Start()
+        public void Start(CancellationToken token)
         {
             _logger.LogInfo(Logs.Client,$@"Polling started from {_currentEventNumber + 1}");
             _eventLogComposer.Initialize();
-            _pollerThread = new Thread(DoPolling) { IsBackground = true };
-            _pollerThread.Start();
+            var pollerThread = new Thread(() => DoPolling(token)) { IsBackground = true };
+            pollerThread.Start();
         }
 
-        private async void DoPolling()
+        private async void DoPolling(CancellationToken token)
         {
             if (_commandLineParameters.IsUnderSuperClientStart)
                 _systemState.PropertyChanged += _systemState_PropertyChanged;
-            while (!CancellationTokenSource.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
                 await EventSourcingTick();
                 Thread.Sleep(TimeSpan.FromMilliseconds(_pollingRate));
@@ -125,7 +124,7 @@ namespace Fibertest.WpfClient
             _logger.LogInfo(Logs.Client,@"Leaving DoPolling...");
         }
 
-        private void _systemState_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void _systemState_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             _logger.LogInfo(Logs.Client,@"Notify super-client system state changed.");
             _c2SWcfManager.SetSystemState(_commandLineParameters.ClientOrdinal, !_systemState.HasAnyActualProblem);
@@ -133,8 +132,9 @@ namespace Fibertest.WpfClient
 
         public async Task<int> EventSourcingTick()
         {
-            string[] events = await _wcfConnection.GetEvents(
-                new GetEventsDto() { Revision = CurrentEventNumber, ClientConnectionId = _currentUser.ConnectionId });
+            var getEventsDto = new GetEventsDto() { Revision = CurrentEventNumber, ClientConnectionId = _currentUser.ConnectionId };
+            var result = await _grpcC2DRequests.SendAnyC2DRequest<GetEventsDto, EventsDto>(getEventsDto);
+            string[]? events = result.Events;
 
             if (events == null)
             {
@@ -154,15 +154,15 @@ namespace Fibertest.WpfClient
             return events.Length;
         }
 
-        private void NotifyUserConnectionProblems()
+        private async void NotifyUserConnectionProblems()
         {
             _serverConnectionLostViewModel.Initialize(_currentDatacenterParameters.General.ServerTitle,
                 _currentDatacenterParameters.General.ServerDoubleAddress.Main.Ip4Address);
             _serverConnectionLostViewModel.PropertyChanged += OnServerConnectionLostViewModelOnPropertyChanged;
-            _windowManager.ShowDialogWithAssignedOwner(_serverConnectionLostViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_serverConnectionLostViewModel);
         }
 
-        private void OnServerConnectionLostViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnServerConnectionLostViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"IsOpen")
             {
@@ -176,8 +176,9 @@ namespace Fibertest.WpfClient
         {
             foreach (var json in events)
             {
-                var msg = (EventMessage)JsonConvert.DeserializeObject(json, JsonSerializerSettings);
-                if (msg == null) continue;
+                var o = JsonConvert.DeserializeObject(json, JsonSerializerSettings);
+                if (o == null) continue;
+                var msg = (EventMessage)o;
                 var evnt = msg.Body;
 
                 try
