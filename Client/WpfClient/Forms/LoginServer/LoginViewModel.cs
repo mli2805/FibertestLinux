@@ -23,13 +23,11 @@ namespace Fibertest.WpfClient
         private readonly SecurityAdminConfirmationViewModel _securityAdminConfirmationViewModel;
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger; 
-        private readonly IWcfServiceDesktopC2D _desktopC2DWcfManager;
-        private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly CurrentUser _currentUser;
         private readonly CurrentGis _currentGis;
         private readonly DataCenterConfig _currentDatacenterParameters;
 
-        private string _userName;
+        private string _userName = "";
         public string UserName
         {
             get => _userName;
@@ -50,7 +48,7 @@ namespace Fibertest.WpfClient
 
         public PasswordViewModel PasswordViewModel { get; set; } = new PasswordViewModel();
 
-        public string ConnectionId { get; set; }
+        public string ConnectionId { get; set; } = null!;
 
         private string _status = Resources.SID_Input_user_name_and_password;
         public string Status
@@ -70,7 +68,6 @@ namespace Fibertest.WpfClient
             IWindowManager windowManager, SecurityAdminConfirmationViewModel securityAdminConfirmationViewModel,
             IMachineKeyProvider machineKeyProvider, NoLicenseAppliedViewModel noLicenseAppliedViewModel,
             GrpcC2DRequests grpcC2DRequests,
-            IWcfServiceDesktopC2D desktopC2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,
             CurrentUser currentUser, CurrentGis currentGis, DataCenterConfig currentDatacenterParameters)
         {
             _globalScope = globalScope;
@@ -81,8 +78,6 @@ namespace Fibertest.WpfClient
             _securityAdminConfirmationViewModel = securityAdminConfirmationViewModel;
             _config = config;
             _logger = logger;
-            _desktopC2DWcfManager = desktopC2DWcfManager;
-            _commonC2DWcfManager = commonC2DWcfManager;
             _currentUser = currentUser;
             _currentGis = currentGis;
             _currentDatacenterParameters = currentDatacenterParameters;
@@ -115,17 +110,29 @@ namespace Fibertest.WpfClient
             IsButtonEnabled = true;
         }
 
-        // private DoubleAddress _commonServiceAddresses;
-        // private DoubleAddress _desktopServiceAddresses;
-        private NetAddress _clientAddress;
-        private RegisterClientDto _sendDto;
+        private NetAddress _clientAddress = null!;
 
-        private string _grpcIp;
-
-        private void PrepareAddresses(string username, bool isUnderSuperClient = false, int ordinal = 0)
+        // public to start under super-client
+        public async Task<bool> RegisterClientAsync(string username, string password,
+            string connectionId, bool isUnderSuperClient = false, int ordinal = 0)
         {
-            // _desktopServiceAddresses = _config.Value.General.ServerAddress;
-            _grpcIp = _config.Value.General.ServerAddress.Main.Ip4Address;
+            PrepareAddresses(isUnderSuperClient, ordinal);
+          
+            var sendDto = new RegisterClientDto(username, password.GetHashString()!)
+            {
+                ClientConnectionId = connectionId,
+                ClientIp = _clientAddress.Ip4Address,
+                MachineKey = _machineKeyProvider.Get(),
+                IsUnderSuperClient = isUnderSuperClient,
+                Addresses = new DoubleAddress() { Main = _clientAddress, HasReserveAddress = false }
+            };
+
+            return await ProcessRegistrationResult(sendDto);
+        }
+
+        private void PrepareAddresses(bool isUnderSuperClient = false, int ordinal = 0)
+        {
+            var grpcIp = _config.Value.General.ServerAddress.Main.Ip4Address;
 
             _currentDatacenterParameters.General.ServerDoubleAddress = _config.Value.General.ServerAddress;
             _currentDatacenterParameters.General.ServerTitle = _config.Value.General.ServerTitle;
@@ -133,69 +140,47 @@ namespace Fibertest.WpfClient
             var clientTcpPort = (int)TcpPorts.ClientListenTo;
             if (isUnderSuperClient)
                 clientTcpPort += ordinal;
+
             _clientAddress = _config.Value.General.ClientLocalAddress;
             _clientAddress.Port = clientTcpPort;
 
             if (_clientAddress.IsAddressSetAsIp && _clientAddress.Ip4Address == @"0.0.0.0" &&
-                _grpcIp != @"0.0.0.0")
+                grpcIp != @"0.0.0.0")
             {
-                _clientAddress.Ip4Address = LocalAddressResearcher.GetLocalAddressToConnectServer(_grpcIp);
+                _clientAddress.Ip4Address = LocalAddressResearcher.GetLocalAddressToConnectServer(grpcIp) ?? "0.0.0.0";
                 _config.Update(c=>c.General.ClientLocalAddress = _clientAddress);
             }
 
-            // _commonServiceAddresses = _desktopServiceAddresses.Clone();
-            // _commonServiceAddresses.Main.Port = (int)TcpPorts.ServerListenToCommonClient;
-            // if (_commonServiceAddresses.HasReserveAddress)
-            //     _commonServiceAddresses.Reserve.Port = (int)TcpPorts.ServerListenToCommonClient;
-
-            _grpcC2DRequests.ChangeAddress(_grpcIp);
-            // _desktopC2DWcfManager.SetServerAddresses(_desktopServiceAddresses, username, _clientAddress.Ip4Address);
-            // _commonC2DWcfManager.SetServerAddresses(_commonServiceAddresses, username, _clientAddress.Ip4Address);
+            _grpcC2DRequests.SetClientConnectionId(ConnectionId);
+            _grpcC2DRequests.ChangeAddress(grpcIp);
+            Status = string.Format(Resources.SID_Performing_registration_on__0_, grpcIp);
+            _logger.LogInfo(Logs.Client,$@"Performing registration on {grpcIp}");
         }
 
-        // public to start under super-client
-        public async Task<bool> RegisterClientAsync(string username, string password,
-            string connectionId, bool isUnderSuperClient = false, int ordinal = 0)
+        private async Task<bool> ProcessRegistrationResult(RegisterClientDto sendDto)
         {
-            PrepareAddresses(username, isUnderSuperClient, ordinal);
-
-            Status = string.Format(Resources.SID_Performing_registration_on__0_, _grpcIp);
-            _logger.LogInfo(Logs.Client,$@"Performing registration on {_grpcIp}");
-
-            _sendDto = new RegisterClientDto(username, password.GetHashString()!)
-            {
-                ClientConnectionId = connectionId,
-                MachineKey = _machineKeyProvider.Get(),
-                IsUnderSuperClient = isUnderSuperClient,
-                Addresses = new DoubleAddress() { Main = _clientAddress, HasReserveAddress = false }
-            };
-
-            return await ProcessRegistrationResult();
-        }
-
-        private async Task<bool> ProcessRegistrationResult()
-        {
-            var resultDto = await SendAsync(_sendDto);
+            var resultDto = await SendAsync(sendDto);
             if (resultDto.ReturnCode == ReturnCode.NoLicenseHasBeenAppliedYet)
             {
-                _windowManager.ShowDialogWithAssignedOwner(_noLicenseAppliedViewModel);
+                _currentUser.UserName = UserName; // it will be sent with license
+                await _windowManager.ShowDialogWithAssignedOwner(_noLicenseAppliedViewModel);
                 if (!_noLicenseAppliedViewModel.IsCommandSent)
                     return false;
                 if (!_noLicenseAppliedViewModel.IsLicenseAppliedSuccessfully)
                     return false; // message was shown already
 
-                _sendDto.SecurityAdminPassword = _noLicenseAppliedViewModel.SecurityAdminPassword.GetHashString();
-                resultDto = await SendAsync(_sendDto);
+                sendDto.SecurityAdminPassword = _noLicenseAppliedViewModel.SecurityAdminPassword.GetHashString();
+                resultDto = await SendAsync(sendDto);
             }
             else if (resultDto.ReturnCode == ReturnCode.WrongMachineKey
                      || resultDto.ReturnCode == ReturnCode.EmptyMachineKey
                      || resultDto.ReturnCode == ReturnCode.WrongSecurityAdminPassword)
             {
-                if (!AskSecurityAdminPassword(resultDto))
+                if (! await AskSecurityAdminPassword(resultDto))
                    return false;
 
-                _sendDto.SecurityAdminPassword = _securityAdminConfirmationViewModel.PasswordViewModel.Password.GetHashString();
-                resultDto = await SendAsync(_sendDto);
+                sendDto.SecurityAdminPassword = _securityAdminConfirmationViewModel.PasswordViewModel.Password.GetHashString();
+                resultDto = await SendAsync(sendDto);
             }
 
             if (resultDto.ReturnCode != ReturnCode.ClientRegisteredSuccessfully)
@@ -212,14 +197,14 @@ namespace Fibertest.WpfClient
         {
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                return await _grpcC2DRequests.RegisterClient(dto);
+                return await _grpcC2DRequests.SendAnyC2DRequest<RegisterClientDto, ClientRegisteredDto>(dto);
             }
         }
 
-        private bool AskSecurityAdminPassword(ClientRegisteredDto resultDto)
+        private async Task<bool> AskSecurityAdminPassword(ClientRegisteredDto resultDto)
         {
             _securityAdminConfirmationViewModel.Initialize(resultDto);
-            _windowManager.ShowDialogWithAssignedOwner(_securityAdminConfirmationViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_securityAdminConfirmationViewModel);
             return _securityAdminConfirmationViewModel.IsOkPressed;
         }
 

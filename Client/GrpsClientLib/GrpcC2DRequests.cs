@@ -72,8 +72,8 @@ public class GrpcC2DRequests
     {
         using var grpcChannel = GrpcChannel.ForAddress(_uri);
         var grpcClient = new c2d.c2dClient(grpcChannel);
-        var command = new c2dCommand()
-            { Json = JsonConvert.SerializeObject(cmd, JsonSerializerSettings), IsEventSourcingCommand = true, ClientConnectionId = _clientConnectionId };
+        var command = new c2dCommand { Json = JsonConvert.SerializeObject(cmd, JsonSerializerSettings), 
+            IsEventSourcingCommand = true, ClientConnectionId = _clientConnectionId };
 
         try
         {
@@ -123,11 +123,11 @@ public class GrpcC2DRequests
 
     public async Task<TResult> SendAnyC2DRequest<T, TResult>(T dto) where T : BaseRequest where TResult : RequestAnswer, new()
     {
-
         using var grpcChannel = GrpcChannel.ForAddress(_uri);
         var grpcClient = new c2d.c2dClient(grpcChannel);
 
         dto.ClientConnectionId = _clientConnectionId;
+        _logger.LogInfo(Logs.Client, $"Connection ID is {_clientConnectionId}");
         var command = new c2dCommand { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
         try

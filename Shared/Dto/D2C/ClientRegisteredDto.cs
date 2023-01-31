@@ -13,6 +13,7 @@ public class ClientRegisteredDto : RequestAnswer
     public DataCenterConfig DcCurrentParameters = new DataCenterConfig();
         
 
+    public ClientRegisteredDto() {}
     public ClientRegisteredDto(ReturnCode returnCode) : base(returnCode)
     {
     }

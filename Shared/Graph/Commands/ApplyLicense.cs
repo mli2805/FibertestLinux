@@ -4,6 +4,10 @@ public class ApplyLicense
 {
     public Guid LicenseId;
     public Guid UserId; // user who sends license to server
+
+    public string? UserName; // in case it is an initial license and user is not registered yet
+    public string? ClientIp;
+
     public bool IsIncremental; // by default = false -> Main license
     public string? Owner;
 

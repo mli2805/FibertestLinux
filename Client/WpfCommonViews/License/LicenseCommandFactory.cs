@@ -1,4 +1,7 @@
-﻿namespace Fibertest.Graph
+﻿using System;
+using Fibertest.Graph;
+
+namespace Fibertest.WpfCommonViews
 {
     public class LicenseCommandFactory
     {
@@ -24,12 +27,16 @@
             };
         }
 
-        public ApplyLicense CreateFromFile(LicenseInFile licenseInFile, Guid currentUserId)
+        public ApplyLicense CreateFromFile(LicenseInFile licenseInFile, Guid currentUserId, string? username = null)
         {
            return new ApplyLicense()
             {
                 LicenseId = licenseInFile.LicenseId,
+                
                 UserId = currentUserId,
+
+                UserName = username,
+
                 IsIncremental = licenseInFile.IsIncremental,
                 Owner = licenseInFile.Owner,
                 RtuCount = new LicenseParameter(licenseInFile.RtuCount),

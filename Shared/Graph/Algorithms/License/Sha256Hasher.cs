@@ -10,7 +10,7 @@ namespace Fibertest.Graph
             if (inputString == null) return null;
             StringBuilder sb = new StringBuilder();
             foreach (byte b in GetHash(inputString))
-                sb.Append(b.ToString(@"X2"));
+                sb.Append(b.ToString(@"x2"));
 
             return sb.ToString();
         }

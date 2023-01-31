@@ -1,31 +1,80 @@
 ﻿using System.Collections.Concurrent;
+using AutoMapper;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.Utils;
+using Microsoft.Extensions.Options;
 
 namespace Fibertest.DataCenter;
 
 public class ClientCollection
 {
-    private readonly ILogger<ClientCollection> _logger;
+    public readonly IOptions<DataCenterConfig> FullConfig;
+    public readonly ILogger<ClientCollection> Logger;
+    public readonly Model WriteModel;
+    private readonly EventStoreService _eventStoreService;
+
+    // key is ConnectionId
     public readonly ConcurrentDictionary<string, ClientStation> Clients = new();
 
-    public ClientCollection(ILogger<ClientCollection> logger)
+    public ClientCollection(IOptions<DataCenterConfig> fullConfig, ILogger<ClientCollection> logger, Model writeModel,
+        EventStoreService eventStoreService)
     {
-        _logger = logger;
+        FullConfig = fullConfig;
+        Logger = logger;
+        WriteModel = writeModel;
+        _eventStoreService = eventStoreService;
     }
 
     public async Task<ClientRegisteredDto> RegisterClientAsync(RegisterClientDto dto)
     {
-        await Task.Delay(1);
-        // instead of this line many-many checks
-        var user = new User(dto.UserName, dto.Password);
+        // R1
+        var licenseCheckResult = this.CheckLicense(dto);
+        if (licenseCheckResult != null)
+        {
+            Logger.LogError(Logs.Client, licenseCheckResult.ReturnCode.GetLocalizedString());
+            return licenseCheckResult;
+        }
 
-        var clientStation = new ClientStation(dto, user) { ClientIp = dto.ClientIp ?? "client IP not set" };
+        // R2
+        var user = WriteModel.Users
+            .FirstOrDefault(u => u.Title == dto.UserName
+                                 && u.EncodedPassword == dto.Password);
+        if (user == null)
+            return new ClientRegisteredDto { ReturnCode = ReturnCode.NoSuchUserOrWrongPassword };
+
+        // R3
+        var hasRight = user.CheckRights(dto);
+        if (hasRight != null)
+            return hasRight;
+
+
+        // R4
+        var theSameUserCheckResult = await this.CheckTheSameUser(dto, user);
+        if (theSameUserCheckResult != null)
+            return theSameUserCheckResult;
+
+        // R5 Machine Key
+        var machineKeyCheckResult = this.CheckMachineKey(dto, user);
+        if (machineKeyCheckResult.ReturnCode == ReturnCode.SaveUsersMachineKey)
+        {
+            IMapper mapper = new MapperConfiguration(
+                cfg => cfg.AddProfile<MappingModelToCmdProfile>()).CreateMapper();
+            var cmd = mapper.Map<AssignUsersMachineKey>(user);
+            await _eventStoreService.SendCommand(cmd, "admin", dto.ClientIp ?? "client IP not set");
+        }
+        else if (machineKeyCheckResult.ReturnCode != ReturnCode.Ok)
+            return machineKeyCheckResult;
+
+        var clientStation = new ClientStation(dto, user)
+        {
+            ConnectionId = dto.ClientConnectionId,
+            ClientIp = dto.ClientIp ?? "client IP not set"
+        };
         if (!Clients.TryAdd(clientStation.ConnectionId, clientStation))
             return new ClientRegisteredDto(ReturnCode.Error);
         var successfulResult = this.FillInSuccessfulResult(dto, user);
-        _logger.LogInfo(Logs.DataCenter, 
+        Logger.LogInfo(Logs.DataCenter,
             $"Client {clientStation.UserName} from {clientStation.ClientIp} registered successfully!");
         LogStations();
         return successfulResult;
@@ -59,7 +108,7 @@ public class ClientCollection
 
         foreach (var deadStation in deadStations)
         {
-            _logger.LogInfo(Logs.DataCenter,
+            Logger.LogInfo(Logs.DataCenter,
                 $"Dead client {deadStation} with connectionId {deadStation.ConnectionId} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
 
             var command = new KeyValuePair<string, string>(deadStation.UserName, deadStation.ClientIp);
@@ -74,14 +123,14 @@ public class ClientCollection
 
     private void LogStations()
     {
-        _logger.HyphenLine(Logs.DataCenter);
-        _logger.LogInfo(Logs.DataCenter, $"There are {Clients.Count} client(s):");
-        _logger.HyphenLine(Logs.RtuService);
+        Logger.HyphenLine(Logs.DataCenter);
+        Logger.LogInfo(Logs.DataCenter, $"There are {Clients.Count} client(s):");
+        Logger.HyphenLine(Logs.RtuService);
         foreach (var station in Clients.Values)
         {
-            _logger.LogInfo(Logs.DataCenter,
+            Logger.LogInfo(Logs.DataCenter,
                 $"{station.UserName}/{station.ClientIp}:{station.ClientAddressPort} with connection id {station.ConnectionId}");
         }
-        _logger.HyphenLine(Logs.DataCenter);
+        Logger.HyphenLine(Logs.DataCenter);
     }
 }

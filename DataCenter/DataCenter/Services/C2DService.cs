@@ -1,4 +1,5 @@
 ﻿using Fibertest.Dto;
+using Fibertest.Graph;
 using Fibertest.Utils;
 using Grpc.Core;
 using Newtonsoft.Json;
@@ -9,14 +10,16 @@ public class C2DService : c2d.c2dBase
 {
     private readonly ILogger<C2DService> _logger;
     private readonly ClientCollection _clientCollection;
+    private readonly Model _writeModel;
     private readonly ClientGrpcRequestExecutor _clientGrpcRequestExecutor;
     private readonly EventStoreService _eventStoreService;
 
-    public C2DService(ILogger<C2DService> logger, ClientCollection clientCollection,
+    public C2DService(ILogger<C2DService> logger, ClientCollection clientCollection, Model writeModel,
         ClientGrpcRequestExecutor clientGrpcRequestExecutor, EventStoreService eventStoreService)
     {
         _logger = logger;
         _clientCollection = clientCollection;
+        _writeModel = writeModel;
         _clientGrpcRequestExecutor = clientGrpcRequestExecutor;
         _eventStoreService = eventStoreService;
     }
@@ -36,11 +39,27 @@ public class C2DService : c2d.c2dBase
                 if (cmd == null)
                     return CreateBadResponse(ReturnCode.FailedDeserializeJson);
 
-                var client = _clientCollection.Get(command.ClientConnectionId);
-                if (client == null)
-                    return CreateBadResponse(ReturnCode.NoSuchUserOrWrongPassword);
+                string username;
+                string clientIp;
+                if (cmd is ApplyLicense applyLicenseCmd)
+                {
+                    var user = _writeModel.Users.FirstOrDefault(u => u.Title == applyLicenseCmd.UserName);
+                    if (user == null)
+                        return CreateBadResponse(ReturnCode.NoSuchUserOrWrongPassword);
+                    username = user.Title;
+                    clientIp = "";
+                }
+                else
+                {
 
-                var res = await _eventStoreService.SendCommand(cmd, client.UserName, client.ClientIp);
+                    var client = _clientCollection.Get(command.ClientConnectionId);
+                    if (client == null)
+                        return CreateBadResponse(ReturnCode.NoSuchUserOrWrongPassword);
+                    username = client.UserName;
+                    clientIp = client.ClientIp;
+                }
+
+                var res = await _eventStoreService.SendCommand(cmd, username, clientIp);
                 var answer = new RequestAnswer(string.IsNullOrEmpty(res) ? ReturnCode.Ok : ReturnCode.Error);
                 return new c2dResponse { Json = JsonConvert.SerializeObject(answer, JsonSerializerSettings) };
             }
@@ -49,14 +68,18 @@ public class C2DService : c2d.c2dBase
             if (request == null)
                 return CreateBadResponse(ReturnCode.FailedDeserializeJson);
 
-            if (!(request is RegisterClientDto || request is CheckServerConnectionDto))
+            if (request is RegisterClientDto || request is CheckServerConnectionDto)
+            {
+                // it is registration process, do not check connection ID
+            }
+            else
             {
                 var client = _clientCollection.Get(request.ClientConnectionId);
                 if (client == null)
                     return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
             }
             _logger.LogInfo(Logs.DataCenter, $"Client sent {request.What} request");
-              
+
             var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);
             return new c2dResponse { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
         }

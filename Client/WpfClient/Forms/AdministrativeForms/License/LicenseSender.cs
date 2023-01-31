@@ -6,30 +6,30 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class LicenseSender
     {
         private readonly ILifetimeScope _globalScope;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly LicenseCommandFactory _licenseCommandFactory;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private readonly ILicenseFileChooser _licenseFileChooser;
         private readonly LicenseFromFileDecoder _licenseFromFileDecoder;
         private readonly IWindowManager _windowManager;
         private readonly CurrentUser _currentUser;
 
-        private SecurityAdminConfirmationViewModel _vm;
 
-        public string SecurityAdminPassword;
+        public string? SecurityAdminPassword;
 
-        public LicenseSender(ILifetimeScope globalScope, IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager,
+        public LicenseSender(ILifetimeScope globalScope, GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager,
             LicenseCommandFactory licenseCommandFactory, ILicenseFileChooser licenseFileChooser,
             LicenseFromFileDecoder licenseFromFileDecoder, CurrentUser currentUser)
         {
             _globalScope = globalScope;
+            _grpcC2DRequests = grpcC2DRequests;
             _licenseCommandFactory = licenseCommandFactory;
-            _c2DWcfManager = c2DWcfManager;
             _licenseFileChooser = licenseFileChooser;
             _licenseFromFileDecoder = licenseFromFileDecoder;
             _windowManager = windowManager;
@@ -51,10 +51,10 @@ namespace Fibertest.WpfClient
 
         private async Task<bool> ApplyLicenseFromFile(LicenseInFile licenseInFile)
         {
-            var cmd = _licenseCommandFactory.CreateFromFile(licenseInFile, _currentUser.UserId);
+            var cmd = _licenseCommandFactory.CreateFromFile(licenseInFile, _currentUser.UserId, _currentUser.UserName);
             if (licenseInFile.IsMachineKeyRequired)
             {
-                if (!IsCorrectPasswordEntered(licenseInFile))
+                if (! await IsCorrectPasswordEntered(licenseInFile))
                     return false;
             }
 
@@ -69,33 +69,33 @@ namespace Fibertest.WpfClient
 
         private async Task<bool> SendApplyLicenseCommand(ApplyLicense cmd)
         {
-            string result;
+            RequestAnswer result;
 
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _c2DWcfManager.SendCommandAsObj(cmd);
+                result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
 
-            var vm = result != null
-                ? new MyMessageBoxViewModel(MessageType.Error, ((ReturnCode)int.Parse(result)).GetLocalizedString())
+            var vm = result.ReturnCode != ReturnCode.Ok
+                ? new MyMessageBoxViewModel(MessageType.Error, result.ReturnCode.GetLocalizedString())
                 : new MyMessageBoxViewModel(MessageType.Information, Resources.SID_License_applied_successfully_);
             await _windowManager.ShowDialogWithAssignedOwner(vm);
-            return result == null;
+            return result.ReturnCode != ReturnCode.Ok;
         }
 
-        private bool IsCorrectPasswordEntered(LicenseInFile licenseInFile)
+        private async Task<bool>  IsCorrectPasswordEntered(LicenseInFile licenseInFile)
         {
-            _vm = new SecurityAdminConfirmationViewModel();
-            _vm.Initialize(licenseInFile.Lk());
-            _windowManager.ShowDialogWithAssignedOwner(_vm);
-            if (_vm.IsOkPressed)
+            var vm = new SecurityAdminConfirmationViewModel();
+            vm.Initialize(licenseInFile.Lk());
+            await _windowManager.ShowDialogWithAssignedOwner(vm);
+            if (vm.IsOkPressed)
             {
-                var password = (string)Cryptography.Decode(licenseInFile.SecurityAdminPassword);
-                if (_vm.PasswordViewModel.Password != password)
+                var password = (string)Cryptography.Decode(licenseInFile.SecurityAdminPassword!);
+                if (vm.PasswordViewModel.Password != password)
                 {
                     var strs = new List<string>() { Resources.SID_Wrong_password, "", Resources.SID_License_will_not_be_applied_ };
                     var mb = new MyMessageBoxViewModel(MessageType.Information, strs, 0);
-                    _windowManager.ShowDialogWithAssignedOwner(mb);
+                    await _windowManager.ShowDialogWithAssignedOwner(mb);
                     return false;
                 }
             }
@@ -103,11 +103,11 @@ namespace Fibertest.WpfClient
             {
                 var strs = new List<string>() { Resources.SID_Password_is_not_entered_, "", Resources.SID_License_will_not_be_applied_ };
                 var mb = new MyMessageBoxViewModel(MessageType.Information, strs, 0);
-                _windowManager.ShowDialogWithAssignedOwner(mb);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
                 return false;
             }
 
-            SecurityAdminPassword = _vm.PasswordViewModel.Password;
+            SecurityAdminPassword = vm.PasswordViewModel.Password;
             return true;
         }
     }

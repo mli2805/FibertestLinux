@@ -237,8 +237,7 @@ namespace Fibertest.WpfClient
         {
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                _heartbeater.CancellationTokenSource = _heartbeaterCts;
-                _heartbeater.Start();
+                _heartbeater.Start(_heartbeaterCts.Token);
             }
         }
 

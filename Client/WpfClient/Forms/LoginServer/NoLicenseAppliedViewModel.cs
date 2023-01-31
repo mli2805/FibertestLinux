@@ -9,7 +9,7 @@ namespace Fibertest.WpfClient
 
         public bool IsCommandSent { get; set; }
         public bool IsLicenseAppliedSuccessfully { get; set; }
-        public string SecurityAdminPassword;
+        public string? SecurityAdminPassword;
 
         public NoLicenseAppliedViewModel(LicenseSender licenseSender)
         {
