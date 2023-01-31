@@ -33,18 +33,13 @@ public class WritableOptions<T> : IWritableOptions<T> where T : class, new()
     public T Get(string name) => _options.Get(name);
     public void Update(Action<T> applyChanges)
     {
-        // var fileProvider = _environment.ContentRootFileProvider;
-        // var fileInfo = fileProvider.GetFileInfo(_file);
-        // var physicalPath = fileInfo.PhysicalPath;
-        // var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(physicalPath));
         var jObject = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(_file));
         if (jObject == null) return;
-        var sectionObject = jObject.TryGetValue(_section, out JToken? section) 
+        var sectionObject = jObject.TryGetValue(_section, out JToken? section)
             ? JsonConvert.DeserializeObject<T>(section.ToString()) ?? Value
             : Value;
         applyChanges(sectionObject);
         jObject[_section] = JObject.Parse(JsonConvert.SerializeObject(sectionObject));
-        // File.WriteAllText(physicalPath, JsonConvert.SerializeObject(jObject, Formatting.Indented));
         File.WriteAllText(_file, JsonConvert.SerializeObject(jObject, Formatting.Indented));
         _configuration.Reload();
     }

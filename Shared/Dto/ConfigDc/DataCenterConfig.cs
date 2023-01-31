@@ -5,7 +5,7 @@ public class DataCenterConfig
     public ServerGeneralConfig General { get; set; } = new ServerGeneralConfig();
     public ServerTimeoutConfig ServerTimeouts { get; set; } = new ServerTimeoutConfig();
     public EventSourcingConfig EventSourcing { get; set; } = new EventSourcingConfig();
-    public MysqlConfig Mysql { get; set; } = new MysqlConfig();
+    public MysqlConfig MySql { get; set; } = new MysqlConfig();
     public BroadcastConfig Broadcast { get; set; } = new BroadcastConfig();
     public SmtpConfig Smtp { get; set; } = new SmtpConfig();
     public SnmpConfig Snmp { get; set; } = new SnmpConfig();
@@ -16,7 +16,7 @@ public class DataCenterConfig
         General = other.General;
         ServerTimeouts = other.ServerTimeouts;
         EventSourcing = other.EventSourcing;
-        Mysql = other.Mysql;
+        MySql = other.MySql;
         Broadcast = other.Broadcast;
         Smtp = other.Smtp;
         Snmp = other.Snmp;

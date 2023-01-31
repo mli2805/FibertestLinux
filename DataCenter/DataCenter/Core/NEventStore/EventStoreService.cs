@@ -10,6 +10,7 @@ public class EventStoreService
 {
     const string Timestamp = @"Timestamp";
     private readonly IWritableOptions<MysqlConfig> _configMySql;
+    private readonly IWritableOptions<EventSourcingConfig> _configEvent;
     private readonly ILogger<EventStoreService> _logger;
     private readonly IDbInitializer _dbInitializer;
     private readonly SnapshotRepository _snapshotRepository;
@@ -38,6 +39,7 @@ public class EventStoreService
     {
         _eventsPortion = configEvent.Value.EventSourcingPortion;
         _configMySql = configMySql;
+        _configEvent = configEvent;
         _logger = logger;
         _dbInitializer = dbInitializer;
         _snapshotRepository = snapshotRepository;
@@ -58,7 +60,7 @@ public class EventStoreService
             {
                 await dbContext.Database.EnsureDeletedAsync();
             }
-            _dbInitializer.DropDatabase();
+         //   _dbInitializer.DropDatabase();
             _configMySql.Update(o => o.ResetDb = false);
             _logger.LogInfo(Logs.DataCenter, "Db deleted successfully.");
         }
@@ -72,6 +74,7 @@ public class EventStoreService
             StreamIdOriginal = Guid.NewGuid();
             _logger.LogInfo(Logs.DataCenter, $"DB will be created with StreamIdOriginal {StreamIdOriginal}");
         }
+        _configEvent.Update(o=>o.StreamIdOriginal = StreamIdOriginal);
 
         await using (var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions))
         {
