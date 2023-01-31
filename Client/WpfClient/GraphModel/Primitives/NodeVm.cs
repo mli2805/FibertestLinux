@@ -9,15 +9,15 @@ namespace Fibertest.WpfClient
     {
         public Guid Id { get; set; }
 
-        private string _title;
+        private string? _title;
         private PointLatLng _position;
         private FiberState _state;
         private EquipmentType _type;
         private bool _isHighlighted;
         private bool _isVisible;
-        private GraphVisibilityLevelItem _graphVisibilityLevelItem;
+        private GraphVisibilityLevelItem? _graphVisibilityLevelItem;
 
-        public string Title
+        public string? Title
         {
             get => _title;
             set
@@ -84,7 +84,7 @@ namespace Fibertest.WpfClient
         }
 
 
-        public GraphVisibilityLevelItem GraphVisibilityLevelItem
+        public GraphVisibilityLevelItem? GraphVisibilityLevelItem
         {
             get { return _graphVisibilityLevelItem; }
             set

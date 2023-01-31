@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using System.Windows.Input;
-using Fibertest.WpfClient;
+// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+// ReSharper disable AssignNullToNotNullAttribute
+#pragma warning disable CS8605
 
-// ReSharper disable All
-
-namespace Iit.Fibertest.Client
+namespace Fibertest.WpfClient
 {
     /// <summary>
     ///   Class used to define a converter for the <see cref="MultiKeyGesture" /> class.
@@ -26,12 +26,12 @@ namespace Iit.Fibertest.Client
         /// <summary>
         ///   The inner key converter.
         /// </summary>
-        static readonly KeyConverter keyConverter = new KeyConverter();
+        static readonly KeyConverter KeyConverter = new KeyConverter();
 
         /// <summary>
         ///   The inner modifier key converter.
         /// </summary>
-        static readonly ModifierKeysConverter modifierKeysConverter = new ModifierKeysConverter();
+        static readonly ModifierKeysConverter ModifierKeysConverter = new ModifierKeysConverter();
 
         /// <summary>
         ///   Tries to get the modifier equivalent to the specified string.
@@ -69,7 +69,7 @@ namespace Iit.Fibertest.Client
         /// <param name="context"> An <see cref="System.ComponentModel.ITypeDescriptorContext" /> that provides a format context. </param>
         /// <param name="sourceType"> A <see cref="System.Type" /> that represents the type you want to convert from. </param>
         /// <returns> true if this converter can perform the conversion; otherwise, false. </returns>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             return sourceType == typeof(string);
         }
@@ -82,7 +82,7 @@ namespace Iit.Fibertest.Client
         /// <param name="value"> The <see cref="object" /> to convert. </param>
         /// <returns> An <see cref="object" /> that represents the converted value. </returns>
         /// <exception cref="System.NotSupportedException">The conversion cannot be performed.</exception>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             var str = (value as string);
 
@@ -114,7 +114,7 @@ namespace Iit.Fibertest.Client
                         var keyString = keyStrings[i];
                         if (keyString != null)
                         {
-                            var key = (Key)keyConverter.ConvertFrom(keyString.Trim());
+                            var key = (Key)KeyConverter.ConvertFrom(keyString.Trim());
                             keys.Add(key);
                         }
                     }
@@ -140,7 +140,7 @@ namespace Iit.Fibertest.Client
         ///   <paramref name="destinationType" />
         ///   parameter is null.</exception>
         /// <exception cref="System.NotSupportedException">The conversion cannot be performed.</exception>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             if (destinationType == typeof(string))
             {
@@ -160,16 +160,16 @@ namespace Iit.Fibertest.Client
                         sequence = gesture.KeySequences[i];
                         if (sequence.Modifiers != ModifierKeys.None)
                         {
-                            builder.Append((string)modifierKeysConverter.ConvertTo(context, culture, sequence.Modifiers, destinationType));
+                            builder.Append((string)ModifierKeysConverter.ConvertTo(context, culture, sequence.Modifiers, destinationType));
                             builder.Append(@"+");
                         }
 
-                        builder.Append((string)keyConverter.ConvertTo(context, culture, sequence.Keys[0], destinationType));
+                        builder.Append((string)KeyConverter.ConvertTo(context, culture, sequence.Keys[0], destinationType));
 
                         for (var j = 1; j < sequence.Keys.Length; j++)
                         {
                             builder.Append(@"+");
-                            builder.Append((string)keyConverter.ConvertTo(context, culture, sequence.Keys[0], destinationType));
+                            builder.Append((string)KeyConverter.ConvertTo(context, culture, sequence.Keys[0], destinationType));
                         }
                     }
 

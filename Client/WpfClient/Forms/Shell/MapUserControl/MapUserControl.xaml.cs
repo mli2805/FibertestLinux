@@ -6,7 +6,6 @@ using Autofac;
 using Fibertest.Dto;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
-using Fibertest.Graph;
 
 namespace Fibertest.WpfClient
 {

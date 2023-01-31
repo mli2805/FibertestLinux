@@ -12,7 +12,7 @@
         public CacheQueueItem(RawTile tile, byte[] img, CacheUsage cacheType)
         {
             Tile = tile;
-            this.Img = img;
+            Img = img;
             CacheType = cacheType;
         }
 

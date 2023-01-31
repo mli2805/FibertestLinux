@@ -13,7 +13,6 @@ using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
-using Iit.Fibertest.Client;
 
 namespace Fibertest.WpfClient;
 
@@ -79,7 +78,7 @@ public class AppBootstrapper : BootstrapperBase
         _container.InjectProperties(instance);
     }
 
-    protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
+    protected override void OnStartup(object sender, StartupEventArgs e)
     {
         SomeInitialActions(e.Args);
         DisplayRootViewForAsync<IShell>();

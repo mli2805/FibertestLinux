@@ -3500,4 +3500,10 @@ RTU инициализируется в данный момент!</value>
 	<data name="SID_Optical_fiber_monitoring_system_software" xml:space="preserve">
 		<value>Программный комплекс мониторинга оптических волокон</value>
 	</data>
+	<data name="SID_Initialize_and_synch" xml:space="preserve">
+		<value>Инициализировать RTU и синхронизировать базовые</value>
+	</data>
+	<data name="SID_Sending_base_refs_for_port__0_" xml:space="preserve">
+		<value>Пересылка базовых для порта {0}</value>
+	</data>
 </root>

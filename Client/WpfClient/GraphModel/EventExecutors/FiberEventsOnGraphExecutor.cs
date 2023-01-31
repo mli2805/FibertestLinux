@@ -19,12 +19,9 @@ namespace Fibertest.WpfClient
         {
             if (_currentUser.Role > Role.Root) return;
 
-            _graphModel.Data.Fibers.Add(new FiberVm()
-            {
-                Id = evnt.FiberId,
-                Node1 = _graphModel.Data.Nodes.First(m => m.Id == evnt.NodeId1),
-                Node2 = _graphModel.Data.Nodes.First(m => m.Id == evnt.NodeId2),
-            });
+            _graphModel.Data.Fibers.Add(new FiberVm(evnt.FiberId,
+                _graphModel.Data.Nodes.First(m => m.Id == evnt.NodeId1),
+                 _graphModel.Data.Nodes.First(m => m.Id == evnt.NodeId2)));
         }
 
         public void RemoveFiber(FiberRemoved evnt)

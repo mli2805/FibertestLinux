@@ -19,10 +19,11 @@ public static class DcDependencyCollectionExtensions
     {
         services.AddSingleton<Boot>();
         services.AddHostedService(x => x.GetService<Boot>());
+
         services.AddSingleton<LastConnectionTimeChecker>();
         services.AddHostedService(x => x.GetService<LastConnectionTimeChecker>());
-        services.AddSingleton<SnmpTrapListener>();
-        services.AddHostedService(x => x.GetService<SnmpTrapListener>());
+        // services.AddSingleton<SnmpTrapListener>();
+        // services.AddHostedService(x => x.GetService<SnmpTrapListener>());
         services.AddSingleton<MessageQueueService>();
         services.AddHostedService(x => x.GetService<MessageQueueService>());
 

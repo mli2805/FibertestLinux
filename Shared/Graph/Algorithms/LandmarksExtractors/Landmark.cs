@@ -3,21 +3,21 @@ using GMap.NET;
 
 namespace Fibertest.Graph
 {
-    public class Landmark : ICloneable
+    public class Landmark
     {
         public int Number { get; set; }
         public int NumberIncludingAdjustmentPoints { get; set; }
         public Guid NodeId { get; set; }
-        public string NodeTitle { get; set; }
-        public string NodeComment { get; set; }
+        public string? NodeTitle { get; set; }
+        public string? NodeComment { get; set; }
         public Guid EquipmentId { get; set; }
-        public string EquipmentTitle { get; set; }
+        public string? EquipmentTitle { get; set; }
         public EquipmentType EquipmentType { get; set; }
         public double Distance { get; set; }
         public int EventNumber { get; set; }
         public PointLatLng GpsCoors { get; set; }
         
-        public object Clone()
+        public Landmark Clone()
         {
             return new Landmark()
             {

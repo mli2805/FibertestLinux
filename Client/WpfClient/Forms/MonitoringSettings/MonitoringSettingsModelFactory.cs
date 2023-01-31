@@ -101,7 +101,7 @@ namespace Fibertest.WpfClient
                         TraceTitle = traceLeaf.Title,
                         PreciseBaseSpan = trace.PreciseDuration,
                         FastBaseSpan = trace.FastDuration,
-                        AdditionalBaseSpan = trace.AdditionalDuration,
+                        // AdditionalBaseSpan = trace.AdditionalDuration,
                         IsIncluded = trace.IsIncludedInMonitoringCycle,
                         IsInCurrentUserZone = trace.ZoneIds.Contains(_currentUser.ZoneId),
                     });

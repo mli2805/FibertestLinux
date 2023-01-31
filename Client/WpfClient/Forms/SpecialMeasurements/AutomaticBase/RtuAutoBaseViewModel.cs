@@ -98,7 +98,7 @@ namespace Fibertest.WpfClient
             _finishInProgress = false;
 
             WholeRtuMeasurementsExecutor = rtuLeaf.RtuMaker == RtuMaker.IIT
-                ? (IWholeRtuMeasurementsExecutor)_globalScope.Resolve<WholeIitRtuMeasurementsExecutor>()
+                ? _globalScope.Resolve<WholeIitRtuMeasurementsExecutor>()
                 : _globalScope.Resolve<WholeVeexRtuMeasurementsExecutor>();
 
             _goodTraces = new List<Trace>();

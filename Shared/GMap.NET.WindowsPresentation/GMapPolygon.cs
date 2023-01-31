@@ -27,7 +27,7 @@ namespace GMap.NET.WindowsPresentation
         {
              if(map != null)
              {
-                this.Map = map;
+                Map = map;
                  
                 if(Points.Count > 1)
                 {
@@ -43,18 +43,18 @@ namespace GMap.NET.WindowsPresentation
     
                    var shape = map.CreatePolygonPath(localPath);
     
-                   if(this.Shape is Path)
+                   if(Shape is Path)
                    {
-                      (this.Shape as Path).Data = shape.Data;
+                      (Shape as Path).Data = shape.Data;
                    }
                    else
                    {
-                      this.Shape = shape;
+                      Shape = shape;
                    }
                 }
                 else
                 {
-                   this.Shape = null;
+                   Shape = null;
                 }
              }
         }

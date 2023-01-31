@@ -9,7 +9,7 @@ namespace Fibertest.WpfClient
 {
     public class MonitoringFrequenciesModel : PropertyChangedBase
     {
-        public List<Frequency> PreciseMeasFreqs { get; set; }
+        public List<Frequency> PreciseMeasFreqs { get; set; } = null!;
 
         private Frequency _selectedPreciseMeasFreq;
         public Frequency SelectedPreciseMeasFreq
@@ -31,10 +31,10 @@ namespace Fibertest.WpfClient
             PreciseSaveFreqs = FastSaveFreqs.Where(f => f == Frequency.DoNot || f >= SelectedPreciseMeasFreq).ToList();
         }
 
-        public List<string> FastMeasFreq { get; set; }
-        public string SelectedFastMeasFreq { get; set; }
+        public List<string> FastMeasFreq { get; set; } = null!;
+        public string SelectedFastMeasFreq { get; set; } = null!;
 
-        private List<Frequency> _preciseSaveFreqs;
+        private List<Frequency> _preciseSaveFreqs = null!;
         public List<Frequency> PreciseSaveFreqs
         {
             get => _preciseSaveFreqs;
@@ -58,7 +58,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public List<Frequency> FastSaveFreqs { get; set; }
+        public List<Frequency> FastSaveFreqs { get; set; } = null!;
         public Frequency SelectedFastSaveFreq { get; set; }
 
         public void InitializeComboboxes(Frequency fastSaveFrequency, Frequency preciseMeasFrequency, Frequency preciseSaveFrequency)

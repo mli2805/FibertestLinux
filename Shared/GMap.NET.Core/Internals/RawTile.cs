@@ -13,9 +13,9 @@ namespace GMap.NET
 
         public RawTile(int type, GPoint pos, int zoom)
         {
-            this.Type = type;
-            this.Pos = pos;
-            this.Zoom = zoom;
+            Type = type;
+            Pos = pos;
+            Zoom = zoom;
         }
 
         public override string ToString()

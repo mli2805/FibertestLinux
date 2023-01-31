@@ -49,7 +49,7 @@ public class C2DService : c2d.c2dBase
             if (request == null)
                 return CreateBadResponse(ReturnCode.FailedDeserializeJson);
 
-            if (!(request is RegisterClientDto))
+            if (!(request is RegisterClientDto || request is CheckServerConnectionDto))
             {
                 var client = _clientCollection.Get(request.ClientConnectionId);
                 if (client == null)

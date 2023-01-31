@@ -4,7 +4,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Autofac;
 using Fibertest.Dto;
-using Fibertest.Graph;
 using GMap.NET.WindowsPresentation;
 
 namespace Fibertest.WpfClient

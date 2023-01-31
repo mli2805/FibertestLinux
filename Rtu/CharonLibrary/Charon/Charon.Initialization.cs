@@ -1,7 +1,6 @@
 ﻿using Fibertest.Dto;
 using Fibertest.Utils;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.CharonLib;
 

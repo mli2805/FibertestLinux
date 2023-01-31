@@ -115,16 +115,19 @@ namespace Fibertest.WpfClient
             IsButtonEnabled = true;
         }
 
-        private DoubleAddress _commonServiceAddresses;
-        private DoubleAddress _desktopServiceAddresses;
+        // private DoubleAddress _commonServiceAddresses;
+        // private DoubleAddress _desktopServiceAddresses;
         private NetAddress _clientAddress;
         private RegisterClientDto _sendDto;
 
+        private string _grpcIp;
+
         private void PrepareAddresses(string username, bool isUnderSuperClient = false, int ordinal = 0)
         {
-            _desktopServiceAddresses = _config.Value.General.ServerAddress;
-            _currentDatacenterParameters.General.ServerDoubleAddress.Main.Ip4Address =
-                _desktopServiceAddresses.Main.Ip4Address;
+            // _desktopServiceAddresses = _config.Value.General.ServerAddress;
+            _grpcIp = _config.Value.General.ServerAddress.Main.Ip4Address;
+
+            _currentDatacenterParameters.General.ServerDoubleAddress = _config.Value.General.ServerAddress;
             _currentDatacenterParameters.General.ServerTitle = _config.Value.General.ServerTitle;
 
             var clientTcpPort = (int)TcpPorts.ClientListenTo;
@@ -134,19 +137,20 @@ namespace Fibertest.WpfClient
             _clientAddress.Port = clientTcpPort;
 
             if (_clientAddress.IsAddressSetAsIp && _clientAddress.Ip4Address == @"0.0.0.0" &&
-                _desktopServiceAddresses.Main.Ip4Address != @"0.0.0.0")
+                _grpcIp != @"0.0.0.0")
             {
-                _clientAddress.Ip4Address = LocalAddressResearcher.GetLocalAddressToConnectServer(_desktopServiceAddresses.Main.Ip4Address);
+                _clientAddress.Ip4Address = LocalAddressResearcher.GetLocalAddressToConnectServer(_grpcIp);
                 _config.Update(c=>c.General.ClientLocalAddress = _clientAddress);
             }
 
-            _commonServiceAddresses = (DoubleAddress)_desktopServiceAddresses.Clone();
-            _commonServiceAddresses.Main.Port = (int)TcpPorts.ServerListenToCommonClient;
-            if (_commonServiceAddresses.HasReserveAddress)
-                _commonServiceAddresses.Reserve.Port = (int)TcpPorts.ServerListenToCommonClient;
+            // _commonServiceAddresses = _desktopServiceAddresses.Clone();
+            // _commonServiceAddresses.Main.Port = (int)TcpPorts.ServerListenToCommonClient;
+            // if (_commonServiceAddresses.HasReserveAddress)
+            //     _commonServiceAddresses.Reserve.Port = (int)TcpPorts.ServerListenToCommonClient;
 
-            _desktopC2DWcfManager.SetServerAddresses(_desktopServiceAddresses, username, _clientAddress.Ip4Address);
-            _commonC2DWcfManager.SetServerAddresses(_commonServiceAddresses, username, _clientAddress.Ip4Address);
+            _grpcC2DRequests.ChangeAddress(_grpcIp);
+            // _desktopC2DWcfManager.SetServerAddresses(_desktopServiceAddresses, username, _clientAddress.Ip4Address);
+            // _commonC2DWcfManager.SetServerAddresses(_commonServiceAddresses, username, _clientAddress.Ip4Address);
         }
 
         // public to start under super-client
@@ -155,8 +159,8 @@ namespace Fibertest.WpfClient
         {
             PrepareAddresses(username, isUnderSuperClient, ordinal);
 
-            Status = string.Format(Resources.SID_Performing_registration_on__0_, _desktopServiceAddresses.Main.Ip4Address);
-            _logger.LogInfo(Logs.Client,$@"Performing registration on {_desktopServiceAddresses.Main.Ip4Address}");
+            Status = string.Format(Resources.SID_Performing_registration_on__0_, _grpcIp);
+            _logger.LogInfo(Logs.Client,$@"Performing registration on {_grpcIp}");
 
             _sendDto = new RegisterClientDto(username, password.GetHashString()!)
             {

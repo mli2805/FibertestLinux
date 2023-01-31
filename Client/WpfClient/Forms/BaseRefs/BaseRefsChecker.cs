@@ -87,7 +87,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private async Task<OtdrDataKnownBlocks?> GetFromBytes(byte[] sorBytes, string errorHeader)
+        private async Task<OtdrDataKnownBlocks?> GetFromBytes(byte[]? sorBytes, string errorHeader)
         {
             var message = SorData.TryGetFromBytes(sorBytes, out var otdrKnownBlocks);
             if (message == "")

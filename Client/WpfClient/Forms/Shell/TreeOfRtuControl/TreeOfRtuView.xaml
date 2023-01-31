@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:testBench="clr-namespace:Iit.Fibertest.Client"
              xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
              xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
              mc:Ignorable="d" 

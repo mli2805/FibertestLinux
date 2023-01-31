@@ -6,7 +6,7 @@ namespace Fibertest.WpfClient
 {
     public interface IWcfServiceDesktopC2D
     {
-        IWcfServiceDesktopC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp);
+        // IWcfServiceDesktopC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp);
 
         Task<bool> SendHeartbeat(HeartbeatDto dto);
         Task<bool> CheckServerConnection(CheckServerConnectionDto dto);
@@ -36,10 +36,10 @@ namespace Fibertest.WpfClient
 
     public class WcfServiceDesktopC2D : IWcfServiceDesktopC2D
     {
-        public IWcfServiceDesktopC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public IWcfServiceDesktopC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<bool> SendHeartbeat(HeartbeatDto dto)
         {

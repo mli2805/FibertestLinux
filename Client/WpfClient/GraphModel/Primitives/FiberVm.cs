@@ -27,6 +27,16 @@ namespace Fibertest.WpfClient
 
         // if empty - fiber is not in any trace
         public Dictionary<Guid, FiberState> States { get; set; } = new Dictionary<Guid, FiberState>();
+        public List<Guid> HighLights { get; set; } = new List<Guid>();
+        public Dictionary<Guid, FiberState> TracesWithExceededLossCoeff { get; set; } = new Dictionary<Guid, FiberState>();
+        public bool IsBadSegment => TracesWithExceededLossCoeff.Any();
+
+        public FiberVm(Guid id, NodeVm node1, NodeVm node2)
+        {
+            Id = id;
+            _node1 = node1;
+            Node2 = node2;
+        }
 
         public void SetState(Guid traceId, FiberState traceState)
         {
@@ -46,11 +56,9 @@ namespace Fibertest.WpfClient
             NotifyOfPropertyChange(nameof(State));
         }
 
-        public List<Guid> HighLights { get; set; } = new List<Guid>();
 
         public void SetLightOnOff(Guid traceId, bool light)
         {
-            if (HighLights == null) HighLights = new List<Guid>();
             if (light && !HighLights.Contains(traceId))
             {
                 HighLights.Add(traceId);
@@ -80,7 +88,6 @@ namespace Fibertest.WpfClient
                     ? FiberState.NotInTrace
                     : States.Values.Max();
 
-        public Dictionary<Guid, FiberState> TracesWithExceededLossCoeff { get; set; } = new Dictionary<Guid, FiberState>();
 
         public void SetBadSegment(Guid traceId, FiberState lossCoeffSeriousness)
         {
@@ -107,6 +114,5 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public bool IsBadSegment => TracesWithExceededLossCoeff.Any();
     }
 }

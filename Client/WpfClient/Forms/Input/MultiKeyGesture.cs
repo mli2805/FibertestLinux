@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
-using Iit.Fibertest.Client;
 
 namespace Fibertest.WpfClient
 {
@@ -121,7 +120,7 @@ namespace Fibertest.WpfClient
             if (sequences.Length == 0)
                 throw new ArgumentException(@"At least one sequence must be specified.", @"sequences");
 
-            this._displayString = displayString;
+            _displayString = displayString;
             _keySequences = new KeySequence[sequences.Length];
             sequences.CopyTo(_keySequences, 0);
         }

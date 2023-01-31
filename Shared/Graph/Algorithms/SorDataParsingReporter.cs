@@ -9,14 +9,14 @@ namespace Fibertest.Graph
     /// </summary>
     public class SorDataParsingReporter
     {
-        private OtdrDataKnownBlocks _sorData;
-        private OtdrDataKnownBlocks _baseSorData;
+        private OtdrDataKnownBlocks _sorData = null!;
+        private OtdrDataKnownBlocks _baseSorData = null!;
         private readonly List<string> _report = new List<string>();
 
         public void DoReport(OtdrDataKnownBlocks sorData)
         {
             _sorData = sorData;
-            _baseSorData = sorData.GetBase();
+            _baseSorData = sorData.GetBase()!;
 
             var rftsEventsBlocks = _sorData.GetRftsEventsBlockForEveryLevel().ToList();
             ReportBaseAndMeasEventsParsing(rftsEventsBlocks);
@@ -55,7 +55,7 @@ namespace Fibertest.Graph
             }
         }
 
-        private void ReportKeyAndRftsEvents(OtdrDataKnownBlocks sorData, List<RftsEventsBlock> rftsEventsBlocks)
+        private void ReportKeyAndRftsEvents(OtdrDataKnownBlocks sorData, List<RftsEventsBlock>? rftsEventsBlocks)
         {
             var dict = new Dictionary<string, List<string>>();
             if (rftsEventsBlocks != null) // base

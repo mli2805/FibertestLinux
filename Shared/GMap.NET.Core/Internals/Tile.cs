@@ -20,8 +20,8 @@ namespace GMap.NET
         public Tile(int zoom, GPoint pos)
         {
             NotEmpty = true;
-            this.Zoom = zoom;
-            this._pos = pos;
+            Zoom = zoom;
+            _pos = pos;
             _overlays = null;
             _overlaysCount = 0;
         }

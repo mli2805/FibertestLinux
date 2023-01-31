@@ -5,7 +5,6 @@
         xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:client="clr-namespace:Iit.Fibertest.Client"
         xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
         mc:Ignorable="d"
         cal:Bind.ModelWithoutContext="{Binding .}"

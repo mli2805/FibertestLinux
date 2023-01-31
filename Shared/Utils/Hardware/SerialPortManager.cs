@@ -1,7 +1,6 @@
 ﻿using System.IO.Ports;
 using Fibertest.Dto;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.Utils;
 

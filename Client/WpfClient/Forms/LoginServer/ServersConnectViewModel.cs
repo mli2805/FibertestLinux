@@ -6,7 +6,6 @@ using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.StringResources;
 using Fibertest.Utils;
-using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
 {
@@ -14,8 +13,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly ILogger _logger; 
-        public string NewServerTitle { get; set; }
+        public string NewServerTitle { get; set; } = "";
 
         public Visibility NewServerTitleVisibility
         {
@@ -28,7 +26,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ObservableCollection<ServerForClient> Servers { get; set; }
+        public ObservableCollection<ServerForClient> Servers { get; set; } = null!;
 
         public Visibility ServersComboboxVisibility
         {
@@ -43,7 +41,7 @@ namespace Fibertest.WpfClient
 
         public bool IsRemoveServerEnabled
         {
-            get { return _isRemoveServerEnabled; }
+            get => _isRemoveServerEnabled;
             set
             {
                 if (value == _isRemoveServerEnabled) return;
@@ -52,8 +50,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private ServerForClient _selectedServerForClient;
-        public ServerForClient SelectedServerForClient
+        private ServerForClient? _selectedServerForClient;
+        public ServerForClient? SelectedServerForClient
         {
             get => _selectedServerForClient;
             set
@@ -66,8 +64,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _clientAddress;
+        private string _clientAddress = "";
 
+        private NetAddressTestViewModel _serverConnectionTestViewModel = null!;
         public NetAddressTestViewModel ServerConnectionTestViewModel
         {
             get => _serverConnectionTestViewModel;
@@ -79,8 +78,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _message;
-
+        private string _message = "";
         public string Message
         {
             get => _message;
@@ -92,12 +90,10 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ServersConnectViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, 
-            ILogger logger)
+        public ServersConnectViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config)
         {
             _globalScope = globalScope;
             _config = config;
-            _logger = logger;
             InitializeView();
         }
 
@@ -119,7 +115,7 @@ namespace Fibertest.WpfClient
                 ToggleToSelectServerMode();
         }
 
-        private void ServerConnectionTestViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ServerConnectionTestViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"Result")
             {
@@ -134,7 +130,7 @@ namespace Fibertest.WpfClient
                             new NetAddressInputViewModel(new NetAddress(serverIp, TcpPorts.ServerListenToDesktopClient), true);
                         serverAddress = serverIp;
                     }
-                    _clientAddress = LocalAddressResearcher.GetLocalAddressToConnectServer(serverAddress);
+                    _clientAddress = LocalAddressResearcher.GetLocalAddressToConnectServer(serverAddress) ?? "";
                     Message = Resources.SID_Connection_established_successfully_
                               + System.Environment.NewLine + string.Format(Resources.SID___Client_s_address__0_, _clientAddress);
                 }
@@ -146,10 +142,9 @@ namespace Fibertest.WpfClient
         }
 
         private bool _isInAddMode;
-        private readonly NetAddress _serverInWorkAddress = new NetAddress(@"0.0.0.0", TcpPorts.ServerListenToDesktopClient);
+        private readonly NetAddress _serverInWorkAddress = new NetAddress(@"0.0.0.0", TcpPorts.ServerListenToCommonClient);
         private Visibility _serversComboboxVisibility = Visibility.Visible;
         private Visibility _newServerTitleVisibility = Visibility.Collapsed;
-        private NetAddressTestViewModel _serverConnectionTestViewModel;
         private bool _isRemoveServerEnabled;
 
         public void ButtonPlus()
@@ -160,7 +155,7 @@ namespace Fibertest.WpfClient
 
         public void ButtonMinus()
         {
-            Servers.Remove(SelectedServerForClient);
+            Servers.Remove(SelectedServerForClient!);
             SaveChanges();
 
             if (Servers.Count > 0)

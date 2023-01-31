@@ -18,7 +18,7 @@ public class ClientGrpcRequestExecutor
     {
         switch (o)
         {
-            case CheckServerConnectionDto dto:
+            case CheckServerConnectionDto _:
                 return new RequestAnswer(ReturnCode.Ok);
             case RegisterClientDto dto:
                 return await _clientCollection.RegisterClientAsync(dto);

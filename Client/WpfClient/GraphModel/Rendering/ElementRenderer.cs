@@ -22,22 +22,19 @@ namespace Fibertest.WpfClient
             };
         }
 
-        public static FiberVm Map(Fiber fiber, List<NodeVm> nodesForRendering)
+        public static FiberVm? Map(Fiber fiber, List<NodeVm> nodesForRendering)
         {
             var nodeVm1 = nodesForRendering.FirstOrDefault(n => n.Id == fiber.NodeId1);
             var nodeVm2 = nodesForRendering.FirstOrDefault(n => n.Id == fiber.NodeId2);
             if (nodeVm1 == null || nodeVm2 == null) return null;
-            return new FiberVm()
+            return new FiberVm(fiber.FiberId, nodeVm1, nodeVm2)
             {
-                Id = fiber.FiberId,
-                Node1 = nodeVm1,
-                Node2 = nodeVm2,
                 States = new Dictionary<Guid, FiberState>(),
                 TracesWithExceededLossCoeff = new Dictionary<Guid, FiberState>(),
             };
         }
 
-        public static FiberVm MapWithStates(Fiber fiber, IEnumerable<NodeVm> nodesForRendering)
+        public static FiberVm? MapWithStates(Fiber fiber, IEnumerable<NodeVm> nodesForRendering)
         {
             var fiberVm = Map(fiber, nodesForRendering.ToList());
             if (fiberVm == null)
@@ -51,11 +48,8 @@ namespace Fibertest.WpfClient
         
         public static FiberVm MapWithStates(Fiber fiber, NodeVm nodeVm1, NodeVm nodeVm2)
         {
-            var fiberVm = new FiberVm()
+            var fiberVm = new FiberVm(fiber.FiberId, nodeVm1, nodeVm2)
             {
-                Id = fiber.FiberId,
-                Node1 = nodeVm1,
-                Node2 = nodeVm2,
                 HighLights = new List<Guid>(fiber.HighLights ?? new List<Guid>()),
                 States = new Dictionary<Guid, FiberState>(),
                 TracesWithExceededLossCoeff = new Dictionary<Guid, FiberState>(),

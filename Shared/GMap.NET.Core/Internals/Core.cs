@@ -463,8 +463,8 @@ namespace GMap.NET
 
         public void OnMapSizeChanged(int width, int height)
         {
-            this.Width = width;
-            this.Height = height;
+            Width = width;
+            Height = height;
 
             if (IsRotated)
             {
@@ -642,7 +642,7 @@ namespace GMap.NET
 
             var d = new GPoint(Width / 2, Height / 2);
 
-            this.Drag(d);
+            Drag(d);
         }
 
         public bool MouseWheelZooming = false;
@@ -968,7 +968,7 @@ namespace GMap.NET
                                 while (img == null && zoomOffset < task.Zoom)
                                 {
                                     Ix = (long)Math.Pow(2, zoomOffset);
-                                    parentTile = new GMap.NET.GPoint((task.Pos.X / Ix), (task.Pos.Y / Ix));
+                                    parentTile = new GPoint((task.Pos.X / Ix), (task.Pos.Y / Ix));
                                     img = GMaps.Instance.GetImageFrom(tl, parentTile, task.Zoom - zoomOffset++, out ex);
                                 }
 

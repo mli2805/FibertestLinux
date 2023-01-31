@@ -16,7 +16,7 @@
     using System.Windows.Shapes;
     using System.Windows.Threading;
     using System.Diagnostics;
-    using GMap.NET;
+    using NET;
 
     /// <summary>
     /// GMap.NET control for Windows Presentation
@@ -27,11 +27,11 @@
 
         #region DependencyProperties and related stuff
 
-        public System.Windows.Point MapPoint
+        public Point MapPoint
         {
             get
             {
-                return (System.Windows.Point)GetValue(MapPointProperty);
+                return (Point)GetValue(MapPointProperty);
             }
             set
             {
@@ -42,7 +42,7 @@
 
         // Using a DependencyProperty as the backing store for point.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MapPointProperty =
-               DependencyProperty.Register("MapPoint", typeof(System.Windows.Point), typeof(GMapControl), new PropertyMetadata(new Point(), OnMapPointPropertyChanged));
+               DependencyProperty.Register("MapPoint", typeof(Point), typeof(GMapControl), new PropertyMetadata(new Point(), OnMapPointPropertyChanged));
 
 
         private static void OnMapPointPropertyChanged(DependencyObject source,
@@ -333,7 +333,7 @@
         /// <summary>
         /// text on empty tiles
         /// </summary>
-        public FormattedText EmptyTileText = new FormattedText("We are sorry, but we don't\nhave imagery at this zoom\n     level for this region.", System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Arial"), 16, Brushes.Blue);
+        public FormattedText EmptyTileText = new FormattedText("We are sorry, but we don't\nhave imagery at this zoom\n     level for this region.", CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Arial"), 16, Brushes.Blue);
 
         /// <summary>
         /// map zooming type for mouse wheel
@@ -483,7 +483,7 @@
         {
             get
             {
-                return System.ComponentModel.DesignerProperties.GetIsInDesignMode(this);
+                return DesignerProperties.GetIsInDesignMode(this);
             }
         }
 
@@ -498,7 +498,7 @@
             {
                 if (mapCanvas == null)
                 {
-                    if (this.VisualChildrenCount > 0)
+                    if (VisualChildrenCount > 0)
                     {
                         Border border = VisualTreeHelper.GetChild(this, 0) as Border;
                         ItemsPresenter items = border.Child as ItemsPresenter;
@@ -567,7 +567,7 @@
                 {
                     var factoryPanel = new FrameworkElementFactory(typeof(Canvas));
                     {
-                        factoryPanel.SetValue(Canvas.IsItemsHostProperty, true);
+                        factoryPanel.SetValue(Panel.IsItemsHostProperty, true);
 
                         ItemsPanelTemplateInstance = new ItemsPanelTemplate();
                         {
@@ -583,7 +583,7 @@
                     {
                         StyleInstance.Setters.Add(new Setter(Canvas.LeftProperty, new Binding("LocalPositionX")));
                         StyleInstance.Setters.Add(new Setter(Canvas.TopProperty, new Binding("LocalPositionY")));
-                        StyleInstance.Setters.Add(new Setter(Canvas.ZIndexProperty, new Binding("ZIndex")));
+                        StyleInstance.Setters.Add(new Setter(Panel.ZIndexProperty, new Binding("ZIndex")));
                     }
                 }
                 ItemContainerStyle = StyleInstance;
@@ -594,7 +594,7 @@
 
                 Core.SystemType = "WindowsPresentation";
 
-                Core.RenderMode = GMap.NET.RenderMode.WPF;
+                Core.RenderMode = RenderMode.WPF;
 
                 Core.OnMapZoomChanged += new MapZoomChanged(ForceUpdateOverlays);
                 Loaded += new RoutedEventHandler(GMapControl_Loaded);
@@ -726,7 +726,7 @@
         /// <param name="e"></param>
         void GMapControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            System.Windows.Size constraint = e.NewSize;
+            Size constraint = e.NewSize;
 
             // 50px outside control
             //region = new GRect(-50, -50, (int)constraint.Width + 100, (int)constraint.Height + 100);
@@ -780,7 +780,7 @@
             {
                 if (MapScaleTransform != null)
                 {
-                    var tp = MapScaleTransform.Transform(new System.Windows.Point(Core.renderOffset.X, Core.renderOffset.Y));
+                    var tp = MapScaleTransform.Transform(new Point(Core.renderOffset.X, Core.renderOffset.Y));
                     MapOverlayTranslateTransform.X = tp.X;
                     MapOverlayTranslateTransform.Y = tp.Y;
 
@@ -864,7 +864,7 @@
                             while (!parentTile.NotEmpty && zoomOffset < Core.Zoom && zoomOffset <= LevelsKeepInMemmory)
                             {
                                 Ix = (long)Math.Pow(2, zoomOffset);
-                                parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++, new GMap.NET.GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
+                                parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++, new GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
                             }
 
                             if (parentTile.NotEmpty)
@@ -909,12 +909,12 @@
                                     g.DrawRectangle(EmptytileBrush, EmptyTileBorders, new Rect(Core.tileRect.X, Core.tileRect.Y, Core.tileRect.Width, Core.tileRect.Height));
 
                                     var ex = Core.FailedLoads[lt];
-                                    FormattedText TileText = new FormattedText("Exception: " + ex.Message, System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 14, Brushes.Red);
+                                    FormattedText TileText = new FormattedText("Exception: " + ex.Message, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 14, Brushes.Red);
                                     TileText.MaxTextWidth = Core.tileRect.Width - 11;
 
-                                    g.DrawText(TileText, new System.Windows.Point(Core.tileRect.X + 11, Core.tileRect.Y + 11));
+                                    g.DrawText(TileText, new Point(Core.tileRect.X + 11, Core.tileRect.Y + 11));
 
-                                    g.DrawText(EmptyTileText, new System.Windows.Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - EmptyTileText.Height / 2));
+                                    g.DrawText(EmptyTileText, new Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - EmptyTileText.Height / 2));
                                 }
                             }
                         }
@@ -925,15 +925,15 @@
 
                             if (tilePoint.PosXY == Core.centerTileXYLocation)
                             {
-                                FormattedText TileText = new FormattedText("CENTER:" + tilePoint.ToString(), System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 16, Brushes.Red);
+                                FormattedText TileText = new FormattedText("CENTER:" + tilePoint.ToString(), CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 16, Brushes.Red);
                                 TileText.MaxTextWidth = Core.tileRect.Width;
-                                g.DrawText(TileText, new System.Windows.Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - TileText.Height / 2));
+                                g.DrawText(TileText, new Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - TileText.Height / 2));
                             }
                             else
                             {
-                                FormattedText TileText = new FormattedText("TILE: " + tilePoint.ToString(), System.Globalization.CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 16, Brushes.Red);
+                                FormattedText TileText = new FormattedText("TILE: " + tilePoint.ToString(), CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, tileTypeface, 16, Brushes.Red);
                                 TileText.MaxTextWidth = Core.tileRect.Width;
-                                g.DrawText(TileText, new System.Windows.Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - TileText.Height / 2));
+                                g.DrawText(TileText, new Point(Core.tileRect.X + Core.tileRect.Width / 2 - EmptyTileText.Width / 2, Core.tileRect.Y + Core.tileRect.Height / 2 - TileText.Height / 2));
                             }
                         }
                     }
@@ -1195,7 +1195,7 @@
             {
                 foreach (var m in Overlays)
                 {
-                    if (m.Shape != null && m.Shape.Visibility == System.Windows.Visibility.Visible)
+                    if (m.Shape != null && m.Shape.Visibility == Visibility.Visible)
                     {
                         // left
                         if (m.Position.Lng < left)
@@ -1270,7 +1270,7 @@
         /// </summary>
         void UpdateRotationMatrix()
         {
-            System.Windows.Point center = new System.Windows.Point(ActualWidth / 2.0, ActualHeight / 2.0);
+            Point center = new Point(ActualWidth / 2.0, ActualHeight / 2.0);
 
             rotationMatrix.Angle = -Bearing;
             rotationMatrix.CenterY = center.Y;
@@ -1341,9 +1341,9 @@
         /// <summary>
         /// apply transformation if in rotation mode
         /// </summary>
-        System.Windows.Point ApplyRotation(double x, double y)
+        Point ApplyRotation(double x, double y)
         {
-            System.Windows.Point ret = new System.Windows.Point(x, y);
+            Point ret = new Point(x, y);
 
             if (IsRotated)
             {
@@ -1356,9 +1356,9 @@
         /// <summary>
         /// apply transformation if in rotation mode
         /// </summary>
-        System.Windows.Point ApplyRotationInversion(double x, double y)
+        Point ApplyRotationInversion(double x, double y)
         {
-            System.Windows.Point ret = new System.Windows.Point(x, y);
+            Point ret = new Point(x, y);
 
             if (IsRotated)
             {
@@ -1445,7 +1445,7 @@
 
                 if (SelectionUseCircle)
                 {
-                    drawingContext.DrawEllipse(SelectedAreaFill, SelectionPen, new System.Windows.Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2), (x2 - x1) / 2, (y2 - y1) / 2);
+                    drawingContext.DrawEllipse(SelectedAreaFill, SelectionPen, new Point(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2), (x2 - x1) / 2, (y2 - y1) / 2);
                 }
                 else
                 {
@@ -1455,8 +1455,8 @@
 
             if (ShowCenter)
             {
-                drawingContext.DrawLine(CenterCrossPen, new System.Windows.Point((ActualWidth / 2) - 5, ActualHeight / 2), new System.Windows.Point((ActualWidth / 2) + 5, ActualHeight / 2));
-                drawingContext.DrawLine(CenterCrossPen, new System.Windows.Point(ActualWidth / 2, (ActualHeight / 2) - 5), new System.Windows.Point(ActualWidth / 2, (ActualHeight / 2) + 5));
+                drawingContext.DrawLine(CenterCrossPen, new Point((ActualWidth / 2) - 5, ActualHeight / 2), new Point((ActualWidth / 2) + 5, ActualHeight / 2));
+                drawingContext.DrawLine(CenterCrossPen, new Point(ActualWidth / 2, (ActualHeight / 2) - 5), new Point(ActualWidth / 2, (ActualHeight / 2) + 5));
             }
 
             if (renderHelperLine)
@@ -1471,7 +1471,7 @@
 
             if (Copyright != null && IsInGisVisibleMode)
             {
-                drawingContext.DrawText(Copyright, new System.Windows.Point(5, ActualHeight - Copyright.Height - 5));
+                drawingContext.DrawText(Copyright, new Point(5, ActualHeight - Copyright.Height - 5));
             }
 
             #endregion
@@ -1571,7 +1571,7 @@
             {
                 Cursor = Cursors.Wait;
 
-                System.Windows.Point p = e.GetPosition(this);
+                Point p = e.GetPosition(this);
                 if (MapScaleTransform != null)
                     p = MapScaleTransform.Inverse.Transform(p);
 
@@ -1599,7 +1599,7 @@
                 // set mouse position to map center
                 if (MouseWheelZoomType != MouseWheelZoomType.MousePositionWithoutCenter)
                 {
-                    System.Windows.Point ps = PointToScreen(new System.Windows.Point(ActualWidth / 2, ActualHeight / 2));
+                    Point ps = PointToScreen(new Point(ActualWidth / 2, ActualHeight / 2));
                     Stuff.SetCursorPos((int)ps.X, (int)ps.Y);
                 }
 
@@ -1909,7 +1909,7 @@
 
         private void UpdateSelectedAreaRect(MouseEventArgs e)
         {
-            System.Windows.Point p = e.GetPosition(this);
+            Point p = e.GetPosition(this);
             selectionEnd = FromLocalToLatLng((int)p.X, (int)p.Y);
 
             double x1 = Math.Min(selectionStart.Lng, selectionEnd.Lng);
@@ -2157,14 +2157,14 @@
         {
             if (MapScaleTransform != null)
             {
-                var tp = MapScaleTransform.Inverse.Transform(new System.Windows.Point(x, y));
+                var tp = MapScaleTransform.Inverse.Transform(new Point(x, y));
                 x = (int)tp.X;
                 y = (int)tp.Y;
             }
 
             if (IsRotated)
             {
-                var f = rotationMatrixInvert.Transform(new System.Windows.Point(x, y));
+                var f = rotationMatrixInvert.Transform(new Point(x, y));
 
                 x = (int)f.X;
                 y = (int)f.Y;
@@ -2179,14 +2179,14 @@
 
             if (MapScaleTransform != null)
             {
-                var tp = MapScaleTransform.Transform(new System.Windows.Point(ret.X, ret.Y));
+                var tp = MapScaleTransform.Transform(new Point(ret.X, ret.Y));
                 ret.X = (int)tp.X;
                 ret.Y = (int)tp.Y;
             }
 
             if (IsRotated)
             {
-                var f = rotationMatrix.Transform(new System.Windows.Point(ret.X, ret.Y));
+                var f = rotationMatrix.Transform(new Point(ret.X, ret.Y));
 
                 ret.X = (int)f.X;
                 ret.Y = (int)f.Y;
@@ -2359,11 +2359,11 @@
             }
         }
 
-        public GMap.NET.RenderMode RenderMode
+        public RenderMode RenderMode
         {
             get
             {
-                return GMap.NET.RenderMode.WPF;
+                return RenderMode.WPF;
             }
         }
 

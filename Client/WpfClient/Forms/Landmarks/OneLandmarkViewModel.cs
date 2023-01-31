@@ -6,7 +6,6 @@ using System.Windows;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
-using Fibertest.OtdrDataFormat;
 using Fibertest.WpfCommonViews;
 using GMap.NET;
 
@@ -62,7 +61,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private Graph.Landmark _landmarkBeforeChanges;
+        private Landmark _landmarkBeforeChanges;
 
         private EquipmentTypeComboItem _selectedEquipmentTypeItem;
         public EquipmentTypeComboItem SelectedEquipmentTypeItem
@@ -70,20 +69,19 @@ namespace Fibertest.WpfClient
             get => _selectedEquipmentTypeItem;
             set
             {
-                if (Equals(value, _selectedEquipmentTypeItem) || value == null) return;
+                if (Equals(value, _selectedEquipmentTypeItem)) return;
                 _selectedEquipmentTypeItem = value;
                 SelectedLandmark.EquipmentType = value.Type;
                 NotifyOfPropertyChange();
             }
         }
 
-        private Graph.Landmark _selectedLandmark;
-        public Graph.Landmark SelectedLandmark
+        private Landmark _selectedLandmark;
+        public Landmark SelectedLandmark
         {
             get => _selectedLandmark;
             set
             {
-                if (value == null) return;
                 _selectedLandmark = value;
                 InitializeUserControl();
                 NotifyOfPropertyChange();
@@ -92,7 +90,7 @@ namespace Fibertest.WpfClient
 
         private void InitializeUserControl()
         {
-            _landmarkBeforeChanges = (Graph.Landmark)_selectedLandmark.Clone();
+            _landmarkBeforeChanges = _selectedLandmark.Clone();
             GpsInputSmallViewModel.Initialize(SelectedLandmark.GpsCoors);
             ComboItems = GetItems(SelectedLandmark.EquipmentType);
             SelectedEquipmentTypeItem = ComboItems.First(i => i.Type == SelectedLandmark.EquipmentType);

@@ -54,7 +54,7 @@ namespace Fibertest.WpfClient
             NodeVm node1 = _graphModel.Data.Fibers.First(f => f.Id == e.FiberId).Node1;
             NodeVm node2 = _graphModel.Data.Fibers.First(f => f.Id == e.FiberId).Node2;
 
-            var fiberVm1 = new FiberVm() { Id = e.NewFiberId1, Node1 = node1, Node2 = _graphModel.Data.Nodes.First(n => n.Id == e.Id) };
+            var fiberVm1 = new FiberVm(e.NewFiberId1, node1, _graphModel.Data.Nodes.First(n => n.Id == e.Id));
             foreach (var pair in oldFiberVm.States)
                 fiberVm1.States.Add(pair.Key, pair.Value);
             foreach (var pair in oldFiberVm.TracesWithExceededLossCoeff)
@@ -62,7 +62,7 @@ namespace Fibertest.WpfClient
             fiberVm1.HighLights = new List<Guid>(oldFiberVm.HighLights);
             _graphModel.Data.Fibers.Add(fiberVm1);
 
-            var fiberVm2 = new FiberVm() { Id = e.NewFiberId2, Node1 = _graphModel.Data.Nodes.First(n => n.Id == e.Id), Node2 = node2 };
+            var fiberVm2 = new FiberVm(e.NewFiberId2, _graphModel.Data.Nodes.First(n => n.Id == e.Id), node2);
             foreach (var pair in oldFiberVm.States)
                 fiberVm2.States.Add(pair.Key, pair.Value);
             foreach (var pair in oldFiberVm.TracesWithExceededLossCoeff)
@@ -148,7 +148,7 @@ namespace Fibertest.WpfClient
 
             _graphModel.Data.Fibers.Remove(leftFiber);
             _graphModel.Data.Fibers.Remove(rightFiber);
-            _graphModel.Data.Fibers.Add(new FiberVm() { Id = detourFiberId, Node1 = leftNode, Node2 = rightNode });
+            _graphModel.Data.Fibers.Add(new FiberVm(detourFiberId, leftNode, rightNode));
 
             var node = _graphModel.Data.Nodes.FirstOrDefault(n => n.Id == nodeId);
             if (node == null)
@@ -194,22 +194,16 @@ namespace Fibertest.WpfClient
 
         private void CreateDetourIfAbsent(NodeDetour detour)
         {
-            // var isHighlighted = _graphModel.Data.Fibers.First(f => f.States.ContainsKey(detour.TraceId)).IsHighlighted;
-
             var fiberVm = _graphModel.Data.Fibers.FirstOrDefault(f => f.Node1.Id == detour.NodeId1 && f.Node2.Id == detour.NodeId2
                                                        || f.Node2.Id == detour.NodeId1 && f.Node1.Id == detour.NodeId2);
             if (fiberVm == null)
             {
-                fiberVm = new FiberVm()
-                {
-                    Id = detour.FiberId,
-                    Node1 = _graphModel.Data.Nodes.First(m => m.Id == detour.NodeId1),
-                    Node2 = _graphModel.Data.Nodes.First(m => m.Id == detour.NodeId2),
-                };
+                fiberVm = new FiberVm(detour.FiberId,
+                    _graphModel.Data.Nodes.First(m => m.Id == detour.NodeId1),
+                    _graphModel.Data.Nodes.First(m => m.Id == detour.NodeId2));
                 _graphModel.Data.Fibers.Add(fiberVm);
             }
             fiberVm.SetState(detour.TraceId, detour.TraceState);
-            // fiberVm.IsHighlighted = isHighlighted;
         }
     }
 }

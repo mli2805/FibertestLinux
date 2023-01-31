@@ -10,10 +10,10 @@ namespace Fibertest.WpfClient
         private bool _isIncluded;
         public int PortNumber { get; set; }
         public Guid TraceId { get; set; }
-        public string TraceTitle { get; set; }
+        public string TraceTitle { get; set; } = null!;
         public TimeSpan PreciseBaseSpan { get; set; } = TimeSpan.Zero;
         public TimeSpan FastBaseSpan { get; set; } = TimeSpan.Zero;
-        public TimeSpan AdditionalBaseSpan { get; set; } = TimeSpan.Zero;
+        // public TimeSpan AdditionalBaseSpan { get; set; } = TimeSpan.Zero;
         public bool IsInCurrentUserZone { get; set; }
 
         public bool IsIncluded

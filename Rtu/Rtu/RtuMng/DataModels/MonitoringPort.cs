@@ -53,7 +53,7 @@ public class MonitoringPort
     // new port for monitoring in user's command
     public MonitoringPort(PortWithTraceDto port)
     {
-        CharonSerial = port.OtauPort.Serial;
+        CharonSerial = port.OtauPort.Serial ?? "";
         OpticalPort = port.OtauPort.OpticalPort;
         IsPortOnMainCharon = port.OtauPort.IsPortOnMainCharon;
         TraceId = port.TraceId;

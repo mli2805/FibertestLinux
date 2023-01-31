@@ -16,7 +16,7 @@ public class AccidentOnTraceV2
 
     public int AccidentLandmarkIndex;
     public double AccidentToRtuOpticalDistanceKm;
-    public string? AccidentTitle;
+    public string AccidentTitle = string.Empty;
     public double AccidentToRtuPhysicalDistanceKm;
 
     public double AccidentToLeftOpticalDistanceKm;
@@ -24,9 +24,10 @@ public class AccidentOnTraceV2
     public double AccidentToRightOpticalDistanceKm;
     public double AccidentToRightPhysicalDistanceKm;
 
-    public string? EventCode;
+    public string EventCode = null!;
     public double DeltaLen;
 
+    // could be null for accidents in first or last event
     public AccidentNeighbour? Left;
     public AccidentNeighbour? Right;
 

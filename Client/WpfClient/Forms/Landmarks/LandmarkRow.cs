@@ -12,6 +12,7 @@ namespace Fibertest.WpfClient
         public int Number { get; set; }
         public int NumberIncludingAdjustmentPoints { get; set; }
 
+        private string _nodeTitle = "";
         public string NodeTitle
         {
             get => _nodeTitle;
@@ -23,6 +24,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private string _nodeComment = "";
         public string NodeComment
         {
             get => _nodeComment;
@@ -35,15 +37,13 @@ namespace Fibertest.WpfClient
         }
 
         public Guid EquipmentId { get; set; }
-        public string EquipmentTitle { get; set; }
-        public string EquipmentType { get; set; }
-        public string Distance { get; set; }
-        public string EventNumber { get; set; }
+        public string EquipmentTitle { get; set; } = "";
+        public string EquipmentType { get; set; } = "";
+        public string Distance { get; set; } = "";
+        public string EventNumber { get; set; } = "";
 
-        private string _gpsCoors;
-        private string _nodeTitle;
-        private string _nodeComment;
 
+        private string _gpsCoors = "";
         public string GpsCoors
         {
             get => _gpsCoors;
@@ -60,10 +60,10 @@ namespace Fibertest.WpfClient
             Number = landmark.Number;
             NumberIncludingAdjustmentPoints = landmark.NumberIncludingAdjustmentPoints;
             NodeId = landmark.NodeId;
-            NodeTitle = landmark.NodeTitle;
-            NodeComment = landmark.NodeComment;
+            NodeTitle = landmark.NodeTitle ?? "";
+            NodeComment = landmark.NodeComment ?? "";
             EquipmentId = landmark.EquipmentId;
-            EquipmentTitle = landmark.EquipmentTitle;
+            EquipmentTitle = landmark.EquipmentTitle ?? "";
             EquipmentType = landmark.EquipmentType.ToLocalizedString();
             Distance = $@"{landmark.Distance: 0.000}";
             EventNumber = landmark.EventNumber == -1 ? Resources.SID_no : $@"{landmark.EventNumber}";

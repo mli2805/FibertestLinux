@@ -38,15 +38,15 @@ namespace GMap.NET
         {
             if (_server == null)
             {
-                this._port = port;
+                _port = port;
                 _server = new TcpListener(IPAddress.Any, port);
             }
             else
             {
-                if (this._port != port)
+                if (_port != port)
                 {
                     Stop();
-                    this._port = port;
+                    _port = port;
                     _server = null;
                     _server = new TcpListener(IPAddress.Any, port);
                 }

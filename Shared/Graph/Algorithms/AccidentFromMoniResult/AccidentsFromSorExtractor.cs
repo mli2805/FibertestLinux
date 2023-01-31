@@ -12,12 +12,12 @@ namespace Fibertest.Graph
         private readonly SorDataParsingReporter _sorDataParsingReporter;
         private readonly Model _writeModel;
         private readonly AccidentPlaceLocator _accidentPlaceLocator;
-        private OtdrDataKnownBlocks _sorData;
+        private OtdrDataKnownBlocks _sorData = null!;
 
         private Guid _traceId;
-        private List<Node> _nodesExcludingAdjustmentPoints;
-        private Rtu _rtu;
-        private List<Equipment> _equipmentsWithoutPointsAndRtu;
+        private List<Node> _nodesExcludingAdjustmentPoints = null!;
+        private Rtu _rtu = null!;
+        private List<Equipment> _equipmentsWithoutPointsAndRtu = null!;
 
         public AccidentsFromSorExtractor(ILogger<AccidentsFromSorExtractor> logger, Model writeModel,
             AccidentPlaceLocator accidentPlaceLocator, SorDataParsingReporter sorDataParsingReporter)
@@ -222,7 +222,7 @@ namespace Fibertest.Graph
             var node = _nodesExcludingAdjustmentPoints[landmarkIndex];
             var equipment = _equipmentsWithoutPointsAndRtu[landmarkIndex - 1];
 
-            var title = node.Title;
+            var title = node.Title ?? "";
             if (equipment.Type != EquipmentType.EmptyNode && !string.IsNullOrEmpty(equipment.Title))
                 title = title + @" / " + equipment.Title;
             return title;

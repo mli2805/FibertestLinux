@@ -20,24 +20,25 @@ namespace Fibertest.Graph
         {
             var trace = _model.Traces.First(t => t.TraceId == traceId);
 
-            var distances = GetGpsDistancesOfSegmentsBetweenLandmarks(accident, trace, out Node leftNodeVm, out Node rightNodeVm);
+            var distances = GetGpsDistancesOfSegmentsBetweenLandmarks(accident, trace, out Node? leftNodeVm, out Node? rightNodeVm);
+            if (distances == null) return;
             GetCableReserves(accident, traceId, out double leftReserveM, out double rightReserveM);
             var distanceBetweenTwoNodesOnGraphM = distances.Sum();
 
-            var opticalLengthM = (accident.Right.ToRtuOpticalDistanceKm - accident.Left.ToRtuOpticalDistanceKm) * 1000;
+            var opticalLengthM = (accident.Right!.ToRtuOpticalDistanceKm - accident.Left!.ToRtuOpticalDistanceKm) * 1000;
             var coeff = opticalLengthM / (distanceBetweenTwoNodesOnGraphM + leftReserveM + rightReserveM);
 
             var distanceToAccidentOnGraphM = (accident.AccidentToRtuOpticalDistanceKm - accident.Left.ToRtuOpticalDistanceKm) * 1000 / coeff;
 
             if (distanceToAccidentOnGraphM <= leftReserveM)
             {
-                accident.AccidentCoors = leftNodeVm.Position;
+                accident.AccidentCoors = leftNodeVm!.Position;
                 return;
             }
 
             if (distanceToAccidentOnGraphM > leftReserveM + distanceBetweenTwoNodesOnGraphM)
             {
-                accident.AccidentCoors = rightNodeVm.Position;
+                accident.AccidentCoors = rightNodeVm!.Position;
                 return;
             }
 
@@ -51,7 +52,7 @@ namespace Fibertest.Graph
 
             accident.AccidentCoors = GetPointOnBrokenSegment(trace,
                 (distances[segmentIndex] - (distancesSum - distanceToAccidentOnGraphM)) / distances[segmentIndex],
-                trace.NodeIds.IndexOf(leftNodeVm.NodeId) + segmentIndex);
+                trace.NodeIds.IndexOf(leftNodeVm!.NodeId) + segmentIndex);
         }
 
         private PointLatLng GetPointOnBrokenSegment(Trace trace, double procentOfSegmentUptoAccident, int leftNodeIndex)
@@ -69,8 +70,8 @@ namespace Fibertest.Graph
         private void GetCableReserves(AccidentOnTraceV2 accident, Guid traceId, out double leftReserveM, out double rightReserveM)
         {
             var equipmentsWithoutPointsAndRtu = _model.GetTraceEquipmentsExcludingAdjustmentPoints(traceId).ToList();
-            leftReserveM = GetCableReserve(equipmentsWithoutPointsAndRtu, accident.Left.LandmarkIndex, true);
-            rightReserveM = GetCableReserve(equipmentsWithoutPointsAndRtu, accident.Right.LandmarkIndex, false);
+            leftReserveM = GetCableReserve(equipmentsWithoutPointsAndRtu, accident.Left!.LandmarkIndex, true);
+            rightReserveM = GetCableReserve(equipmentsWithoutPointsAndRtu, accident.Right!.LandmarkIndex, false);
         }
 
         private double GetCableReserve(List<Equipment> equipmentsWithoutPointsAndRtu, int landmarkIndex, bool isLeftLandmark)
@@ -82,20 +83,20 @@ namespace Fibertest.Graph
             return isLeftLandmark ? equipment.CableReserveRight : equipment.CableReserveLeft;
         }
 
-        private List<double>? GetGpsDistancesOfSegmentsBetweenLandmarks(AccidentOnTraceV2 accident, Trace trace, out Node leftNode, out Node rightNode)
+        private List<double>? GetGpsDistancesOfSegmentsBetweenLandmarks(AccidentOnTraceV2 accident, Trace trace, out Node? leftNode, out Node? rightNode)
         {
             var withoutPoints = _model.GetTraceNodesExcludingAdjustmentPoints(trace.TraceId).ToList();
-            leftNode = _model.Nodes.FirstOrDefault(n => n.NodeId == withoutPoints[accident.Left.LandmarkIndex]);
-            rightNode = _model.Nodes.FirstOrDefault(n => n.NodeId == withoutPoints[accident.Right.LandmarkIndex]);
+            leftNode = _model.Nodes.FirstOrDefault(n => n.NodeId == withoutPoints[accident.Left!.LandmarkIndex]);
+            rightNode = _model.Nodes.FirstOrDefault(n => n.NodeId == withoutPoints[accident.Right!.LandmarkIndex]);
 
             if (leftNode == null)
             {
-                _logger.LogError(Logs.Client,$@"Node {withoutPoints[accident.Left.LandmarkIndex].First6()} not found");
+                _logger.LogError(Logs.Client,$@"Node {withoutPoints[accident.Left?.LandmarkIndex ?? -1].First6()} not found");
                 return null;
             }
             if (rightNode == null)
             {
-                _logger.LogError(Logs.Client,$@"Node {withoutPoints[accident.Right.LandmarkIndex].First6()} not found");
+                _logger.LogError(Logs.Client,$@"Node {withoutPoints[accident.Right?.LandmarkIndex ?? -1].First6()} not found");
                 return null;
             }
 

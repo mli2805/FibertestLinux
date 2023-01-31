@@ -7,7 +7,7 @@ namespace Fibertest.WpfClient
     {
         private readonly CurrentGis _currentGis;
 
-        private OneCoorViewModel _oneCoorViewModelLatitude;
+        private OneCoorViewModel _oneCoorViewModelLatitude = null!;
         public OneCoorViewModel OneCoorViewModelLatitude
         {
             get => _oneCoorViewModelLatitude;
@@ -19,7 +19,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private OneCoorViewModel _oneCoorViewModelLongitude;
+        private OneCoorViewModel _oneCoorViewModelLongitude = null!;
         public OneCoorViewModel OneCoorViewModelLongitude
         {
             get => _oneCoorViewModelLongitude;
@@ -45,8 +45,9 @@ namespace Fibertest.WpfClient
             currentGis.PropertyChanged += CurrentGpsInputMode_PropertyChanged;
         }
 
-        private void CurrentGpsInputMode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void CurrentGpsInputMode_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if (sender == null) return;
             OneCoorViewModelLatitude.CurrentGpsInputMode = ((CurrentGis) sender).GpsInputMode;
             OneCoorViewModelLongitude.CurrentGpsInputMode = ((CurrentGis) sender).GpsInputMode;
         }
@@ -59,7 +60,7 @@ namespace Fibertest.WpfClient
             OneCoorViewModelLongitude = new OneCoorViewModel(_currentGis.GpsInputMode, Coors.Lng);
         }
 
-        public string TryGetPoint(out PointLatLng point)
+        public string? TryGetPoint(out PointLatLng point)
         {
             point = new PointLatLng();
             if (!OneCoorViewModelLatitude.TryGetValue(out double lat)) return OneCoorViewModelLatitude.Error;

@@ -116,7 +116,7 @@ namespace Fibertest.WpfClient
         {
             await OneLandmarkViewModel.Cancel(OneLandmarkViewModel.BeforeNew);
             var landmark = _landmarks.First(l => l.Number == SelectedRow.Number);
-            OneLandmarkViewModel.SelectedLandmark = (Graph.Landmark)landmark.Clone();
+            OneLandmarkViewModel.SelectedLandmark = landmark.Clone();
 
             if (_isLandmarksFromBase || SelectedRow.Number == 0 || SelectedRow.Number == _landmarks.Last().Number)
             {

@@ -2,7 +2,6 @@
 using Fibertest.CharonLib;
 using Fibertest.Dto;
 using Fibertest.Utils;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace Fibertest.Rtu;

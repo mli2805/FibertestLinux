@@ -3,7 +3,7 @@ namespace GMap.NET.WindowsPresentation
 {
     using System.ComponentModel;
     using System.Windows;
-    using GMap.NET;
+    using NET;
     using System.Windows.Media;
     using System;
 
@@ -102,11 +102,11 @@ namespace GMap.NET.WindowsPresentation
         /// </summary>
         public object Tag;
 
-        System.Windows.Point offset;
+        Point offset;
         /// <summary>
         /// offset of marker
         /// </summary>
-        public System.Windows.Point Offset
+        public Point Offset
         {
             get { return offset; }
             set

@@ -38,7 +38,7 @@ namespace Fibertest.WpfClient
 
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            ClientVersion = fvi.FileVersion;
+            ClientVersion = fvi.FileVersion ?? "";
         }
 
         protected override void OnViewLoaded(object view)
@@ -47,7 +47,8 @@ namespace Fibertest.WpfClient
 
             Rtus.Clear();
             foreach (var rtu in _readModel.Rtus)
-                Rtus.Add(new RtuLine(rtu.Title, rtu.Mfid, rtu.Serial, rtu.RtuMaker == RtuMaker.IIT ? rtu.Version : rtu.Version2));
+                Rtus.Add(new RtuLine(rtu.Title, rtu.Mfid ?? "", rtu.Serial ?? "",
+                    rtu.RtuMaker == RtuMaker.IIT ? rtu.Version ?? ""  : rtu.Version2 ?? ""));
         }
 
         public async void Close()

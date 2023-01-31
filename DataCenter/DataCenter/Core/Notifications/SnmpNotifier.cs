@@ -80,7 +80,7 @@ public class SnmpNotifier
         var accidentType = $"{accident.AccidentSeriousness.ToLocalizedString()} ({accident.OpticalTypeOfAccident.ToLetter()})";
         var data = new List<KeyValuePair<FtTrapProperty, string>>()
         {
-            new KeyValuePair<FtTrapProperty, string>(FtTrapProperty.AccidentNodeTitle, accident.AccidentTitle ?? ""),
+            new KeyValuePair<FtTrapProperty, string>(FtTrapProperty.AccidentNodeTitle, accident.AccidentTitle),
             new KeyValuePair<FtTrapProperty, string>(FtTrapProperty.AccidentType, accidentType),
             new KeyValuePair<FtTrapProperty, string>(FtTrapProperty.AccidentGps, accident.AccidentCoors.ToString()),
             new KeyValuePair<FtTrapProperty, string>(FtTrapProperty.AccidentToRtuDistanceKm,

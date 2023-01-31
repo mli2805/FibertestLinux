@@ -50,7 +50,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public async Task<List<Guid>> FindPath(Guid start, Guid end)
+        public async Task<List<Guid>?> FindPath(Guid start, Guid end)
         {
             await Task.Delay(1);
             var path = new List<Guid> {start};

@@ -6,10 +6,10 @@ namespace Fibertest.WpfClient
 {
     public class MenuItemVm : PropertyChangedBase
     {
-        public string Header { get; set; }
+        public string Header { get; set; } = null!;
         public List<MenuItemVm> Children { get; private set; }
-        public ICommand Command { get; set; }
-        public object CommandParameter { get; set; }
+        public ICommand Command { get; set; } = null!;
+        public object CommandParameter { get; set; } = null!;
 
         private bool _isChecked;
         public bool IsChecked

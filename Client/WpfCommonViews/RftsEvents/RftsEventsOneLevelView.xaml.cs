@@ -41,7 +41,7 @@ namespace Fibertest.WpfCommonViews
             for (int i = 1; i < cc; i++)
             {
                 var text = (string?) rowView.Row.ItemArray[i];
-                if (text != Fibertest.StringResources.Resources.SID_pass && text != "")
+                if (text != StringResources.Resources.SID_pass && text != "")
                 {
                     DataGridCell? cell = GetCell(row, i);
                     if (cell != null)

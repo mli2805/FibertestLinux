@@ -6,29 +6,30 @@ namespace Fibertest.Utils;
 
 public static class SorData
 {
-    public static string TryGetFromBytes(byte[] buffer, out OtdrDataKnownBlocks? otdrDataKnownBlocks)
+    public static string TryGetFromBytes(byte[]? buffer, out OtdrDataKnownBlocks? otdrDataKnownBlocks)
     {
-        using (var stream = new MemoryStream(buffer))
+        if (buffer == null)
         {
-            try
-            {
-                otdrDataKnownBlocks = new OtdrDataKnownBlocks(new OtdrReader(stream).Data);
-                return "";
-            }
-            catch (Exception e)
-            {
-                otdrDataKnownBlocks = null;
-                return e.Message;
-            }
+            otdrDataKnownBlocks = null;
+            return "buffer is null";
+        }
+        using var stream = new MemoryStream(buffer);
+        try
+        {
+            otdrDataKnownBlocks = new OtdrDataKnownBlocks(new OtdrReader(stream).Data);
+            return "";
+        }
+        catch (Exception e)
+        {
+            otdrDataKnownBlocks = null;
+            return e.Message;
         }
     }
 
     public static OtdrDataKnownBlocks FromBytes(byte[] buffer)
     {
-        using (var stream = new MemoryStream(buffer))
-        {
-            return new OtdrDataKnownBlocks(new OtdrReader(stream).Data);
-        }
+        using var stream = new MemoryStream(buffer);
+        return new OtdrDataKnownBlocks(new OtdrReader(stream).Data);
     }
 
     public static byte[] GetRidOfBase(byte[] sorbytes)
@@ -41,11 +42,9 @@ public static class SorData
 
     public static byte[] ToBytes(this OtdrDataKnownBlocks sorData)
     {
-        using (var stream = new MemoryStream())
-        {
-            sorData.Save(stream);
-            return stream.ToArray();
-        }
+        using var stream = new MemoryStream();
+        sorData.Save(stream);
+        return stream.ToArray();
     }
 
     public static void Save(this OtdrDataKnownBlocks sorData, string filename)
@@ -55,10 +54,8 @@ public static class SorData
         var folder = Path.GetDirectoryName(filename);
         if (folder != null && !Directory.Exists(folder))
             Directory.CreateDirectory(folder);
-        using (FileStream fs = File.Create(filename))
-        {
-            sorData.Save(fs);
-        }
+        using FileStream fs = File.Create(filename);
+        sorData.Save(fs);
     }
 
     private const double LightSpeed = 0.000299792458; // km/ns
