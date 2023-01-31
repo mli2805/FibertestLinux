@@ -11,6 +11,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Buttons\CloseChildren.png" />
+	  <None Remove="Resources\Buttons\Collapse.png" />
+	  <None Remove="Resources\Buttons\Expand.png" />
+	  <None Remove="Resources\Buttons\Extinguish.png" />
+	  <None Remove="Resources\Buttons\half_eye.png" />
+	  <None Remove="Resources\Buttons\HidePorts.png" />
+	  <None Remove="Resources\Buttons\left.png" />
+	  <None Remove="Resources\Buttons\right.png" />
+	  <None Remove="Resources\Buttons\ShowPorts.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Autofac" Version="6.5.0" />
 		<PackageReference Include="Caliburn.Micro" Version="4.0.212" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
@@ -31,6 +43,18 @@
 	  <Reference Include="Fibertest.OtdrDataFormat">
 	    <HintPath>..\..\OtdrDataFormat\Fibertest.OtdrDataFormat.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Buttons\CloseChildren.png" />
+	  <Resource Include="Resources\Buttons\Collapse.png" />
+	  <Resource Include="Resources\Buttons\Expand.png" />
+	  <Resource Include="Resources\Buttons\Extinguish.png" />
+	  <Resource Include="Resources\Buttons\half_eye.png" />
+	  <Resource Include="Resources\Buttons\HidePorts.png" />
+	  <Resource Include="Resources\Buttons\left.png" />
+	  <Resource Include="Resources\Buttons\right.png" />
+	  <Resource Include="Resources\Buttons\ShowPorts.png" />
 	</ItemGroup>
 
 </Project>
