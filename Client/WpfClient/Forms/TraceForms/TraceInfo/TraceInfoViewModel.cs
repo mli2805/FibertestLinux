@@ -13,6 +13,7 @@ using Fibertest.OtdrDataFormat;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -21,7 +22,7 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
         private readonly CurrentGis _currentGis;
@@ -65,13 +66,13 @@ namespace Fibertest.WpfClient
         public bool IsCreatedSuccessfully { get; set; }
 
         public TraceInfoViewModel(ILifetimeScope globalScope, Model readModel, CurrentUser currentUser,
-            IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager,
+            GrpcC2DRequests grpcC2DRequests, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager,
             CurrentGis currentGis, GraphGpsCalculator graphGpsCalculator)
         {
             _globalScope = globalScope;
             _readModel = readModel;
             _currentUser = currentUser;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _c2DWcfCommonManager = c2DWcfCommonManager;
             _windowManager = windowManager;
             _currentGis = currentGis;
@@ -223,7 +224,7 @@ namespace Fibertest.WpfClient
                     "",
                     Resources.SID_Define_trace_again_,
                 }, 0);
-                _windowManager.ShowDialogWithAssignedOwner(errVm);
+                await _windowManager.ShowDialogWithAssignedOwner(errVm);
                 return;
             }
             var cmd = new AddTrace(Model.TraceId, Model.Rtu.Id, Model.TraceNodes, Model.TraceEquipments, fiberIds)
@@ -232,17 +233,17 @@ namespace Fibertest.WpfClient
                 Comment = Model.Comment
             };
 
-            string message;
+            RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                message = await _c2DWcfManager.SendCommandAsObj(cmd);
+                result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
 
-            if (message == null)
+            if (result.ReturnCode == ReturnCode.Ok)
                 IsCreatedSuccessfully = true;
             else
-                _windowManager.ShowDialogWithAssignedOwner(
-                    new MyMessageBoxViewModel(MessageType.Error, @"AddTrace: " + message));
+                await _windowManager.ShowDialogWithAssignedOwner(
+                    new MyMessageBoxViewModel(MessageType.Error, @"AddTrace: " + result.ErrorMessage));
         }
 
         private async Task SendUpdateTraceCommand()
@@ -256,7 +257,7 @@ namespace Fibertest.WpfClient
             };
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                await _c2DWcfManager.SendCommandAsObj(cmd);
+                await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
 
         }

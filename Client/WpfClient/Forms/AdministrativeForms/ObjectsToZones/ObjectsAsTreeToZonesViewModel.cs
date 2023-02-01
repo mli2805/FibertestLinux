@@ -5,21 +5,22 @@ using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class ObjectsAsTreeToZonesViewModel : Screen
     {
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         public Model ReadModel { get; }
         public List<ObjectToZonesModel> Rows { get; set; } = new  List<ObjectToZonesModel>();
-        public ObjectToZonesModel SelectedRow { get; set; }
+        public ObjectToZonesModel? SelectedRow { get; set; }
 
         public bool IsEnabled { get; set; }
 
-        public ObjectsAsTreeToZonesViewModel(Model readModel, CurrentUser currentUser, IWcfServiceDesktopC2D c2DWcfManager)
+        public ObjectsAsTreeToZonesViewModel(Model readModel, CurrentUser currentUser, GrpcC2DRequests grpcC2DRequests)
         {
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             ReadModel = readModel;
             IsEnabled = currentUser.Role <= Role.Root;
 
@@ -113,7 +114,8 @@ namespace Fibertest.WpfClient
 
         public async void Save()
         {
-            await _c2DWcfManager.SendCommandAsObj(PrepareCommand());
+            var cmd = PrepareCommand();
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
 
             await TryCloseAsync();
         }

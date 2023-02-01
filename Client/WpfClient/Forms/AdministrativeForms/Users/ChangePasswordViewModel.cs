@@ -4,13 +4,14 @@ using AutoMapper;
 using Caliburn.Micro;
 using Fibertest.Graph;
 using Fibertest.StringResources;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class ChangePasswordViewModel : Screen
     {
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
-        private User _user;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private User _user = null!;
 
         public PasswordViewModel OldPasswordVm { get; set; } = new PasswordViewModel();
 
@@ -65,7 +66,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _explanation;
+        private string _explanation = "";
 
         public string Explanation
         {
@@ -78,9 +79,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ChangePasswordViewModel(IWcfServiceDesktopC2D c2DWcfManager)
+        public ChangePasswordViewModel(GrpcC2DRequests grpcC2DRequests)
         {
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
         }
 
         public void Initialize(User user)
@@ -98,12 +99,12 @@ namespace Fibertest.WpfClient
             NewPasswordVm2.PropertyChanged += NewPasswordVm2_PropertyChanged;
         }
 
-        private void NewPasswordVm2_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void NewPasswordVm2_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             IsButtonSaveEnabled = IsPasswordValid();
         }
 
-        private void NewPasswordVm1_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void NewPasswordVm1_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             IsButtonSaveEnabled = IsPasswordValid();
         }
@@ -123,7 +124,7 @@ namespace Fibertest.WpfClient
                 cfg => cfg.AddProfile<MappingModelToCmdProfile>()).CreateMapper();
             var cmd = mapper.Map<UpdateUser>(_user);
             cmd.EncodedPassword = NewPasswordVm1.Password.GetHashString();
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
             await TryCloseAsync();
         }
 
@@ -141,8 +142,8 @@ namespace Fibertest.WpfClient
                 {
                     case "Password1":
                     case "Password2":
-                        if (string.IsNullOrEmpty(NewPasswordVm1.Password?.Trim())
-                            || string.IsNullOrEmpty(NewPasswordVm2.Password?.Trim()))
+                        if (string.IsNullOrEmpty(NewPasswordVm1.Password.Trim())
+                            || string.IsNullOrEmpty(NewPasswordVm2.Password.Trim()))
                             errorMessage = Resources.SID_Password_should_be_set;
                         else if (NewPasswordVm1.Password != NewPasswordVm2.Password)
                             errorMessage = Resources.SID_Passwords_don_t_match;
@@ -155,7 +156,7 @@ namespace Fibertest.WpfClient
 
         private bool IsPasswordValid()
         {
-            if (string.IsNullOrEmpty(NewPasswordVm1.Password?.Trim())) return false;
+            if (string.IsNullOrEmpty(NewPasswordVm1.Password.Trim())) return false;
             return NewPasswordVm1.Password == NewPasswordVm2.Password;
         }
 

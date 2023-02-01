@@ -25,7 +25,7 @@ public class C2RCommandsProcessor
         new() { TypeNameHandling = TypeNameHandling.All };
 
     private readonly DoubleAddress _serverDoubleAddress;
-    public C2RCommandsProcessor(IWritableOptions<ServerGeneralConfig> config, ILogger<C2RCommandsProcessor> logger,
+    public C2RCommandsProcessor(IWritableConfig<DataCenterConfig> config, ILogger<C2RCommandsProcessor> logger,
         Model writeModel, BaseRefsCheckerOnServer baseRefsCheckerOnServer,
         RtuStationsRepository rtuStationsRepository, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
         RtuResponseApplier rtuResponseApplier)
@@ -37,7 +37,7 @@ public class C2RCommandsProcessor
         _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
         _rtuResponseApplier = rtuResponseApplier;
 
-        _serverDoubleAddress = config.Value.ServerDoubleAddress;
+        _serverDoubleAddress = config.Value.General.ServerDoubleAddress;
     }
 
     /// <summary>

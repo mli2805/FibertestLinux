@@ -99,7 +99,12 @@ public class C2DService : c2d.c2dBase
             RegisterHeartbeatDto dto => dto,
             SetRtuOccupationDto dto => dto,
 
+            GetDiskSpaceDto dto => dto,
             GetEventsDto dto => dto,
+            GetSerializedModelParamsDto dto => dto,
+            GetModelPortionDto dto => dto,
+
+            ChangeDcConfigDto dto => dto,
             _ => null
         };
     }

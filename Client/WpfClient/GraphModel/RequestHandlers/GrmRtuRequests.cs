@@ -44,10 +44,10 @@ namespace Fibertest.WpfClient
             await _windowManager.ShowDialogWithAssignedOwner(vm);
         }
 
-        public async Task<string> RemoveRtu(RequestRemoveRtu request)
+        public async Task RemoveRtu(RequestRemoveRtu request)
         {
             var rtu = _model.Rtus.First(r => r.NodeId == request.NodeId);
-            return await _rtuRemover.Fire(rtu);
+            await _rtuRemover.Fire(rtu);
         }
 
 

@@ -12,6 +12,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Trace = Fibertest.Graph.Trace;
 
@@ -25,7 +26,7 @@ namespace Fibertest.WpfClient
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceDesktopC2D _desktopC2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly FailedAutoBasePdfProvider _failedAutoBasePdfProvider;
         private readonly MonitoringSettingsModelFactory _monitoringSettingsModelFactory;
@@ -66,7 +67,8 @@ namespace Fibertest.WpfClient
 
         public RtuAutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, CurrentUser currentUser,
             IDispatcherProvider dispatcherProvider, Model readModel, IWindowManager windowManager,
-            IWcfServiceDesktopC2D desktopC2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager,
+            GrpcC2DRequests grpcC2DRequests,
+            IWcfServiceCommonC2D commonC2DWcfManager,
             FailedAutoBasePdfProvider failedAutoBasePdfProvider,
             MonitoringSettingsModelFactory monitoringSettingsModelFactory)
         {
@@ -76,7 +78,7 @@ namespace Fibertest.WpfClient
             _dispatcherProvider = dispatcherProvider;
             _readModel = readModel;
             _windowManager = windowManager;
-            _desktopC2DWcfManager = desktopC2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _commonC2DWcfManager = commonC2DWcfManager;
             _failedAutoBasePdfProvider = failedAutoBasePdfProvider;
             _monitoringSettingsModelFactory = monitoringSettingsModelFactory;
@@ -302,7 +304,7 @@ namespace Fibertest.WpfClient
                 }
 
                 var mb = new MyMessageBoxViewModel(MessageType.Information, strs);
-                _windowManager.ShowDialogWithAssignedOwner(mb);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
             }
 
             WholeRtuMeasurementsExecutor.Model.IsEnabled = true;
@@ -328,7 +330,8 @@ namespace Fibertest.WpfClient
                 if (resultDto.ReturnCode == ReturnCode.MonitoringSettingsAppliedSuccessfully)
                 {
                     var cmd = dto.CreateCommand();
-                    return await _desktopC2DWcfManager.SendCommandAsObj(cmd);
+                    var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                    return result.ReturnCode == ReturnCode.Ok ? "" : result.ErrorMessage!;
                 }
                 else
                 {

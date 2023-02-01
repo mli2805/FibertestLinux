@@ -5,6 +5,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -12,25 +13,25 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
 
-        public RtuRemover(ILifetimeScope globalScope, IWindowManager windowManager, IWcfServiceDesktopC2D c2DWcfManager)
+        public RtuRemover(ILifetimeScope globalScope, IWindowManager windowManager, GrpcC2DRequests grpcC2DRequests)
         {
             _globalScope = globalScope;
             _windowManager = windowManager;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
         }
 
-        public async Task<string> Fire(Rtu rtu)
+        public async Task Fire(Rtu rtu)
         {
             if (!await _globalScope.Resolve<IRtuHolder>().SetRtuOccupationState(rtu.Id, rtu.Title, RtuOccupation.RemoveRtu))
-                return @"RTU is busy";
+                return;
 
             var vm = new MyMessageBoxViewModel(MessageType.Confirmation, string.Format(Resources.SID_Remove_RTU___0____, rtu.Title));
             await _windowManager.ShowDialogWithAssignedOwner(vm);
-            if (!vm.IsAnswerPositive) return null;
+            if (!vm.IsAnswerPositive) return;
             var cmd = new RemoveRtu() { RtuId = rtu.Id, RtuNodeId = rtu.NodeId };
-            return await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
     }
 }

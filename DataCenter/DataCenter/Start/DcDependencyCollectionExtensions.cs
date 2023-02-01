@@ -1,4 +1,6 @@
+using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.Utils;
 using Fibertest.Utils.Snmp;
 
 namespace Fibertest.DataCenter;
@@ -8,11 +10,18 @@ public static class DcDependencyCollectionExtensions
     public static IServiceCollection AddDependencies(this IServiceCollection services)
     {
         return services
+            .AddConfigAsInstance()
             .AddBootAndBackgroundServices()
             .AddGlobalVars()
             .AddDbRepositories()
             .AddNotifiers()
             .AddOther();
+    }
+
+    private static IServiceCollection AddConfigAsInstance(this IServiceCollection services)
+    {
+        return services
+            .AddSingleton<IWritableConfig<DataCenterConfig>>(s => new WritableConfig<DataCenterConfig>("dc.json"));
     }
 
     private static IServiceCollection AddBootAndBackgroundServices(this IServiceCollection services)

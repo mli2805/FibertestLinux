@@ -8,6 +8,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -15,7 +16,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
 
         private ObservableCollection<Zone> _rows;
@@ -49,11 +50,11 @@ namespace Fibertest.WpfClient
         public bool IsEnabled { get; set; }
 
         public ZonesViewModel(ILifetimeScope globalScope, Model readModel, EventArrivalNotifier eventArrivalNotifier,
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager, CurrentUser currentUser)
+            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
             Rows = new ObservableCollection<Zone>(readModel.Zones);
             SelectedZone = Rows.First();
@@ -61,7 +62,7 @@ namespace Fibertest.WpfClient
             IsEnabled = currentUser.Role <= Role.Root;
         }
 
-        private void _eventArrivalNotifier_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void _eventArrivalNotifier_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Rows = new ObservableCollection<Zone>(_readModel.Zones);
         }
@@ -90,7 +91,8 @@ namespace Fibertest.WpfClient
             if (! await ConfirmZoneRemove()) return;
 
             var cmd = new RemoveZone() { ZoneId = SelectedZone.ZoneId };
-            if (await _c2DWcfManager.SendCommandAsObj(cmd) == null)
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            if (result.ReturnCode == ReturnCode.Ok)
             {
                 var zone = SelectedZone;
                 SelectedZone = Rows.First();

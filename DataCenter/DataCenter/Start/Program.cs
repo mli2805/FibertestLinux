@@ -19,10 +19,6 @@ public class Program
                 options.ListenAnyIP((int)TcpPorts.ServerListenToRtu, o => o.Protocols = HttpProtocols.Http2);
                 // http
                 options.ListenAnyIP((int)TcpPorts.WebApiListenTo, o => o.Protocols = HttpProtocols.Http1);
-            })
-            .ConfigureAppConfiguration((_, configurationBuilder) =>
-            {
-               configurationBuilder.Configure();
             });
 
         // Add services to the container.
@@ -33,8 +29,7 @@ public class Program
         builder.Services.AddControllers();
 
         builder.Services
-            .AddConfig(builder.Configuration)
-            .AddDependencies();
+           .AddDependencies();
 
         var logLevel = builder.Configuration.GetSection("General")["LogLevel"];
         Logger logger = LoggerConfigurationFactory

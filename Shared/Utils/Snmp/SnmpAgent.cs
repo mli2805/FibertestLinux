@@ -8,10 +8,10 @@ namespace Fibertest.Utils.Snmp;
 
 public class SnmpAgent
 {
-    private readonly IWritableOptions<SnmpConfig> _config;
+    private readonly IWritableConfig<DataCenterConfig> _config;
     private readonly ILogger<SnmpAgent> _logger;
 
-    public SnmpAgent(IWritableOptions<SnmpConfig> config, ILogger<SnmpAgent> logger)
+    public SnmpAgent(IWritableConfig<DataCenterConfig> config, ILogger<SnmpAgent> logger)
     {
         _config = config;
         _logger = logger;
@@ -19,13 +19,13 @@ public class SnmpAgent
 
     public void SaveSnmpSettings(SnmpConfig dto)
     {
-        _config.Update(c =>c.FillIn(dto));
+        _config.Update(c =>c.Snmp.FillIn(dto));
     }
 
     public bool SendTestTrap()
     {
         var trapData = CreateTestTrapData();
-        if (_config.Value.SnmpTrapVersion == "v1")
+        if (_config.Value.Snmp.SnmpTrapVersion == "v1")
             return SendSnmpV1Trap(trapData, FtTrapType.TestTrap);
         return false;
     }
@@ -35,11 +35,11 @@ public class SnmpAgent
         try
         {
             TrapAgent trapAgent = new TrapAgent();
-            trapAgent.SendV1Trap(new IpAddress(_config.Value.SnmpReceiverIp),
-                _config.Value.SnmpReceiverPort,
-                _config.Value.SnmpCommunity,
-                new Oid(_config.Value.EnterpriseOid),
-                new IpAddress(_config.Value.SnmpAgentIp),
+            trapAgent.SendV1Trap(new IpAddress(_config.Value.Snmp.SnmpReceiverIp),
+                _config.Value.Snmp.SnmpReceiverPort,
+                _config.Value.Snmp.SnmpCommunity,
+                new Oid(_config.Value.Snmp.EnterpriseOid),
+                new IpAddress(_config.Value.Snmp.SnmpAgentIp),
                 6,
                 (int)trapType, // my trap type 
                 12345678, // system UpTime in 0,1sec
@@ -59,8 +59,8 @@ public class SnmpAgent
         try
         {
             TrapAgent trapAgent = new TrapAgent();
-            trapAgent.SendV2Trap(new IpAddress(_config.Value.SnmpReceiverIp),
-                _config.Value.SnmpReceiverPort,
+            trapAgent.SendV2Trap(new IpAddress(_config.Value.Snmp.SnmpReceiverIp),
+                _config.Value.Snmp.SnmpReceiverPort,
                 "public",
                 upTime,
                 trapObjOid,
@@ -80,8 +80,8 @@ public class SnmpAgent
         var trapData = new VbCollection();
         foreach (KeyValuePair<FtTrapProperty, string> pair in data)
         {
-            trapData.Add(new Oid(_config.Value.EnterpriseOid + "." + (int)pair.Key),
-                new OctetString(EncodeString(pair.Value, _config.Value.SnmpEncoding)));
+            trapData.Add(new Oid(_config.Value.Snmp.EnterpriseOid + "." + (int)pair.Key),
+                new OctetString(EncodeString(pair.Value, _config.Value.Snmp.SnmpEncoding)));
         }
         return SendSnmpV1Trap(trapData, trapType);
     }
@@ -90,13 +90,13 @@ public class SnmpAgent
     {
         var trapData = new VbCollection();
 
-        trapData.Add(new Oid(_config.Value.EnterpriseOid + "." + (int)FtTrapProperty.TestString),
-            new OctetString(EncodeString("Test string with Русский язык.", _config.Value.SnmpEncoding)));
-        trapData.Add(new Oid(_config.Value.EnterpriseOid + "." + (int)FtTrapProperty.EventRegistrationTime),
+        trapData.Add(new Oid(_config.Value.Snmp.EnterpriseOid + "." + (int)FtTrapProperty.TestString),
+            new OctetString(EncodeString("Test string with Русский язык.", _config.Value.Snmp.SnmpEncoding)));
+        trapData.Add(new Oid(_config.Value.Snmp.EnterpriseOid + "." + (int)FtTrapProperty.EventRegistrationTime),
             new OctetString(DateTime.Now.ToString("G")));
-        trapData.Add(new Oid(_config.Value.EnterpriseOid + "." + (int)FtTrapProperty.TestInt), new Integer32(412));
+        trapData.Add(new Oid(_config.Value.Snmp.EnterpriseOid + "." + (int)FtTrapProperty.TestInt), new Integer32(412));
         var doubleValue = 43.0319;
-        trapData.Add(new Oid(_config.Value.EnterpriseOid + "." + (int)FtTrapProperty.TestDouble),
+        trapData.Add(new Oid(_config.Value.Snmp.EnterpriseOid + "." + (int)FtTrapProperty.TestDouble),
             new OctetString(doubleValue.ToString(CultureInfo.CurrentUICulture)));
         return trapData;
     }

@@ -6,6 +6,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -13,7 +14,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
 
         public string NodeCountStr { get; set; }
@@ -22,11 +23,12 @@ namespace Fibertest.WpfClient
         public bool IsEnabled { get; set; }
 
         public GraphOptimizationViewModel(ILifetimeScope globalScope, CurrentUser currentUser, Model readModel,
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager)
+            GrpcC2DRequests grpcC2DRequests,
+            IWindowManager windowManager)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
 
             IsEnabled = currentUser.Role <= Role.Root;
@@ -54,17 +56,17 @@ namespace Fibertest.WpfClient
                     Resources.SID_If_you_click_OK_now__the_data_will_be_permanently_deleted,
                     Resources.SID_with_no_possibility_to_restore_them_,
                 }, 0);
-            _windowManager.ShowDialogWithAssignedOwner(vm2);
+            await _windowManager.ShowDialogWithAssignedOwner(vm2);
             if (!vm2.IsAnswerPositive) return;
 
-            string result;
+            RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _c2DWcfManager.SendCommandAsObj(new RemoveUnused());
+                result = await _grpcC2DRequests.SendEventSourcingCommand(new RemoveUnused());
             }
 
-            var vm = !string.IsNullOrEmpty(result)
-                ? new MyMessageBoxViewModel(MessageType.Error, string.Format(Resources.SID_Graph_of_traces_optimization_failed___0_, result))
+            var vm = result.ReturnCode != ReturnCode.Ok
+                ? new MyMessageBoxViewModel(MessageType.Error, string.Format(Resources.SID_Graph_of_traces_optimization_failed___0_, result.ErrorMessage))
                 : new MyMessageBoxViewModel(MessageType.Information, Resources.SID_Successfully_optimized_graph_of_traces_);
             await _windowManager.ShowDialogWithAssignedOwner(vm);
 

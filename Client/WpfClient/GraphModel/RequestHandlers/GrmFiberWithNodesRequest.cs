@@ -7,18 +7,19 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class GrmFiberWithNodesRequest
     {
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly Model _model;
         private readonly IWindowManager _windowManager;
 
-        public GrmFiberWithNodesRequest(IWcfServiceDesktopC2D c2DWcfManager, Model model, IWindowManager windowManager)
+        public GrmFiberWithNodesRequest(GrpcC2DRequests grpcC2DRequests, Model model, IWindowManager windowManager)
         {
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _model = model;
             _windowManager = windowManager;
         }
@@ -28,12 +29,11 @@ namespace Fibertest.WpfClient
             var cmd = await PrepareCommand(request);
             if (cmd == null)
                 return;
-            var message =
-                await _c2DWcfManager.SendCommandAsObj(cmd);
-            if (message != null)
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
             {
                 await _windowManager.ShowDialogWithAssignedOwner(
-                    new MyMessageBoxViewModel(MessageType.Error, @"Graph AddFiberWithNodes: " + message));
+                    new MyMessageBoxViewModel(MessageType.Error, @"Graph AddFiberWithNodes: " + result.ErrorMessage));
             }
         }
 

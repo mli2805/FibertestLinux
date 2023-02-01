@@ -8,13 +8,15 @@ namespace Fibertest.DataCenter;
 
 public sealed class Boot : IHostedService
 {
-    private readonly IOptions<ServerGeneralConfig> _generalConfig;
+    // private readonly IOptions<ServerGeneralConfig> _generalConfig;
+    private readonly IWritableConfig<DataCenterConfig> _config;
     private readonly ILogger<Boot> _logger;
     private readonly EventStoreService _eventStoreService;
 
-    public Boot(IOptions<ServerGeneralConfig> generalConfig, ILogger<Boot> logger, EventStoreService eventStoreService)
+    public Boot(IWritableConfig<DataCenterConfig> config, ILogger<Boot> logger, EventStoreService eventStoreService)
     {
-        _generalConfig = generalConfig;
+        // _generalConfig = generalConfig;
+        _config = config;
         _logger = logger;
         _eventStoreService = eventStoreService;
     }
@@ -31,7 +33,7 @@ public sealed class Boot : IHostedService
         _logger.LogInfo(Logs.DataCenter, $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
         _logger.LogInfo(Logs.DataCenter, 
-            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");
+            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_config.Value.General.LogLevel)}");
 
         await _eventStoreService.InitializeBothDb();
     }

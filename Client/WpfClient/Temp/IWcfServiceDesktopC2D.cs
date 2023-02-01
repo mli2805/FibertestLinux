@@ -16,20 +16,20 @@ namespace Fibertest.WpfClient
         #region Event sourcing
         Task<int> SendCommands(List<string> jsons, string username, string clientIp); // especially for Migrator.exe
         Task<int> SendCommandsAsObjs(List<object> cmds);
-        Task<string> SendCommandAsObj(object cmd);
+        // Task<string> SendCommandAsObj(object cmd);
         Task<string> SendCommand(string json, string username, string clientIp);
         Task<string[]> GetEvents(GetEventsDto dto);
-        Task<SerializedModelDto> GetModelDownloadParams(GetSnapshotDto dto);
+        // Task<SerializedModelDto> GetModelDownloadParams(GetSerializedModelParamsDto dto);
         Task<byte[]> GetModelPortion(int portionOrdinal);
         #endregion
         
         Task<bool> RemoveUnused();
 
         #region Settings
-        Task<bool> SaveSmtpSettings(SmtpConfig dto);
-        Task<bool> SaveAndTestSnmpSettings(SnmpConfig dto);
-        Task<bool> SaveGisMode(bool isMapVisible);
-        Task<bool> SaveGsmComPort(string comPort);
+        // Task<bool> SaveSmtpSettings(SmtpConfig dto);
+        // Task<bool> SaveAndTestSnmpSettings(SnmpConfig dto);
+        // Task<bool> SaveGisMode(bool isMapVisible);
+        // Task<bool> SaveGsmComPort(string comPort);
         Task<bool> SendTest(string to, NotificationType notificationType);
         #endregion
     }
@@ -71,10 +71,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<string> SendCommandAsObj(object cmd)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<string> SendCommandAsObj(object cmd)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<string> SendCommand(string json, string username, string clientIp)
         {
@@ -86,10 +86,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<SerializedModelDto> GetModelDownloadParams(GetSnapshotDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<SerializedModelDto> GetModelDownloadParams(GetSerializedModelParamsDto dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<byte[]> GetModelPortion(int portionOrdinal)
         {
@@ -101,25 +101,25 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> SaveSmtpSettings(SmtpConfig dto)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<bool> SaveAndTestSnmpSettings(SnmpConfig dto)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<bool> SaveGisMode(bool isMapVisible)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<bool> SaveGsmComPort(string comPort)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<bool> SaveSmtpSettings(SmtpConfig dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
+        //
+        // public Task<bool> SaveAndTestSnmpSettings(SnmpConfig dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
+        //
+        // public Task<bool> SaveGisMode(bool isMapVisible)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
+        //
+        // public Task<bool> SaveGsmComPort(string comPort)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<bool> SendTest(string to, NotificationType notificationType)
         {

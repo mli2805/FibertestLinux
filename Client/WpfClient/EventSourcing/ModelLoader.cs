@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.Utils;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -11,14 +12,14 @@ namespace Fibertest.WpfClient
     {
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly GraphReadModel _graphReadModel;
         private readonly ZoneEventsOnTreeExecutor _zoneEventsOnTreeExecutor;
         private readonly OpticalEventsDoubleViewModel _opticalEventsDoubleViewModel;
         private readonly NetworkEventsDoubleViewModel _networkEventsDoubleViewModel;
         private readonly BopNetworkEventsDoubleViewModel _bopNetworkEventsDoubleViewModel;
 
-        public ModelLoader(ILogger logger, Model readModel, IWcfServiceDesktopC2D c2DWcfManager, GraphReadModel graphReadModel,
+        public ModelLoader(ILogger logger, Model readModel, GrpcC2DRequests grpcC2DRequests, GraphReadModel graphReadModel,
             ZoneEventsOnTreeExecutor zoneEventsOnTreeExecutor,
             OpticalEventsDoubleViewModel opticalEventsDoubleViewModel,
             NetworkEventsDoubleViewModel networkEventsDoubleViewModel,
@@ -26,7 +27,7 @@ namespace Fibertest.WpfClient
         {
             _logger = logger;
             _readModel = readModel;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _graphReadModel = graphReadModel;
             _zoneEventsOnTreeExecutor = zoneEventsOnTreeExecutor;
             _opticalEventsDoubleViewModel = opticalEventsDoubleViewModel;
@@ -39,19 +40,23 @@ namespace Fibertest.WpfClient
             try
             {
                 _logger.LogInfo(Logs.Client,@"Downloading model...");
-                var dto = await _c2DWcfManager.GetModelDownloadParams(new GetSnapshotDto());
+                var paramsDto =
+                    await _grpcC2DRequests.SendAnyC2DRequest<GetSerializedModelParamsDto, SerializedModelDto>(new GetSerializedModelParamsDto());
                 _logger.LogInfo(Logs.Client,
-                    $@"Model size is {dto.Size} in {dto.PortionsCount} portions, last event included {dto.LastIncludedEvent}");
+                    $@"Model size is {paramsDto.Size} in {paramsDto.PortionsCount} portions, last event included {paramsDto.LastIncludedEvent}");
 
-                var bb = new byte[dto.Size];
+                var bb = new byte[paramsDto.Size];
                 var offset = 0;
 
-                for (int i = 0; i < dto.PortionsCount; i++)
+                for (int i = 0; i < paramsDto.PortionsCount; i++)
                 {
-                    var portion = await _c2DWcfManager.GetModelPortion(i);
-                    portion.CopyTo(bb, offset);
-                    offset += portion.Length;
-                    _logger.LogInfo(Logs.Client,$@"portion {i}  {portion.Length} bytes received");
+
+                    var result =
+                        await _grpcC2DRequests.SendAnyC2DRequest<GetModelPortionDto, SerializedModelPortionDto>(
+                            new GetModelPortionDto(i));
+                    result.Bytes.CopyTo(bb, offset);
+                    offset += result.Bytes.Length;
+                    _logger.LogInfo(Logs.Client,$@"portion {i}  {result.Bytes.Length} bytes received");
                 }
 
                 await _readModel.Deserialize(_logger, bb);
@@ -62,7 +67,7 @@ namespace Fibertest.WpfClient
                 _networkEventsDoubleViewModel.RenderNetworkEvents();
                 _bopNetworkEventsDoubleViewModel.RenderBopNetworkEvents();
 
-                return dto.LastIncludedEvent;
+                return paramsDto.LastIncludedEvent;
             }
             catch (Exception e)
             {

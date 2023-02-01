@@ -2,17 +2,18 @@
 using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class GrmEquipmentRequests
     {
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly AddEquipmentIntoNodeBuilder _addEquipmentIntoNodeBuilder;
 
-        public GrmEquipmentRequests(IWcfServiceDesktopC2D c2DWcfManager, AddEquipmentIntoNodeBuilder addEquipmentIntoNodeBuilder)
+        public GrmEquipmentRequests(GrpcC2DRequests grpcC2DRequests, AddEquipmentIntoNodeBuilder addEquipmentIntoNodeBuilder)
         {
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _addEquipmentIntoNodeBuilder = addEquipmentIntoNodeBuilder;
         }
 
@@ -24,7 +25,7 @@ namespace Fibertest.WpfClient
                 NodeId = Guid.NewGuid(),
             };
             cmd.EmptyNodeEquipmentId = request.Type == EquipmentType.EmptyNode || request.Type == EquipmentType.AdjustmentPoint ? Guid.Empty : Guid.NewGuid();
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async Task AddEquipmentIntoNode(RequestAddEquipmentIntoNode request)
@@ -32,17 +33,17 @@ namespace Fibertest.WpfClient
             var cmd = await _addEquipmentIntoNodeBuilder.BuildCommand(request.NodeId);
             if (cmd == null)
                 return;
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async Task UpdateEquipment(UpdateEquipment cmd)
         {
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async Task RemoveEquipment(RemoveEquipment cmd)
         {
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
 

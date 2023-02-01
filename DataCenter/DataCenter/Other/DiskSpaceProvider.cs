@@ -6,12 +6,12 @@ namespace Fibertest.DataCenter
 {
     public class DiskSpaceProvider
     {
-        private readonly MySqlDbInitializer _mySqlEventStoreInitializer;
+        private readonly IDbInitializer _mySqlEventStoreInitializer;
         private readonly ILogger<DiskSpaceProvider> _logger;
 
         private readonly double _freeSpaceThresholdGb;
 
-        public DiskSpaceProvider(MySqlDbInitializer mySqlEventStoreInitializer, 
+        public DiskSpaceProvider(IDbInitializer mySqlEventStoreInitializer, 
             IOptions<MysqlConfig> mysqlConfig, ILogger<DiskSpaceProvider> logger)
         {
             _mySqlEventStoreInitializer = mySqlEventStoreInitializer;

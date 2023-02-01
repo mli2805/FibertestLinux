@@ -9,6 +9,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -16,6 +17,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWindowManager _windowManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private bool _isInCreationMode;
 
@@ -85,11 +87,12 @@ namespace Fibertest.WpfClient
 
         public Visibility ChangePasswordVisibility { get; set; }
 
-        public UserViewModel(ILifetimeScope globalScope, IWindowManager windowManager,
+        public UserViewModel(ILifetimeScope globalScope, IWindowManager windowManager, GrpcC2DRequests grpcC2DRequests,
             IWcfServiceDesktopC2D c2DWcfManager, Model readModel, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _windowManager = windowManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _c2DWcfManager = c2DWcfManager;
             _readModel = readModel;
             _currentUser = currentUser;
@@ -113,7 +116,7 @@ namespace Fibertest.WpfClient
             SelectedZone = Zones.First();
         }
 
-        private async void SmsReceiverVm_TestButtonPressed(object sender, EventArgs e)
+        private async void SmsReceiverVm_TestButtonPressed(object? sender, EventArgs e)
         {
             bool res;
             using (new WaitCursor())
@@ -213,7 +216,7 @@ namespace Fibertest.WpfClient
                 };
 
 
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
             await TryCloseAsync(true);
         }
 
@@ -230,12 +233,12 @@ namespace Fibertest.WpfClient
                 switch (columnName)
                 {
                     case "Title":
-                        if (string.IsNullOrEmpty(UserInWork.Title?.Trim()))
+                        if (string.IsNullOrEmpty(UserInWork.Title.Trim()))
                             errorMessage = Resources.SID_Title_should_be_set_;
                         break;
                     case "Password1":
                     case "Password2":
-                        if (string.IsNullOrEmpty(Password1?.Trim()) || string.IsNullOrEmpty(Password2?.Trim()))
+                        if (string.IsNullOrEmpty(Password1.Trim()) || string.IsNullOrEmpty(Password2.Trim()))
                             errorMessage = Resources.SID_Password_should_be_set;
                         else if (Password1 != Password2)
                             errorMessage = Resources.SID_Passwords_don_t_match;

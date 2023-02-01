@@ -8,18 +8,19 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class UserListViewModel : Screen
     {
-        private List<User> _users;
-        private List<Zone> _zones;
+        private List<User> _users = null!;
+        private List<Zone> _zones = null!;
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
         private readonly EventArrivalNotifier _eventArrivalNotifier;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly CurrentUser _currentUser;
 
         private ObservableCollection<UserVm> _rows = new ObservableCollection<UserVm>();
@@ -34,8 +35,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private UserVm _selectedUser;
-        public UserVm SelectedUser
+        private UserVm? _selectedUser;
+        public UserVm? SelectedUser
         {
             get => _selectedUser;
             set
@@ -46,7 +47,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public static List<Role> Roles { get; set; }
+        public static List<Role> Roles { get; set; } = null!;
         public bool CanAdd => _currentUser.Role <= Role.Root;
         public bool CanEdit => _currentUser.Role <= Role.Root || _currentUser.UserId == SelectedUser?.UserId;
         public bool CanRemove => _currentUser.Role <= Role.Root 
@@ -54,13 +55,13 @@ namespace Fibertest.WpfClient
 
         public UserListViewModel(ILifetimeScope globalScope, Model readModel, 
             EventArrivalNotifier eventArrivalNotifier, IWindowManager windowManager, 
-            IWcfServiceDesktopC2D c2DWcfManager, CurrentUser currentUser)
+            GrpcC2DRequests grpcC2DRequests, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _readModel = readModel;
             _eventArrivalNotifier = eventArrivalNotifier;
             _windowManager = windowManager;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _currentUser = currentUser;
 
             Initialize();
@@ -79,7 +80,7 @@ namespace Fibertest.WpfClient
             SelectedUser = Rows.First();
         }
 
-        private void _eventArrivalNotifier_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void _eventArrivalNotifier_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Rows = new ObservableCollection<UserVm>();
             foreach (var user in _users.Where(u => u.Role >= _currentUser.Role))
@@ -101,7 +102,7 @@ namespace Fibertest.WpfClient
 
         public async void ChangeUser()
         {
-            if (SelectedUser.Role != Role.SecurityAdmin)
+            if (SelectedUser!.Role != Role.SecurityAdmin)
             {
                 var userInWork = (UserVm)SelectedUser.Clone();
                 var vm = _globalScope.Resolve<UserViewModel>();
@@ -141,8 +142,8 @@ namespace Fibertest.WpfClient
 
         public async void RemoveUser()
         {
-            var cmd = new RemoveUser() { UserId = SelectedUser.UserId };
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            var cmd = new RemoveUser() { UserId = SelectedUser!.UserId };
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
         }
         #endregion
 

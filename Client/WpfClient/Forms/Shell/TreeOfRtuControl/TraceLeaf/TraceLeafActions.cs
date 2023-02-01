@@ -8,6 +8,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -18,9 +19,9 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly GraphReadModel _graphReadModel;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private readonly IWcfServiceCommonC2D _c2DCommonWcf;
         private readonly TabulatorViewModel _tabulatorViewModel;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly TraceStateViewsManager _traceStateViewsManager;
         private readonly TraceStatisticsViewsManager _traceStatisticsViewsManager;
         private readonly BaseRefsAssignViewModel _baseRefsAssignViewModel;
@@ -32,7 +33,7 @@ namespace Fibertest.WpfClient
         public TraceLeafActions(ILifetimeScope globalScope, CurrentUser currentUser, 
             Model readModel, GraphReadModel graphReadModel,
             IWindowManager windowManager, TabulatorViewModel tabulatorViewModel,
-            IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D c2DCommonWcf,
+            GrpcC2DRequests grpcC2DRequests, IWcfServiceCommonC2D c2DCommonWcf,
             TraceStateViewsManager traceStateViewsManager, TraceStatisticsViewsManager traceStatisticsViewsManager,
             BaseRefsAssignViewModel baseRefsAssignViewModel, LandmarksViewsManager landmarksViewsManager,
             OutOfTurnPreciseMeasurementViewModel outOfTurnPreciseMeasurementViewModel, AutoBaseViewModel autoBaseViewModel,
@@ -43,9 +44,9 @@ namespace Fibertest.WpfClient
             _readModel = readModel;
             _graphReadModel = graphReadModel;
             _windowManager = windowManager;
-            _c2DWcfManager = c2DWcfManager;
             _c2DCommonWcf = c2DCommonWcf;
             _tabulatorViewModel = tabulatorViewModel;
+            _grpcC2DRequests = grpcC2DRequests;
             _traceStateViewsManager = traceStateViewsManager;
             _traceStatisticsViewsManager = traceStatisticsViewsManager;
             _baseRefsAssignViewModel = baseRefsAssignViewModel;
@@ -169,8 +170,8 @@ namespace Fibertest.WpfClient
             {
                 _commonStatusBarViewModel.StatusBarMessage2 = Resources.SID_Long_operation__Removing_trace_s_measurements____Please_wait_;
                 var cmd = isRemoval ? new RemoveTrace() { TraceId = traceId } : (object)new CleanTrace() { TraceId = traceId };
-                var result = await _c2DWcfManager.SendCommandAsObj(cmd);
-                _commonStatusBarViewModel.StatusBarMessage2 = result ?? "";
+                var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                _commonStatusBarViewModel.StatusBarMessage2 = result.ReturnCode == ReturnCode.Ok ? "" : result.ErrorMessage!;
             }
 
             await _globalScope.Resolve<IRtuHolder>()

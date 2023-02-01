@@ -3,13 +3,14 @@ using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class SnmpSettingsViewModel : Screen
     {
         private readonly DataCenterConfig _currentDatacenterParameters;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
 
         public bool IsSnmpOn { get; set; }
@@ -26,11 +27,11 @@ namespace Fibertest.WpfClient
         public bool IsEditEnabled { get; set; }
 
         public SnmpSettingsViewModel(DataCenterConfig currentDatacenterParameters, CurrentUser currentUser,
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager)
+            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)
         {
             _currentDatacenterParameters = currentDatacenterParameters;
+            _grpcC2DRequests = grpcC2DRequests;
             IsEditEnabled = currentUser.Role <= Role.Root;
-            _c2DWcfManager = c2DWcfManager;
             _windowManager = windowManager;
 
             IsSnmpOn = currentDatacenterParameters.Snmp.IsSnmpOn;
@@ -49,8 +50,23 @@ namespace Fibertest.WpfClient
 
         public async void SaveAndTest()
         {
-            bool res;
+            RequestAnswer result;
             using (new WaitCursor())
+            {
+                var dto = new ChangeDcConfigDto() { NewConfig = _currentDatacenterParameters };
+
+                dto.NewConfig.Snmp.IsSnmpOn = IsSnmpOn;
+                dto.NewConfig.Snmp.SnmpReceiverIp = SnmpManagerIp;
+                dto.NewConfig.Snmp.SnmpReceiverPort = SnmpManagerPort;
+                dto.NewConfig.Snmp.SnmpCommunity = SnmpCommunity;
+                dto.NewConfig.Snmp.SnmpAgentIp = SnmpAgentIp;
+                dto.NewConfig.Snmp.SnmpEncoding = SelectedSnmpEncoding;
+                dto.NewConfig.Snmp.EnterpriseOid = EnterpriseOid;
+
+                result = await _grpcC2DRequests.SendAnyC2DRequest<ChangeDcConfigDto, RequestAnswer>(dto);
+            }
+
+            if (result.ReturnCode == ReturnCode.Ok)
             {
                 _currentDatacenterParameters.Snmp.IsSnmpOn = IsSnmpOn;
                 _currentDatacenterParameters.Snmp.SnmpReceiverIp = SnmpManagerIp;
@@ -60,21 +76,6 @@ namespace Fibertest.WpfClient
                 _currentDatacenterParameters.Snmp.SnmpEncoding = SelectedSnmpEncoding;
                 _currentDatacenterParameters.Snmp.EnterpriseOid = EnterpriseOid;
 
-                var dto = new SnmpConfig()
-                {
-                    IsSnmpOn = IsSnmpOn,
-                    SnmpReceiverIp = SnmpManagerIp,
-                    SnmpReceiverPort = SnmpManagerPort,
-                    SnmpCommunity = SnmpCommunity,
-                    SnmpAgentIp = SnmpAgentIp,
-                    SnmpEncoding = SelectedSnmpEncoding,
-                    EnterpriseOid = EnterpriseOid,
-                };
-                res = await _c2DWcfManager.SaveAndTestSnmpSettings(dto);
-            }
-
-            if (res)
-            {
                 var vm = new MyMessageBoxViewModel(MessageType.Information, new List<string>()
                 {
                     Resources.SID_SNMP_trap_sent_,
@@ -88,7 +89,7 @@ namespace Fibertest.WpfClient
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
             }
         }
-      
+
         public async void Close()
         {
             await TryCloseAsync();

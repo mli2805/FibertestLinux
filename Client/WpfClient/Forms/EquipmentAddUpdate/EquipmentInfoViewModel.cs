@@ -5,6 +5,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -15,7 +16,7 @@ namespace Fibertest.WpfClient
         public Guid NodeId;
         private ViewMode _mode;
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
 
         public EquipmentInfoModel Model { get; set; } = new EquipmentInfoModel();
@@ -23,10 +24,10 @@ namespace Fibertest.WpfClient
         public object Command { get; set; }
 
         public EquipmentInfoViewModel(IWritableConfig<ClientConfig> config, 
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager)
+            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)
         {
             _config = config;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
         }
 
@@ -90,7 +91,7 @@ namespace Fibertest.WpfClient
                     CableReserveRight = Model.CableReserveRight,
                     Comment = Model.Comment,
                 };
-                await _c2DWcfManager.SendCommandAsObj(cmd);
+                await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
 
             if (_mode == ViewMode.Add)

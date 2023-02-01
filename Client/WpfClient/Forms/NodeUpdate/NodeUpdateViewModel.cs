@@ -12,6 +12,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
 using GMap.NET;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -21,7 +22,7 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly GraphReadModel _graphReadModel;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly CurrentGis _currentGis;
         private readonly AddEquipmentIntoNodeBuilder _addEquipmentIntoNodeBuilder;
         private Node _originalNode;
@@ -113,8 +114,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private object _command;
-        public object Command
+        private object? _command;
+        public object? Command
         {
             get { return _command; }
             set
@@ -131,7 +132,7 @@ namespace Fibertest.WpfClient
 
         public NodeUpdateViewModel(ILifetimeScope globalScope, Model readModel, GraphReadModel graphReadModel,
             IWindowManager windowManager, EventArrivalNotifier eventArrivalNotifier,
-            IWcfServiceDesktopC2D c2DWcfManager, CurrentGis currentGis,
+            GrpcC2DRequests grpcC2DRequests, CurrentGis currentGis,
             CurrentUser currentUser, 
             AddEquipmentIntoNodeBuilder addEquipmentIntoNodeBuilder)
         {
@@ -139,8 +140,8 @@ namespace Fibertest.WpfClient
             _readModel = readModel;
             _graphReadModel = graphReadModel;
             _windowManager = windowManager;
+            _grpcC2DRequests = grpcC2DRequests;
             eventArrivalNotifier.PropertyChanged += _eventArrivalNotifier_PropertyChanged;
-            _c2DWcfManager = c2DWcfManager;
             _currentGis = currentGis;
             IsEditEnabled = currentUser.Role <= Role.Root;
             _addEquipmentIntoNodeBuilder = addEquipmentIntoNodeBuilder;
@@ -163,7 +164,7 @@ namespace Fibertest.WpfClient
                 _readModel.Equipments.Where(e => e.NodeId == _originalNode.NodeId && e.Type != EquipmentType.EmptyNode).Select(CreateEqItem));
         }
 
-        private void _eventArrivalNotifier_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void _eventArrivalNotifier_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             EquipmentsInNode = new ObservableCollection<ItemOfEquipmentTableModel>(
                 _readModel.Equipments.Where(eq => eq.NodeId == _originalNode.NodeId && eq.Type != EquipmentType.EmptyNode).Select(CreateEqItem));
@@ -214,7 +215,7 @@ namespace Fibertest.WpfClient
             var cmd = await _addEquipmentIntoNodeBuilder.BuildCommand(_originalNode.NodeId);
             if (cmd == null)
                 return;
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async void AddEquipment()
@@ -236,16 +237,16 @@ namespace Fibertest.WpfClient
 
             var equipmentViewModel = _globalScope.Resolve<EquipmentInfoViewModel>();
             equipmentViewModel.InitializeForUpdate(equipment);
-            _windowManager.ShowDialogWithAssignedOwner(equipmentViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(equipmentViewModel);
             if (equipmentViewModel.Command == null) return;
             var cmd = (UpdateEquipment)equipmentViewModel.Command;
 
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async Task RemoveEquipment(RemoveEquipment cmd)
         {
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async void Save()
@@ -258,7 +259,7 @@ namespace Fibertest.WpfClient
                     Title = _title?.Trim(),
                     Comment = _comment?.Trim()
                 };
-                await _c2DWcfManager.SendCommandAsObj(cmd);
+                await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
 
             await TryCloseAsync();

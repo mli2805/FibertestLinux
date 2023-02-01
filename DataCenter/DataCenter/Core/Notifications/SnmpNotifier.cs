@@ -3,7 +3,6 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.Utils.Snmp;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.DataCenter;
 
@@ -14,7 +13,7 @@ public class SnmpNotifier
     private readonly Model _writeModel;
     private readonly SnmpAgent _snmpAgent;
 
-    public SnmpNotifier(IOptions<DataCenterConfig> fullConfig, ILogger<SnmpNotifier> logger, Model writeModel, SnmpAgent snmpAgent)
+    public SnmpNotifier(IWritableConfig<DataCenterConfig> fullConfig, ILogger<SnmpNotifier> logger, Model writeModel, SnmpAgent snmpAgent)
     {
         _config = fullConfig.Value;
         _logger = logger;

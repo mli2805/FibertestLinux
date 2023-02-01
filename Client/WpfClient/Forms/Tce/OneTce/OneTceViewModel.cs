@@ -6,6 +6,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Trace = Fibertest.Graph.Trace;
 
 namespace Fibertest.WpfClient
@@ -13,7 +14,7 @@ namespace Fibertest.WpfClient
     public class OneTceViewModel : Screen
     {
         private readonly CurrentUser _currentUser;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
         private readonly TceReportProvider _tceReportProvider;
@@ -23,11 +24,11 @@ namespace Fibertest.WpfClient
 
         public bool IsSaveEnabled => !string.IsNullOrEmpty(TceInfoViewModel.Title) && _currentUser.Role <= Role.Root;
 
-        public OneTceViewModel(CurrentUser currentUser, IWcfServiceDesktopC2D c2DWcfManager, 
+        public OneTceViewModel(CurrentUser currentUser, GrpcC2DRequests grpcC2DRequests,
             Model readModel, IWindowManager windowManager, TceReportProvider tceReportProvider)
         {
             _currentUser = currentUser;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _readModel = readModel;
             _windowManager = windowManager;
             _tceReportProvider = tceReportProvider;
@@ -85,7 +86,7 @@ namespace Fibertest.WpfClient
 
         private async Task<bool> Save()
         {
-            if (!Validate()) return false;
+            if (! await Validate()) return false;
 
             var cmd = new AddOrUpdateTceWithRelations
             {
@@ -99,26 +100,27 @@ namespace Fibertest.WpfClient
                 AllRelationsOfTce = TceSlotsViewModel.Slots.SelectMany(s => s.GetGponPortsRelations()).ToList(),
             };
 
-            var result = await _c2DWcfManager.SendCommandAsObj(cmd);
-            if (result != null)
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
             {
-                _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, result));
+                var mb = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage!);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
             }
-            return string.IsNullOrEmpty(result);
+            return result.ReturnCode == ReturnCode.Ok;
         }
 
-        private bool Validate()
+        private async Task<bool> Validate()
         {
             if (_readModel.TcesNew.Any(t =>t.Title == TceInfoViewModel.Title && t.Id != _tceInWork.Id))
             {
-                _windowManager.ShowWindowWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, Resources.SID_There_is_a_TCE_with_the_same_name));
+                await _windowManager.ShowWindowWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, Resources.SID_There_is_a_TCE_with_the_same_name));
                 return false;
             }
 
 
             if (_readModel.TcesNew.Any(t => t.Ip == TceInfoViewModel.Ip4InputViewModel.GetString() && t.Id != _tceInWork.Id))
             {
-                _windowManager.ShowWindowWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, Resources.SID_There_is_a_TCE_with_the_same_IP_address));
+                await _windowManager.ShowWindowWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, Resources.SID_There_is_a_TCE_with_the_same_IP_address));
                 return false;
             }
             return true;

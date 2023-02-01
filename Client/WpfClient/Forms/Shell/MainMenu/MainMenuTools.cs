@@ -44,10 +44,10 @@ namespace Fibertest.WpfClient
            await _wcfDesktopC2D.ExportEvents();
         }
 
-        public void LaunchTcesView()
+        public async void LaunchTcesView()
         {
             _tcesViewModel.Initialize();
-            _windowManager.ShowWindowWithAssignedOwner(_tcesViewModel);
+            await _windowManager.ShowWindowWithAssignedOwner(_tcesViewModel);
         }
     }
 }

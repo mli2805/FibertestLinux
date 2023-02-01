@@ -10,6 +10,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -20,7 +21,7 @@ namespace Fibertest.WpfClient
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private readonly EquipmentOfChoiceModelFactory _equipmentOfChoiceModelFactory;
         private List<Equipment> _possibleEquipment;
@@ -45,14 +46,14 @@ namespace Fibertest.WpfClient
         public bool ShouldWeContinue { get; set; }
 
         public TraceContentChoiceViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config,
-            ILogger logger, Model readModel, IWcfServiceDesktopC2D c2DWcfManager,
+            ILogger logger, Model readModel, GrpcC2DRequests grpcC2DRequests,
             IWindowManager windowManager, EquipmentOfChoiceModelFactory equipmentOfChoiceModelFactory)
         {
             _globalScope = globalScope;
             _config = config;
             _logger = logger;
             _readModel = readModel;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
             _equipmentOfChoiceModelFactory = equipmentOfChoiceModelFactory;
         }
@@ -129,9 +130,7 @@ namespace Fibertest.WpfClient
 
                 if (_node.Title != NodeTitle)
                 {
-                    var str = await SendNodeTitle();
-                    if (!string.IsNullOrEmpty(str))
-                        _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendNodeTitle - {str}");
+                    await SendNodeTitle();
                 }
 
                 foreach (var equipment in _possibleEquipment.Where(e => e.Type != EquipmentType.EmptyNode))
@@ -158,9 +157,7 @@ namespace Fibertest.WpfClient
                             return;
                         }
 
-                        var str = await SendEquipmentChanges(equipment, model.TitleOfEquipment, model.LeftCableReserve, model.RightCableReserve);
-                        if (!string.IsNullOrEmpty(str))
-                            _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendEquipmentChanges - {str}");
+                        await SendEquipmentChanges(equipment, model.TitleOfEquipment, model.LeftCableReserve, model.RightCableReserve);
                     }
                 }
 
@@ -168,7 +165,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private async Task<string> SendNodeTitle()
+        private async Task SendNodeTitle()
         {
             var cmd = new UpdateNode
             {
@@ -176,13 +173,13 @@ namespace Fibertest.WpfClient
                 Title = NodeTitle.Trim(),
                 Comment = _node.Comment,
             };
-            return await _c2DWcfManager.SendCommandAsObj(cmd);
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
+                        _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendNodeTitle - {result.ErrorMessage}");
         }
 
-        private async Task<string> SendEquipmentChanges(Equipment equipment, string newTitle, int leftCableReserve, int rightCableReserve)
+        private async Task SendEquipmentChanges(Equipment equipment, string newTitle, int leftCableReserve, int rightCableReserve)
         {
-            // if (!_readModel.EquipmentCanBeChanged(equipment.EquipmentId, _windowManager)) return null;
-
             var cmd = new UpdateEquipment()
             {
                 EquipmentId = equipment.EquipmentId,
@@ -192,7 +189,9 @@ namespace Fibertest.WpfClient
                 CableReserveRight = rightCableReserve,
                 Comment = equipment.Comment,
             };
-            return await _c2DWcfManager.SendCommandAsObj(cmd);
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
+                            _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendEquipmentChanges - {result.ErrorMessage}");
         }
 
         public async void CancelButton()

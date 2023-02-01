@@ -13,6 +13,7 @@ using Fibertest.OtdrDataFormat;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -82,7 +83,7 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly LandmarksBaseParser _landmarksBaseParser;
         private readonly LandmarksGraphParser _landmarksGraphParser;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
         private List<Graph.Landmark> _landmarks;
@@ -149,14 +150,14 @@ namespace Fibertest.WpfClient
 
         public LandmarksViewModel(ILifetimeScope globalScope, Model readModel, CurrentGis currentGis,
             LandmarksBaseParser landmarksBaseParser, LandmarksGraphParser landmarksGraphParser,
-             IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)
+             GrpcC2DRequests grpcC2DRequests, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)
         {
             CurrentGis = currentGis;
             _globalScope = globalScope;
             _readModel = readModel;
             _landmarksBaseParser = landmarksBaseParser;
             _landmarksGraphParser = landmarksGraphParser;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _c2DWcfCommonManager = c2DWcfCommonManager;
             _windowManager = windowManager;
             _selectedGpsInputMode = GpsInputModes.First(i => i.Mode == CurrentGis.GpsInputMode);
@@ -271,7 +272,7 @@ namespace Fibertest.WpfClient
                     IndexInTrace = SelectedRow.NumberIncludingAdjustmentPoints,
                     EquipmentId = traceContentChoiceViewModel.GetSelectedEquipmentGuid()
                 };
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async void ExcludeEquipment()
@@ -282,7 +283,7 @@ namespace Fibertest.WpfClient
                 IndexInTrace = SelectedRow.NumberIncludingAdjustmentPoints,
                 EquipmentId = SelectedRow.EquipmentId,
             };
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public void ExportToPdf()

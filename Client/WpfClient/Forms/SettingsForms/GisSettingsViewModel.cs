@@ -7,13 +7,15 @@ using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
 using GMap.NET;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class GisSettingsViewModel : Screen
     {
         private readonly CurrentGis _currentGis;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly DataCenterConfig _currentDatacenterParameters;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly GraphReadModel _graphReadModel;
@@ -48,7 +50,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public List<string> MapProviders { get; set; } = 
+        public List<string> MapProviders { get; set; } =
             new List<string>() { @"OpenStreetMap", @"GoogleMap", @"GoogleSatelliteMap", @"GoogleHybridMap" };
         private string _selectedProvider;
         public string SelectedProvider
@@ -57,13 +59,12 @@ namespace Fibertest.WpfClient
             set
             {
                 _selectedProvider = value;
-                _config.Update(c=>c.Map.GMapProvider = _selectedProvider);
+                _config.Update(c => c.Map.GMapProvider = _selectedProvider);
                 if (_currentGis.IsGisOn)
                     _graphReadModel.MainMap.MapProvider = GMapProviderExt.Get(_selectedProvider);
             }
         }
 
-      //  public List<string> AccessModes { get; set; } = new List<string>() { @"ServerOnly", @"ServerAndCache", @"CacheOnly" };
         public List<string> AccessModes { get; set; }
 
         private string _selectedAccessMode;
@@ -76,7 +77,7 @@ namespace Fibertest.WpfClient
                 _selectedAccessMode = value;
 
                 var mo = AccessModeExt.FromLocalizedString(_selectedAccessMode);
-                _config.Update(c=>c.Map.MapAccessMode = mo);
+                _config.Update(c => c.Map.MapAccessMode = mo);
                 if (_currentGis.IsGisOn)
                     _graphReadModel.MainMap.Manager.Mode = AccessModeExt.FromEnumConstant(_selectedAccessMode);
             }
@@ -98,22 +99,23 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public GisSettingsViewModel(CurrentUser currentUser, CurrentGis currentGis,
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager,
+        public GisSettingsViewModel(CurrentUser currentUser, CurrentGis currentGis, DataCenterConfig currentDatacenterParameters,
+            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager,
             IWritableConfig<ClientConfig> config, GraphReadModel graphReadModel)
         {
             _currentGis = currentGis;
+            _currentDatacenterParameters = currentDatacenterParameters;
+            _grpcC2DRequests = grpcC2DRequests;
             IsInWithoutMapMode = currentGis.IsWithoutMapMode;
-            _c2DWcfManager = c2DWcfManager;
             _windowManager = windowManager;
-            
+
             _config = config;
             _graphReadModel = graphReadModel;
 
             // AccessModes = Enum.GetValues(typeof(AccessMode))
             //     .Cast<AccessMode>().Select(x => x.ToLocalizedString()).ToList();
-            var str = _config.Value.Map.MapAccessMode; 
-            
+            // var str = _config.Value.Map.MapAccessMode;
+
             // _selectedAccessMode = AccessModeExt.FromEnumConstant(str).ToLocalizedString();
             _selectedAccessMode = _config.Value.Map.MapAccessMode.ToLocalizedString();
 
@@ -131,14 +133,18 @@ namespace Fibertest.WpfClient
 
         public async void ChangeMode()
         {
-            bool res;
+            RequestAnswer result;
             using (new WaitCursor())
             {
-                res = await _c2DWcfManager.SaveGisMode(!IsInWithoutMapMode);
+                var dto = new ChangeDcConfigDto() { NewConfig = _currentDatacenterParameters };
+                dto.NewConfig.General.IsWithoutMapMode = !IsInWithoutMapMode;
+
+                result = await _grpcC2DRequests.SendAnyC2DRequest<ChangeDcConfigDto, RequestAnswer>(dto);
             }
 
-            if (res)
+            if (result.ReturnCode == ReturnCode.Ok)
             {
+                _currentDatacenterParameters.General.IsWithoutMapMode = !IsInWithoutMapMode;
                 IsInWithoutMapMode = !IsInWithoutMapMode;
                 _currentGis.IsWithoutMapMode = IsInWithoutMapMode;
                 if (IsInWithoutMapMode && IsMapTemporarilyVisibleInThisClient)

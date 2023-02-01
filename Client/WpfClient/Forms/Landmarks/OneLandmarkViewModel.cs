@@ -8,6 +8,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.WpfCommonViews;
 using GMap.NET;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -19,7 +20,7 @@ namespace Fibertest.WpfClient
         public Guid RtuId;
 
         private readonly CurrentGis _currentGis;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private readonly GraphReadModel _graphReadModel;
         private readonly Model _readModel;
@@ -167,16 +168,16 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public OneLandmarkViewModel(CurrentUser currentUser, CurrentGis currentGis,
-            GpsInputSmallViewModel gpsInputSmallViewModel, IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager,
+        public OneLandmarkViewModel(CurrentUser currentUser, CurrentGis currentGis, GrpcC2DRequests grpcC2DRequests,
+            GpsInputSmallViewModel gpsInputSmallViewModel, IWindowManager windowManager,
             GraphReadModel graphReadModel, Model readModel,
             ReflectogramManager reflectogramManager, TabulatorViewModel tabulatorViewModel)
         {
             HasPrivileges = currentUser.Role <= Role.Root;
             IsEditEnabled = true;
             _currentGis = currentGis;
+            _grpcC2DRequests = grpcC2DRequests;
             GisVisibility = currentGis.IsGisOn ? Visibility.Visible : Visibility.Collapsed;
-            _c2DWcfManager = c2DWcfManager;
             _windowManager = windowManager;
             _graphReadModel = graphReadModel;
             _readModel = readModel;
@@ -196,14 +197,14 @@ namespace Fibertest.WpfClient
         private async Task<bool> ApplyingProcess()
         {
             var result = await ApplyEquipment();
-            if (result != null)
+            if (result.ReturnCode != ReturnCode.Ok)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, @"ApplyEquipment: " + result);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
                 return false;
             }
             result = await ApplyNode();
-            if (result != null)
+            if (result.ReturnCode != ReturnCode.Ok)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, @"ApplyNode: " + result);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
@@ -212,34 +213,34 @@ namespace Fibertest.WpfClient
             return true;
         }
 
-        private async Task<string> ApplyEquipment()
+        private async Task<RequestAnswer> ApplyEquipment()
         {
             if (_landmarkBeforeChanges.EquipmentTitle != SelectedLandmark.EquipmentTitle ||
                 _landmarkBeforeChanges.EquipmentType != SelectedLandmark.EquipmentType)
             {
                 var equipment = _readModel.Equipments.First(e => e.EquipmentId == SelectedLandmark.EquipmentId);
-                return await _c2DWcfManager.SendCommandAsObj(
-                    new UpdateEquipment
-                    {
-                        EquipmentId = SelectedLandmark.EquipmentId,
-                        Title = SelectedLandmark.EquipmentTitle,
-                        Type = SelectedLandmark.EquipmentType,
-                        CableReserveLeft = equipment.CableReserveLeft,
-                        CableReserveRight = equipment.CableReserveRight,
-                        Comment = equipment.Comment,
-                    });
+                var cmd = new UpdateEquipment
+                {
+                    EquipmentId = SelectedLandmark.EquipmentId,
+                    Title = SelectedLandmark.EquipmentTitle,
+                    Type = SelectedLandmark.EquipmentType,
+                    CableReserveLeft = equipment.CableReserveLeft,
+                    CableReserveRight = equipment.CableReserveRight,
+                    Comment = equipment.Comment,
+                };
+                return await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
-            return null;
+            return new RequestAnswer(ReturnCode.Ok);
         }
 
-        private async Task<string> ApplyNode()
+        private async Task<RequestAnswer> ApplyNode()
         {
             var errorMessage = GpsInputSmallViewModel.TryGetPoint(out PointLatLng position);
             if (errorMessage != null)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, errorMessage);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
-                return null;
+                return new RequestAnswer(ReturnCode.Ok);
             }
 
             if (_landmarkBeforeChanges.NodeTitle != SelectedLandmark.NodeTitle ||
@@ -261,9 +262,9 @@ namespace Fibertest.WpfClient
                         Comment = SelectedLandmark.NodeComment,
                         Position = position,
                     };
-                return await _c2DWcfManager.SendCommandAsObj(cmd);
+                return await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
-            return null;
+            return new RequestAnswer(ReturnCode.Ok);
         }
 
         public async void CancelChanges()

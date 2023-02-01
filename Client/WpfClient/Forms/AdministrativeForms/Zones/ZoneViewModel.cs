@@ -4,15 +4,17 @@ using AutoMapper;
 using Caliburn.Micro;
 using Fibertest.Graph;
 using Fibertest.StringResources;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class ZoneViewModel : Screen, IDataErrorInfo
     {
+        private readonly GrpcC2DRequests _grpcC2DRequests;
+
         private static readonly IMapper Mapper = new MapperConfiguration(
             cfg => cfg.AddProfile<MappingViewModelToCommand>()).CreateMapper();
 
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private bool _isInCreationMode;
 
         public Guid ZoneId { get; set; }
@@ -53,9 +55,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ZoneViewModel(IWcfServiceDesktopC2D c2DWcfManager)
+        public ZoneViewModel(GrpcC2DRequests grpcC2DRequests)
         {
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
         }
 
         protected override void OnViewLoaded(object view)
@@ -84,7 +86,7 @@ namespace Fibertest.WpfClient
                 cmd = Mapper.Map<AddZone>(this);
             else
                 cmd = Mapper.Map<UpdateZone>(this);
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
             await TryCloseAsync();
         }
 
@@ -101,7 +103,7 @@ namespace Fibertest.WpfClient
                 switch (columnName)
                 {
                     case "Title":
-                        if (string.IsNullOrEmpty(_title?.Trim()))
+                        if (string.IsNullOrEmpty(_title.Trim()))
                             errorMessage = Resources.SID_Title_is_required;
                         IsButtonSaveEnabled = errorMessage == string.Empty;
                         break;

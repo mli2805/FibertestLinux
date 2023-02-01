@@ -3,7 +3,6 @@ using AutoMapper;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.Utils;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.DataCenter;
 
@@ -26,7 +25,7 @@ public class LastConnectionTimeChecker : BackgroundService
     private readonly TimeSpan _rtuHeartbeatPermittedGap;
     private readonly TimeSpan _clientHeartbeatPermittedGap;
 
-    public LastConnectionTimeChecker(IOptions<DataCenterConfig> fullConfig, ILogger<LastConnectionTimeChecker> logger, 
+    public LastConnectionTimeChecker(IWritableConfig<DataCenterConfig> fullConfig, ILogger<LastConnectionTimeChecker> logger, 
         GlobalState globalState, EventStoreService eventStoreService, ClientCollection clientCollection, 
         RtuStationsRepository rtuStationsRepository, Model writeModel,
         IFtSignalRClient ftSignalRClient,

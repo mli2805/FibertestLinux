@@ -11,6 +11,7 @@ using Fibertest.Graph;
 using Fibertest.WpfCommonViews;
 using Fibertest.StringResources;
 using GMap.NET;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -22,7 +23,7 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
         private readonly GraphReadModel _graphReadModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private bool _isInCreationMode;
 
@@ -82,12 +83,12 @@ namespace Fibertest.WpfClient
 
         public RtuUpdateViewModel(ILifetimeScope globalScope, CurrentUser currentUser, CurrentGis currentGis,
             Model readModel, GraphReadModel graphReadModel,
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager)
+            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)
         {
             _globalScope = globalScope;
             _readModel = readModel;
             _graphReadModel = graphReadModel;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
             IsEditEnabled = true;
             HasPrivilegies = currentUser.Role <= Role.Root;
@@ -153,16 +154,16 @@ namespace Fibertest.WpfClient
                 Comment = Comment,
             };
 
-            string result;
+            RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _c2DWcfManager.SendCommandAsObj(cmd);
+                result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             }
 
-            if (result != null)
+            if (result.ReturnCode != ReturnCode.Ok)
             {
                 var mb = new MyMessageBoxViewModel(MessageType.Error, @"CreateRtu: " + result);
-                _windowManager.ShowDialogWithAssignedOwner(mb);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
                 return false;
             }
 
@@ -182,11 +183,11 @@ namespace Fibertest.WpfClient
                 return false;
             }
             cmd.Position = position;
-            var result = await _c2DWcfManager.SendCommandAsObj(cmd);
-            if (result != null)
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
             {
-                var mb = new MyMessageBoxViewModel(MessageType.Error, result);
-                _windowManager.ShowDialogWithAssignedOwner(mb);
+                var mb = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage!);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
                 return false;
             }
             return true;

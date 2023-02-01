@@ -9,8 +9,7 @@ namespace Fibertest.DataCenter;
 public class EventStoreService
 {
     const string Timestamp = @"Timestamp";
-    private readonly IWritableOptions<MysqlConfig> _configMySql;
-    private readonly IWritableOptions<EventSourcingConfig> _configEvent;
+    private readonly IWritableConfig<DataCenterConfig> _config;
     private readonly ILogger<EventStoreService> _logger;
     private readonly IDbInitializer _dbInitializer;
     private readonly SnapshotRepository _snapshotRepository;
@@ -26,20 +25,17 @@ public class EventStoreService
     public int LastEventNumberInSnapshot;
     public DateTime LastEventDateInSnapshot;
 
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
-    {
-        TypeNameHandling = TypeNameHandling.All
-    };
+    private static readonly JsonSerializerSettings JsonSerializerSettings = 
+        new () { TypeNameHandling = TypeNameHandling.All };
 
-    public EventStoreService(IWritableOptions<MysqlConfig> configMySql, IWritableOptions<EventSourcingConfig> configEvent,
+    public EventStoreService(IWritableConfig<DataCenterConfig> config,
         ILogger<EventStoreService> logger,
         IDbInitializer dbInitializer,
         SnapshotRepository snapshotRepository, EventLogComposer eventLogComposer,
         CommandAggregator commandAggregator, EventsQueue eventsQueue, Model writeModel)
     {
-        _eventsPortion = configEvent.Value.EventSourcingPortion;
-        _configMySql = configMySql;
-        _configEvent = configEvent;
+        _eventsPortion = config.Value.EventSourcing.EventSourcingPortion;
+        _config = config;
         _logger = logger;
         _dbInitializer = dbInitializer;
         _snapshotRepository = snapshotRepository;
@@ -52,7 +48,7 @@ public class EventStoreService
 
     public async Task InitializeBothDb()
     {
-        var resetDb = _configMySql.Value.ResetDb; // default = false
+        var resetDb = _config.Value.MySql.ResetDb; // default = false
         if (resetDb)
         {
             _logger.LogInfo(Logs.DataCenter, "ResetDb flag is TRUE! DB will be deleted...");
@@ -61,7 +57,7 @@ public class EventStoreService
                 await dbContext.Database.EnsureDeletedAsync();
             }
          //   _dbInitializer.DropDatabase();
-            _configMySql.Update(o => o.ResetDb = false);
+            _config.Update(o => o.MySql.ResetDb = false);
             _logger.LogInfo(Logs.DataCenter, "Db deleted successfully.");
         }
         else
@@ -74,7 +70,7 @@ public class EventStoreService
             StreamIdOriginal = Guid.NewGuid();
             _logger.LogInfo(Logs.DataCenter, $"DB will be created with StreamIdOriginal {StreamIdOriginal}");
         }
-        _configEvent.Update(o=>o.StreamIdOriginal = StreamIdOriginal);
+        _config.Update(o=>o.EventSourcing.StreamIdOriginal = StreamIdOriginal);
 
         await using (var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions))
         {

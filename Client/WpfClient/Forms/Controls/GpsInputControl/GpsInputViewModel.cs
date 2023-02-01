@@ -64,7 +64,7 @@ namespace Fibertest.WpfClient
             IsEditEnabled = isEditEnabled;
         }
 
-        public string TryGetPoint(out PointLatLng point)
+        public string? TryGetPoint(out PointLatLng point)
         {
             point = new PointLatLng();
             if (!OneCoorViewModelLatitude.TryGetValue(out double lat)) return OneCoorViewModelLatitude.Error;

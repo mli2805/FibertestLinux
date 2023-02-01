@@ -2,13 +2,14 @@
 using Fibertest.Dto;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class SmtpSettingsViewModel : Screen
     {
         private readonly DataCenterConfig _currentDatacenterParameters;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
 
         public string SmtpHost { get; set; }
@@ -20,11 +21,11 @@ namespace Fibertest.WpfClient
         public bool IsEditEnabled { get; set; }
 
         public SmtpSettingsViewModel(DataCenterConfig currentDatacenterParameters, CurrentUser currentUser,
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager)
+            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)
         {
             _currentDatacenterParameters = currentDatacenterParameters;
+            _grpcC2DRequests = grpcC2DRequests;
             IsEditEnabled = currentUser.Role <= Role.Root;
-            _c2DWcfManager = c2DWcfManager;
             _windowManager = windowManager;
 
             SmtpHost = _currentDatacenterParameters.Smtp.SmtpHost;
@@ -41,8 +42,20 @@ namespace Fibertest.WpfClient
 
         public async void Save()
         {
-            bool res;
+            RequestAnswer result;
             using (new WaitCursor())
+            {
+                var dto = new ChangeDcConfigDto() { NewConfig = _currentDatacenterParameters };
+                dto.NewConfig.Smtp.SmtpHost = SmtpHost;
+                dto.NewConfig.Smtp.SmtpPort = SmtpPort;
+                dto.NewConfig.Smtp.MailFrom = MailFrom;
+                dto.NewConfig.Smtp.MailFromPassword = MailFromPassword;
+                dto.NewConfig.Smtp.SmtpTimeoutMs = SmtpTimeoutMs;
+
+                result = await _grpcC2DRequests.SendAnyC2DRequest<ChangeDcConfigDto, RequestAnswer>(dto);
+            }
+
+            if (result.ReturnCode == ReturnCode.Ok)
             {
                 _currentDatacenterParameters.Smtp.SmtpHost = SmtpHost;
                 _currentDatacenterParameters.Smtp.SmtpPort = SmtpPort;
@@ -50,19 +63,8 @@ namespace Fibertest.WpfClient
                 _currentDatacenterParameters.Smtp.MailFromPassword = MailFromPassword;
                 _currentDatacenterParameters.Smtp.SmtpTimeoutMs = SmtpTimeoutMs;
 
-                var dto = new SmtpConfig()
-                {
-                    SmtpHost = SmtpHost,
-                    SmtpPort = SmtpPort,
-                    MailFrom = MailFrom,
-                    MailFromPassword = MailFromPassword,
-                    SmtpTimeoutMs = SmtpTimeoutMs,
-                };
-                res = await _c2DWcfManager.SaveSmtpSettings(dto);
-            }
-
-            if (res)
                 await TryCloseAsync();
+            }
             else
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Failed_to_save_smtp_settings_);

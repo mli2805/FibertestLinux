@@ -5,49 +5,49 @@ using Caliburn.Micro;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class GrmFiberRequests
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly Model _model;
         private readonly IWindowManager _windowManager;
 
 
-        public GrmFiberRequests(ILifetimeScope globalScope, IWcfServiceDesktopC2D c2DWcfManager, Model model, IWindowManager windowManager)
+        public GrmFiberRequests(ILifetimeScope globalScope, GrpcC2DRequests grpcC2DRequests, Model model, IWindowManager windowManager)
         {
             _globalScope = globalScope;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _model = model;
             _windowManager = windowManager;
         }
 
         public async Task AddFiber(AddFiber cmd)
         {
-            if (!Validate(cmd)) return;
+            if (! await Validate(cmd)) return;
             cmd.FiberId = Guid.NewGuid();
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
-        private bool Validate(AddFiber cmd)
+        private async Task<bool> Validate(AddFiber cmd)
         {
             if (cmd.NodeId1 == cmd.NodeId2)
                 return false;
 
             if (!_model.HasDirectFiberDontMindPoints(cmd.NodeId1, cmd.NodeId2))
                 return true;
-            _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Section_already_exists));
+            await _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Section_already_exists));
             return false;
         }
 
         public async Task UpdateFiber(RequestUpdateFiber request)
         {
             var cmd = await PrepareCommand(request);
-            if (cmd == null)
-                return;
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            if (cmd == null) return;
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         private async Task<UpdateFiber> PrepareCommand(RequestUpdateFiber request)
@@ -61,7 +61,7 @@ namespace Fibertest.WpfClient
 
         public async Task RemoveFiber(RemoveFiber cmd)
         {
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
     }
 }

@@ -7,13 +7,14 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class TceTypeViewModel : Screen
     {
         private readonly Model _readModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private readonly CurrentUser _currentUser;
         private bool _isCreationMode;
@@ -23,10 +24,10 @@ namespace Fibertest.WpfClient
         public Visibility ReSeedVisibility { get; set; }
         public int SelectedTabItem { get; set; }
 
-        public TceTypeViewModel(Model readModel, IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager, CurrentUser currentUser)
+        public TceTypeViewModel(Model readModel, GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager, CurrentUser currentUser)
         {
             _readModel = readModel;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
             _currentUser = currentUser;
         }
@@ -50,7 +51,7 @@ namespace Fibertest.WpfClient
         public async Task ReSeed()
         {
             var cmd = new ReSeedTceTypeStructList() { TceTypes = TceTypeStructExt.Generate().ToList() };
-            var res = await _c2DWcfManager.SendCommandAsObj(cmd);
+            var res = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             if (res != null)
                 _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error,
                     @"Can't send Tce Types List!"));

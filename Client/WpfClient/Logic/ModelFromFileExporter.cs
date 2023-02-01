@@ -4,27 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class ModelFromFileExporter
     {
         private readonly Model _readModel;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWcfServiceDesktopC2D _c2DWcfManager;
 
-        public ModelFromFileExporter(Model readModel, IWcfServiceDesktopC2D c2DWcfManager)
+        public ModelFromFileExporter(Model readModel, GrpcC2DRequests grpcC2DRequests, IWcfServiceDesktopC2D c2DWcfManager)
         {
             _readModel = readModel;
+            _grpcC2DRequests = grpcC2DRequests;
             _c2DWcfManager = c2DWcfManager;
         }
 
-        public async Task<string> Apply(Model oneRtuModel)
+        public async Task Apply(Model oneRtuModel)
         {
             var rtu = oneRtuModel.Rtus.First();
             var rtuNode = oneRtuModel.Nodes.First(n => n.NodeId == rtu.NodeId);
             var cmd = new AddRtuAtGpsLocation(rtu.Id, rtu.NodeId, rtuNode.Position.Lat, rtuNode.Position.Lng,
                 rtu.Title);
-            var res = await _c2DWcfManager.SendCommandAsObj(cmd);
+            var unused3 = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
             await Task.Delay(2000);
             var initializeRtu = new InitializeRtu()
             {
@@ -35,7 +38,7 @@ namespace Fibertest.WpfClient
                 Serial = rtu.Serial,
                 OtauNetAddress = rtu.OtdrNetAddress
             };
-            var unused2 = await _c2DWcfManager.SendCommandAsObj(initializeRtu);
+            var unused2 = await _grpcC2DRequests.SendEventSourcingCommand(initializeRtu);
 
             foreach (var otau in oneRtuModel.Otaus)
             {
@@ -49,7 +52,7 @@ namespace Fibertest.WpfClient
                     Serial = otau.Serial,
                     IsOk = otau.IsOk
                 };
-                var unused = await _c2DWcfManager.SendCommandAsObj(attachOtau);
+                var unused = await _grpcC2DRequests.SendEventSourcingCommand(attachOtau);
             }
 
             var commandList = new List<object>();
@@ -122,7 +125,6 @@ namespace Fibertest.WpfClient
                 var _ = await _c2DWcfManager.SendCommandsAsObjs(commandList);
             }
 
-            return res;
         }
     }
 }

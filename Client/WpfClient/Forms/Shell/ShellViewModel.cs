@@ -182,7 +182,6 @@ namespace Fibertest.WpfClient
         {
             var dto = new GetDiskSpaceDto();
             var driveInfo = await _grpcC2DRequests!.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
-                // await _c2DWcfManager.GetDiskSpaceGb();
             var totalSize = $@"Database drive's size: {driveInfo.TotalSize:0.0}Gb";
             var freeSpace = $@"free space: {driveInfo.AvailableFreeSpace:0.0}Gb";
             var dataSize = $@"database size: {driveInfo.DataSize:0.0}Gb";

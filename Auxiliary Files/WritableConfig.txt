@@ -1,0 +1,16 @@
+в WpfClient и KadastrLoader, создается экземпляр класса с полным конфигом ClientConfig и регистрируется в Autofac
+
+	var clientConfig = new WritableConfig<ClientConfig>(configFileName);
+    builder.RegisterInstance<IWritableConfig<ClientConfig>>(clientConfig);
+	
+в все классы инжектится этот инстанс (полный конфиг)	
+
+	IWritableConfig<ClientConfig> config,
+	
+и далее можно читать	
+    var maxCableReserve = _config.Value.Miscellaneous.MaxCableReserve;
+и писать
+    _config.Update(c=>c.General.ClientLocalAddress = _clientAddress);
+
+IWritableConfig<T> & WritableConfig<T> (лежат в Utils)
+ делал на основе MS IWritableOptions<out T>  повыкидывав все лишнее.

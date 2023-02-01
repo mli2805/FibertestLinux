@@ -8,6 +8,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -15,7 +16,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private readonly CurrentUser _currentUser;
         private ObservableCollection<TceS> _tces;
@@ -35,17 +36,17 @@ namespace Fibertest.WpfClient
         public bool IsEnabled { get; set; }
 
         public TcesViewModel(ILifetimeScope globalScope, Model readModel, EventArrivalNotifier eventArrivalNotifier,
-            IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager, CurrentUser currentUser)
+            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
             _currentUser = currentUser;
             eventArrivalNotifier.PropertyChanged += _eventArrivalNotifier_PropertyChanged;
         }
 
-        private void _eventArrivalNotifier_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void _eventArrivalNotifier_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Tces = new ObservableCollection<TceS>(_readModel.TcesNew);
         }
@@ -105,14 +106,15 @@ namespace Fibertest.WpfClient
                     .ToList(),
             };
 
-            var result = await _c2DWcfManager.SendCommandAsObj(cmd);
-            if (result != null)
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
             {
-                _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, result));
+                var mb = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage!);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
             }
             else
             {
-                _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Information,
+                await _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Information,
                     Resources.SID_Equipment_type_changed_successfully_));
             }
         }
@@ -181,7 +183,7 @@ namespace Fibertest.WpfClient
             if (! await ConfirmTceRemove()) return;
 
             var cmd = new RemoveTce() { Id = SelectedTce.Id };
-            if (await _c2DWcfManager.SendCommandAsObj(cmd) == null)
+            if (await _grpcC2DRequests.SendEventSourcingCommand(cmd) == null)
             {
                 Tces.Remove(SelectedTce);
             }

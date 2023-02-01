@@ -14,6 +14,7 @@ using Fibertest.WpfCommonViews;
 using Fibertest.StringResources;
 using GMap.NET;
 using Microsoft.Extensions.Logging;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
@@ -26,7 +27,6 @@ namespace Fibertest.WpfClient
         private readonly ReflectogramManager _reflectogramManager;
         private readonly SoundManager _soundManager;
         private readonly Model _readModel;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private readonly CommandLineParameters _commandLineParameters;
         private readonly IWcfServiceInSuperClient _c2SWcfManager;
         private readonly TabulatorViewModel _tabulatorViewModel;
@@ -34,6 +34,7 @@ namespace Fibertest.WpfClient
         private readonly TraceStatisticsViewsManager _traceStatisticsViewsManager;
         private readonly LandmarksViewsManager _landmarksViewsManager;
         private readonly GraphReadModel _graphReadModel;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private bool _isSoundForThisVmInstanceOn;
         private bool _isTraceStateChanged;
         public bool IsOpen { get; private set; }
@@ -60,7 +61,7 @@ namespace Fibertest.WpfClient
         public TraceStateViewModel(ILogger logger, CurrentUser currentUser, CurrentGis currentGis,
             IWindowManager windowManager, ReflectogramManager reflectogramManager,
             SoundManager soundManager, Model readModel, GraphReadModel graphReadModel,
-            IWcfServiceDesktopC2D c2DWcfManager, IWcfServiceInSuperClient c2SWcfManager, 
+            GrpcC2DRequests grpcC2DRequests, IWcfServiceInSuperClient c2SWcfManager, 
             CommandLineParameters commandLineParameters, 
             TabulatorViewModel tabulatorViewModel, TraceStateReportProvider traceStateReportProvider,
             TraceStatisticsViewsManager traceStatisticsViewsManager, LandmarksViewsManager landmarksViewsManager)
@@ -74,7 +75,6 @@ namespace Fibertest.WpfClient
             _reflectogramManager = reflectogramManager;
             _soundManager = soundManager;
             _readModel = readModel;
-            _c2DWcfManager = c2DWcfManager;
             _commandLineParameters = commandLineParameters;
             _c2SWcfManager = c2SWcfManager;
             _tabulatorViewModel = tabulatorViewModel;
@@ -82,6 +82,7 @@ namespace Fibertest.WpfClient
             _traceStatisticsViewsManager = traceStatisticsViewsManager;
             _landmarksViewsManager = landmarksViewsManager;
             _graphReadModel = graphReadModel;
+            _grpcC2DRequests = grpcC2DRequests;
         }
 
         public void Initialize(TraceStateModel model, bool isTraceStateChanged)
@@ -249,8 +250,8 @@ namespace Fibertest.WpfClient
                     }
                 }
 
-                var result = await _c2DWcfManager.SendCommandAsObj(dto);
-                if (result != null)
+                var result = await _grpcC2DRequests.SendEventSourcingCommand(dto);
+                if (result.ReturnCode != ReturnCode.Ok)
                     _logger.LogInfo(Logs.Client,@"Cannot update measurement!");
                 IsEditEnabled = true;
             }

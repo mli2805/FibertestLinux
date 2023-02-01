@@ -30,12 +30,12 @@ public sealed class MySqlDbInitializer : IDbInitializer
     private string FtConnectionString => $"server=localhost;port={_mysqlTcpPort};user id=root;password=root;database={OtherTablesScheme}";
     public string EsConnectionString => $"server=localhost;port={_mysqlTcpPort};user id=root;password=root;database={EventSourcingScheme}";
 
-    public MySqlDbInitializer(IWritableOptions<MysqlConfig> config, ILogger<MySqlDbInitializer> logger, MySerializer mySerializer)
+    public MySqlDbInitializer(IWritableConfig<DataCenterConfig> config, ILogger<MySqlDbInitializer> logger, MySerializer mySerializer)
     {
         _logger = logger;
         _mySerializer = mySerializer;
-        _mysqlTcpPort = config.Value.TcpPort; // default 3306
-        _postfix = config.Value.SchemePostfix;
+        _mysqlTcpPort = config.Value.MySql.TcpPort; // default 3306
+        _postfix = config.Value.MySql.SchemePostfix;
     }
 
     public IStoreEvents Init()

@@ -1,18 +1,27 @@
 ﻿using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.Utils;
 
 namespace Fibertest.DataCenter;
 
-public class ClientGrpcRequestExecutor
+public partial class ClientGrpcRequestExecutor
 {
+    private readonly IWritableConfig<DataCenterConfig> _config;
+    private readonly ILogger<ClientGrpcRequestExecutor> _logger;
+    private readonly Model _writeModel;
     private readonly ClientCollection _clientCollection;
     private readonly RtuOccupations _rtuOccupations;
     private readonly EventStoreService _eventStoreService;
     private readonly DiskSpaceProvider _diskSpaceProvider;
 
-    public ClientGrpcRequestExecutor(ClientCollection clientCollection, RtuOccupations rtuOccupations,
+    public ClientGrpcRequestExecutor(IWritableConfig<DataCenterConfig> config, 
+        ILogger<ClientGrpcRequestExecutor> logger, Model writeModel,
+        ClientCollection clientCollection, RtuOccupations rtuOccupations,
         EventStoreService eventStoreService, DiskSpaceProvider diskSpaceProvider)
     {
+        _config = config;
+        _logger = logger;
+        _writeModel = writeModel;
         _clientCollection = clientCollection;
         _rtuOccupations = rtuOccupations;
         _eventStoreService = eventStoreService;
@@ -32,11 +41,19 @@ public class ClientGrpcRequestExecutor
             case SetRtuOccupationDto dto:
                 return await _rtuOccupations.SetRtuOccupationState(dto);
 
+            case GetDiskSpaceDto _:
+                return await _diskSpaceProvider.GetDiskSpaceGb();
             case GetEventsDto dto:
                 return _eventStoreService.GetEvents(dto.Revision);
-            case GetDiskSpaceDto dto:
-                return await _diskSpaceProvider.GetDiskSpaceGb();
+            case GetSerializedModelParamsDto _:
+                return await GetModelDownloadParams();
+            case GetModelPortionDto dto:
+                return await GetModelPortion(dto.Portion);
 
+            case ChangeDcConfigDto dto:
+                _config.Update(cfg=>cfg.FillIn(dto.NewConfig));
+                return new RequestAnswer(ReturnCode.Ok);
+         
             default: return new RequestAnswer(ReturnCode.Error);
         }
     }

@@ -7,25 +7,26 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {
     public class GrmNodeRequests
     {
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
+        private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWindowManager _windowManager;
         private readonly Model _model;
 
-        public GrmNodeRequests(IWcfServiceDesktopC2D c2DWcfManager, IWindowManager windowManager, Model model)
+        public GrmNodeRequests(GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager, Model model)
         {
-            _c2DWcfManager = c2DWcfManager;
+            _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
             _model = model;
         }
 
         public async Task MoveNode(MoveNode cmd)
         {
-            await _c2DWcfManager.SendCommandAsObj(cmd);
+            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
         }
 
         public async Task AddNodeIntoFiber(RequestAddNodeIntoFiber request)
@@ -33,10 +34,10 @@ namespace Fibertest.WpfClient
             var cmd = await PrepareAddNodeIntoFiber(request);
             if (cmd == null)
                 return;
-            var message = await _c2DWcfManager.SendCommandAsObj(cmd);
-            if (message != null)
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
                 await _windowManager.ShowDialogWithAssignedOwner(
-                    new MyMessageBoxViewModel(MessageType.Error, @"Graph AddNodeIntoFiber: " + message));
+                    new MyMessageBoxViewModel(MessageType.Error, @"Graph AddNodeIntoFiber: " + result.ErrorMessage));
         }
 
         private async Task<AddNodeIntoFiber?> PrepareAddNodeIntoFiber(RequestAddNodeIntoFiber request)
@@ -81,10 +82,10 @@ namespace Fibertest.WpfClient
             if (detoursForGraph.Count == 0 && type == EquipmentType.AdjustmentPoint)
                 cmd.FiberIdToDetourAdjustmentPoint = Guid.NewGuid();
 
-            var message = await _c2DWcfManager.SendCommandAsObj(cmd);
-            if (message != null)
+            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode != ReturnCode.Ok)
                 await _windowManager.ShowDialogWithAssignedOwner(
-                    new MyMessageBoxViewModel(MessageType.Error, @"Graph RemoveNode: " + message));
+                    new MyMessageBoxViewModel(MessageType.Error, @"Graph RemoveNode: " + result.ErrorMessage));
         }
 
         // if node has 3 or more neighbours (it's a fork) and one or more from them are adjustment point 

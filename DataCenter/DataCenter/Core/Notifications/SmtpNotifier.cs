@@ -4,14 +4,12 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.Graph.TraceStateReport;
 using Fibertest.Utils;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.DataCenter;
 
 public class SmtpNotifier
 {
-    private readonly IWritableOptions<SmtpConfig> _config;
-    private readonly IOptions<DataCenterConfig> _fullConfig;
+    private readonly IWritableConfig<DataCenterConfig> _config;
     private readonly ILogger<SmtpNotifier> _logger;
     private readonly Model _writeModel;
 
@@ -19,18 +17,16 @@ public class SmtpNotifier
     private const string TestEmailMessage =
         @"You received this letter because you are included in Fibertest alarm subscription. - Вы получили данное сообщение так как включены в  список рассылки Fibertest'a";
 
-    public SmtpNotifier(IWritableOptions<SmtpConfig> config, IOptions<DataCenterConfig> fullConfig, 
-        ILogger<SmtpNotifier> logger, Model writeModel)
+    public SmtpNotifier(IWritableConfig<DataCenterConfig> config, ILogger<SmtpNotifier> logger, Model writeModel)
     {
         _config = config;
-        _fullConfig = fullConfig;
         _logger = logger;
         _writeModel = writeModel;
     }
 
     public void SaveSmtpSettings(SmtpConfig dto)
     {
-        _config.Update(c=>c.FillIn(dto));
+        _config.Update(c=>c.Smtp.FillIn(dto));
     }
 
     public async Task<bool> SendTest(string address)
@@ -77,7 +73,7 @@ public class SmtpNotifier
                 
                 Accidents = ConvertAccidents(addMeasurement.Accidents).ToList(),
             };
-            new TraceStateReportProvider().Create(reportModel, _fullConfig.Value);
+            new TraceStateReportProvider().Create(reportModel, _config.Value);
             //.Save(filename);
             return filename;
         }
@@ -91,7 +87,7 @@ public class SmtpNotifier
     private IEnumerable<AccidentLineModel> ConvertAccidents(List<AccidentOnTraceV2> list)
     {
         var number = 0;
-        var isGisOn = !_fullConfig.Value.General.IsWithoutMapMode;
+        var isGisOn = !_config.Value.General.IsWithoutMapMode;
         var factory = new AccidentLineModelFactory();
         foreach (var accidentOnTraceV2 in list)
         {
@@ -123,7 +119,7 @@ public class SmtpNotifier
     {
         try
         {
-            var mailFrom = _config.Value.MailFrom;
+            var mailFrom = _config.Value.Smtp.MailFrom;
             using (SmtpClient smtpClient = GetSmtpClient(mailFrom))
             {
                 var mail = new MailMessage
@@ -152,13 +148,13 @@ public class SmtpNotifier
     private SmtpClient GetSmtpClient(string mailFrom)
     {
             
-        SmtpClient smtpClient = new SmtpClient(_config.Value.SmtpHost, _config.Value.SmtpPort)
+        SmtpClient smtpClient = new SmtpClient(_config.Value.Smtp.SmtpHost, _config.Value.Smtp.SmtpPort)
         {
             EnableSsl = true,
-            Timeout = _config.Value.SmtpTimeoutMs,
+            Timeout = _config.Value.Smtp.SmtpTimeoutMs,
             DeliveryMethod = SmtpDeliveryMethod.Network,
             UseDefaultCredentials = false,
-            Credentials = new NetworkCredential(mailFrom, _config.Value.MailFromPassword)
+            Credentials = new NetworkCredential(mailFrom, _config.Value.Smtp.MailFromPassword)
         };
 
         return smtpClient;
