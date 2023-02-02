@@ -79,7 +79,7 @@ public class C2DService : c2d.c2dBase
                     return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
             }
 
-            if (request.What != "GetEvents")
+            if (request.What != "GetEvents" && request.What != "Heartbeat")
                 _logger.LogInfo(Logs.DataCenter, $"Client sent {request.What} request");
 
             var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);

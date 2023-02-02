@@ -16,7 +16,6 @@ namespace Fibertest.WpfClient
     public class ClientMeasurementViewModel : Screen
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly IWritableConfig<OtdrParametersConfig> _config;
         private readonly ILogger _logger;
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
@@ -56,7 +55,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ClientMeasurementViewModel(ILifetimeScope globalScope, IWritableConfig<OtdrParametersConfig> config, 
+        public ClientMeasurementViewModel(ILifetimeScope globalScope, 
             ILogger logger,
             CurrentUser currentUser, Model readModel, MeasurementInterrupter measurementInterrupter,
             IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager,
@@ -64,7 +63,6 @@ namespace Fibertest.WpfClient
             ReflectogramManager reflectogramManager)
         {
             _globalScope = globalScope;
-            _config = config;
             _logger = logger;
             _currentUser = currentUser;
             _readModel = readModel;
@@ -75,15 +73,15 @@ namespace Fibertest.WpfClient
             _reflectogramManager = reflectogramManager;
         }
 
-        public bool Initialize(Leaf parent, int portNumber)
+        public async Task<bool> Initialize(Leaf parent, int portNumber)
         {
-            RtuLeaf = parent is RtuLeaf leaf ? leaf : (RtuLeaf)parent.Parent;
+            RtuLeaf = parent as RtuLeaf ?? (RtuLeaf)parent.Parent;
             _rtu = _readModel.Rtus.First(r => r.Id == RtuLeaf.Id);
 
             _vm = _globalScope.Resolve<OtdrParametersThroughServerSetterViewModel>();
             _vm.Initialize(_rtu.AcceptableMeasParams);
             IWindowManager windowManager = new WindowManager();
-            windowManager.ShowDialogWithAssignedOwner(_vm);
+            await windowManager.ShowDialogWithAssignedOwner(_vm);
             if (!_vm.IsAnswerPositive)
                 return false;
 

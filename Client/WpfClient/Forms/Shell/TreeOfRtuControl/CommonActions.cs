@@ -50,8 +50,8 @@ namespace Fibertest.WpfClient
             if (!await _globalScope.Resolve<IRtuHolder>().SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.DoMeasurementClient))
                 return;
 
-            if (_clientMeasurementViewModel.Initialize(parent, GetPortNumber(param)))
-                _windowManager.ShowDialogWithAssignedOwner(_clientMeasurementViewModel);
+            if (await _clientMeasurementViewModel.Initialize(parent, GetPortNumber(param)))
+               await _windowManager.ShowDialogWithAssignedOwner(_clientMeasurementViewModel);
 
             await _globalScope.Resolve<IRtuHolder>()
                 .SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.None);

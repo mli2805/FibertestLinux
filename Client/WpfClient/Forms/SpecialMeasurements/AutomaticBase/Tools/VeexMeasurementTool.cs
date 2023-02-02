@@ -67,7 +67,7 @@ namespace Fibertest.WpfClient
                 { ReturnCode = ReturnCode.Ok, ConnectionQuality = lineCheckResult.ConnectionQuality[0] };
         }
         
-        public async Task<MeasurementEventArgs> Fetch(Guid rtuId, Trace trace, Guid clientMeasurementId, CancellationTokenSource cts)
+        public async Task<MeasurementEventArgs> Fetch(Guid rtuId, Trace? trace, Guid clientMeasurementId, CancellationTokenSource cts)
         {
             var getDto = new GetClientMeasurementDto(rtuId, RtuMaker.VeEX)
             {

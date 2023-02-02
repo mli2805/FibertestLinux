@@ -125,6 +125,7 @@ namespace Fibertest.WpfClient
 
             var postfix = _commandLineParameters.IsUnderSuperClientStart ? _commandLineParameters.ClientOrdinal.ToString() : "";
             // _logFile.AssignFile($@"client{postfix}.log");
+            _logger.StartLine(Logs.Client);
             _logger.LogInfo(Logs.Client,$@"Client application {postfix} started!");
 
             if (_commandLineParameters.IsUnderSuperClientStart)
