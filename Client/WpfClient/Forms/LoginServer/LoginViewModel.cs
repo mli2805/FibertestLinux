@@ -20,6 +20,7 @@ namespace Fibertest.WpfClient
         private readonly IMachineKeyProvider _machineKeyProvider;
         private readonly NoLicenseAppliedViewModel _noLicenseAppliedViewModel;
         private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2RRequests _grpcC2RRequests;
         private readonly SecurityAdminConfirmationViewModel _securityAdminConfirmationViewModel;
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger; 
@@ -67,7 +68,7 @@ namespace Fibertest.WpfClient
         public LoginViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger,
             IWindowManager windowManager, SecurityAdminConfirmationViewModel securityAdminConfirmationViewModel,
             IMachineKeyProvider machineKeyProvider, NoLicenseAppliedViewModel noLicenseAppliedViewModel,
-            GrpcC2DRequests grpcC2DRequests,
+            GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests,
             CurrentUser currentUser, CurrentGis currentGis, DataCenterConfig currentDatacenterParameters)
         {
             _globalScope = globalScope;
@@ -75,6 +76,7 @@ namespace Fibertest.WpfClient
             _machineKeyProvider = machineKeyProvider;
             _noLicenseAppliedViewModel = noLicenseAppliedViewModel;
             _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2RRequests = grpcC2RRequests;
             _securityAdminConfirmationViewModel = securityAdminConfirmationViewModel;
             _config = config;
             _logger = logger;
@@ -153,6 +155,7 @@ namespace Fibertest.WpfClient
 
             _grpcC2DRequests.SetClientConnectionId(ConnectionId);
             _grpcC2DRequests.ChangeAddress(grpcIp);
+            _grpcC2RRequests.SetClientConnectionId(ConnectionId);
             Status = string.Format(Resources.SID_Performing_registration_on__0_, grpcIp);
             _logger.LogInfo(Logs.Client,$@"Performing registration on {grpcIp}");
         }

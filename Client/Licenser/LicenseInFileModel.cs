@@ -317,7 +317,7 @@ namespace Licenser
 
             IsMachineKeyRequired = licenseInFile.IsMachineKeyRequired;
             IsStandart = !licenseInFile.IsMachineKeyRequired;
-            SecurityAdminPassword = (string?)Cryptography.Decode(licenseInFile.SecurityAdminPassword);
+            SecurityAdminPassword = (string?)Cryptography.Decode(licenseInFile.SecurityAdminPassword ?? Array.Empty<byte>());
             CreationDate = licenseInFile.CreationDate;
 
         }

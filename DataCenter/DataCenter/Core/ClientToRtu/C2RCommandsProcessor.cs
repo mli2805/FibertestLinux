@@ -57,6 +57,9 @@ public class C2RCommandsProcessor
             return validationResult;
 
         ///////////////////////////////////////////////////////////////////
+        if (command is CheckRtuConnectionDto checkDto)
+            return await CheckRtuConnection(checkDto, rtuAddressTuple.Item2!);
+        
         var resultJson = command.RtuMaker == RtuMaker.IIT
             ? await _clientToIitRtuTransmitter
                 .TransferCommand(rtuAddressTuple.Item2!,
@@ -66,7 +69,7 @@ public class C2RCommandsProcessor
         ///////////////////////////////////////////////////////////////////
 
         // resultJson could be changed while post processing
-        return await PostProcessResult(command, resultJson);
+        return await _rtuResponseApplier.ApplyResponse(command, resultJson);
     }
 
     /// <summary>
@@ -104,7 +107,11 @@ public class C2RCommandsProcessor
     private async Task<Tuple<string?, string?>> GetRtuAddress<T>(T command) where T : BaseRtuRequest
     {
         string? rtuAddress;
-        if (command is InitializeRtuDto dto)
+        if (command is CheckRtuConnectionDto checkDto)
+        {
+            rtuAddress = checkDto.NetAddress.ToStringA();
+        }
+        else if (command is InitializeRtuDto dto)
         {
             dto.ServerAddresses = _serverDoubleAddress.Clone();
             if (!dto.RtuAddresses.HasReserveAddress)
@@ -118,33 +125,61 @@ public class C2RCommandsProcessor
         {
             var rtuStation = await _rtuStationsRepository.GetRtuStation(command.RtuId);
             if (rtuStation == null)
-                return new Tuple<string?, string?>(JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.RtuNotFound), JsonSerializerSettings), null);
+                return new Tuple<string?, string?>(JsonConvert.SerializeObject(
+                    new RequestAnswer(ReturnCode.RtuNotFound), JsonSerializerSettings), null);
 
             rtuAddress = rtuStation.GetRtuAvailableAddress();
             if (rtuAddress == null)
-                return new Tuple<string?, string?>(JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.RtuNotAvailable), JsonSerializerSettings), null);
+                return new Tuple<string?, string?>(JsonConvert.SerializeObject(
+                    new RequestAnswer(ReturnCode.RtuNotAvailable), JsonSerializerSettings), null);
         }
         _logger.LogInfo(Logs.DataCenter, $"rtuAddress {rtuAddress}");
 
         return new Tuple<string?, string?>(null, rtuAddress);
     }
 
-    private async Task<string> PostProcessResult<T>(T command, string jsonResult) where T : BaseRtuRequest
+    private async Task<string> CheckRtuConnection(CheckRtuConnectionDto dto, string rtuAddress)
     {
-        switch (command)
+        RtuConnectionCheckedDto? result = null;
+        if (dto.NetAddress.Port == (int)TcpPorts.RtuListenTo)
         {
-            case InitializeRtuDto dto:
-                return await _rtuResponseApplier.ApplyRtuInitializationResult(dto, jsonResult);
-            case AttachOtauDto dto:
-                return await _rtuResponseApplier.ApplyOtauAttachmentResult(dto, jsonResult);
-            case DetachOtauDto dto:
-                return await _rtuResponseApplier.ApplyOtauDetachmentResult(dto, jsonResult);
-            case AssignBaseRefsDto dto:
-                return await _rtuResponseApplier.ApplyBaseRefsAssignmentResult(dto, jsonResult);
-            default:
-                return JsonConvert
-                    .SerializeObject(new RequestAnswer(ReturnCode.Error) { ErrorMessage = "Unknown command" },
-                        JsonSerializerSettings);
+            string res = await _clientToIitRtuTransmitter.TransferCommand(rtuAddress,
+                JsonConvert.SerializeObject(dto, JsonSerializerSettings));
+            result = JsonConvert.DeserializeObject<RtuConnectionCheckedDto>(res);
         }
+
+        if (dto.NetAddress.Port == (int)TcpPorts.RtuVeexListenTo)
+        {
+            //TODO check veex
+            result = new RtuConnectionCheckedDto(ReturnCode.Error) { NetAddress = dto.NetAddress };
+        }
+
+        if (dto.NetAddress.Port == -1)
+        {
+            dto.NetAddress.Port = (int)TcpPorts.RtuListenTo;
+            rtuAddress = dto.NetAddress.ToStringA();
+            string res = await _clientToIitRtuTransmitter.TransferCommand(rtuAddress,
+                JsonConvert.SerializeObject(dto, JsonSerializerSettings));
+            result = JsonConvert.DeserializeObject<RtuConnectionCheckedDto>(res);
+            if (result != null && !result.IsConnectionSuccessful)
+            {
+                dto.NetAddress.Port = (int)TcpPorts.RtuListenTo;
+                rtuAddress = dto.NetAddress.ToStringA();
+                //TODO check veex
+                _logger.LogError(Logs.DataCenter, $"Check for VEEX RTU {rtuAddress} is not implemented yet");
+                // only if failed
+                dto.NetAddress.Port = -1;
+                result = new RtuConnectionCheckedDto(ReturnCode.Error) { NetAddress = dto.NetAddress };
+            }
+        }
+
+        result ??= new RtuConnectionCheckedDto(ReturnCode.D2RGrpcOperationError) { NetAddress = dto.NetAddress };
+        if (!result.IsConnectionSuccessful)
+        {
+            result.IsPingSuccessful = 
+                Pinger.Ping(dto.NetAddress.IsAddressSetAsIp ? dto.NetAddress.Ip4Address : dto.NetAddress.HostName);
+        }
+
+        return JsonConvert.SerializeObject(result, JsonSerializerSettings);
     }
 }

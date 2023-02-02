@@ -28,6 +28,28 @@ public partial class RtuResponseApplier
         _ftSignalRClient = ftSignalRClient;
     }
 
+
+    public async Task<string> ApplyResponse<T>(T command, string jsonResult) where T : BaseRtuRequest
+    {
+        switch (command)
+        {
+            case CheckRtuConnectionDto _:
+                return jsonResult;
+
+            case InitializeRtuDto dto:
+                return await ApplyRtuInitializationResult(dto, jsonResult);
+            case AttachOtauDto dto:
+                return await ApplyOtauAttachmentResult(dto, jsonResult);
+            case DetachOtauDto dto:
+                return await ApplyOtauDetachmentResult(dto, jsonResult);
+            case AssignBaseRefsDto dto:
+                return await ApplyBaseRefsAssignmentResult(dto, jsonResult);
+            default:
+                return JsonConvert
+                    .SerializeObject(new RequestAnswer(ReturnCode.Error) { ErrorMessage = "Unknown command" },
+                        JsonSerializerSettings);
+        }
+    }
   
     private TResult Deserialize<TResult>(string jsonResult) where TResult : RequestAnswer, new()
     {

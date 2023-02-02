@@ -3,7 +3,7 @@
     public class RtuConnectionCheckedDto : RequestAnswer
     {
         public Guid RtuId;
-        public bool IsConnectionSuccessful;
+        public bool IsConnectionSuccessful => ReturnCode == ReturnCode.Ok;
         public NetAddress? NetAddress;
         public bool IsPingSuccessful; // check if rtu service connection failed
 

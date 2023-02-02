@@ -15,7 +15,7 @@ namespace Fibertest.WpfClient
         Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto);
 
         // C2D2R
-        Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress);
+        // Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress);
         Task<RtuInitializedDto> InitializeRtuAsync(InitializeRtuDto dto);
         Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto);
         Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto);
@@ -71,10 +71,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<RtuInitializedDto> InitializeRtuAsync(InitializeRtuDto dto)
         {

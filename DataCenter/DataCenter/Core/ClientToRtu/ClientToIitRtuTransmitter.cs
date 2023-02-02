@@ -52,4 +52,5 @@ public class ClientToIitRtuTransmitter
             return JsonConvert.SerializeObject(badResult, JsonSerializerSettings);
         }
     }
+
 }

@@ -20,8 +20,9 @@ namespace Fibertest.Graph
             return binaryFormatter.Deserialize(cryptoStream);
         }
 
-        public static byte[]? Encode(object obj)
+        public static byte[]? Encode(object? obj)
         {
+            if (obj == null) return null;
             try
             {
                 using MemoryStream memoryStream = new MemoryStream();

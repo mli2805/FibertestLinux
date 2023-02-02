@@ -24,13 +24,15 @@ public class RtuGrpcService : d2r.d2rBase
         object? o = JsonConvert.DeserializeObject(d2RCommand.Json, JsonSerializerSettings);
         if (o == null)
             return new d2rResponse()
-                { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.FailedDeserializeJson)) };
+            { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.FailedDeserializeJson)) };
         var request = (BaseRtuRequest)o;
         _logger.LogInfo(Logs.RtuService, $"request {request.What} received");
 
         object result;
         switch (o)
         {
+            case CheckRtuConnectionDto dto: 
+                result = new RtuConnectionCheckedDto(ReturnCode.Ok) { NetAddress = dto.NetAddress.Clone() }; break;
             case InitializeRtuDto dto: result = await _rtuManager.InitializeRtu(dto); break;
             case ApplyMonitoringSettingsDto dto: result = await _rtuManager.ApplyMonitoringSettings(dto); break;
             case StopMonitoringDto _: result = await _rtuManager.StopMonitoring(); break;
@@ -44,5 +46,5 @@ public class RtuGrpcService : d2r.d2rBase
         return new d2rResponse() { Json = JsonConvert.SerializeObject(result) };
     }
 
-   
+
 }
