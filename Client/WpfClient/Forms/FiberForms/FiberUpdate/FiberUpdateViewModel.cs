@@ -20,14 +20,14 @@ namespace Fibertest.WpfClient
         private readonly CurrentGis _currentGis;
         private readonly GraphGpsCalculator _graphGpsCalculator;
         private readonly ReflectogramManager _reflectogramManager;
-        private Fiber _fiber;
-        private string _userInputedLength;
+        private Fiber _fiber = null!;
 
-        public string GpsLength { get; set; }
+        public string GpsLength { get; set; } = null!;
 
-        public string NodeAtitle { get; set; }
-        public string NodeBtitle { get; set; }
+        public string? NodeAtitle { get; set; }
+        public string? NodeBtitle { get; set; }
 
+        private string _userInputedLength = null!;
         public string UserInputedLength
         {
             get => _userInputedLength;
@@ -41,9 +41,9 @@ namespace Fibertest.WpfClient
 
         public bool IsEditEnabled { get; set; }
         public bool IsButtonSaveEnabled { get; set; }
-        public UpdateFiber Command { get; set; }
+        public UpdateFiber? Command { get; set; }
 
-        public Tuple<Trace, string> SelectedTrace { get; set; }
+        public Tuple<Trace, string>? SelectedTrace { get; set; }
         public List<Tuple<Trace, string>> TracesThrough { get; set; } = new List<Tuple<Trace, string>>();
 
         public Visibility GisVisibility { get; set; }
@@ -86,7 +86,8 @@ namespace Fibertest.WpfClient
             }
             SelectedTrace = TracesThrough.FirstOrDefault();
 
-            UserInputedLength = _fiber.UserInputedLength.Equals(0) ? "" : _fiber.UserInputedLength.ToString(CultureInfo.InvariantCulture);
+            UserInputedLength = _fiber.UserInputedLength.Equals(0) 
+                ? "" : _fiber.UserInputedLength.ToString(CultureInfo.InvariantCulture);
         }
 
         private int GetRealFiberIndex(Trace trace, int fiberIndexWithAdjustmentPoints)
@@ -163,6 +164,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; } = null;
+        public string Error { get; } = "";
     }
 }

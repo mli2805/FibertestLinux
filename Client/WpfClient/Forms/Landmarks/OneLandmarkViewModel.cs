@@ -14,7 +14,7 @@ namespace Fibertest.WpfClient
 {
     public class OneLandmarkViewModel : PropertyChangedBase
     {
-        public string TraceTitle;
+        public string TraceTitle = null!;
         public DateTime PreciseTimestamp;
         public int SorFileId;
         public Guid RtuId;
@@ -62,22 +62,22 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private Landmark _landmarkBeforeChanges;
+        private Landmark? _landmarkBeforeChanges;
 
-        private EquipmentTypeComboItem _selectedEquipmentTypeItem;
-        public EquipmentTypeComboItem SelectedEquipmentTypeItem
+        private EquipmentTypeComboItem? _selectedEquipmentTypeItem;
+        public EquipmentTypeComboItem? SelectedEquipmentTypeItem
         {
             get => _selectedEquipmentTypeItem;
             set
             {
-                if (Equals(value, _selectedEquipmentTypeItem)) return;
+                if (value == null || Equals(value, _selectedEquipmentTypeItem)) return;
                 _selectedEquipmentTypeItem = value;
                 SelectedLandmark.EquipmentType = value.Type;
                 NotifyOfPropertyChange();
             }
         }
 
-        private Landmark _selectedLandmark;
+        private Landmark _selectedLandmark = null!;
         public Landmark SelectedLandmark
         {
             get => _selectedLandmark;
@@ -99,7 +99,7 @@ namespace Fibertest.WpfClient
                                  SelectedLandmark.EquipmentType != EquipmentType.Rtu;
         }
 
-        private List<EquipmentTypeComboItem> _comboItems;
+        private List<EquipmentTypeComboItem> _comboItems = null!;
         public List<EquipmentTypeComboItem> ComboItems
         {
             get => _comboItems;
@@ -183,7 +183,7 @@ namespace Fibertest.WpfClient
             _readModel = readModel;
             _reflectogramManager = reflectogramManager;
             _tabulatorViewModel = tabulatorViewModel;
-            GpsInputSmallViewModel = gpsInputSmallViewModel;
+            _gpsInputSmallViewModel = gpsInputSmallViewModel;
         }
 
         public async void Apply()
@@ -215,7 +215,7 @@ namespace Fibertest.WpfClient
 
         private async Task<RequestAnswer> ApplyEquipment()
         {
-            if (_landmarkBeforeChanges.EquipmentTitle != SelectedLandmark.EquipmentTitle ||
+            if (_landmarkBeforeChanges!.EquipmentTitle != SelectedLandmark.EquipmentTitle ||
                 _landmarkBeforeChanges.EquipmentType != SelectedLandmark.EquipmentType)
             {
                 var equipment = _readModel.Equipments.First(e => e.EquipmentId == SelectedLandmark.EquipmentId);
@@ -243,7 +243,7 @@ namespace Fibertest.WpfClient
                 return new RequestAnswer(ReturnCode.Ok);
             }
 
-            if (_landmarkBeforeChanges.NodeTitle != SelectedLandmark.NodeTitle ||
+            if (_landmarkBeforeChanges!.NodeTitle != SelectedLandmark.NodeTitle ||
                 _landmarkBeforeChanges.NodeComment != SelectedLandmark.NodeComment ||
                 _landmarkBeforeChanges.GpsCoors != position)
             {

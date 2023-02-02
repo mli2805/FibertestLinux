@@ -65,7 +65,7 @@ namespace Fibertest.WpfClient
         private static void MoveFocus()
         {
             TraversalRequest tRequest = new TraversalRequest(FocusNavigationDirection.Next);
-            UIElement keyboardFocus = Keyboard.FocusedElement as UIElement;
+            UIElement? keyboardFocus = Keyboard.FocusedElement as UIElement;
             keyboardFocus?.MoveFocus(tRequest);
         }
 

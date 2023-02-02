@@ -7,10 +7,10 @@ namespace Fibertest.WpfClient
 {
     public class FiberWithNodesAddViewModel : Screen, IDataErrorInfo
     {
-        private string _count;
         public bool Result { get; set; }
 
-        public string Count
+        private string? _count;
+        public string? Count
         {
             get { return _count; }
             set
@@ -124,6 +124,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
 }

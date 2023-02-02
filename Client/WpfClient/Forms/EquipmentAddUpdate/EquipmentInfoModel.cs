@@ -6,8 +6,8 @@ namespace Fibertest.WpfClient
 {
     public class EquipmentInfoModel : PropertyChangedBase
     {
-        private string _title;
-        public string Title
+        private string? _title;
+        public string? Title
         {
             get => _title;
             set
@@ -42,10 +42,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _comment;
-        private bool _isRightCableReserveEnabled;
-
-        public string Comment
+        private string? _comment;
+        public string? Comment
         {
             get => _comment;
             set
@@ -56,6 +54,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private bool _isRightCableReserveEnabled;
         public bool IsRightCableReserveEnabled
         {
             get => _isRightCableReserveEnabled;
@@ -89,11 +88,11 @@ namespace Fibertest.WpfClient
             Other.PropertyChanged += RadioButtonPropertyChanged;
         }
 
-        private void RadioButtonPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void RadioButtonPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName != @"IsChecked") return;
-            var model = (RadioButtonModel) sender;
-            if (!model.IsChecked) return;
+            var model = (RadioButtonModel?) sender;
+            if (!model!.IsChecked) return;
             IsRightCableReserveEnabled =
                 model.Title != Resources.SID_Terminal && model.Title != Resources.SID_CableReserve;
         }

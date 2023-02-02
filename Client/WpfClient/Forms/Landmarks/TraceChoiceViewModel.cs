@@ -8,8 +8,8 @@ namespace Fibertest.WpfClient
 {
     public class TraceChoiceViewModel : Screen
     {
-        public List<Trace> Rows { get; set; }
-        public Trace SelectedTrace { get; set; }
+        public List<Trace> Rows { get; set; } = null!;
+        public Trace SelectedTrace { get; set; } = null!;
         public bool IsAnswerPositive;
 
         public void Initialize(List<Trace> traces)

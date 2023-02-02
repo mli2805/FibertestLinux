@@ -30,11 +30,11 @@ namespace Fibertest.WpfClient
             childrenViews.PropertyChanged += ChildrenViews_PropertyChanged;
         }
 
-        private void ChildrenViews_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs args)
+        private void ChildrenViews_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(ChildrenViews.ShouldBeClosed))
             {
-                if (((ChildrenViews) sender).ShouldBeClosed)
+                if (((ChildrenViews) sender!).ShouldBeClosed)
                 {
                     foreach (var traceStateViewModel in LaunchedViews.ToArray())
                     {
@@ -51,7 +51,7 @@ namespace Fibertest.WpfClient
             var res = await vm.InitializeFromRtu(rtuId);
             LaunchedViews.Add(vm);
             _childrenViews.ShouldBeClosed = false;
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
             return res;
         }
 
@@ -61,7 +61,7 @@ namespace Fibertest.WpfClient
             var res = await vm.InitializeFromTrace(traceId, selectedNodeId);
             LaunchedViews.Add(vm);
             _childrenViews.ShouldBeClosed = false;
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
             return res;
         }
 
@@ -73,7 +73,7 @@ namespace Fibertest.WpfClient
                 return await InitializeFromTrace(traces.First().TraceId, nodeId);
 
             _traceChoiceViewModel.Initialize(traces);
-            _windowManager.ShowDialogWithAssignedOwner(_traceChoiceViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_traceChoiceViewModel);
             if (!_traceChoiceViewModel.IsAnswerPositive)
                 return -1;
             var traceId = _traceChoiceViewModel.SelectedTrace.TraceId;

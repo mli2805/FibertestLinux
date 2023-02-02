@@ -19,8 +19,8 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
-        private Rtu _rtu;
-        private Trace _trace;
+        private Rtu _rtu = null!;
+        private Trace _trace = null!;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
         private readonly CurrentUser _currentUser;
@@ -32,15 +32,15 @@ namespace Fibertest.WpfClient
 
 
         private readonly string _savedInDb = Resources.SID_Saved_in_DB;
-        private string _lastChosenFile;
+        private string? _lastChosenFile;
 
-        public string RtuTitle { get; private set; }
+        public string RtuTitle { get; private set; } = null!;
 
-        public string TraceTitle { get; private set; }
-        public string TracePortOnRtu { get; private set; }
+        public string TraceTitle { get; private set; } = null!;
+        public string TracePortOnRtu { get; private set; } = null!;
 
-        private string _preciseBaseFilename;
-        public string PreciseBaseFilename
+        private string? _preciseBaseFilename;
+        public string? PreciseBaseFilename
         {
             get => _preciseBaseFilename;
             set
@@ -52,8 +52,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _fastBaseFilename;
-        public string FastBaseFilename
+        private string? _fastBaseFilename;
+        public string? FastBaseFilename
         {
             get => _fastBaseFilename;
             set
@@ -65,8 +65,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _additionalBaseFilename;
-        public string AdditionalBaseFilename
+        private string? _additionalBaseFilename;
+        public string? AdditionalBaseFilename
         {
             get => _additionalBaseFilename;
             set
@@ -90,7 +90,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _initialDirectory;
+        private string _initialDirectory = null!;
         private string InitialDirectory
         {
             get => _initialDirectory;
@@ -181,7 +181,7 @@ namespace Fibertest.WpfClient
             if (dialog.ShowDialog() == true)
             {
                 PreciseBaseFilename = dialog.FileName;
-                InitialDirectory = Path.GetDirectoryName(dialog.FileName);
+                InitialDirectory = Path.GetDirectoryName(dialog.FileName) ?? "";
                 _lastChosenFile = Path.GetFileName(dialog.FileName);
             }
         }
@@ -196,7 +196,7 @@ namespace Fibertest.WpfClient
             if (dialog.ShowDialog() == true)
             {
                 FastBaseFilename = dialog.FileName;
-                InitialDirectory = Path.GetDirectoryName(dialog.FileName);
+                InitialDirectory = Path.GetDirectoryName(dialog.FileName) ?? "";
                 _lastChosenFile = Path.GetFileName(dialog.FileName);
             }
         }
@@ -211,7 +211,7 @@ namespace Fibertest.WpfClient
             if (dialog.ShowDialog() == true)
             {
                 AdditionalBaseFilename = dialog.FileName;
-                InitialDirectory = Path.GetDirectoryName(dialog.FileName);
+                InitialDirectory = Path.GetDirectoryName(dialog.FileName) ?? "";
                 _lastChosenFile = Path.GetFileName(dialog.FileName);
             }
         }
@@ -226,6 +226,8 @@ namespace Fibertest.WpfClient
         {
             IsEditEnabled = false;
             var dto = PrepareDto(_trace);
+            if (dto == null) return;
+
             if (dto.BaseRefs.Any() && await IsValidCombination() && await IsDistanceLengthAcceptable(dto, _trace))
             {
                 BaseRefAssignedDto result;
@@ -274,7 +276,7 @@ namespace Fibertest.WpfClient
             if (message != "") return true;
 
             var gpsDistance = $@"{_graphGpsCalculator.CalculateTraceGpsLengthKm(trace):#,0.##}";
-            var opticalLength = $@"{otdrKnownBlocks.GetTraceLengthKm():#,0.##}";
+            var opticalLength = $@"{otdrKnownBlocks!.GetTraceLengthKm():#,0.##}";
             return await _baseRefMessages.IsLengthDifferenceAcceptable(gpsDistance, opticalLength);
         }
 
@@ -282,8 +284,10 @@ namespace Fibertest.WpfClient
         {
             var rtu = _readModel.Rtus.FirstOrDefault(r => r.Id == trace.RtuId);
             if (rtu == null) return null;
-            var dto = new AssignBaseRefsDto(trace.RtuId, rtu.RtuMaker, trace.TraceId,new List<BaseRefDto>(), new List<int>()){
-                OtdrId = rtu.OtdrId,
+            var dto = new AssignBaseRefsDto(trace.RtuId, rtu.RtuMaker, 
+                trace.TraceId,new List<BaseRefDto>(), new List<int>())
+            {
+                OtdrId = rtu.OtdrId ?? "",
                 OtauPortDto = trace.OtauPort,
             };
 
@@ -296,26 +300,28 @@ namespace Fibertest.WpfClient
             }
 
             var baseRefs = new List<BaseRefDto>();
-            if (IsFilenameChanged(PreciseBaseFilename, trace.PreciseId))
+            if (IsFilenameChanged(PreciseBaseFilename!, trace.PreciseId))
             {
-                var baseRefDto = BaseRefDtoFactory.CreateFromFile(PreciseBaseFilename,
-                    BaseRefType.Precise, _currentUser.UserName);
+                var baseRefDto = BaseRefDtoFactory
+                    .CreateFromFile(PreciseBaseFilename!, BaseRefType.Precise, _currentUser.UserName);
                 if (trace.PreciseId != Guid.Empty)
                     dto.DeleteOldSorFileIds.Add(_readModel.BaseRefs.First(b => b.Id == trace.PreciseId).SorFileId);
                 baseRefs.Add(baseRefDto);
             }
 
-            if (IsFilenameChanged(FastBaseFilename, trace.FastId))
+            if (IsFilenameChanged(FastBaseFilename!, trace.FastId))
             {
-                var baseRefDto = BaseRefDtoFactory.CreateFromFile(FastBaseFilename, BaseRefType.Fast, _currentUser.UserName);
+                var baseRefDto = BaseRefDtoFactory
+                    .CreateFromFile(FastBaseFilename!, BaseRefType.Fast, _currentUser.UserName);
                 if (trace.FastId != Guid.Empty)
                     dto.DeleteOldSorFileIds.Add(_readModel.BaseRefs.First(b => b.Id == trace.FastId).SorFileId);
                 baseRefs.Add(baseRefDto);
             }
 
-            if (IsFilenameChanged(AdditionalBaseFilename, trace.AdditionalId))
+            if (IsFilenameChanged(AdditionalBaseFilename!, trace.AdditionalId))
             {
-                var baseRefDto = BaseRefDtoFactory.CreateFromFile(AdditionalBaseFilename, BaseRefType.Additional, _currentUser.UserName);
+                var baseRefDto = BaseRefDtoFactory
+                    .CreateFromFile(AdditionalBaseFilename!, BaseRefType.Additional, _currentUser.UserName);
                 if (trace.AdditionalId != Guid.Empty)
                     dto.DeleteOldSorFileIds.Add(_readModel.BaseRefs.First(b => b.Id == trace.AdditionalId).SorFileId);
                 baseRefs.Add(baseRefDto);

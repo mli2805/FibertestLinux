@@ -8,6 +8,7 @@ namespace Fibertest.WpfClient
 {
     public class OneCoorViewModel : PropertyChangedBase, IDataErrorInfo
     {
+        private string _degrees = null!;
         public string Degrees
         {
             get => _degrees;
@@ -19,6 +20,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private string _minutes = null!;
         public string Minutes
         {
             get => _minutes;
@@ -30,6 +32,8 @@ namespace Fibertest.WpfClient
             }
         }
 
+      
+        private string _seconds = null!;
         public string Seconds
         {
             get => _seconds;
@@ -41,8 +45,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _snapshot;
+        private string? _snapshot;
 
+        private Visibility _degreesModeVisibility;
         public Visibility DegreesModeVisibility
         {
             get => _degreesModeVisibility;
@@ -54,6 +59,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private Visibility _degreesAndMinutesModeVisibility;
         public Visibility DegreesAndMinutesModeVisibility
         {
             get => _degreesAndMinutesModeVisibility;
@@ -65,6 +71,8 @@ namespace Fibertest.WpfClient
             }
         }
 
+       
+        private Visibility _degreesMinutesAndSecondsModeVisibility;
         public Visibility DegreesMinutesAndSecondsModeVisibility
         {
             get => _degreesMinutesAndSecondsModeVisibility;
@@ -115,16 +123,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private Visibility _degreesModeVisibility;
-        private Visibility _degreesAndMinutesModeVisibility;
-        private Visibility _degreesMinutesAndSecondsModeVisibility;
-        private string _degrees;
-        private string _minutes;
-        private string _seconds;
-
         private double _value;
-
-
         public void ReassignValue(double newValue)
         {
             _value = newValue;
@@ -253,6 +252,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = "";
     }
 }

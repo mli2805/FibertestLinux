@@ -39,7 +39,8 @@ namespace Fibertest.WpfClient
         private async void DisplayCommonError(BaseRefAssignedDto dto)
         {
             var baseRefHeader = dto.BaseRefType.GetLocalizedFemaleString() + Resources.SID__base_;
-            var vm = new MyMessageBoxViewModel(MessageType.Error, new List<string>() { baseRefHeader, "", "", dto.ErrorMessage });
+            var vm = new MyMessageBoxViewModel(MessageType.Error, new List<string>() 
+                { baseRefHeader, "", "", dto.ErrorMessage! });
             await _windowManager.ShowDialogWithAssignedOwner(vm);
         }
         private async void DisplayD2RError(BaseRefAssignedDto dto)

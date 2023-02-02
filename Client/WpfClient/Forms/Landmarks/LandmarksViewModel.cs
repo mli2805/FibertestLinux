@@ -14,21 +14,22 @@ using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
 using GrpsClientLib;
+using Landmark = Fibertest.Graph.Landmark;
 
 namespace Fibertest.WpfClient
 {
     public class LandmarksViewModel : Screen
     {
-        private string _rtuTitle;
+        private string _rtuTitle = null!;
         public CurrentGis CurrentGis { get; }
         private bool _isLandmarksFromBase;
         public List<GpsInputModeComboItem> GpsInputModes { get; set; } =
             (from mode in Enum.GetValues(typeof(GpsInputMode)).OfType<GpsInputMode>()
              select new GpsInputModeComboItem(mode)).ToList();
 
-        public List<Trace> Traces { get; set; }
+        public List<Trace> Traces { get; set; } = null!;
 
-        private Trace _selectedTrace;
+        private Trace _selectedTrace = null!;
         public Trace SelectedTrace
         {
             get => _selectedTrace;
@@ -86,9 +87,9 @@ namespace Fibertest.WpfClient
         private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
-        private List<Graph.Landmark> _landmarks;
+        private List<Landmark> _landmarks = null!;
 
-        private ObservableCollection<LandmarkRow> _rows;
+        private ObservableCollection<LandmarkRow> _rows = null!;
         public ObservableCollection<LandmarkRow> Rows
         {
             get => _rows;
@@ -100,13 +101,12 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private LandmarkRow _selectedRow;
+        private LandmarkRow _selectedRow = null!;
         public LandmarkRow SelectedRow
         {
             get => _selectedRow;
             set
             {
-                if (value == null) return;
                 _selectedRow = value;
                 InitiateOneLandmarkControl();
                 NotifyOfPropertyChange();
@@ -133,7 +133,7 @@ namespace Fibertest.WpfClient
             OneLandmarkViewModel.IsFromBaseRef = _isLandmarksFromBase;
         }
 
-        private OneLandmarkViewModel _oneLandmarkViewModel;
+        private OneLandmarkViewModel _oneLandmarkViewModel = null!;
         public OneLandmarkViewModel OneLandmarkViewModel
         {
             get => _oneLandmarkViewModel;
@@ -208,7 +208,9 @@ namespace Fibertest.WpfClient
             if (_isLandmarksFromBase)
             {
                 var sorData = await GetBase(SelectedTrace.PreciseId);
-                _landmarks = _landmarksBaseParser.GetLandmarks(sorData, SelectedTrace);
+                _landmarks = sorData != null 
+                    ? _landmarksBaseParser.GetLandmarks(sorData, SelectedTrace) 
+                    : new List<Landmark>();
             }
             else
             {
@@ -219,7 +221,7 @@ namespace Fibertest.WpfClient
             return 0;
         }
 
-        private async Task<OtdrDataKnownBlocks> GetBase(Guid baseId)
+        private async Task<OtdrDataKnownBlocks?> GetBase(Guid baseId)
         {
             if (baseId == Guid.Empty)
                 return null;
@@ -262,7 +264,7 @@ namespace Fibertest.WpfClient
             var allEquipmentInNode = _readModel.Equipments.Where(e => e.NodeId == node.NodeId).ToList();
             var traceContentChoiceViewModel = _globalScope.Resolve<TraceContentChoiceViewModel>();
             traceContentChoiceViewModel.Initialize(allEquipmentInNode, node, false);
-            _windowManager.ShowDialogWithAssignedOwner(traceContentChoiceViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(traceContentChoiceViewModel);
             if (!traceContentChoiceViewModel.ShouldWeContinue || 
                 traceContentChoiceViewModel.GetSelectedEquipmentGuid() == SelectedRow.EquipmentId) return;
 

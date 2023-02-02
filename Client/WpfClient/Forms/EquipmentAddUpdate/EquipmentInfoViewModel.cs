@@ -12,7 +12,7 @@ namespace Fibertest.WpfClient
     public class EquipmentInfoViewModel : Screen
     {
         public Guid EquipmentId { get; set; }
-        public Equipment Equipment { get; set; }
+        public Equipment? Equipment { get; set; }
         public Guid NodeId;
         private ViewMode _mode;
         private readonly IWritableConfig<ClientConfig> _config;
@@ -21,7 +21,7 @@ namespace Fibertest.WpfClient
 
         public EquipmentInfoModel Model { get; set; } = new EquipmentInfoModel();
 
-        public object Command { get; set; }
+        public object? Command { get; set; }
 
         public EquipmentInfoViewModel(IWritableConfig<ClientConfig> config, 
             GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)

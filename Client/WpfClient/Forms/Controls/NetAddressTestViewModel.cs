@@ -54,7 +54,7 @@ namespace Fibertest.WpfClient
             _grpcC2DRequests = grpcC2DRequests;
             _grpcC2RRequests = grpcC2RRequests;
             _netAddressForConnectionTest = netAddressForConnectionTest;
-            NetAddressInputViewModel = new NetAddressInputViewModel(netAddressForConnectionTest.Address, currentUser.Role <= Role.Root);
+            _netAddressInputViewModel = new NetAddressInputViewModel(netAddressForConnectionTest.Address, currentUser.Role <= Role.Root);
             IsButtonEnabled = currentUser.Role <= Role.Operator;
             Result = true;
         }
@@ -102,7 +102,7 @@ namespace Fibertest.WpfClient
                 };
 
                 var resultDto = await _grpcC2RRequests.SendAnyC2RRequest<CheckRtuConnectionDto, RtuConnectionCheckedDto>(dto);
-                if (resultDto.IsConnectionSuccessful && dto.NetAddress.Port != resultDto.NetAddress.Port)
+                if (resultDto.IsConnectionSuccessful && dto.NetAddress.Port != resultDto.NetAddress!.Port)
                 {
                     NetAddressInputViewModel = 
                         new NetAddressInputViewModel(resultDto.NetAddress, _currentUser.Role <= Role.Root);

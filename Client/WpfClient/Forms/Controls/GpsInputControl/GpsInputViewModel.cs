@@ -14,8 +14,8 @@ namespace Fibertest.WpfClient
         private readonly GraphReadModel _graphReadModel;
         private readonly TabulatorViewModel _tabulatorViewModel;
 
-        public OneCoorViewModel OneCoorViewModelLatitude { get; set; }
-        public OneCoorViewModel OneCoorViewModelLongitude { get; set; }
+        public OneCoorViewModel OneCoorViewModelLatitude { get; set; } = null!;
+        public OneCoorViewModel OneCoorViewModelLongitude { get; set; } = null!;
 
         public PointLatLng Coors { get; set; }
 
@@ -59,7 +59,7 @@ namespace Fibertest.WpfClient
 
             OneCoorViewModelLatitude = new OneCoorViewModel(SelectedGpsInputModeComboItem.Mode, Coors.Lat);
             OneCoorViewModelLongitude = new OneCoorViewModel(SelectedGpsInputModeComboItem.Mode, Coors.Lng);
-            SelectedGpsInputModeComboItem = GpsInputModes.FirstOrDefault(i => i.Mode == _modeInIniFile);
+            SelectedGpsInputModeComboItem = GpsInputModes.First(i => i.Mode == _modeInIniFile);
 
             IsEditEnabled = isEditEnabled;
         }
