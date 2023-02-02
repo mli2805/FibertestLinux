@@ -14,10 +14,6 @@ public class Program
             .ConfigureKestrel(o =>
             {
                 o.Listen(IPAddress.Any, (int)TcpPorts.RtuListenTo);
-            })
-            .ConfigureAppConfiguration((_, configurationBuilder) =>
-            {
-                configurationBuilder.Configure();
             });
 
         // Add services to the container.
@@ -27,7 +23,6 @@ public class Program
         });
 
         builder.Services
-            .AddConfig(builder.Configuration)
             .AddDependencyGroup();
 
         var logLevel = builder.Configuration.GetSection("General")["LogLevel"];

@@ -14,7 +14,7 @@ public partial class OtdrManager
     private readonly string _charonIp;
     private readonly int _otdrTcpPort;
 
-    public OtdrManager(IWritableOptions<RtuGeneralConfig> generalConfig, ILogger<OtdrManager> logger,
+    public OtdrManager(IWritableConfig<RtuConfig> config, ILogger<OtdrManager> logger,
         InterOpWrapper interOpWrapper, SerialPortManager serialPort)
     {
         _logger = logger;
@@ -24,8 +24,8 @@ public partial class OtdrManager
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
         var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
         _iitOtdrFolder = basePath + "/OtdrMeasEngine";
-        _charonIp = generalConfig.Value.CharonIp;
-        _otdrTcpPort = generalConfig.Value.OtdrTcpPort;
+        _charonIp = config.Value.General.CharonIp;
+        _otdrTcpPort = config.Value.General.OtdrTcpPort;
     }
 
     public async Task<RtuInitializedDto> InitializeOtdr()

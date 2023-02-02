@@ -29,7 +29,7 @@ public partial class RtuManager
         _serialPortManager.ShowOnLedDisplay(LedDisplayCode.Connecting); // "Connecting..."
 
         var result = await _otdrManager.InitializeOtdr();
-        result.RtuId = _rtuGeneralConfig.Value.RtuId;
+        result.RtuId = _config.Value.General.RtuId;
         if (result.ReturnCode != ReturnCode.Ok)
             return result;
 
@@ -45,7 +45,7 @@ public partial class RtuManager
             return result2;
         }
 
-        result2.IsMonitoringOn = _monitoringConfig.Value.IsMonitoringOn;
+        result2.IsMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
         result2.AcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
 
         _logger.LogInfo(Logs.RtuManager, "RTU initialized successfully!");
@@ -53,9 +53,9 @@ public partial class RtuManager
         _monitoringQueue.Load();
         EvaluateFrequencies();
 
-        _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.Ok);
+        _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
 
-        if (!_monitoringConfig.Value.IsMonitoringOn)
+        if (!_config.Value.Monitoring.IsMonitoringOn)
         {
             _logger.LogInfo(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
             var unused = await _otdrManager.DisconnectOtdr();
@@ -76,17 +76,17 @@ public partial class RtuManager
 
     private void SaveInitializationParameters(InitializeRtuDto dto)
     {
-        _rtuGeneralConfig.Update(c => c.RtuId = dto.RtuId);
-        _rtuGeneralConfig.Update(c => c.ServerAddress = dto.ServerAddresses!);
+        _config.Update(c => c.General.RtuId = dto.RtuId);
+        _config.Update(c => c.General.ServerAddress = dto.ServerAddresses!);
 
-        _monitoringConfig.Update(c => c.IsMonitoringOn = false);
+        _config.Update(c => c.Monitoring.IsMonitoringOn = false);
         _logger.EmptyAndLog(Logs.RtuManager, "Initialization by the USER puts RTU into MANUAL mode.");
     }
 
     private void EvaluateFrequencies()
     {
-        _preciseMakeTimespan = TimeSpan.FromSeconds(_monitoringConfig.Value.PreciseMakeTimespan);
-        _preciseSaveTimespan = TimeSpan.FromSeconds(_monitoringConfig.Value.PreciseSaveTimespan);
-        _fastSaveTimespan = TimeSpan.FromSeconds(_monitoringConfig.Value.FastSaveTimespan);
+        _preciseMakeTimespan = TimeSpan.FromSeconds(_config.Value.Monitoring.PreciseMakeTimespan);
+        _preciseSaveTimespan = TimeSpan.FromSeconds(_config.Value.Monitoring.PreciseSaveTimespan);
+        _fastSaveTimespan = TimeSpan.FromSeconds(_config.Value.Monitoring.FastSaveTimespan);
     }
 }

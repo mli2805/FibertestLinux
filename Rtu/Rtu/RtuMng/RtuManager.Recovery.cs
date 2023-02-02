@@ -10,31 +10,31 @@ public partial class RtuManager
 
     private async Task<ReturnCode> RunMainCharonRecovery()
     {
-        _mikrotikRebootTimeout = TimeSpan.FromSeconds(_recoveryConfig.Value.MikrotikRebootTimeout);
-        var previousStep = _recoveryConfig.Value.RecoveryStep;
+        _mikrotikRebootTimeout = TimeSpan.FromSeconds(_config.Value.Recovery.MikrotikRebootTimeout);
+        var previousStep = _config.Value.Recovery.RecoveryStep;
 
         switch (previousStep)
         {
             case RecoveryStep.Ok:
-                _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.ResetArpAndCharon);
+                _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.ResetArpAndCharon);
                 RestoreFunctions.ClearArp(_logger);
                 var recoveryResult = await InitializeRtu();
                 if (recoveryResult.IsInitialized)
-                    _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.Ok);
+                    _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
                 return recoveryResult.ReturnCode; // Reset Charon
             case RecoveryStep.ResetArpAndCharon:
-                _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.RestartService);
+                _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.RestartService);
                 _logger.LogInfo(Logs.RtuManager, "Recovery procedure: Exit rtu service.");
                 _logger.LogInfo(Logs.RtuService, "Recovery procedure: Exit rtu service.");
                 Environment.FailFast("Recovery procedure: Exit rtu service.");
                 // ReSharper disable once HeuristicUnreachableCode
                 return ReturnCode.Ok;
             case RecoveryStep.RestartService:
-                var enabled = _recoveryConfig.Value.RebootSystemEnabled;
+                var enabled = _config.Value.Recovery.RebootSystemEnabled;
                 if (enabled)
                 {
-                    _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.RebootPc);
-                    var delay = _recoveryConfig.Value.RebootSystemDelay;
+                    _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.RebootPc);
+                    var delay = _config.Value.Recovery.RebootSystemDelay;
                     _logger.LogInfo(Logs.RtuManager, "Recovery procedure: Reboot system.");
                     _logger.LogInfo(Logs.RtuService, "Recovery procedure: Reboot system.");
                     RestoreFunctions.RebootSystem(_logger, delay);
@@ -43,19 +43,19 @@ public partial class RtuManager
                 }
                 else
                 {
-                    _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.ResetArpAndCharon);
+                    _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.ResetArpAndCharon);
                     RestoreFunctions.ClearArp(_logger);
                     var recoveryResult1 = await InitializeRtu();
                     if (recoveryResult1.IsInitialized)
-                        _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.Ok);
+                        _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
                     return recoveryResult1.ReturnCode;
                 }
             case RecoveryStep.RebootPc:
-                _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.ResetArpAndCharon);
+                _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.ResetArpAndCharon);
                 RestoreFunctions.ClearArp(_logger);
                 var recoveryResult2 = await InitializeRtu();
                 if (recoveryResult2.IsInitialized)
-                    _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.Ok);
+                    _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
                 return recoveryResult2.ReturnCode;
         }
 
@@ -68,7 +68,7 @@ public partial class RtuManager
         damagedOtau.RebootAttempts++;
 
         var mikrotikRebootAttemptsBeforeNotification =
-            _recoveryConfig.Value.MikrotikRebootAttemptsBeforeNotification;
+            _config.Value.Recovery.MikrotikRebootAttemptsBeforeNotification;
         if (damagedOtau.RebootAttempts == mikrotikRebootAttemptsBeforeNotification)
             MessageQueue.Send(new BopStateChangedDto()
             {
@@ -81,7 +81,7 @@ public partial class RtuManager
 
         _logger.LogInfo(Logs.RtuService, $"Mikrotik {damagedOtau.Ip} reboot N{damagedOtau.RebootAttempts}");
         _logger.LogInfo(Logs.RtuManager, $"Reboot attempt N{damagedOtau.RebootAttempts}");
-        var connectionTimeout = _fullConfig.Value.Charon.ConnectionTimeout;
+        var connectionTimeout = _config.Value.Charon.ConnectionTimeout;
         try
         {
             MikrotikInBop.ConnectAndReboot(_logger, Logs.RtuManager.ToInt(), damagedOtau.Ip, connectionTimeout);

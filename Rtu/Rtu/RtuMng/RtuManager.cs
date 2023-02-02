@@ -10,10 +10,7 @@ public partial class RtuManager
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
 
-    private readonly IWritableConfig<RtuConfig> _fullConfig;
-    private readonly IWritableOptions<RtuGeneralConfig> _rtuGeneralConfig;
-    private readonly IWritableOptions<MonitoringConfig> _monitoringConfig;
-    private readonly IWritableOptions<RecoveryConfig> _recoveryConfig;
+    private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<RtuManager> _logger;
     private readonly SerialPortManager _serialPortManager;
     private readonly InterOpWrapper _interOpWrapper;
@@ -31,16 +28,12 @@ public partial class RtuManager
     private MonitoringQueue _monitoringQueue;
     public readonly ConcurrentQueue<object> ShouldSendHeartbeat = new ConcurrentQueue<object>();
 
-    public RtuManager(IWritableConfig<RtuConfig> fullConfig, IWritableOptions<RtuGeneralConfig> rtuGeneralConfig,
-        IWritableOptions<MonitoringConfig> monitoringConfig, IWritableOptions<RecoveryConfig> recoveryConfig,
+    public RtuManager(IWritableConfig<RtuConfig> config, 
         ILogger<RtuManager> logger, MonitoringQueue monitoringQueue,
         SerialPortManager serialPortManager, InterOpWrapper interOpWrapper, OtdrManager otdrManager,
         GrpcSender grpcSender)
     {
-        _fullConfig = fullConfig;
-        _rtuGeneralConfig = rtuGeneralConfig;
-        _monitoringConfig = monitoringConfig;
-        _recoveryConfig = recoveryConfig;
+        _config = config;
         _logger = logger;
         _monitoringQueue = monitoringQueue;
         _serialPortManager = serialPortManager;
@@ -48,6 +41,6 @@ public partial class RtuManager
         _otdrManager = otdrManager;
         _grpcSender = grpcSender;
 
-        _id = rtuGeneralConfig.Value.RtuId;
+        _id = config.Value.General.RtuId;
     }
 }

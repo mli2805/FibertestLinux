@@ -2,20 +2,17 @@ using System.Diagnostics;
 using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.DataCenter;
 
 public sealed class Boot : IHostedService
 {
-    // private readonly IOptions<ServerGeneralConfig> _generalConfig;
     private readonly IWritableConfig<DataCenterConfig> _config;
     private readonly ILogger<Boot> _logger;
     private readonly EventStoreService _eventStoreService;
 
     public Boot(IWritableConfig<DataCenterConfig> config, ILogger<Boot> logger, EventStoreService eventStoreService)
     {
-        // _generalConfig = generalConfig;
         _config = config;
         _logger = logger;
         _eventStoreService = eventStoreService;

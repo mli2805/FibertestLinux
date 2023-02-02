@@ -1,6 +1,8 @@
 ﻿using Fibertest.Utils.Setup;
 using Newtonsoft.Json;
 
+// https://learn.microsoft.com/en-us/answers/questions/609232/how-to-save-the-updates-i-made-to-appsettings-conf.html?childToView=1092152#comment-1092152
+// dramatically refactored
 namespace Fibertest.Utils
 {
     public interface IWritableConfig<T> where T : class, new()

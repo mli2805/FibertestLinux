@@ -12,7 +12,7 @@ public class HeartbeatService : BackgroundService
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings =
         new() { TypeNameHandling = TypeNameHandling.All };
-    private readonly IWritableOptions<RtuGeneralConfig> _config;
+    private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<HeartbeatService> _logger;
     private readonly RtuManager _rtuManager;
 
@@ -20,7 +20,7 @@ public class HeartbeatService : BackgroundService
     private bool _isLastAttemptSuccessful;
     private bool _initializationInProgress;
 
-    public HeartbeatService(IWritableOptions<RtuGeneralConfig> config, ILogger<HeartbeatService> logger,
+    public HeartbeatService(IWritableConfig<RtuConfig> config, ILogger<HeartbeatService> logger,
         RtuManager rtuManager)
     {
         _config = config;
@@ -39,7 +39,7 @@ public class HeartbeatService : BackgroundService
 
         _logger.LogInfo(Logs.RtuService, $"RTU heartbeat service started. Process {pid}, thread {tid}");
         _logger.LogInfo(Logs.RtuService,
-            $"Server address is {_config.Value.ServerAddress.Main.ToStringA()}");
+            $"Server address is {_config.Value.General.ServerAddress.Main.ToStringA()}");
         await DoWork(stoppingToken);
     }
 
@@ -61,7 +61,7 @@ public class HeartbeatService : BackgroundService
                 _initializationInProgress = false;
                 _isLastAttemptSuccessful = await SendHeartbeat();
 
-                var rtuHeartbeatRate = _config.Value.RtuHeartbeatRate == 0 ? 30 : _config.Value.RtuHeartbeatRate;
+                var rtuHeartbeatRate = _config.Value.General.RtuHeartbeatRate == 0 ? 30 : _config.Value.General.RtuHeartbeatRate;
                 await Task.Delay(rtuHeartbeatRate * 1000, stoppingToken);
             }
         }
@@ -75,9 +75,9 @@ public class HeartbeatService : BackgroundService
     {
         try
         {
-            var serverAddress = _config.Value.ServerAddress;
+            var serverAddress = _config.Value.General.ServerAddress;
 
-            var dto = new RtuChecksChannelDto(_config.Value.RtuId, _version, true);
+            var dto = new RtuChecksChannelDto(_config.Value.General.RtuId, _version, true);
             var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
             var dcUri = $"http://{serverAddress.Main.ToStringA()}";

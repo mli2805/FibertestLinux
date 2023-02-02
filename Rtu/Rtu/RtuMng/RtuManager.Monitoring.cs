@@ -8,15 +8,15 @@ public partial class RtuManager
 {
     private async void RunMonitoringCycle()
     {
-        _monitoringConfig.Update(c => c.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
-        _monitoringConfig.Update(c => c.IsMonitoringOn = true);
+        _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
+        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
         _logger.LogInfo(Logs.RtuManager, Environment.NewLine + "Start monitoring.");
         _logger.LogInfo(Logs.RtuManager, $"_mainCharon.Serial = {_mainCharon.Serial}");
 
         if (_monitoringQueue.Count() < 1)
         {
             _logger.LogInfo(Logs.RtuManager, "There are no ports in queue for monitoring.");
-            _monitoringConfig.Update(c => c.IsMonitoringOn = false);
+            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
             return;
         }
 
@@ -34,13 +34,13 @@ public partial class RtuManager
             }
 
 
-            if (!_monitoringConfig.Value.IsMonitoringOn)
+            if (!_config.Value.Monitoring.IsMonitoringOn)
                 break;
         }
 
         _logger.LogInfo(Logs.RtuManager, "Monitoring stopped.");
 
-        _monitoringConfig.Update(c => c.IsMonitoringOn = false);
+        _config.Update(c => c.Monitoring.IsMonitoringOn = false);
         await _otdrManager.DisconnectOtdr();
         _logger.LogInfo(Logs.RtuManager, "Rtu is turned into MANUAL mode.");
     }
@@ -178,7 +178,7 @@ public partial class RtuManager
 
         SendCurrentMonitoringStep(MonitoringCurrentStep.Measure, monitoringPort, baseRefType);
 
-        _monitoringConfig.Update(c => c.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
+        _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
 
         if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while port toggling
             return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
@@ -187,7 +187,7 @@ public partial class RtuManager
 
         if (result == ReturnCode.MeasurementInterrupted)
         {
-            _monitoringConfig.Update(c => c.IsMonitoringOn = false);
+            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
             SendCurrentMonitoringStep(MonitoringCurrentStep.Interrupted);
             return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
         }
@@ -199,13 +199,13 @@ public partial class RtuManager
             return new MoniResult() { MeasurementResult = MeasurementResult.HardwareProblem };
         }
 
-        _recoveryConfig.Update(c => c.RecoveryStep = RecoveryStep.Ok);
+        _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
 
         SendCurrentMonitoringStep(MonitoringCurrentStep.Analysis, monitoringPort, baseRefType);
         var buffer = _otdrManager.GetLastSorDataBuffer();
         if (buffer == null)
             return new MoniResult() { MeasurementResult = MeasurementResult.FailedGetSorBuffer };
-        if (_monitoringConfig.Value.ShouldSaveSorData)
+        if (_config.Value.Monitoring.ShouldSaveSorData)
             monitoringPort.SaveSorData(baseRefType, buffer, SorType.Raw, _logger); // for investigations purpose
         monitoringPort.SaveMeasBytes(baseRefType, buffer, SorType.Raw, _logger); // for investigations purpose
         _logger.LogInfo(Logs.RtuManager, $"Measurement result ({buffer.Length} bytes).");
@@ -233,12 +233,13 @@ public partial class RtuManager
             _logger.LogInfo(Logs.RtuManager, "Start auto analysis.");
             var measBytes = _otdrManager.ApplyAutoAnalysis(buffer);
             if (measBytes == null)
-                return new MoniResult() { MeasurementResult = MeasurementResult.FailedGetSorBuffer }; if (_monitoringConfig.Value.ShouldSaveSorData)
+                return new MoniResult() { MeasurementResult = MeasurementResult.FailedGetSorBuffer }; 
+            if (_config.Value.Monitoring.ShouldSaveSorData)
                 monitoringPort.SaveSorData(baseRefType, buffer, SorType.Analysis, _logger); // for investigations purpose
             monitoringPort.SaveMeasBytes(baseRefType, buffer, SorType.Analysis, _logger); // 
             _logger.LogInfo(Logs.RtuManager, $"Auto analysis applied. Now sor data has {measBytes.Length} bytes.");
             moniResult = _otdrManager.CompareMeasureWithBase(baseBytes, measBytes, true); // base is inserted into meas during comparison
-            if (_monitoringConfig.Value.ShouldSaveSorData)
+            if (_config.Value.Monitoring.ShouldSaveSorData)
                 monitoringPort.SaveSorData(baseRefType, buffer, SorType.Meas, _logger); // for investigations purpose
             monitoringPort.SaveMeasBytes(baseRefType, measBytes, SorType.Meas, _logger); // so re-save meas after comparison
             moniResult.BaseRefType = baseRefType;

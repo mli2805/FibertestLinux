@@ -9,12 +9,12 @@ namespace Fibertest.Rtu;
 
 public sealed class Boot : IHostedService
 {
-    private readonly IOptions<RtuGeneralConfig> _generalConfig;
+    private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<Boot> _logger;
 
-    public Boot(IOptions<RtuGeneralConfig> generalConfig, ILogger<Boot> logger)
+    public Boot(IWritableConfig<RtuConfig> config, ILogger<Boot> logger)
     {
-        _generalConfig = generalConfig;
+        _config = config;
         _logger = logger;
     }
 
@@ -29,10 +29,8 @@ public sealed class Boot : IHostedService
         _logger.LogInfo(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
         _logger.LogInfo(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
 
-        var configFile = FileOperations.GetMainFolder() +"/config/rtu.json";
-        _logger.LogInfo(Logs.RtuService, $"config file: {configFile}");
         _logger.LogInfo(Logs.RtuService, 
-            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_generalConfig.Value.LogLevel)}");
+            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_config.Value.General.LogLevel)}");
         return Task.CompletedTask;
     }
 

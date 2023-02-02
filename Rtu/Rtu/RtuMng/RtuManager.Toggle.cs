@@ -45,7 +45,7 @@ public partial class RtuManager
                         damagedOtau.TcpPort == cha.NetAddress.Port)
                     {
                         _logger.LogInfo(Logs.RtuManager, $"OTAU {cha.NetAddress.ToStringA()} recovered");
-                        if (damagedOtau.RebootAttempts >= _recoveryConfig.Value.MikrotikRebootAttemptsBeforeNotification)
+                        if (damagedOtau.RebootAttempts >= _config.Value.Recovery.MikrotikRebootAttemptsBeforeNotification)
                         {
                             _logger.LogInfo(Logs.RtuManager, "Send notification to server.");
                             var dto = new BopStateChangedDto()

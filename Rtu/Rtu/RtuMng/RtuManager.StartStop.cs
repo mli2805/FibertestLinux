@@ -8,8 +8,8 @@ public partial class RtuManager
     public async Task<RequestAnswer> ApplyMonitoringSettings(ApplyMonitoringSettingsDto dto)
     {
         await Task.Delay(1);
-        var wasMonitoringOn = _monitoringConfig.Value.IsMonitoringOn;
-        if (_monitoringConfig.Value.IsMonitoringOn)
+        var wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
+        if (_config.Value.Monitoring.IsMonitoringOn)
             StopMonitoring("Apply monitoring settings");
 
         SaveNewFrequenciesInConfig(dto.Timespans);
@@ -25,11 +25,11 @@ public partial class RtuManager
 
     private void SaveNewFrequenciesInConfig(MonitoringTimespansDto dto)
     {
-        _monitoringConfig.Update(c => c.PreciseMakeTimespan = (int)dto.PreciseMeas.TotalSeconds);
+        _config.Update(c => c.Monitoring.PreciseMakeTimespan = (int)dto.PreciseMeas.TotalSeconds);
         _preciseMakeTimespan = dto.PreciseMeas;
-        _monitoringConfig.Update(c => c.PreciseSaveTimespan = (int)dto.PreciseSave.TotalSeconds);
+        _config.Update(c => c.Monitoring.PreciseSaveTimespan = (int)dto.PreciseSave.TotalSeconds);
         _preciseSaveTimespan = dto.PreciseSave;
-        _monitoringConfig.Update(c => c.FastSaveTimespan = (int)dto.FastSave.TotalSeconds);
+        _config.Update(c => c.Monitoring.FastSaveTimespan = (int)dto.FastSave.TotalSeconds);
         _fastSaveTimespan = dto.FastSave;
     }
 
@@ -62,13 +62,13 @@ public partial class RtuManager
 
     private void StopMonitoring(string caller)
     {
-        if (!_monitoringConfig.Value.IsMonitoringOn)
+        if (!_config.Value.Monitoring.IsMonitoringOn)
         {
             _logger.LogInfo(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
             return;
         }
 
-        _monitoringConfig.Update(c => c.IsMonitoringOn = false);
+        _config.Update(c => c.Monitoring.IsMonitoringOn = false);
         _logger.LogInfo(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
         _cancellationTokenSource?.Cancel();
 
