@@ -63,7 +63,7 @@ public partial class Charon
         }
 
         _logger.LogInfo(Logs.RtuManager, $"Check connection with OTAU {additionalOtauAddress.ToStringA()}");
-        var child = new Charon(additionalOtauAddress, false, _config, _logger, _serialPort);
+        var child = new Charon(additionalOtauAddress, false, _config, _logger);
         if (child.InitializeOtauRecursively() != null)
         {
             return null;

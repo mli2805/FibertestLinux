@@ -10,7 +10,7 @@ public partial class RtuManager
     {
         await Task.Delay(1);
         var charonIp = _config.Value.General.CharonIp;
-        _mainCharon = new Charon(new NetAddress(charonIp, 23), true, _config.Value.Charon, _logger, _serialPortManager);
+        _mainCharon = new Charon(new NetAddress(charonIp, 23), true, _config.Value.Charon, _logger);
         var res = _mainCharon.InitializeOtauRecursively();
         if (res == _mainCharon.NetAddress)
             return new RtuInitializedDto(ReturnCode.OtauInitializationError);

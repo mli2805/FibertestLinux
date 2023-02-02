@@ -31,11 +31,12 @@ public partial class Charon
 
     private ILogger<Charon> _lll;
 
-    public Charon(NetAddress netAddress, bool isMainCharon, CharonConfig config, ILogger logger, SerialPortManager serialPort)
+    public Charon(NetAddress netAddress, bool isMainCharon, CharonConfig config, ILogger logger)
     {
         _config = config;
         _logger = logger;
-        _serialPort = serialPort;
+        _serialPort = new SerialPortManager();
+        _serialPort.Initialize(config, logger);
         _connectionTimeout = config.ConnectionTimeout;
         _readTimeout = config.ReadTimeout;
         _writeTimeout = config.WriteTimeout;
@@ -100,7 +101,7 @@ public partial class Charon
                 }
 
                 var expendedPort = extendedPorts[p];
-                var childCharon = new Charon(expendedPort, false, _config, _logger, _serialPort);
+                var childCharon = new Charon(expendedPort, false, _config, _logger);
                 Children.Add(p, childCharon); // even if it broken it should be in list
 
                 var childSerial = childCharon.GetSerial();

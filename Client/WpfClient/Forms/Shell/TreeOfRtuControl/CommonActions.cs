@@ -145,8 +145,7 @@ namespace Fibertest.WpfClient
                 ? rtu.MainChannel.Clone()
                 : rtu.OtdrNetAddress.Clone();
             mainCharonAddress.Port = 23;
-            var mainCharon = new Charon(mainCharonAddress, true, 
-                _config.Value.CharonConfig, _logger, new SerialPortManager(new CharonConfig(), _logger))
+            var mainCharon = new Charon(mainCharonAddress, true, _config.Value.CharonConfig, _logger)
             {
                 OwnPortCount = rtuLeaf.OwnPortCount,
                 Serial = rtuLeaf.Serial,
@@ -158,7 +157,7 @@ namespace Fibertest.WpfClient
                 serialOfCharonWithThisPort = otauLeaf.Serial;
 
                 var bopCharon = new Charon(otauLeaf.OtauNetAddress, false, _config.Value.CharonConfig,
-                     _logger, new SerialPortManager(new CharonConfig(), _logger));
+                     _logger);
                 bopCharon.Serial = otauLeaf.Serial;
                 bopCharon.OwnPortCount = otauLeaf.OwnPortCount;
                 mainCharon.Children = new Dictionary<int, Charon> { { otauLeaf.MasterPort, bopCharon } };

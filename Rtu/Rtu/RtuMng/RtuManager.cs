@@ -30,13 +30,14 @@ public partial class RtuManager
 
     public RtuManager(IWritableConfig<RtuConfig> config, 
         ILogger<RtuManager> logger, MonitoringQueue monitoringQueue,
-        SerialPortManager serialPortManager, InterOpWrapper interOpWrapper, OtdrManager otdrManager,
+        InterOpWrapper interOpWrapper, OtdrManager otdrManager,
         GrpcSender grpcSender)
     {
         _config = config;
         _logger = logger;
         _monitoringQueue = monitoringQueue;
-        _serialPortManager = serialPortManager;
+        _serialPortManager = new SerialPortManager();
+        _serialPortManager.Initialize(_config.Value.Charon, logger);
         _interOpWrapper = interOpWrapper;
         _otdrManager = otdrManager;
         _grpcSender = grpcSender;

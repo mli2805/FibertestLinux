@@ -34,7 +34,6 @@ public static class RtuDependencyCollectionExtension
         services.AddSingleton<GrpcSender>();
 
         services.AddSingleton<InterOpWrapper>();
-        services.AddSingleton<SerialPortManager>();
         services.AddSingleton<MonitoringQueue>();
         services.AddSingleton<OtdrManager>();
         services.AddSingleton<RtuManager>();

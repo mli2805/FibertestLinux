@@ -15,11 +15,12 @@ public partial class OtdrManager
     private readonly int _otdrTcpPort;
 
     public OtdrManager(IWritableConfig<RtuConfig> config, ILogger<OtdrManager> logger,
-        InterOpWrapper interOpWrapper, SerialPortManager serialPort)
+        InterOpWrapper interOpWrapper)
     {
         _logger = logger;
         _interOpWrapper = interOpWrapper;
-        _serialPort = serialPort;
+        _serialPort = new SerialPortManager();
+        _serialPort.Initialize(config.Value.Charon, logger);
 
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
         var basePath = Path.GetDirectoryName(assemblyLocation) ?? "";
