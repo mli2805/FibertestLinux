@@ -7,7 +7,7 @@ namespace Fibertest.WpfClient
 {
     public class MonitoringSettingsModelFactory
     {
-        private RtuLeaf _rtuLeaf;
+        private RtuLeaf _rtuLeaf = null!;
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
 
@@ -20,9 +20,7 @@ namespace Fibertest.WpfClient
         public MonitoringSettingsModel Create(RtuLeaf rtuLeaf, bool isEditEnabled)
         {
             _rtuLeaf = rtuLeaf;
-            var rtu = _readModel.Rtus.FirstOrDefault(r => r.Id == _rtuLeaf.Id);
-            if (rtu == null)
-                return null;
+            var rtu = _readModel.Rtus.First(r => r.Id == _rtuLeaf.Id);
             var model = new MonitoringSettingsModel()
             {
                 RtuId = _rtuLeaf.Id,
@@ -38,7 +36,7 @@ namespace Fibertest.WpfClient
             return model;
         }
 
-        private string GetRealOtdrAddress()
+        private string? GetRealOtdrAddress()
         {
             return _readModel.Rtus.FirstOrDefault(r => r.Id == _rtuLeaf.Id)?.OtdrNetAddress.Ip4Address;
         }

@@ -16,7 +16,6 @@ namespace Fibertest.WpfClient
         private Rtu _rtu;
         private int _portNumberForAttachment;
         private readonly ILifetimeScope _globalScope;
-        private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly IWcfServiceCommonC2D _c2RWcfManager;
         private readonly IWindowManager _windowManager;
@@ -84,11 +83,10 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public OtauToAttachViewModel(ILifetimeScope globalScope, CurrentUser currentUser, Model readModel, 
+        public OtauToAttachViewModel(ILifetimeScope globalScope, Model readModel, 
             IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager)
         {
             _globalScope = globalScope;
-            _currentUser = currentUser;
             _readModel = readModel;
             _c2RWcfManager = c2RWcfManager;
             _windowManager = windowManager;

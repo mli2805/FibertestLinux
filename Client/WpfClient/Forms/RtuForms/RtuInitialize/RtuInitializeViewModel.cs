@@ -89,7 +89,7 @@ namespace Fibertest.WpfClient
 
         private async Task Do(bool isSynchronizationRequired)
         {
-            if (!FullModel.Validate()) return;
+            if (! await FullModel.Validate()) return;
 
             try
             {

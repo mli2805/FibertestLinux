@@ -7,10 +7,10 @@ namespace Fibertest.WpfClient
 {
     public class SecurityAdminConfirmationViewModel : Screen
     {
-        public string ReturnCodeText { get; set; }
-        public string Text3 { get; set; }
-        public string Text4 { get; set; }
-        public string Text5 { get; set; }
+        public string ReturnCodeText { get; set; } = "";
+        public string Text3 { get; set; } = "";
+        public string Text4 { get; set; } = "";
+        public string Text5 { get; set; } = "";
 
         public PasswordViewModel PasswordViewModel { get; set; } = new PasswordViewModel();
 

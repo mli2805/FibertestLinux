@@ -14,15 +14,14 @@ namespace Fibertest.WpfClient
     {
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger; 
-        private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
 
-        public VeexMeasurementTool(IWritableConfig<ClientConfig> config, ILogger logger, CurrentUser currentUser, Model readModel, IWcfServiceCommonC2D c2DWcfCommonManager)
+        public VeexMeasurementTool(IWritableConfig<ClientConfig> config, ILogger logger, 
+            Model readModel, IWcfServiceCommonC2D c2DWcfCommonManager)
         {
             _config = config;
             _logger = logger;
-            _currentUser = currentUser;
             _readModel = readModel;
             _c2DWcfCommonManager = c2DWcfCommonManager;
         }

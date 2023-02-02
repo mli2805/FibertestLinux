@@ -7,7 +7,7 @@ namespace Fibertest.WpfClient
     public class MonitoringCharonModel : PropertyChangedBase
     {
         public string Serial { get; set; }
-        public string OtauId { get; set; }
+        public string? OtauId { get; set; }
         public bool IsMainCharon { get; set; }
         public int MainCharonPort { get; set; }
         public string Title { get; set; }
@@ -45,7 +45,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void Port_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Port_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"IsIncluded")
                 NotifyOfPropertyChange(nameof(CycleTime));

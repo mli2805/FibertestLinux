@@ -6,7 +6,7 @@ public class ReSendBaseRefsDto : BaseRtuRequest
     {
     }
 
-    public string OtdrId = string.Empty; //  in VeEX RTU main OTDR has its own ID
+    public string? OtdrId; //  in VeEX RTU main OTDR has its own ID
 
     public Guid TraceId;
     public OtauPortDto? OtauPortDto; // could be null if trace isn't attached to port yet

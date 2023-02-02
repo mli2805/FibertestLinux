@@ -25,11 +25,11 @@ namespace Fibertest.WpfClient
         private readonly GrpcC2DRequests _grpcC2DRequests;
         private readonly CurrentGis _currentGis;
         private readonly AddEquipmentIntoNodeBuilder _addEquipmentIntoNodeBuilder;
-        private Node _originalNode;
+        private Node _originalNode = null!;
         private PointLatLng _nodeCoors;
 
-        private string _title;
-        public string Title
+        private string? _title;
+        public string? Title
         {
             get => _title;
             set
@@ -43,7 +43,7 @@ namespace Fibertest.WpfClient
             (from mode in Enum.GetValues(typeof(GpsInputMode)).OfType<GpsInputMode>()
              select new GpsInputModeComboItem(mode)).ToList();
 
-        private GpsInputModeComboItem _selectedGpsInputModeComboItem;
+        private GpsInputModeComboItem _selectedGpsInputModeComboItem = null!;
         public GpsInputModeComboItem SelectedGpsInputModeComboItem
         {
             get => _selectedGpsInputModeComboItem;
@@ -57,7 +57,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _coors;
+        private string _coors = null!;
         public string Coors
         {
             get => _coors;
@@ -69,8 +69,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _comment;
-        public string Comment
+        private string? _comment;
+        public string? Comment
         {
             get => _comment;
             set
@@ -81,7 +81,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private ObservableCollection<ItemOfEquipmentTableModel> _equipmentsInNode;
+        private ObservableCollection<ItemOfEquipmentTableModel> _equipmentsInNode = null!;
         public ObservableCollection<ItemOfEquipmentTableModel> EquipmentsInNode
         {
             get => _equipmentsInNode;
@@ -93,8 +93,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public Trace SelectedTrace { get; set; }
-        public List<Trace> TracesInNode { get; set; }
+        public Trace? SelectedTrace { get; set; }
+        public List<Trace> TracesInNode { get; set; } = null!;
 
         private bool IsChanged()
         {
@@ -153,21 +153,26 @@ namespace Fibertest.WpfClient
             _nodeCoors = _originalNode.Position;
             Title = _originalNode.Title;
             GisVisibility = _currentGis.IsGisOn ? Visibility.Visible : Visibility.Collapsed;
-            _selectedGpsInputModeComboItem = GpsInputModeComboItems.First(i => i.Mode == _currentGis.GpsInputMode);
+            _selectedGpsInputModeComboItem = 
+                GpsInputModeComboItems.First(i => i.Mode == _currentGis.GpsInputMode);
             Coors = _nodeCoors.ToDetailedString(_selectedGpsInputModeComboItem.Mode);
             Comment = _originalNode.Comment;
 
             TracesInNode = _readModel.Traces.Where(t => t.NodeIds.Contains(nodeId)).ToList();
             SelectedTrace = TracesInNode.FirstOrDefault();
 
-            EquipmentsInNode = new ObservableCollection<ItemOfEquipmentTableModel>(
-                _readModel.Equipments.Where(e => e.NodeId == _originalNode.NodeId && e.Type != EquipmentType.EmptyNode).Select(CreateEqItem));
+            _equipmentsInNode = new ObservableCollection<ItemOfEquipmentTableModel>(
+                _readModel.Equipments
+                    .Where(e => e.NodeId == _originalNode.NodeId && e.Type != EquipmentType.EmptyNode)
+                    .Select(CreateEqItem));
         }
 
         private void _eventArrivalNotifier_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             EquipmentsInNode = new ObservableCollection<ItemOfEquipmentTableModel>(
-                _readModel.Equipments.Where(eq => eq.NodeId == _originalNode.NodeId && eq.Type != EquipmentType.EmptyNode).Select(CreateEqItem));
+                _readModel.Equipments
+                    .Where(eq => eq.NodeId == _originalNode.NodeId 
+                                 && eq.Type != EquipmentType.EmptyNode).Select(CreateEqItem));
         }
 
         protected override void OnViewLoaded(object view)
@@ -181,7 +186,8 @@ namespace Fibertest.WpfClient
                 .Aggregate("", (current, traceVm) => current + (traceVm.Title + @" ;  "));
 
             var isLastForSomeTrace = _readModel.Traces.Any(t => t.EquipmentIds.Last() == equipment.EquipmentId);
-            var isPartOfTraceWithBase = _readModel.Traces.Any(t => t.EquipmentIds.Contains(equipment.EquipmentId) && t.HasAnyBaseRef);
+            var isPartOfTraceWithBase = _readModel.Traces
+                .Any(t => t.EquipmentIds.Contains(equipment.EquipmentId) && t.HasAnyBaseRef);
 
             var eqItem = new ItemOfEquipmentTableModel()
             {
@@ -199,9 +205,9 @@ namespace Fibertest.WpfClient
             return eqItem;
         }
 
-        private async void EqItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void EqItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            var cmd = ((ItemOfEquipmentTableModel)sender).Command;
+            var cmd = ((ItemOfEquipmentTableModel)sender!).Command;
             if (cmd is UpdateEquipment equipment)
                 LaunchUpdateEquipmentView(equipment.EquipmentId);
             else if (cmd is RemoveEquipment)
@@ -288,7 +294,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = "";
 
     }
 }

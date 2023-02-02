@@ -9,12 +9,11 @@ namespace Fibertest.WpfClient
     public class MonitoringSettingsModel : PropertyChangedBase
     {
         public Guid RtuId { get; set; }
-        public string RtuTitle { get; set; }
+        public string RtuTitle { get; set; } = null!;
         public RtuMaker RtuMaker { get; set; }
-        public string OtdrId { get; set; }
-        // public string OtauId { get; set; }
+        public string? OtdrId { get; set; }
         public VeexOtau MainVeexOtau { get; set; } = new VeexOtau(); // in Veex RTU it is a separate unit
-        public string RealOtdrAddress { get; set; }
+        public string? RealOtdrAddress { get; set; }
         public List<MonitoringCharonModel> Charons { get; set; } = new List<MonitoringCharonModel>();
         public MonitoringFrequenciesModel Frequencies { get; set; } = new MonitoringFrequenciesModel();
         public bool IsMonitoringOn { get; set; }
@@ -30,14 +29,13 @@ namespace Fibertest.WpfClient
             CycleTime = TimeSpan.FromSeconds(Charons.Sum(c => c.CycleTime)).ToString();
         }
 
-        private void Charon_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Charon_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"CycleTime")
                 CycleTime = TimeSpan.FromSeconds(Charons.Sum(c => c.CycleTime)).ToString();
         }
 
-        private string _cycleTime;
-
+        private string _cycleTime = "";
         public string CycleTime
         {
             get { return _cycleTime; }

@@ -6,18 +6,11 @@ namespace Fibertest.WpfClient
 {
     public class ItemOfEquipmentTableModel : PropertyChangedBase
     {
-        private string _title;
-        private string _type;
-        private string _comment;
-        private string _traces;
-        private bool _isRemoveEnabled;
-        private object _command;
-        private string _cableReserveLeft;
-        private string _cableReserveRight;
-
         public Guid Id { get; set; }
 
         public Guid NodeId { get; set; }
+
+        private string _type = null!;
         public string Type
         {
             get => _type;
@@ -29,7 +22,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Title
+        private string? _title;
+        public string? Title
         {
             get => _title;
             set
@@ -40,6 +34,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private string _cableReserveLeft = null!;
         public string CableReserveLeft
         {
             get => _cableReserveLeft;
@@ -51,6 +46,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private string _cableReserveRight = null!;
         public string CableReserveRight
         {
             get => _cableReserveRight;
@@ -62,7 +58,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Comment
+        private string? _comment;
+        public string? Comment
         {
             get => _comment;
             set
@@ -73,6 +70,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private string _traces = null!;
         public string Traces
         {
             get => _traces;
@@ -84,6 +82,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private bool _isRemoveEnabled;
         public bool IsRemoveEnabled
         {
             get => _isRemoveEnabled;
@@ -95,6 +94,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private object _command = null!;
         public object Command
         {
             get => _command;

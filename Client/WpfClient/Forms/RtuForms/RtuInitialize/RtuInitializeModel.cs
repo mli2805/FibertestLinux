@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
 using Caliburn.Micro;
@@ -131,35 +132,35 @@ namespace Fibertest.WpfClient
         }
 
 
-        private void ReserveChannelTestViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void ReserveChannelTestViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"Result")
             {
                 if (ReserveChannelTestViewModel.Result == true)
-                    WindowManager.ShowDialogWithAssignedOwner(
+                    await WindowManager.ShowDialogWithAssignedOwner(
                         new MyMessageBoxViewModel(MessageType.Information, Resources.SID_RTU_connection_established_successfully_));
                 if (ReserveChannelTestViewModel.Result == false)
-                    WindowManager.ShowDialogWithAssignedOwner(
+                    await WindowManager.ShowDialogWithAssignedOwner(
                         new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Cannot_establish_connection_with_RTU_));
             }
         }
 
-        private void MainChannelTestViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void MainChannelTestViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"Result")
             {
                 if (MainChannelTestViewModel.Result == true)
-                    WindowManager.ShowDialogWithAssignedOwner(
+                    await WindowManager.ShowDialogWithAssignedOwner(
                         new MyMessageBoxViewModel(MessageType.Information, Resources.SID_RTU_connection_established_successfully_));
                 if (MainChannelTestViewModel.Result == false)
-                    WindowManager.ShowDialogWithAssignedOwner(
+                    await WindowManager.ShowDialogWithAssignedOwner(
                         new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Cannot_establish_connection_with_RTU_));
             }
         }
 
         #region Validate
 
-        public bool Validate()
+        public async Task<bool> Validate()
         {
             var initializedRtuCount = _readModel.Rtus.Count(r => r.OwnPortCount > 0);
             if (OriginalRtu.OwnPortCount > 0)
@@ -167,23 +168,23 @@ namespace Fibertest.WpfClient
             if (_readModel.GetRtuLicenseCount() <= initializedRtuCount)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Exceeded_the_number_of_RTU_for_an_existing_license);
-                WindowManager.ShowDialogWithAssignedOwner(vm);
+                await WindowManager.ShowDialogWithAssignedOwner(vm);
                 return false;
             }
 
             if (string.IsNullOrEmpty(OriginalRtu.Title))
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Title_should_be_set_);
-                WindowManager.ShowDialogWithAssignedOwner(vm);
+                await WindowManager.ShowDialogWithAssignedOwner(vm);
                 return false;
             }
 
-            if (!CheckAddressUniqueness())
+            if (! await CheckAddressUniqueness())
                 return false;
             return true;
         }
 
-        private bool CheckAddressUniqueness()
+        private async Task<bool> CheckAddressUniqueness()
         {
             var list = _readModel.Rtus.Where(r =>
                 r.MainChannel.Ip4Address ==
@@ -200,7 +201,7 @@ namespace Fibertest.WpfClient
                 return true;
 
             var vm = new MyMessageBoxViewModel(MessageType.Error, Resources.SID_There_is_RTU_with_the_same_ip_address_);
-            WindowManager.ShowDialogWithAssignedOwner(vm);
+            await WindowManager.ShowDialogWithAssignedOwner(vm);
             return false;
         }
         #endregion

@@ -5,7 +5,7 @@ namespace Fibertest.WpfClient
 {
     public class PasswordViewModel : PropertyChangedBase
     {
-        private string _password;
+        private string _password = "";
         public string Label { get; set; } = Resources.SID_Password;
 
         public string Password

@@ -23,7 +23,6 @@ namespace Fibertest.WpfClient
         private readonly ILogger _logger; 
         private readonly CurrentUser _currentUser;
         private readonly CurrentGis _currentGis;
-        private readonly IWindowManager _windowManager;
         private readonly ReflectogramManager _reflectogramManager;
         private readonly SoundManager _soundManager;
         private readonly Model _readModel;
@@ -59,7 +58,7 @@ namespace Fibertest.WpfClient
 
 
         public TraceStateViewModel(ILogger logger, CurrentUser currentUser, CurrentGis currentGis,
-            IWindowManager windowManager, ReflectogramManager reflectogramManager,
+             ReflectogramManager reflectogramManager,
             SoundManager soundManager, Model readModel, GraphReadModel graphReadModel,
             GrpcC2DRequests grpcC2DRequests, IWcfServiceInSuperClient c2SWcfManager, 
             CommandLineParameters commandLineParameters, 
@@ -69,7 +68,6 @@ namespace Fibertest.WpfClient
             _logger = logger;
             _currentUser = currentUser;
             _currentGis = currentGis;
-            _windowManager = windowManager;
             HasPrivilegies = currentUser.Role <= Role.Operator;
             IsEditEnabled = true;
             _reflectogramManager = reflectogramManager;

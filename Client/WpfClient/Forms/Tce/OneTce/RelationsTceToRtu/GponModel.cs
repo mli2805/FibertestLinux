@@ -14,8 +14,8 @@ namespace Fibertest.WpfClient
 
         public int GponInterface { get; set; }
 
-        private Rtu _rtu;
-        public Rtu Rtu
+        private Rtu? _rtu;
+        public Rtu? Rtu
         {
             get => _rtu;
             set
@@ -26,8 +26,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private Otau _otau;
-        public Otau Otau
+        private Otau? _otau;
+        public Otau? Otau
         {
             get => _otau;
             set
@@ -50,9 +50,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private Trace _trace;
-
-        public Trace Trace
+        private Trace? _trace;
+        public Trace? Trace
         {
             get => _trace;
             set
@@ -119,7 +118,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
   
 }

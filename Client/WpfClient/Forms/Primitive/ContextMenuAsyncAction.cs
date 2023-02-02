@@ -20,19 +20,21 @@ namespace Fibertest.WpfClient
 
         #region ICommand Members
 
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
+            if (parameter == null) return false;
             return _canExecute.Invoke(parameter);
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
+            if (parameter == null) return;
             _execute.Invoke(parameter);
         }
 

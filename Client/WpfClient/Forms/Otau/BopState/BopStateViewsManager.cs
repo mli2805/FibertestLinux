@@ -36,11 +36,11 @@ namespace Fibertest.WpfClient
             childrenViews.PropertyChanged += ChildrenViews_PropertyChanged;
         }
 
-        private void ChildrenViews_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs args)
+        private void ChildrenViews_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(ChildrenViews.ShouldBeClosed))
             {
-                if (((ChildrenViews)sender).ShouldBeClosed)
+                if (((ChildrenViews)sender!).ShouldBeClosed)
                 {
                     foreach (var pair in LaunchedViews.ToList())
                     {
@@ -79,7 +79,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void Show(BopNetworkEventAdded bopNetworkEventAdded)
+        private async void Show(BopNetworkEventAdded bopNetworkEventAdded)
         {
             ClearClosedViews();
 
@@ -92,16 +92,17 @@ namespace Fibertest.WpfClient
                 return;
             }
           
-            var vm = LaunchedViews.FirstOrDefault(m => m.Value.BopId == otau.Id).Value;
+            var vm = LaunchedViews.Values
+                .FirstOrDefault(m => m.BopId == otau.Id);
             if (vm != null)
             {
-                vm.TryCloseAsync();
+                await vm.TryCloseAsync();
                 LaunchedViews.Remove(otau.Id);
             }
 
             vm = _globalScope.Resolve<BopStateViewModel>();
             vm.Initialize(bopNetworkEventAdded);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
 
             LaunchedViews.Add(otau.Id, vm);
             _childrenViews.ShouldBeClosed = false;

@@ -19,15 +19,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _mfid;
-        private string _mfsn;
-        private string _omid;
-        private string _omsn;
-        private string _version;
-        private string _version2;
-        private Visibility _visibility;
-
-        public string Mfid
+        private string? _mfid;
+        public string? Mfid
         {
             get => _mfid;
             set
@@ -38,7 +31,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Mfsn
+        private string? _mfsn;
+        public string? Mfsn
         {
             get => _mfsn;
             set
@@ -49,7 +43,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Omid
+        private string? _omid;
+        public string? Omid
         {
             get => _omid;
             set
@@ -60,7 +55,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Omsn
+        private string? _omsn;
+        public string? Omsn
         {
             get => _omsn;
             set
@@ -95,7 +91,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Version
+        private string? _version;
+        public string? Version
         {
             get => _version;
             set
@@ -107,7 +104,8 @@ namespace Fibertest.WpfClient
         }
 
 
-        public string Version2
+        private string? _version2;
+        public string? Version2
         {
             get => _version2;
             set
@@ -118,7 +116,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-       
+
+        private Visibility _visibility;
         public Visibility Visibility
         {
             get => _visibility;
@@ -141,8 +140,8 @@ namespace Fibertest.WpfClient
             Version = rtu.Version;
             Version2 = rtu.Version2;
 
-            MainOtauModel = rtu.RtuMaker == RtuMaker.VeEX ? rtu.MainVeexOtau.model  ?? @"n/a" : "";
-            MainOtauSerial = rtu.RtuMaker == RtuMaker.VeEX ? rtu.MainVeexOtau.serialNumber  ?? @"n/a" : "";
+            MainOtauModel = rtu.RtuMaker == RtuMaker.VeEX ? rtu.MainVeexOtau.model ?? @"n/a" : "";
+            MainOtauSerial = rtu.RtuMaker == RtuMaker.VeEX ? rtu.MainVeexOtau.serialNumber ?? @"n/a" : "";
         }
 
         public void FromDto(RtuInitializedDto dto)
@@ -155,8 +154,8 @@ namespace Fibertest.WpfClient
             Version = dto.Version;
             Version2 = dto.Version2;
 
-            MainOtauModel = dto.Maker == RtuMaker.VeEX ? dto.MainVeexOtau.model ?? @"n/a"  : "";
-            MainOtauSerial = dto.Maker == RtuMaker.VeEX ? dto.MainVeexOtau.serialNumber ?? @"n/a"  : "";
+            MainOtauModel = dto.Maker == RtuMaker.VeEX ? dto.MainVeexOtau.model ?? @"n/a" : "";
+            MainOtauSerial = dto.Maker == RtuMaker.VeEX ? dto.MainVeexOtau.serialNumber ?? @"n/a" : "";
         }
     }
 }

@@ -6,7 +6,7 @@ public class ApplyMonitoringSettingsDto : BaseRtuRequest
     {
     }
 
-    public string OtdrId = string.Empty; //  in VeEX RTU main OTDR has its own ID
+    public string? OtdrId; //  in VeEX RTU main OTDR has its own ID
 
     public VeexOtau MainVeexOtau = new VeexOtau(); // in Veex RTU it is a separate unit
 

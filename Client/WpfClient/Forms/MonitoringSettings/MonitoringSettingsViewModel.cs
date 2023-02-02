@@ -17,14 +17,13 @@ namespace Fibertest.WpfClient
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly GrpcC2DRequests _grpcC2DRequests;
-        private readonly IWcfServiceDesktopC2D _desktopC2DWcfManager;
         private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly IWindowManager _windowManager;
         public MonitoringSettingsModel Model { get; set; }
 
         public int SelectedTabIndex { get; set; }
 
-        private string _messageProp;
+        private string _messageProp = "";
         public string MessageProp
         {
             get => _messageProp;
@@ -53,14 +52,13 @@ namespace Fibertest.WpfClient
 
         public MonitoringSettingsViewModel(RtuLeaf rtuLeaf, ILifetimeScope globalScope, 
             CurrentUser currentUser, Model readModel, GrpcC2DRequests grpcC2DRequests,
-            IWcfServiceDesktopC2D desktopC2DWcfManager, IWcfServiceCommonC2D commonC2DWcfManager, IWindowManager windowManager,
+             IWcfServiceCommonC2D commonC2DWcfManager, IWindowManager windowManager,
             MonitoringSettingsModelFactory monitoringSettingsModelFactory)
         {
             _globalScope = globalScope;
             _currentUser = currentUser;
             _readModel = readModel;
             _grpcC2DRequests = grpcC2DRequests;
-            _desktopC2DWcfManager = desktopC2DWcfManager;
             _commonC2DWcfManager = commonC2DWcfManager;
             _windowManager = windowManager;
 
