@@ -21,4 +21,8 @@ IWritableConfig<T> & WritableConfig<T> (лежат в Utils)
  
  DataCenter
  
- используется родной 
+ используется родной MS контейнер 
+ 
+ при регистрации зависимостей
+            .AddSingleton<IWritableConfig<DataCenterConfig>>(s => new WritableConfig<DataCenterConfig>("dc.json"));
+ и при резолве первого класса которому он нужен, создается экземпляр

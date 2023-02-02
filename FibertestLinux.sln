@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataCenter", "DataCenter", "{3A54ABF1-D57E-4DD1-AE3F-A202999C35B8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{50FF631B-F8A2-4ED3-828D-D0DC6A99D280}"
+	ProjectSection(SolutionItems) = preProject
+		Auxiliary Files\WritableConfig.txt = Auxiliary Files\WritableConfig.txt
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rtu", "Rtu\Rtu\Rtu.csproj", "{99C008DF-F917-4D22-B817-C7C54230E39D}"
 EndProject
@@ -41,7 +44,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapLoader", "Client\MapLoad
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KadastrLoader", "Client\KadastrLoader\KadastrLoader.csproj", "{5D45F7E4-7B10-421E-8FE2-191EE400DFAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharonLib", "Rtu\CharonLibrary\CharonLib.csproj", "{B2DC339B-442A-4440-945C-68235E95DF93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CharonLib", "Rtu\CharonLibrary\CharonLib.csproj", "{B2DC339B-442A-4440-945C-68235E95DF93}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auxillary Files", "Auxillary Files", "{2CC3D11B-CE9D-48C1-BB03-0C80EF460624}"
+	ProjectSection(SolutionItems) = preProject
+		Auxiliary Files\WritableConfig.txt = Auxiliary Files\WritableConfig.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,6 +11,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\AccidentSchemes\AccidentBetweenNodes.png" />
+	  <None Remove="Resources\AccidentSchemes\AccidentInLastNode.png" />
+	  <None Remove="Resources\AccidentSchemes\AccidentInNode.png" />
+	  <None Remove="Resources\AccidentSchemes\BadSegment.png" />
+	  <None Remove="Resources\AccidentSchemes\FiberBrokenBetweenNodes.png" />
+	  <None Remove="Resources\AccidentSchemes\FiberBrokenInNode.png" />
+	  <None Remove="Resources\AdjustmentPoint\AdjustmentPointOk.png" />
 	  <None Remove="Resources\Buttons\CloseChildren.png" />
 	  <None Remove="Resources\Buttons\Collapse.png" />
 	  <None Remove="Resources\Buttons\Expand.png" />
@@ -20,6 +27,133 @@
 	  <None Remove="Resources\Buttons\left.png" />
 	  <None Remove="Resources\Buttons\right.png" />
 	  <None Remove="Resources\Buttons\ShowPorts.png" />
+	  <None Remove="Resources\CableReserve\CableReserveOk.png" />
+	  <None Remove="Resources\Closure\ClosureCritical.png" />
+	  <None Remove="Resources\Closure\ClosureMajor.png" />
+	  <None Remove="Resources\Closure\ClosureMinor.png" />
+	  <None Remove="Resources\Closure\ClosureOk.png" />
+	  <None Remove="Resources\Closure\ClosureSuspected.png" />
+	  <None Remove="Resources\Closure\ClosureUser.png" />
+	  <None Remove="Resources\Cross\CrossCritical.png" />
+	  <None Remove="Resources\Cross\CrossMajor.png" />
+	  <None Remove="Resources\Cross\CrossMinor.png" />
+	  <None Remove="Resources\Cross\CrossOk.png" />
+	  <None Remove="Resources\Cross\CrossSuspected.png" />
+	  <None Remove="Resources\Cross\CrossUser.png" />
+	  <None Remove="Resources\EmptyNode\EmptyNodeCritical.png" />
+	  <None Remove="Resources\EmptyNode\EmptyNodeMajor.png" />
+	  <None Remove="Resources\EmptyNode\EmptyNodeMinor.png" />
+	  <None Remove="Resources\EmptyNode\EmptyNodeOk.png" />
+	  <None Remove="Resources\EmptyNode\EmptyNodeSuspected.png" />
+	  <None Remove="Resources\EmptyNode\EmptyNodeUser.png" />
+	  <None Remove="Resources\Ico\IIT.ico" />
+	  <None Remove="Resources\LeftPanel\BlackSquare.png" />
+	  <None Remove="Resources\LeftPanel\BlueSquare.png" />
+	  <None Remove="Resources\LeftPanel\blue_sphere_16.jpg" />
+	  <None Remove="Resources\LeftPanel\EmptySquare.png" />
+	  <None Remove="Resources\LeftPanel\FuchsiaSquare.png" />
+	  <None Remove="Resources\LeftPanel\GreenSquare.png" />
+	  <None Remove="Resources\LeftPanel\Green_ball_16.jpg" />
+	  <None Remove="Resources\LeftPanel\GreyHalfSquare.png" />
+	  <None Remove="Resources\LeftPanel\GreySquare.png" />
+	  <None Remove="Resources\LeftPanel\MinorSquare.png" />
+	  <None Remove="Resources\LeftPanel\Monitoring_Blue.png" />
+	  <None Remove="Resources\LeftPanel\Monitoring_Grey.png" />
+	  <None Remove="Resources\LeftPanel\PurpleSquare.png" />
+	  <None Remove="Resources\LeftPanel\RedSquare.png" />
+	  <None Remove="Resources\LeftPanel\Red_ball_16.jpg" />
+	  <None Remove="Resources\LeftPanel\WhiteSquare.png" />
+	  <None Remove="Resources\LeftPanel\wifi_green.png" />
+	  <None Remove="Resources\LeftPanel\YellowSquare.png" />
+	  <None Remove="Resources\OnMap\CriticalAccidentPlace.png" />
+	  <None Remove="Resources\OnMap\MajorAccidentPlace.png" />
+	  <None Remove="Resources\OnMap\MinorAccidentPlace.png" />
+	  <None Remove="Resources\OnMap\NodeHighlighting.png" />
+	  <None Remove="Resources\OnMap\RtuHighlighting.png" />
+	  <None Remove="Resources\Other\OtherCritical.png" />
+	  <None Remove="Resources\Other\OtherMajor.png" />
+	  <None Remove="Resources\Other\OtherMinor.png" />
+	  <None Remove="Resources\Other\OtherOk.png" />
+	  <None Remove="Resources\Other\OtherSuspected.png" />
+	  <None Remove="Resources\Other\OtherUser.png" />
+	  <None Remove="Resources\Reports\CheckMark.png" />
+	  <None Remove="Resources\Reports\header-landscape.png" />
+	  <None Remove="Resources\Reports\header.png" />
+	  <None Remove="Resources\Reports\IIT-header-landscape.png" />
+	  <None Remove="Resources\Reports\IIT-header.png" />
+	  <None Remove="Resources\Reports\TraceStateReport.html" />
+	  <None Remove="Resources\Rtu\RtuCritical.png" />
+	  <None Remove="Resources\Rtu\RtuCritical2c.png" />
+	  <None Remove="Resources\Rtu\RtuCritical3c.png" />
+	  <None Remove="Resources\Rtu\RtuMajor.png" />
+	  <None Remove="Resources\Rtu\RtuMajor2c.png" />
+	  <None Remove="Resources\Rtu\RtuMajor3c.png" />
+	  <None Remove="Resources\Rtu\RtuMinor.png" />
+	  <None Remove="Resources\Rtu\RtuMinor2c.png" />
+	  <None Remove="Resources\Rtu\RtuMinor3c.png" />
+	  <None Remove="Resources\Rtu\RtuNotAccessible.png" />
+	  <None Remove="Resources\Rtu\RtuOk.png" />
+	  <None Remove="Resources\Rtu\RtuOnReserveChannel.png" />
+	  <None Remove="Resources\Rtu\RtuReserveCrashed.png" />
+	  <None Remove="Resources\Rtu\RtuSuspected.png" />
+	  <None Remove="Resources\Rtu\RtuSuspected2c.png" />
+	  <None Remove="Resources\Rtu\RtuSuspected3c.png" />
+	  <None Remove="Resources\Rtu\RtuUser.png" />
+	  <None Remove="Resources\Rtu\RtuUser2c.png" />
+	  <None Remove="Resources\Rtu\RtuUser3c.png" />
+	  <None Remove="Resources\Sounds\Accident.mp3" />
+	  <None Remove="Resources\Sounds\Ok.mp3" />
+	  <None Remove="Resources\Terminal\TerminalCritical.png" />
+	  <None Remove="Resources\Terminal\TerminalMajor.png" />
+	  <None Remove="Resources\Terminal\TerminalMinor.png" />
+	  <None Remove="Resources\Terminal\TerminalOk.png" />
+	  <None Remove="Resources\Terminal\TerminalSuspected.png" />
+	  <None Remove="Resources\Terminal\TerminalUser.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\AccidentSchemes\AccidentBetweenNodes.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\AccidentSchemes\AccidentInLastNode.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\AccidentSchemes\AccidentInNode.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\AccidentSchemes\BadSegment.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\AccidentSchemes\FiberBrokenBetweenNodes.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\AccidentSchemes\FiberBrokenInNode.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\CheckMark.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\header-landscape.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\header.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\IIT-header-landscape.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\IIT-header.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\TraceStateReport.html">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Sounds\Accident.mp3">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Sounds\Ok.mp3">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -46,15 +180,258 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Resources\Buttons\CloseChildren.png" />
-	  <Resource Include="Resources\Buttons\Collapse.png" />
-	  <Resource Include="Resources\Buttons\Expand.png" />
-	  <Resource Include="Resources\Buttons\Extinguish.png" />
-	  <Resource Include="Resources\Buttons\half_eye.png" />
-	  <Resource Include="Resources\Buttons\HidePorts.png" />
-	  <Resource Include="Resources\Buttons\left.png" />
-	  <Resource Include="Resources\Buttons\right.png" />
-	  <Resource Include="Resources\Buttons\ShowPorts.png" />
+	  <Resource Include="Resources\AdjustmentPoint\AdjustmentPointOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\CloseChildren.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\Collapse.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\Expand.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\Extinguish.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\half_eye.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\HidePorts.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\left.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\right.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Buttons\ShowPorts.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\CableReserve\CableReserveOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Closure\ClosureCritical.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Closure\ClosureMajor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Closure\ClosureMinor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Closure\ClosureOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Closure\ClosureSuspected.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Closure\ClosureUser.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Cross\CrossCritical.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Cross\CrossMajor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Cross\CrossMinor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Cross\CrossOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Cross\CrossSuspected.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Cross\CrossUser.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\EmptyNode\EmptyNodeCritical.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\EmptyNode\EmptyNodeMajor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\EmptyNode\EmptyNodeMinor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\EmptyNode\EmptyNodeOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\EmptyNode\EmptyNodeSuspected.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\EmptyNode\EmptyNodeUser.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Ico\IIT.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\BlackSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\BlueSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\blue_sphere_16.jpg">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\EmptySquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\FuchsiaSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\GreenSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\Green_ball_16.jpg">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\GreyHalfSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\GreySquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\MinorSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\Monitoring_Blue.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\Monitoring_Grey.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\PurpleSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\RedSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\Red_ball_16.jpg">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\WhiteSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\wifi_green.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\LeftPanel\YellowSquare.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\OnMap\CriticalAccidentPlace.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\OnMap\MajorAccidentPlace.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\OnMap\MinorAccidentPlace.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\OnMap\NodeHighlighting.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\OnMap\RtuHighlighting.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Other\OtherCritical.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Other\OtherMajor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Other\OtherMinor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Other\OtherOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Other\OtherSuspected.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Other\OtherUser.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuCritical.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuCritical2c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuCritical3c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuMajor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuMajor2c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuMajor3c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuMinor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuMinor2c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuMinor3c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuNotAccessible.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuOnReserveChannel.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuReserveCrashed.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuSuspected.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuSuspected2c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuSuspected3c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuUser.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuUser2c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Rtu\RtuUser3c.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Terminal\TerminalCritical.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Terminal\TerminalMajor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Terminal\TerminalMinor.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Terminal\TerminalOk.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Terminal\TerminalSuspected.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Terminal\TerminalUser.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 
 </Project>

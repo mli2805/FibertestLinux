@@ -21,7 +21,7 @@ public static class DcDependencyCollectionExtensions
     private static IServiceCollection AddConfigAsInstance(this IServiceCollection services)
     {
         return services
-            .AddSingleton<IWritableConfig<DataCenterConfig>>(s => new WritableConfig<DataCenterConfig>("dc.json"));
+            .AddSingleton<IWritableConfig<DataCenterConfig>>(_ => new WritableConfig<DataCenterConfig>("dc.json"));
     }
 
     private static IServiceCollection AddBootAndBackgroundServices(this IServiceCollection services)
