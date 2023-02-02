@@ -19,8 +19,8 @@ namespace Fibertest.WpfClient
 
         public Guid ZoneId { get; set; }
 
-        private string _title;
-        public string Title
+        private string? _title;
+        public string? Title
         {
             get => _title;
             set
@@ -31,8 +31,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _comment;
-        public string Comment
+        private string? _comment;
+        public string? Comment
         {
             get => _comment;
             set
@@ -103,7 +103,7 @@ namespace Fibertest.WpfClient
                 switch (columnName)
                 {
                     case "Title":
-                        if (string.IsNullOrEmpty(_title.Trim()))
+                        if (string.IsNullOrEmpty(_title?.Trim()))
                             errorMessage = Resources.SID_Title_is_required;
                         IsButtonSaveEnabled = errorMessage == string.Empty;
                         break;
@@ -112,6 +112,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
 }

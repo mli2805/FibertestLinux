@@ -67,10 +67,10 @@ namespace Fibertest.WpfClient
 
         public void ExportToPdf()
         {
-            var htmlContext = _tceReportProvider.Create(_tceInWork);
-            if (htmlContext == null) return;
+            var htmlContent = _tceReportProvider.Create(_tceInWork);
+            if (htmlContent == null) return;
 
-            var pdfFileName = htmlContext.SaveHtmlAsPdf($"TceReport_{_tceInWork.Title}");
+            var pdfFileName = htmlContent.SaveHtmlAsPdf($"TceReport_{_tceInWork.Title}");
             Process.Start(new ProcessStartInfo() { FileName = pdfFileName, UseShellExecute = true });
         }
 

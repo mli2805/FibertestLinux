@@ -64,11 +64,11 @@ namespace Fibertest.WpfClient
             DisplayName = Resources.SID_Telecommunications_equipment;
         }
 
-        public void AddTce()
+        public async void AddTce()
         {
             var vm = _globalScope.Resolve<TceTypeViewModel>();
             vm.Initialize(_readModel.TceTypeStructs.First(), true);
-            if (_windowManager.ShowDialogWithAssignedOwner(vm).Result != true)
+            if (await _windowManager.ShowDialogWithAssignedOwner(vm) != true)
                 return;
 
             var selectedTceType = vm.SelectedTabItem == 0
@@ -78,7 +78,7 @@ namespace Fibertest.WpfClient
             var ovm = _globalScope.Resolve<OneTceViewModel>();
             var tce = selectedTceType.CreateTce();
             ovm.Initialize(tce);
-            _windowManager.ShowWindowWithAssignedOwner(ovm);
+            await _windowManager.ShowWindowWithAssignedOwner(ovm);
         }
 
         public async void ChangeTceType()
@@ -169,12 +169,12 @@ namespace Fibertest.WpfClient
         }
 
         // button Settings
-        public void UpdateTceComponents()
+        public async void UpdateTceComponents()
         {
             if (SelectedTce == null) return;
             var vm = _globalScope.Resolve<OneTceViewModel>();
             vm.Initialize(SelectedTce);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
         }
 
         public async void RemoveTce()

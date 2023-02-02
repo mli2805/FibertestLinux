@@ -6,7 +6,7 @@ namespace Fibertest.WpfClient
     public class UserFilter
     {
         public bool IsOn { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public UserFilter() { IsOn = false; }
         public UserFilter(User user)
@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
 
         public override string ToString()
         {
-            return IsOn ? User.Title : Resources.SID__no_filter_;
+            return IsOn ? User!.Title : Resources.SID__no_filter_;
         }
     }
 }

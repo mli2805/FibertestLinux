@@ -20,7 +20,6 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
 
         private ObservableCollection<Zone> _rows;
-
         public ObservableCollection<Zone> Rows
         {
             get { return _rows; }
@@ -32,8 +31,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private Zone _selectedZone;
-        public Zone SelectedZone
+        private Zone? _selectedZone;
+        public Zone? SelectedZone
         {
             get { return _selectedZone; }
             set
@@ -45,7 +44,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public bool IsRemoveEnabled => !SelectedZone.IsDefaultZone;
+        public bool IsRemoveEnabled => !SelectedZone!.IsDefaultZone;
 
         public bool IsEnabled { get; set; }
 
@@ -56,7 +55,7 @@ namespace Fibertest.WpfClient
             _readModel = readModel;
             _grpcC2DRequests = grpcC2DRequests;
             _windowManager = windowManager;
-            Rows = new ObservableCollection<Zone>(readModel.Zones);
+            _rows = new ObservableCollection<Zone>(readModel.Zones);
             SelectedZone = Rows.First();
             eventArrivalNotifier.PropertyChanged += _eventArrivalNotifier_PropertyChanged;
             IsEnabled = currentUser.Role <= Role.Root;
@@ -82,7 +81,7 @@ namespace Fibertest.WpfClient
         public async void UpdateZone()
         {
             var vm = _globalScope.Resolve<ZoneViewModel>();
-            vm.Initialize(SelectedZone);
+            vm.Initialize(SelectedZone!);
             await _windowManager.ShowDialogWithAssignedOwner(vm);
         }
 
@@ -90,7 +89,7 @@ namespace Fibertest.WpfClient
         {
             if (! await ConfirmZoneRemove()) return;
 
-            var cmd = new RemoveZone() { ZoneId = SelectedZone.ZoneId };
+            var cmd = new RemoveZone() { ZoneId = SelectedZone!.ZoneId };
             var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
             if (result.ReturnCode == ReturnCode.Ok)
             {
@@ -104,7 +103,7 @@ namespace Fibertest.WpfClient
         {
             var strs = new List<string>()
             {
-                string.Format(Resources.SID_Zone___0___removal_, SelectedZone.Title),
+                string.Format(Resources.SID_Zone___0___removal_, SelectedZone!.Title),
                 "",
                 Resources.SID_Users_associated_with_this_zone_will_be_removed
             };

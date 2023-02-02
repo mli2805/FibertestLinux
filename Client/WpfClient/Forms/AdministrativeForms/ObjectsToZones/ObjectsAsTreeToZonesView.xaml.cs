@@ -15,7 +15,7 @@ namespace Fibertest.WpfClient
     public partial class ObjectsAsTreeToZonesView
     {
         private bool _isDataGridConstructorUsed;
-        private ObjectsAsTreeToZonesViewModel _vm;
+        private ObjectsAsTreeToZonesViewModel _vm = null!;
 
         public ObjectsAsTreeToZonesView()
         {
@@ -65,7 +65,7 @@ namespace Fibertest.WpfClient
 
         private DataTemplate GetZoneColumnCellTemplate(int index, Zone zone)
         {
-            var cellTempate = new DataTemplate {DataType = typeof(ObjectToZonesModel)};
+            var cellTemplate = new DataTemplate {DataType = typeof(ObjectToZonesModel)};
             FrameworkElementFactory borderFactory = new FrameworkElementFactory(typeof(Border));
             FrameworkElementFactory isZoneIncluded = new FrameworkElementFactory(typeof(CheckBox));
             var binding = new Binding($@"IsInZones[{index}].IsChecked") {Mode = BindingMode.TwoWay};
@@ -78,8 +78,8 @@ namespace Fibertest.WpfClient
             isZoneIncluded.AddHandler(ButtonBase.ClickEvent, (RoutedEventHandler)CheckBoxClicked);
 
             borderFactory.AppendChild(isZoneIncluded);
-            cellTempate.VisualTree = borderFactory;
-            return cellTempate;
+            cellTemplate.VisualTree = borderFactory;
+            return cellTemplate;
         }
 
         private DataTemplate GetZoneColumnHeaderTemplate(Zone zone)
@@ -105,6 +105,7 @@ namespace Fibertest.WpfClient
             var checkBox = (CheckBox)sender;
             var column = (int)checkBox.Tag;
 
+            if (_vm.SelectedRow == null) return;
             _vm.SelectedRow.IsInZones[column].IsChecked = checkBox.IsChecked == true; // can't make binding work that way
 
             if (_vm.SelectedRow.IsRtu)

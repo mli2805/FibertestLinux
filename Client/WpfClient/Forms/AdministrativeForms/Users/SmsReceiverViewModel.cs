@@ -6,7 +6,6 @@ namespace Fibertest.WpfClient
 {
     public class SmsReceiverViewModel : PropertyChangedBase
     {
-        private string _phoneNumber;
         private bool _isFiberBreakOn;
         private bool _isCriticalOn;
         private bool _isMajorOn;
@@ -16,6 +15,7 @@ namespace Fibertest.WpfClient
         private bool _isNetworkEventsOn;
         private bool _isBopEventsOn;
 
+        private string _phoneNumber = "";
         public string PhoneNumber
         {
             get => _phoneNumber;
@@ -115,10 +115,10 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public event EventHandler OnTestButtonPressed;
+        public event EventHandler? OnTestButtonPressed;
         public void SendTestSms()
         {
-            OnTestButtonPressed?.Invoke(this, null);
+            OnTestButtonPressed?.Invoke(this, EventArgs.Empty);
         }
 
         public SmsReceiver Get()

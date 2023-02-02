@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using Caliburn.Micro;
@@ -16,10 +17,8 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly LogOperationsViewModel _logOperationsViewModel;
         private readonly IWindowManager _windowManager;
-        private UserFilter _selectedUserFilter;
-        private string _operationsFilterButtonContent;
-        private List<LogLine> _rows;
 
+        private string _operationsFilterButtonContent = null!;
         public string OperationsFilterButtonContent
         {
             get => _operationsFilterButtonContent;
@@ -59,8 +58,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public List<UserFilter> UserFilters { get; set; }
+        public List<UserFilter> UserFilters { get; set; } = null!;
 
+        private UserFilter _selectedUserFilter = null!;
         public UserFilter SelectedUserFilter
         {
             get => _selectedUserFilter;
@@ -75,6 +75,7 @@ namespace Fibertest.WpfClient
         }
 
 
+        private List<LogLine> _rows = null!;
         public List<LogLine> Rows
         {
             get => _rows;
@@ -117,7 +118,7 @@ namespace Fibertest.WpfClient
             var logLine = (LogLine)o;
             return
                 (SelectedUserFilter.IsOn == false ||
-                 SelectedUserFilter.User.Title == logLine.Username)
+                 SelectedUserFilter.User!.Title == logLine.Username)
                 && IsIncludedInOperationFilter(logLine.OperationCode)
                 && logLine.Timestamp.Date >= DateFrom && logLine.Timestamp.Date <= DateTo;
         }
@@ -170,9 +171,9 @@ namespace Fibertest.WpfClient
             InitializeFilters();
         }
 
-        public void ShowOperationFilter()
+        public async void ShowOperationFilter()
         {
-            _windowManager.ShowDialogWithAssignedOwner(_logOperationsViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_logOperationsViewModel);
             OperationsFilterButtonContent = _logOperationsViewModel.IsAllChecked()
                 ? Resources.SID__no_filter_
                 : Resources.SID__filter_applied_;
@@ -186,8 +187,9 @@ namespace Fibertest.WpfClient
             view.Refresh();
             var logLines = view.Cast<LogLine>().ToList();
 
-            // var report = EventLogReportProvider.Create(logLines);
-            // PdfExposer.Show(report, $@"EventLog{DateTime.Now:yyyyMMddHHmmss}.pdf", _windowManager);
+            var htmlContent = EventLogReportProvider.Create(logLines);
+            var pdfFileName = htmlContent.SaveHtmlAsPdf("EventLog");
+            Process.Start(new ProcessStartInfo() { FileName = pdfFileName, UseShellExecute = true });
         }
 
         public async void Close()

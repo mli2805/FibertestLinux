@@ -23,12 +23,12 @@ namespace Fibertest.WpfClient
 
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
-        public UserVm UserInWork { get; set; }
+        public UserVm UserInWork { get; set; } = null!;
 
         public bool IsntItRoot { get; set; }
 
-        private string _password1;
-        public string Password1
+        private string? _password1;
+        public string? Password1
         {
             get => _password1;
             set
@@ -40,8 +40,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _password2;
-        public string Password2
+        private string? _password2;
+        public string? Password2
         {
             get => _password2;
             set
@@ -56,11 +56,11 @@ namespace Fibertest.WpfClient
         public bool IsPasswordsEnabled { get; set; }
 
 
-        public List<Role> Roles { get; set; }
-        public List<Zone> Zones { get; set; }
+        public List<Role> Roles { get; set; } = null!;
+        public List<Zone> Zones { get; set; } = null!;
 
-        private Zone _selectedZone;
-        public Zone SelectedZone
+        private Zone? _selectedZone;
+        public Zone? SelectedZone
         {
             get => _selectedZone;
             set
@@ -135,7 +135,7 @@ namespace Fibertest.WpfClient
             bool res;
             using (new WaitCursor())
             {
-                res = await _c2DWcfManager.SendTest(UserInWork.EmailAddress, NotificationType.Email);
+                res = await _c2DWcfManager.SendTest(UserInWork.EmailAddress!, NotificationType.Email);
             }
 
             var header = res ? MessageType.Information : MessageType.Error;
@@ -196,10 +196,10 @@ namespace Fibertest.WpfClient
                     UserId = Guid.NewGuid(),
                     Title = UserInWork.Title,
                     Role = UserInWork.Role,
-                    Email = new EmailReceiver() { Address = UserInWork.EmailAddress, IsActivated = UserInWork.IsEmailActivated },
+                    Email = new EmailReceiver() { Address = UserInWork.EmailAddress!, IsActivated = UserInWork.IsEmailActivated },
                     Sms = UserInWork.SmsReceiverVm.Get(),
                     EncodedPassword = Password1.GetHashString(),
-                    ZoneId = SelectedZone.ZoneId,
+                    ZoneId = SelectedZone!.ZoneId,
                 };
             else
                 cmd = new UpdateUser()
@@ -207,12 +207,12 @@ namespace Fibertest.WpfClient
                     UserId = UserInWork.UserId,
                     Title = UserInWork.Title,
                     Role = UserInWork.Role,
-                    Email = new EmailReceiver() { Address = UserInWork.EmailAddress, IsActivated = UserInWork.IsEmailActivated },
+                    Email = new EmailReceiver() { Address = UserInWork.EmailAddress!, IsActivated = UserInWork.IsEmailActivated },
                     Sms = UserInWork.SmsReceiverVm.Get(),
                     EncodedPassword = UserInWork.EncodedPassword == Password1 // root has right to change passwords
                         ? UserInWork.EncodedPassword 
                         : Password1.GetHashString(), 
-                    ZoneId = SelectedZone.ZoneId,
+                    ZoneId = SelectedZone!.ZoneId,
                 };
 
 
@@ -233,12 +233,12 @@ namespace Fibertest.WpfClient
                 switch (columnName)
                 {
                     case "Title":
-                        if (string.IsNullOrEmpty(UserInWork.Title.Trim()))
+                        if (string.IsNullOrEmpty(UserInWork.Title?.Trim()))
                             errorMessage = Resources.SID_Title_should_be_set_;
                         break;
                     case "Password1":
                     case "Password2":
-                        if (string.IsNullOrEmpty(Password1.Trim()) || string.IsNullOrEmpty(Password2.Trim()))
+                        if (string.IsNullOrEmpty(Password1?.Trim()) || string.IsNullOrEmpty(Password2?.Trim()))
                             errorMessage = Resources.SID_Password_should_be_set;
                         else if (Password1 != Password2)
                             errorMessage = Resources.SID_Passwords_don_t_match;
@@ -250,6 +250,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = "";
     }
 }

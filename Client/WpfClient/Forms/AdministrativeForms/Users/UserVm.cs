@@ -7,16 +7,10 @@ namespace Fibertest.WpfClient
 {
     public class UserVm : PropertyChangedBase, ICloneable
     {
-        private string _title;
-        private Role _role;
-        private string _email;
-        private bool _isEmailActivated;
-        private Guid _zoneId;
-        private string _zoneTitle;
-
         public Guid UserId { get; set; }
 
-        public string Title
+        private string? _title;
+        public string? Title
         {
             get => _title;
             set
@@ -27,6 +21,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private Role _role;
         public Role Role
         {
             get => _role;
@@ -40,7 +35,8 @@ namespace Fibertest.WpfClient
 
         public string EncodedPassword { get; set; } = "";
 
-        public string EmailAddress
+        private string? _email;
+        public string? EmailAddress
         {
             get => _email;
             set
@@ -51,6 +47,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private bool _isEmailActivated;
         public bool IsEmailActivated
         {
             get => _isEmailActivated;
@@ -64,6 +61,7 @@ namespace Fibertest.WpfClient
 
         public SmsReceiverViewModel SmsReceiverVm { get; set; } = new SmsReceiverViewModel();
 
+        private Guid _zoneId;
         public Guid ZoneId
         {
             get => _zoneId;
@@ -75,7 +73,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string ZoneTitle
+        private string? _zoneTitle;
+        public string? ZoneTitle
         {
             get => _zoneTitle;
             set

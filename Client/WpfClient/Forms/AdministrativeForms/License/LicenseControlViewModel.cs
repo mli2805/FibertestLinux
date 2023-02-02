@@ -5,8 +5,8 @@ namespace Fibertest.WpfClient
 {
     public class LicenseControlViewModel : PropertyChangedBase
     {
-        private License _license;
-        public License License
+        private License? _license;
+        public License? License
         {
             get => _license;
             set
@@ -18,7 +18,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public bool IsBasic => !License.IsIncremental;
-        public bool IsStandart => !License.IsMachineKeyRequired;
+        public bool IsBasic => !License?.IsIncremental ?? true;
+        public bool IsStandard => !License?.IsMachineKeyRequired ?? true;
     }
 }

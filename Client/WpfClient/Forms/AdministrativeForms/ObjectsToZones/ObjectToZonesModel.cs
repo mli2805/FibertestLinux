@@ -6,7 +6,7 @@ namespace Fibertest.WpfClient
 {
     public class ObjectToZonesModel : PropertyChangedBase
     {
-        public string SubjectTitle { get; set; }
+        public string SubjectTitle { get; set; } = "";
         public Guid RtuId { get; set; }
         public Guid TraceId { get; set; }
 

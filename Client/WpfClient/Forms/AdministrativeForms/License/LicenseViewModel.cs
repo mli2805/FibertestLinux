@@ -11,12 +11,12 @@ namespace Fibertest.WpfClient
     {
         private readonly Model _readModel;
         private readonly LicenseSender _licenseSender;
-        private License _selectedLicense;
         public LicenseControlViewModel LicenseControlViewModel { get; set; } = new LicenseControlViewModel();
 
-        public List<License> Licenses { get; set; }
+        public List<License> Licenses { get; set; } = null!;
 
-        public License SelectedLicense
+        private License? _selectedLicense;
+        public License? SelectedLicense
         {
             get => _selectedLicense;
             set
@@ -24,7 +24,7 @@ namespace Fibertest.WpfClient
                 if (Equals(value, _selectedLicense)) return;
                 _selectedLicense = value;
                 NotifyOfPropertyChange();
-                LicenseControlViewModel.License = SelectedLicense;
+                LicenseControlViewModel.License = SelectedLicense!;
             }
         }
 
