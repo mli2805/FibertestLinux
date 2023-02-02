@@ -36,11 +36,11 @@ namespace Fibertest.WpfClient
         {
             while (!_token.IsCancellationRequested)
             {
-                var dto = new HeartbeatDto { ClientConnectionId = _currentUser.ConnectionId };
+                var dto = new ClientHeartbeatDto { ClientConnectionId = _currentUser.ConnectionId };
 
-                var ra = await _grpcC2DRequests.SendAnyC2DRequest<HeartbeatDto, RequestAnswer>(dto);
+                var ra = await _grpcC2DRequests.SendAnyC2DRequest<ClientHeartbeatDto, RequestAnswer>(dto);
                 if (ra.ReturnCode != ReturnCode.Ok)
-                    _logger.LogError(Logs.Client, "Failed to send heartbeat!");
+                    _logger.LogError(Logs.Client, $"Failed to send heartbeat! {ra.ErrorMessage}");
                 Thread.Sleep(TimeSpan.FromMilliseconds(_heartbeatRate));
             }
             _logger.LogInfo(Logs.Client, @"Leaving Heartbeats...");

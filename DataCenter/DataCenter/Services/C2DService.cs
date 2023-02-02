@@ -78,7 +78,9 @@ public class C2DService : c2d.c2dBase
                 if (client == null)
                     return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
             }
-            _logger.LogInfo(Logs.DataCenter, $"Client sent {request.What} request");
+
+            if (request.What != "GetEvents")
+                _logger.LogInfo(Logs.DataCenter, $"Client sent {request.What} request");
 
             var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);
             return new c2dResponse { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
@@ -96,7 +98,7 @@ public class C2DService : c2d.c2dBase
         {
             CheckServerConnectionDto dto => dto,
             RegisterClientDto dto => dto,
-            RegisterHeartbeatDto dto => dto,
+            ClientHeartbeatDto dto => dto,
             SetRtuOccupationDto dto => dto,
 
             GetDiskSpaceDto dto => dto,

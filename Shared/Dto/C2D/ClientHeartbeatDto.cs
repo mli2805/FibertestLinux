@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto
 {
-    public class HeartbeatDto : BaseRequest
+    public class ClientHeartbeatDto : BaseRequest
     {
         public string? ClientIp;
 

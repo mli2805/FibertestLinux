@@ -80,7 +80,7 @@ public class ClientCollection
         return successfulResult;
     }
 
-    public async Task<RequestAnswer> RegisterHeartbeat(RegisterHeartbeatDto dto)
+    public async Task<RequestAnswer> RegisterHeartbeat(ClientHeartbeatDto dto)
     {
         await Task.Delay(1);
         if (!Clients.ContainsKey(dto.ClientConnectionId))

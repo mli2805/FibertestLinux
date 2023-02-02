@@ -127,7 +127,6 @@ public class GrpcC2DRequests
         var grpcClient = new c2d.c2dClient(grpcChannel);
 
         dto.ClientConnectionId = _clientConnectionId;
-        _logger.LogInfo(Logs.Client, $"Connection ID is {_clientConnectionId}");
         var command = new c2dCommand { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
         try
