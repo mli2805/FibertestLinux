@@ -8,9 +8,11 @@
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<RootNamespace>Fibertest.WpfClient</RootNamespace>
 		<AssemblyName>Fibertest.WpfClient</AssemblyName>
+		<ApplicationIcon>FtClient6sizes.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="FtClient6sizes.ico" />
 	  <None Remove="Resources\AccidentSchemes\AccidentBetweenNodes.png" />
 	  <None Remove="Resources\AccidentSchemes\AccidentInLastNode.png" />
 	  <None Remove="Resources\AccidentSchemes\AccidentInNode.png" />
@@ -112,6 +114,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="FtClient6sizes.ico" />
 	  <Content Include="Resources\AccidentSchemes\AccidentBetweenNodes.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
@@ -180,6 +183,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="FtClient6sizes.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	  <Resource Include="Resources\AdjustmentPoint\AdjustmentPointOk.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>

@@ -12,8 +12,8 @@
                 <Image Source="pack://application:,,,/Resources/Ico/IIT.ico" Width="32"/>
             </Grid>
             <StackPanel Margin="0,5,35,5">
-                <TextBlock FontWeight="Bold" Text="FIBERTEST 2.0"/>
-                <TextBlock FontWeight="Bold" Text="Copyright © 2017-2022"/>
+                <TextBlock FontWeight="Bold" Text="FIBERTEST 3.0"/>
+                <TextBlock FontWeight="Bold" Text="Copyright © 2017-2023"/>
                 <TextBlock FontWeight="Bold" Text="{x:Static stringResources1:Resources.SID_Institute_of_Information_Technologies}"/>
             </StackPanel>
         </StackPanel>
