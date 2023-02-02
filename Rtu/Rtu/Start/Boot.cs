@@ -2,8 +2,6 @@ using System.Diagnostics;
 using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
-using Fibertest.Utils.Setup;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.Rtu;
 

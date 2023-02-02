@@ -17,15 +17,10 @@ public enum LedDisplayCode : byte
 
 public class SerialPortManager
 {
-    private ILogger _logger;
+    private ILogger _logger = null!;
     private string _comPortName = null!;
     private int _comPortSpeed;
     private int _pauseAfterReset;
-
-    public SerialPortManager()
-    {
-       
-    }
 
     public void Initialize(CharonConfig config, ILogger logger)
     {

@@ -18,10 +18,10 @@ namespace Fibertest.WpfCommonViews
             {
                 Owner = @"Demo license",
                 IsIncremental = false,
-                RtuCount = new LicenseParameter() {Value = 1, ValidUntil = DateTime.MaxValue},
-                ClientStationCount = new LicenseParameter() {Value = 1, ValidUntil = DateTime.MaxValue},
-                WebClientCount = new LicenseParameter() {Value = 1, ValidUntil = DateTime.MaxValue},
-                SuperClientStationCount = new LicenseParameter() {Value = 1, ValidUntil = DateTime.MaxValue},
+                RtuCount = new LicenseParameter() { Value = 1, ValidUntil = DateTime.MaxValue },
+                ClientStationCount = new LicenseParameter() { Value = 1, ValidUntil = DateTime.MaxValue },
+                WebClientCount = new LicenseParameter() { Value = 1, ValidUntil = DateTime.MaxValue },
+                SuperClientStationCount = new LicenseParameter() { Value = 1, ValidUntil = DateTime.MaxValue },
                 IsMachineKeyRequired = false,
                 Version = @"2.0.0.0"
             };
@@ -29,10 +29,10 @@ namespace Fibertest.WpfCommonViews
 
         public ApplyLicense CreateFromFile(LicenseInFile licenseInFile, Guid currentUserId, string? username = null)
         {
-           return new ApplyLicense()
+            return new ApplyLicense()
             {
                 LicenseId = licenseInFile.LicenseId,
-                
+
                 UserId = currentUserId,
 
                 UserName = username,
@@ -45,7 +45,7 @@ namespace Fibertest.WpfCommonViews
                 SuperClientStationCount = new LicenseParameter(licenseInFile.SuperClientStationCount),
                 IsMachineKeyRequired = licenseInFile.IsMachineKeyRequired,
                 SecurityAdminPassword = licenseInFile.IsMachineKeyRequired
-                    ? ((string?)Cryptography.Decode(licenseInFile.SecurityAdminPassword)).GetHashString() : "",
+                     ? ((string)Cryptography.Decode(licenseInFile.SecurityAdminPassword ?? Array.Empty<byte>())).GetHashString() : "",
                 AdminUserId = Guid.NewGuid(),
                 MachineKey = _machineKeyProvider.Get(),
                 CreationDate = licenseInFile.CreationDate,
