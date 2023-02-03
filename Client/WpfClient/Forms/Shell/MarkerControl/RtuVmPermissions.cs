@@ -14,7 +14,7 @@ namespace Fibertest.WpfClient
 
         public bool CanUpdateRtu(object parameter) { return true; }
 
-        public bool CanRemoveRtu(object parameter)
+        public bool CanRemoveRtu(object? parameter)
         {
             if (_currentUser.Role > Role.Root || parameter == null)
                 return false;
@@ -47,7 +47,7 @@ namespace Fibertest.WpfClient
             return HasPrivilegesAndParameterValid(parameter);
         }
 
-        private bool HasPrivilegesAndParameterValid(object parameter)
+        private bool HasPrivilegesAndParameterValid(object? parameter)
         {
             if (_currentUser.Role > Role.Root || parameter == null)
                 return false;

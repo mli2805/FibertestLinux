@@ -24,7 +24,7 @@ namespace Fibertest.WpfClient
         public async Task<AddEquipmentIntoNode?> BuildCommand(Guid nodeId)
         {
             var tracesInNode = _model.Traces.Where(t => t.NodeIds.Contains(nodeId)).ToList();
-            TracesToEquipmentInjectionViewModel tracesToEquipmentInjectionVm = null;
+            TracesToEquipmentInjectionViewModel? tracesToEquipmentInjectionVm = null;
             if (tracesInNode.Count > 0)
             {
                 tracesToEquipmentInjectionVm = new TracesToEquipmentInjectionViewModel(tracesInNode);

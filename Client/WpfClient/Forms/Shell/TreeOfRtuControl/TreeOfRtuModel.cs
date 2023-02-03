@@ -8,10 +8,10 @@ namespace Fibertest.WpfClient
 {
     public class TreeOfRtuModel : PropertyChangedBase
     {
-        private string _statistics;
 
         public ObservableCollection<Leaf> Tree { get; set; } = new ObservableCollection<Leaf>();
 
+        private string _statistics = "";
         public string Statistics
         {
             get => _statistics;
@@ -32,11 +32,12 @@ namespace Fibertest.WpfClient
                     (double)Tree.Sum(r => ((RtuLeaf)r).TraceCount) / Tree.Sum(r => ((RtuLeaf)r).FullPortCount) * 100);
         }
 
-        public Leaf GetById(Guid id)
+        public Leaf? GetById(Guid id)
         {
             return GetById(Tree, id);
         }
-        private Leaf GetById(ObservableCollection<Leaf> roots, Guid id)
+
+        private Leaf? GetById(ObservableCollection<Leaf> roots, Guid id)
         {
             foreach (var root in roots)
             {

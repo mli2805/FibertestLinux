@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
@@ -12,7 +13,7 @@ namespace Fibertest.WpfClient
     public static class EquipmentChecker48
     {
 
-        public static bool EquipmentCanBeChanged(this Model readModel, Guid equipmentId, IWindowManager windowManager)
+        public static async Task<bool> EquipmentCanBeChanged(this Model readModel, Guid equipmentId, IWindowManager windowManager)
         {
             foreach (var trace in readModel.Traces)
             {
@@ -21,7 +22,7 @@ namespace Fibertest.WpfClient
                     var rtu = readModel.Rtus.FirstOrDefault(r => r.Id == trace.RtuId);
                     if (rtu != null && rtu.MonitoringState == MonitoringState.On)
                     {
-                        windowManager.ShowDialogWithAssignedOwner(
+                        await windowManager.ShowDialogWithAssignedOwner(
                             new MyMessageBoxViewModel(MessageType.Error, new List<string>()
                             {
                                 Resources.SID_This_equipment_could_not_be_changed_,

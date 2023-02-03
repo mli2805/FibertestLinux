@@ -70,7 +70,7 @@ namespace Fibertest.WpfClient
                 $@"-fnw -n {prepareResult.Ip4Address} -p {prepareResult.Port}");
         }
 
-        private Leaf GetParent(object param)
+        private Leaf? GetParent(object param)
         {
             if (param is Leaf leaf)
                 return leaf.Parent;
@@ -120,7 +120,7 @@ namespace Fibertest.WpfClient
          *  send we send command to the RTU to toggle main and additional otaus
          *
          */
-        public async Task<NetAddress> PrepareRtuForMeasurementReflect(Leaf parent, int portNumber)
+        public async Task<NetAddress?> PrepareRtuForMeasurementReflect(Leaf parent, int portNumber)
         {
             RtuLeaf rtuLeaf = parent is RtuLeaf leaf ? leaf : (RtuLeaf)parent.Parent;
             var rtu = _readModel.Rtus.FirstOrDefault(r => r.Id == rtuLeaf.Id);
@@ -136,7 +136,7 @@ namespace Fibertest.WpfClient
                 : await PrepareVeexRtu(rtu, parent, portNumber);
         }
 
-        private async Task<NetAddress> PrepareIitRtu(RtuLeaf rtuLeaf, Rtu rtu, Leaf parent, int portNumber)
+        private async Task<NetAddress?> PrepareIitRtu(RtuLeaf rtuLeaf, Rtu rtu, Leaf parent, int portNumber)
         {
             var isMak100 = rtuLeaf.OtauNetAddress.Ip4Address == @"192.168.88.101";
             var isUcc = rtuLeaf.OtauNetAddress.Ip4Address == @"192.168.88.102"; // БУС
@@ -171,7 +171,7 @@ namespace Fibertest.WpfClient
             return toggleResult ? new NetAddress(mainCharonAddress.Ip4Address, isUcc ? 10001 : 1500) : null;
         }
 
-        private async Task<NetAddress> PrepareVeexRtu(Rtu rtu, Leaf parent, int portNumber)
+        private async Task<NetAddress?> PrepareVeexRtu(Rtu rtu, Leaf parent, int portNumber)
         {
             var dto = new PrepareReflectMeasurementDto(rtu.Id, rtu.RtuMaker)
             {

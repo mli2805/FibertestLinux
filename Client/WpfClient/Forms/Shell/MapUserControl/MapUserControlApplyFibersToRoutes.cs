@@ -16,7 +16,7 @@ namespace Fibertest.WpfClient
     /// </summary>
     public partial class MapUserControl
     {
-        private void FibersCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void FibersCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -68,11 +68,11 @@ namespace Fibertest.WpfClient
         }
 
 
-        private void FiberVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void FiberVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var fiberVm = (FiberVm)sender;
+            var fiberVm = (FiberVm)sender!;
 
-            var oldRoute = (GMapRoute)MainMap.Markers.FirstOrDefault(r => r.Id == fiberVm.Id);
+            var oldRoute = (GMapRoute?)MainMap.Markers.FirstOrDefault(r => r.Id == fiberVm.Id);
             if (oldRoute != null)
                 MainMap.Markers.Remove(oldRoute);
 

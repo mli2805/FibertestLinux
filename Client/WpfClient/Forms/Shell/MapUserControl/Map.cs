@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
     {
         #region Current mouse coordinates
 
-        private CurrentGis _currentGis;
+        private CurrentGis _currentGis = null!;
         public CurrentGis CurrentGis
         {
             get => _currentGis;
@@ -62,8 +62,8 @@ namespace Fibertest.WpfClient
                 ? CurrentGis.ThresholdZoom + " / " + Zoom + " ; " + CurrentGis.ScreenPartAsMargin + " ; " + _mouseCurrentCoors.ToDetailedString(CurrentGis.GpsInputMode)
                 : "";
 
-        private string _nodeCountString;
-        public string NodeCountString
+        private string? _nodeCountString;
+        public string? NodeCountString
         {
             get => _nodeCountString;
             set
@@ -94,9 +94,9 @@ namespace Fibertest.WpfClient
         #region Distance measurement properties
         public bool IsInDistanceMeasurementMode { get; set; }
 
-        public List<GMapMarker> DistanceMarkers;
+        public List<GMapMarker>? DistanceMarkers;
 
-        public List<int> Distances;
+        public List<int>? Distances;
 
         private int _lastDistance;
         private MapLimits _limits = new MapLimits();
@@ -113,7 +113,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string MeasuredDistance => IsInDistanceMeasurementMode ? $"{_lastDistance} m  / {Distances.Sum() + _lastDistance} m" : "";
+        public string MeasuredDistance => 
+            IsInDistanceMeasurementMode ? $"{_lastDistance} m  / {Distances!.Sum() + _lastDistance} m" : "";
         #endregion
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -131,7 +132,7 @@ namespace Fibertest.WpfClient
             IsInDistanceMeasurementMode = false;
             if (DistanceFiberUnderCreation != Guid.Empty)
                 Markers.Remove(Markers.Single(m => m.Id == DistanceFiberUnderCreation));
-            foreach (var marker in DistanceMarkers)
+            foreach (var marker in DistanceMarkers!)
             {
                 Markers.Remove(marker);
             }
@@ -216,20 +217,20 @@ namespace Fibertest.WpfClient
                     var routeMarker = new GMapRoute(FiberUnderCreation, StartNode.Id, marker.Id, Brushes.Blue, 2,
                         new List<PointLatLng>() { StartNode.Position, markerPosition }, this);
                     Markers.Add(routeMarker);
-                    DistanceMarkers.Add(routeMarker);
+                    DistanceMarkers?.Add(routeMarker);
 
-                    Distances.Add((int)GisLabCalculator.GetDistanceBetweenPointLatLng(StartNode.Position, markerPosition));
+                    Distances?.Add((int)GisLabCalculator.GetDistanceBetweenPointLatLng(StartNode.Position, markerPosition));
                 }
 
                 Markers.Add(marker);
-                DistanceMarkers.Add(marker);
+                DistanceMarkers?.Add(marker);
                 StartNode = marker;
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

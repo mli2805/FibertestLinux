@@ -34,7 +34,8 @@ namespace Fibertest.WpfClient
         {
             if (ShouldAcceptEventForTrace(e.TraceId) == EventAcceptability.No) return;
 
-            var traceLeaf = (TraceLeaf)_treeOfRtuModel.GetById(e.TraceId);
+            var traceLeaf = (TraceLeaf?)_treeOfRtuModel.GetById(e.TraceId);
+            if (traceLeaf == null) return;
 
             var preciseBaseRef = e.BaseRefs.FirstOrDefault(b => b.BaseRefType == BaseRefType.Precise);
             if (preciseBaseRef != null)
@@ -65,7 +66,8 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
             rtuLeaf.MonitoringState = e.IsMonitoringOn ? MonitoringState.On : MonitoringState.Off;
             ApplyMonitoringSettingsRecursively(rtuLeaf, e);
         }
@@ -91,7 +93,8 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
             rtuLeaf.MonitoringState = MonitoringState.On;
             ApplyRecursively(rtuLeaf, MonitoringState.On);
         }
@@ -101,7 +104,8 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
             rtuLeaf.MonitoringState = MonitoringState.Off;
             ApplyRecursively(rtuLeaf, MonitoringState.Off);
         }

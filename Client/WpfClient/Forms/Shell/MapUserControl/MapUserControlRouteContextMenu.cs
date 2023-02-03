@@ -16,7 +16,7 @@ namespace Fibertest.WpfClient
     /// </summary>
     public partial class MapUserControl
     {
-        private bool CanUpdateFiber(object parameter)
+        private bool CanUpdateFiber(object? parameter)
         {
             return parameter != null;
         }
@@ -27,7 +27,7 @@ namespace Fibertest.WpfClient
             await GraphReadModel.GrmFiberRequests.UpdateFiber(new RequestUpdateFiber() { Id = route.Id });
         }
 
-        private bool CanAddNodeIntoFiber(object parameter)
+        private bool CanAddNodeIntoFiber(object? parameter)
         {
             if (GraphReadModel.CurrentUser.Role > Role.Root || parameter == null)
                 return false;
@@ -41,7 +41,7 @@ namespace Fibertest.WpfClient
             await GraphReadModel.GrmNodeRequests.AddNodeIntoFiber(new RequestAddNodeIntoFiber() { FiberId = route.Id, InjectionType = EquipmentType.EmptyNode, Position = position });
         }
 
-        private bool CanAddAdjustmentNodeIntoFiber(object parameter)
+        private bool CanAddAdjustmentNodeIntoFiber(object? parameter)
         {
             return GraphReadModel.CurrentUser.Role <= Role.Root && parameter != null;
         }
@@ -52,7 +52,7 @@ namespace Fibertest.WpfClient
             await GraphReadModel.GrmNodeRequests.AddNodeIntoFiber(new RequestAddNodeIntoFiber() { FiberId = route.Id, InjectionType = EquipmentType.AdjustmentPoint, Position = position });
         }
 
-        private bool CanRemoveFiber(object parameter)
+        private bool CanRemoveFiber(object? parameter)
         {
             if (GraphReadModel.CurrentUser.Role > Role.Root || parameter == null)
                 return false;
@@ -66,11 +66,11 @@ namespace Fibertest.WpfClient
             await GraphReadModel.GrmFiberRequests.RemoveFiber(new RemoveFiber() { FiberId = route.Id });
         }
 
-        private void Route_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Route_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"AskContextMenu")
             {
-                var route = (GMapRoute)sender;
+                var route = (GMapRoute)sender!;
                 SetupContextMenu(route);
             }
         }

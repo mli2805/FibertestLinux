@@ -15,7 +15,7 @@ namespace Fibertest.WpfClient
             _globalScope = globalScope;
         }
 
-        public bool CanUpdateNode(object parameter)
+        public bool CanUpdateNode(object? parameter)
         {
             if (parameter == null) return false;
             var marker = (MarkerControl) parameter;
@@ -27,14 +27,14 @@ namespace Fibertest.WpfClient
             return HasPrevilegesAndNotAdjustmentPoint(parameter);
         }
 
-        public bool CanLandmarks(object parameter)
+        public bool CanLandmarks(object? parameter)
         {
             if (parameter == null) return false;
             var marker = (MarkerControl) parameter;
             return marker.Type != EquipmentType.AdjustmentPoint;
         }
 
-        public bool CanRemoveNode(object parameter)
+        public bool CanRemoveNode(object? parameter)
         {
             if (_currentUser.Role > Role.Root || parameter == null)
                 return false;
@@ -58,7 +58,7 @@ namespace Fibertest.WpfClient
             return HasPrevilegesAndNotAdjustmentPoint(parameter);
         }
 
-        private bool HasPrevilegesAndNotAdjustmentPoint(object parameter)
+        private bool HasPrevilegesAndNotAdjustmentPoint(object? parameter)
         {
             if (_currentUser.Role > Role.Root || parameter == null)
                 return false;

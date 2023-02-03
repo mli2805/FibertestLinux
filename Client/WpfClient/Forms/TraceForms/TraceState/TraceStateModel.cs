@@ -51,7 +51,7 @@ namespace Fibertest.WpfClient
             => EventStatus > EventStatus.EventButNotAnAccident ? Visibility.Visible : Visibility.Collapsed;
 
         public List<AccidentLineModel> Accidents { get; set; } = new List<AccidentLineModel>();
-        public AccidentLineModel SelectedAccident { get; set; }
+        public AccidentLineModel? SelectedAccident { get; set; }
 
        
         public Visibility AccidentsPanelVisibility

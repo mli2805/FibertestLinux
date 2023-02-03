@@ -149,7 +149,7 @@ namespace Fibertest.WpfClient
                             return;
                         }
 
-                        if (!_readModel.EquipmentCanBeChanged(equipment.EquipmentId, _windowManager))
+                        if (! await _readModel.EquipmentCanBeChanged(equipment.EquipmentId, _windowManager))
                         {
                             model.TitleOfEquipment = equipment.Title;
                             model.LeftCableReserve = equipment.CableReserveLeft;

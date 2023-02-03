@@ -6,7 +6,7 @@ public class PrepareReflectMeasurementDto : BaseRtuRequest
     {
     }
 
-    public string OtdrId = string.Empty; //  in VeEX RTU main OTDR has its own ID
+    public string? OtdrId; //  in VeEX RTU main OTDR has its own ID
     public OtauPortDto? OtauPortDto; // could be null if trace isn't attached to port yet
     public OtauPortDto? MainOtauPortDto; // optional, filled in if trace attached to the child otau
 

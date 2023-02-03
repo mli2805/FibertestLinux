@@ -46,7 +46,7 @@ public partial class RtuResponseToEventSourcing
         }
 
         // BOP state changed
-        if (result.Children != null)
+        // if (result.Children != null)
             foreach (var keyValuePair in result.Children)
             {
                 var bop = _writeModel.Otaus.FirstOrDefault(o => o.NetAddress.Equals(keyValuePair.Value.NetAddress));

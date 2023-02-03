@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
         }
 
         public static bool FindFiberNodes(Fiber fiber, Model readModel, RenderingResult renderingResult,
-            List<NodeVm> nodesNear, out NodeVm nodeVm1, out NodeVm nodeVm2)
+            List<NodeVm> nodesNear, out NodeVm? nodeVm1, out NodeVm? nodeVm2)
         {
             nodeVm1 = renderingResult.NodeVms.FirstOrDefault(n => n.Id == fiber.NodeId1);
             nodeVm2 = renderingResult.NodeVms.FirstOrDefault(n => n.Id == fiber.NodeId2);
@@ -35,7 +35,7 @@ namespace Fibertest.WpfClient
             return nodeVm1 != null && nodeVm2 != null;
         }
 
-        private static NodeVm FindNeighbor(Guid nodeId, Model readModel, List<NodeVm> nodesNear)
+        private static NodeVm? FindNeighbor(Guid nodeId, Model readModel, List<NodeVm> nodesNear)
         {
             var neighbor = nodesNear.FirstOrDefault(n => n.Id == nodeId);
             if (neighbor == null)

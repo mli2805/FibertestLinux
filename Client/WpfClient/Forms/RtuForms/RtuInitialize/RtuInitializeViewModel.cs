@@ -9,6 +9,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -21,7 +22,7 @@ namespace Fibertest.WpfClient
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceCommonC2D _wcfServiceCommonC2D;
+        private readonly GrpcC2RRequests _grpcC2RRequests;
         private readonly IWcfServiceDesktopC2D _wcfServiceDesktopC2D;
         private readonly ILogger _logger; 
         private readonly CommonStatusBarViewModel _commonStatusBarViewModel;
@@ -54,7 +55,8 @@ namespace Fibertest.WpfClient
         public bool IsInitializationPermitted => _currentUser.Role <= Role.Operator && IsIdle;
 
         public RtuInitializeViewModel(ILifetimeScope globalScope, CurrentUser currentUser, Model readModel,
-            IWindowManager windowManager, IWcfServiceCommonC2D wcfServiceCommonC2D, IWcfServiceDesktopC2D wcfServiceDesktopC2D,
+            IWindowManager windowManager, GrpcC2RRequests grpcC2RRequests,
+            IWcfServiceDesktopC2D wcfServiceDesktopC2D,
             ILogger logger, RtuLeaf rtuLeaf, CommonStatusBarViewModel commonStatusBarViewModel)
         {
             _globalScope = globalScope;
@@ -63,7 +65,7 @@ namespace Fibertest.WpfClient
             IsIdle = true;
             IsCloseEnabled = true;
             _windowManager = windowManager;
-            _wcfServiceCommonC2D = wcfServiceCommonC2D;
+            _grpcC2RRequests = grpcC2RRequests;
             _wcfServiceDesktopC2D = wcfServiceDesktopC2D;
             _logger = logger;
             _commonStatusBarViewModel = commonStatusBarViewModel;
@@ -108,7 +110,7 @@ namespace Fibertest.WpfClient
 
                     var initializeRtuDto = FullModel.CreateDto(rtuMaker, _currentUser);
                     initializeRtuDto.IsSynchronizationRequired = isSynchronizationRequired;
-                    result = await _wcfServiceCommonC2D.InitializeRtuAsync(initializeRtuDto);
+                    result = await _grpcC2RRequests.SendAnyC2RRequest<InitializeRtuDto, RtuInitializedDto>(initializeRtuDto);
                 }
                 _commonStatusBarViewModel.StatusBarMessage2 = "";
 
@@ -168,7 +170,9 @@ namespace Fibertest.WpfClient
                 {
                     _commonStatusBarViewModel.StatusBarMessage2 
                         = string.Format(Resources.SID_Sending_base_refs_for_port__0_, reSendBaseRefsDto.OtauPortDto.ToStringB());
-                    var resultDto = await _wcfServiceCommonC2D.ReSendBaseRefAsync(reSendBaseRefsDto);
+                    var resultDto =
+                        await _grpcC2RRequests
+                            .SendAnyC2RRequest<ReSendBaseRefsDto, BaseRefAssignedDto>(reSendBaseRefsDto);
                     _commonStatusBarViewModel.StatusBarMessage2 
                         = $@"Sending base refs for port {reSendBaseRefsDto.OtauPortDto.ToStringB()} {resultDto.ReturnCode}";
                 }

@@ -50,7 +50,7 @@ namespace Fibertest.WpfClient
         {
             var fiberVm = new FiberVm(fiber.FiberId, nodeVm1, nodeVm2)
             {
-                HighLights = new List<Guid>(fiber.HighLights ?? new List<Guid>()),
+                HighLights = new List<Guid>(fiber.HighLights),
                 States = new Dictionary<Guid, FiberState>(),
                 TracesWithExceededLossCoeff = new Dictionary<Guid, FiberState>(),
             };

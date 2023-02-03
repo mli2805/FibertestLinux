@@ -60,8 +60,9 @@ namespace Fibertest.WpfClient
 
         private void ShowBadSegment(AccidentOnTraceV2 accidentInOldEvent, Guid traceId)
         {
-            var fibers = _readModel.GetTraceFibersBetweenLandmarks(traceId, accidentInOldEvent.Left.LandmarkIndex,
-                accidentInOldEvent.Right.LandmarkIndex);
+            var fibers = _readModel
+                .GetTraceFibersBetweenLandmarks(traceId, accidentInOldEvent.Left!.LandmarkIndex,
+                accidentInOldEvent.Right!.LandmarkIndex);
 
             foreach (var fiberId in fibers)
             {

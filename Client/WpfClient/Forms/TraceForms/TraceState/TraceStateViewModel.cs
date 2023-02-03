@@ -27,6 +27,7 @@ namespace Fibertest.WpfClient
         private readonly SoundManager _soundManager;
         private readonly Model _readModel;
         private readonly CommandLineParameters _commandLineParameters;
+        private readonly DataCenterConfig _currentDataCenterParameters;
         private readonly IWcfServiceInSuperClient _c2SWcfManager;
         private readonly TabulatorViewModel _tabulatorViewModel;
         private readonly TraceStateReportProvider _traceStateReportProvider;
@@ -38,10 +39,10 @@ namespace Fibertest.WpfClient
         private bool _isTraceStateChanged;
         public bool IsOpen { get; private set; }
 
-        public TraceStateModel Model { get; set; }
+        public TraceStateModel Model { get; set; } = null!;
 
-        public List<EventStatusComboItem> StatusRows { get; set; }
-        public EventStatusComboItem SelectedEventStatus { get; set; }
+        public List<EventStatusComboItem> StatusRows { get; set; } = null!;
+        public EventStatusComboItem? SelectedEventStatus { get; set; }
         public bool HasPrivilegies { get; set; }
 
         private bool _isEditEnabled;
@@ -61,7 +62,7 @@ namespace Fibertest.WpfClient
              ReflectogramManager reflectogramManager,
             SoundManager soundManager, Model readModel, GraphReadModel graphReadModel,
             GrpcC2DRequests grpcC2DRequests, IWcfServiceInSuperClient c2SWcfManager, 
-            CommandLineParameters commandLineParameters, 
+            CommandLineParameters commandLineParameters, DataCenterConfig currentDataCenterParameters,
             TabulatorViewModel tabulatorViewModel, TraceStateReportProvider traceStateReportProvider,
             TraceStatisticsViewsManager traceStatisticsViewsManager, LandmarksViewsManager landmarksViewsManager)
         {
@@ -74,6 +75,7 @@ namespace Fibertest.WpfClient
             _soundManager = soundManager;
             _readModel = readModel;
             _commandLineParameters = commandLineParameters;
+            _currentDataCenterParameters = currentDataCenterParameters;
             _c2SWcfManager = c2SWcfManager;
             _tabulatorViewModel = tabulatorViewModel;
             _traceStateReportProvider = traceStateReportProvider;
@@ -125,7 +127,7 @@ namespace Fibertest.WpfClient
                 new EventStatusComboItem() {EventStatus = EventStatus.Unprocessed},
             };
 
-            SelectedEventStatus = StatusRows.FirstOrDefault(r => r.EventStatus == Model.EventStatus);
+            SelectedEventStatus = StatusRows.First(r => r.EventStatus == Model.EventStatus);
         }
 
 
@@ -140,6 +142,7 @@ namespace Fibertest.WpfClient
 
         public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+            await Task.Delay(1);
             if (_isSoundForThisVmInstanceOn)
                 _soundManager.StopAlert();
             IsOpen = false;
@@ -215,9 +218,10 @@ namespace Fibertest.WpfClient
 
                 Accidents = Model.Accidents,
             };
-            // var report = _traceStateReportProvider.Create(reportModel, _currentDatacenterParameters);
-            //
-            // PdfExposer.Show(report, @"TraceStateReport.pdf", _windowManager);
+            var htmlContent = _traceStateReportProvider.Create(reportModel, _currentDataCenterParameters);
+
+            var pdfFileName = htmlContent.SaveHtmlAsPdf("TraceStateReport");
+            Process.Start(new ProcessStartInfo() { FileName = pdfFileName, UseShellExecute = true });
         }
 
         public async void SaveMeasurementChanges()
@@ -231,7 +235,8 @@ namespace Fibertest.WpfClient
                     Comment = Model.Comment,
                 };
 
-                if (Model.OpticalEventPanelVisibility == Visibility.Visible && Model.EventStatus != SelectedEventStatus.EventStatus)
+                if (Model.OpticalEventPanelVisibility == Visibility.Visible
+                    && Model.EventStatus != SelectedEventStatus!.EventStatus)
                 {
                     dto.EventStatus = SelectedEventStatus.EventStatus;
                     dto.StatusChangedTimestamp = DateTime.Now;

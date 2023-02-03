@@ -14,7 +14,7 @@ namespace Fibertest.WpfClient
     /// </summary>
     public partial class MapUserControl
     {
-        private void NodesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void NodesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -35,8 +35,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void ApplyAddedNodes(IList newItems)
+        private void ApplyAddedNodes(IList? newItems)
         {
+            if (newItems == null) return;
             foreach (var newItem in newItems)
             {
                 var nodeVm = (NodeVm)newItem;
@@ -44,7 +45,8 @@ namespace Fibertest.WpfClient
                 var marker = new GMapMarker(nodeVm.Id, nodeVm.Position, false);
                 marker.ZIndex = nodeVm.Type == EquipmentType.AccidentPlace ? -2 : 2;
                 var equipmentType = nodeVm.Type;
-                var markerControl = new MarkerControl(this, marker, equipmentType, nodeVm.State, nodeVm.Title, GraphReadModel.GlobalScope);
+                var markerControl = new MarkerControl(
+                    this, marker, equipmentType, nodeVm.State, nodeVm.Title ?? "", GraphReadModel.GlobalScope);
                 marker.Shape = markerControl;
                 marker.Shape.Visibility =
                     GraphReadModel.SelectedGraphVisibilityItem.Level >= ((MarkerControl)marker.Shape).EqType.GetEnabledVisibilityLevel()
@@ -57,9 +59,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void NodeVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void NodeVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var nodeVm = (NodeVm)sender;
+            var nodeVm = (NodeVm)sender!;
 
             if (e.PropertyName == @"Position")
             {
@@ -77,7 +79,7 @@ namespace Fibertest.WpfClient
             }
             if (e.PropertyName == @"Title")
             {
-                ((MarkerControl)MainMap.Markers.First(m => m.Id == nodeVm.Id).Shape).Title = nodeVm.Title;
+                ((MarkerControl)MainMap.Markers.First(m => m.Id == nodeVm.Id).Shape).Title = nodeVm.Title ?? "";
             }
             if (e.PropertyName == @"Type")
             {
@@ -112,8 +114,9 @@ namespace Fibertest.WpfClient
                 MainMap.Markers.Remove(marker);
         }
 
-        private void ApplyRemovedNodes(IList oldItems)
+        private void ApplyRemovedNodes(IList? oldItems)
         {
+            if (oldItems == null) return;
             foreach (var oldItem in oldItems)
             {
                 var nodeVm = (NodeVm)oldItem;

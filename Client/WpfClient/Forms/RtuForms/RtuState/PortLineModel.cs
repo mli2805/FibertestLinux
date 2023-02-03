@@ -30,8 +30,8 @@ namespace Fibertest.WpfClient
         public string TraceStateOnScreen => TraceId == Guid.Empty ? "" : TraceState.ToLocalizedString();
         public Brush TraceStateBrush => TraceState.GetBrush(false);
 
-        private string _lastSorFileId = "";
-        public string LastSorFileId
+        private string? _lastSorFileId;
+        public string? LastSorFileId
         {
             get => _lastSorFileId;
             set

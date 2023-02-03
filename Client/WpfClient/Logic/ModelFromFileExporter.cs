@@ -119,7 +119,7 @@ namespace Fibertest.WpfClient
 
                 if (trace.IsAttached)
                 {
-                    var attachTrace = new AttachTrace(trace.TraceId, trace.OtauPort);
+                    var attachTrace = new AttachTrace(trace.TraceId, trace.OtauPort!);
                     commandList.Add(attachTrace);
                 }
                 var _ = await _c2DWcfManager.SendCommandsAsObjs(commandList);

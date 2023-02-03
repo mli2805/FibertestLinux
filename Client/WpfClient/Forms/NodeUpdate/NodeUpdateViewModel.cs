@@ -237,7 +237,7 @@ namespace Fibertest.WpfClient
 
         private async void LaunchUpdateEquipmentView(Guid id)
         {
-            if (!_readModel.EquipmentCanBeChanged(id, _windowManager)) return;
+            if (! await _readModel.EquipmentCanBeChanged(id, _windowManager)) return;
 
             var equipment = _readModel.Equipments.First(e => e.EquipmentId == id);
 

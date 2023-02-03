@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
 
         private void OnSelectionChanged( object sender, SelectionChangedEventArgs e )
         {
-            Selector selector = sender as Selector;
+            Selector? selector = sender as Selector;
             if ( selector is DataGrid dataGrid && selector.SelectedItem != null && dataGrid.SelectedIndex >= 0 )
             {
                 try

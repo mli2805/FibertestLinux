@@ -47,7 +47,7 @@ namespace Fibertest.WpfClient
             if (!vm.Result)
                 return null;
 
-            return EndFiberCreationMany(request, int.Parse(vm.Count), vm.GetSelectedType());
+            return EndFiberCreationMany(request, int.Parse(vm.Count!), vm.GetSelectedType());
         }
 
         private async Task<bool> Validate(RequestAddFiberWithNodes request)

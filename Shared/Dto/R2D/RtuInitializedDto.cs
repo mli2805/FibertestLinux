@@ -25,7 +25,7 @@ public class RtuInitializedDto : RequestAnswer
     public string? Version2;
     public string? VersionIitOtdr;
         
-    public Dictionary<int, OtauDto>? Children;
+    public Dictionary<int, OtauDto> Children = null!;
         
     public bool IsMonitoringOn;
         

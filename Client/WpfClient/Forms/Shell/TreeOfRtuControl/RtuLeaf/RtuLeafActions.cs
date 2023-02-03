@@ -19,7 +19,6 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly ILogger _logger;
-        private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly GraphReadModel _graphReadModel;
         private readonly IWindowManager _windowManager;
@@ -40,7 +39,6 @@ namespace Fibertest.WpfClient
         {
             _globalScope = globalScope;
             _logger = logger;
-            _currentUser = currentUser;
             _readModel = readModel;
             _graphReadModel = graphReadModel;
             _windowManager = windowManager;
@@ -62,7 +60,7 @@ namespace Fibertest.WpfClient
 
             var vm = _globalScope.Resolve<RtuUpdateViewModel>();
             vm.Initialize(rtuLeaf.Id);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
         }
 
         public async Task HighlightRtu(object param)
@@ -84,13 +82,14 @@ namespace Fibertest.WpfClient
             if (!(param is RtuLeaf rtuLeaf))
                 return;
 
-            if (!_readModel.TryGetRtu(rtuLeaf.Id, out Rtu rtu)) return;
+            if (!_readModel.TryGetRtu(rtuLeaf.Id, out Rtu? rtu)) return;
 
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                var exportModel = _readModel.CreateOneRtuModel(rtu);
+                var exportModel = _readModel.CreateOneRtuModel(rtu!);
                 var bytes = await exportModel.Serialize(_logger);
-                File.WriteAllBytes($@"..\temp\export_" + rtuLeaf.Title + @".brtu", bytes);
+                if (bytes != null)
+                    File.WriteAllBytes($@"..\temp\export_" + rtuLeaf.Title + @".brtu", bytes);
             }
         }
 
@@ -101,7 +100,7 @@ namespace Fibertest.WpfClient
 
             await Task.Delay(0);
             var vm = _globalScope.Resolve<RtuInitializeViewModel>(new NamedParameter(@"rtuLeaf", rtuLeaf));
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
         }
 
         public async Task ShowRtuState(object param)
@@ -126,7 +125,7 @@ namespace Fibertest.WpfClient
 
             await Task.Delay(0);
             var vm = _globalScope.Resolve<MonitoringSettingsViewModel>(new NamedParameter(@"rtuLeaf", rtuLeaf));
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
         }
 
         public async Task StopMonitoring(object param)
@@ -134,27 +133,27 @@ namespace Fibertest.WpfClient
             if (!(param is RtuLeaf rtuLeaf))
                 return;
 
-            if (!_readModel.TryGetRtu(rtuLeaf.Id, out Rtu rtu)) return;
+            if (!_readModel.TryGetRtu(rtuLeaf.Id, out Rtu? rtu)) return;
 
             bool result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
                 result =
                     await _commonC2DWcfManager.StopMonitoringAsync(
-                        new StopMonitoringDto(rtuLeaf.Id, rtu.RtuMaker));
+                        new StopMonitoringDto(rtuLeaf.Id, rtu!.RtuMaker));
             }
 
             _logger.LogInfo(Logs.Client, $@"Stop monitoring result - {result}");
         }
 
 
-        private ApplyMonitoringSettingsDto CollectMonitoringSettingsFromTree(RtuLeaf rtuLeaf)
+        private ApplyMonitoringSettingsDto? CollectMonitoringSettingsFromTree(RtuLeaf rtuLeaf)
         {
-            if (!_readModel.TryGetRtu(rtuLeaf.Id, out Rtu rtu)) return null;
+            if (!_readModel.TryGetRtu(rtuLeaf.Id, out Rtu? rtu)) return null;
 
             var result = new ApplyMonitoringSettingsDto(rtuLeaf.Id, rtuLeaf.RtuMaker)
             {
-                OtdrId = rtu.OtdrId,
+                OtdrId = rtu!.OtdrId,
                 MainVeexOtau = rtu.MainVeexOtau,
                 Timespans = new MonitoringTimespansDto()
                 {

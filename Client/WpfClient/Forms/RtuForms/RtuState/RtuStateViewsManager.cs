@@ -37,11 +37,11 @@ namespace Fibertest.WpfClient
             childrenViews.PropertyChanged += ChildrenViews_PropertyChanged;
         }
 
-        private void ChildrenViews_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs args)
+        private void ChildrenViews_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(ChildrenViews.ShouldBeClosed))
             {
-                if (((ChildrenViews) sender).ShouldBeClosed)
+                if (((ChildrenViews) sender!).ShouldBeClosed)
                 {
                     foreach (var pair in LaunchedViews.ToList())
                     {
@@ -91,7 +91,7 @@ namespace Fibertest.WpfClient
             var rtu = _reaModel.Rtus.FirstOrDefault(r => r.Id == networkEventAdded.RtuId);
             if (rtu == null || !rtu.ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(networkEventAdded.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(networkEventAdded.RtuId);
             if (rtuLeaf == null) return;
             if (LaunchedViews.TryGetValue(rtuLeaf.Id, out var vm))
                 vm.RefreshModel(rtuLeaf);
@@ -146,7 +146,7 @@ namespace Fibertest.WpfClient
 
         public void NotifyUserRtuUpdated(Guid rtuId)
         {
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(rtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(rtuId);
             if (rtuLeaf == null) return; // trace\RTU could be not in zone
 
             if (LaunchedViews.TryGetValue(rtuId, out var vm))
@@ -162,7 +162,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void Show(RtuLeaf rtuLeaf, bool isUserAskedToOpenView, RtuPartStateChanges changes)
+        private async void Show(RtuLeaf rtuLeaf, bool isUserAskedToOpenView, RtuPartStateChanges changes)
         {
             ClearClosedViews();
 
@@ -177,7 +177,7 @@ namespace Fibertest.WpfClient
 
             vm = _globalScope.Resolve<RtuStateViewModel>();
             vm.Initialize(_rtuStateModelFactory.Create(rtuLeaf), isUserAskedToOpenView, changes);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
 
             LaunchedViews.Add(rtuId, vm);
             _childrenViews.ShouldBeClosed = false;

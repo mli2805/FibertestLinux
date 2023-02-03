@@ -7,7 +7,7 @@ namespace Fibertest.WpfClient
     {
         public bool IsOn { get; set; }
         public Guid RtuId { get; set; }
-        public string RtuTitle { get; set; }
+        public string? RtuTitle { get; set; }
 
         public RtuGuidFilter() { IsOn = false; }
 
@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
 
         public override string ToString()
         {
-            return IsOn ? RtuTitle : Resources.SID__no_filter_;
+            return IsOn ? RtuTitle! : Resources.SID__no_filter_;
         }
     }
 }

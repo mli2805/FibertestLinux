@@ -19,7 +19,7 @@ namespace Fibertest.WpfClient
 
         private void SetExpandTo(bool expand, Leaf root)
         {
-            IPortOwner portOwner = root as IPortOwner;
+            IPortOwner? portOwner = root as IPortOwner;
             if (portOwner == null)
                 return;
 

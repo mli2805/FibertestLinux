@@ -27,7 +27,7 @@ namespace Fibertest.WpfClient
             MainMap.PropertyChanged += MainMap_PropertyChanged;
         }
 
-        private async void MainMap_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void MainMap_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"Limits")
                 await GraphReadModel.RefreshVisiblePart();
@@ -118,7 +118,7 @@ namespace Fibertest.WpfClient
             ApplyAddedFibers(graph.Data.Fibers);
         }
 
-        private void Graph_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Graph_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(GraphReadModel.SelectedGraphVisibilityItem))
                 ChangeVisibility(GraphReadModel.SelectedGraphVisibilityItem.Level);
@@ -160,9 +160,9 @@ namespace Fibertest.WpfClient
             GraphReadModel.CommonStatusBarViewModel.StatusBarMessage2 = message;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -179,7 +179,7 @@ namespace Fibertest.WpfClient
                 GraphReadModel.GlobalScope.Resolve<MapContextMenuProvider>().GetMapContextMenu();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        private void Window_Closing(object? sender, CancelEventArgs e)
         {
             var saveZoomLimit = GraphReadModel.Config.Value.Map.SaveMaxZoomNoMoreThan;
             GraphReadModel.Config.Update(c=>c.Map.Zoom = MainMap.Zoom > saveZoomLimit ? saveZoomLimit : (int)MainMap.Zoom);
