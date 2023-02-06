@@ -59,7 +59,7 @@ public class C2RCommandsProcessor
         ///////////////////////////////////////////////////////////////////
         if (command is CheckRtuConnectionDto checkDto)
             return await CheckRtuConnection(checkDto, rtuAddressTuple.Item2!);
-        
+
         var resultJson = command.RtuMaker == RtuMaker.IIT
             ? await _clientToIitRtuTransmitter
                 .TransferCommand(rtuAddressTuple.Item2!,
@@ -176,7 +176,7 @@ public class C2RCommandsProcessor
         result ??= new RtuConnectionCheckedDto(ReturnCode.D2RGrpcOperationError) { NetAddress = dto.NetAddress };
         if (!result.IsConnectionSuccessful)
         {
-            result.IsPingSuccessful = 
+            result.IsPingSuccessful =
                 Pinger.Ping(dto.NetAddress.IsAddressSetAsIp ? dto.NetAddress.Ip4Address : dto.NetAddress.HostName);
         }
 

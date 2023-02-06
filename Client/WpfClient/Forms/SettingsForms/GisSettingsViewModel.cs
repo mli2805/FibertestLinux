@@ -99,7 +99,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public GisSettingsViewModel(CurrentUser currentUser, CurrentGis currentGis, DataCenterConfig currentDatacenterParameters,
+        public GisSettingsViewModel(CurrentUser currentUser, CurrentGis currentGis,
+            DataCenterConfig currentDatacenterParameters,
             GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager,
             IWritableConfig<ClientConfig> config, GraphReadModel graphReadModel)
         {

@@ -20,6 +20,7 @@ namespace Fibertest.WpfClient
 
         private readonly ILifetimeScope _globalScope;
         private readonly CurrentUser _currentUser;
+        private readonly DataCenterConfig _currentDatacenterParameters;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
         private readonly GrpcC2RRequests _grpcC2RRequests;
@@ -54,13 +55,15 @@ namespace Fibertest.WpfClient
 
         public bool IsInitializationPermitted => _currentUser.Role <= Role.Operator && IsIdle;
 
-        public RtuInitializeViewModel(ILifetimeScope globalScope, CurrentUser currentUser, Model readModel,
+        public RtuInitializeViewModel(ILifetimeScope globalScope, CurrentUser currentUser, 
+            DataCenterConfig currentDatacenterParameters, Model readModel,
             IWindowManager windowManager, GrpcC2RRequests grpcC2RRequests,
             IWcfServiceDesktopC2D wcfServiceDesktopC2D,
             ILogger logger, RtuLeaf rtuLeaf, CommonStatusBarViewModel commonStatusBarViewModel)
         {
             _globalScope = globalScope;
             _currentUser = currentUser;
+            _currentDatacenterParameters = currentDatacenterParameters;
             _readModel = readModel;
             IsIdle = true;
             IsCloseEnabled = true;
@@ -108,7 +111,7 @@ namespace Fibertest.WpfClient
                         : RtuMaker.VeEX;
                     _commonStatusBarViewModel.StatusBarMessage2 = Resources.SID_RTU_is_being_initialized___;
 
-                    var initializeRtuDto = FullModel.CreateDto(rtuMaker, _currentUser);
+                    var initializeRtuDto = FullModel.CreateDto(rtuMaker, _currentDatacenterParameters);
                     initializeRtuDto.IsSynchronizationRequired = isSynchronizationRequired;
                     result = await _grpcC2RRequests.SendAnyC2RRequest<InitializeRtuDto, RtuInitializedDto>(initializeRtuDto);
                 }

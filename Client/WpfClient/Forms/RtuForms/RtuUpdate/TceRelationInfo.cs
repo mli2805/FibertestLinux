@@ -8,6 +8,6 @@ namespace Fibertest.WpfClient
     {
         public Visibility Visibility { get; set; } = Visibility.Collapsed;
 
-        public List<TceS> Tces { get; set; }
+        public List<TceS> Tces { get; set; } = new List<TceS>();
     }
 }
