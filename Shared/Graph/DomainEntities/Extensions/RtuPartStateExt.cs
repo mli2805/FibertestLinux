@@ -19,7 +19,7 @@ public static class RtuPartStateExt
         }
     }
 
-    public static string? GetPathToPictogram(this RtuPartState state)
+    public static string GetPathToPictogram(this RtuPartState state)
     {
         switch (state)
         {
@@ -28,9 +28,8 @@ public static class RtuPartStateExt
             case RtuPartState.NotSetYet:
                 return @"pack://application:,,,/Resources/LeftPanel/EmptySquare.png";
             case RtuPartState.Ok:
-                return @"pack://application:,,,/Resources/LeftPanel/GreenSquare.png";
             default:
-                return null;
+                return @"pack://application:,,,/Resources/LeftPanel/GreenSquare.png";
         }
     }
 }

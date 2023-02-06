@@ -1,5 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
+[Serializable]
 public class NetAddress
 {
     public string Ip4Address { get; set; } // 172.35.98.128

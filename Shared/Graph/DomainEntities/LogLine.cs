@@ -1,5 +1,6 @@
 ﻿namespace Fibertest.Graph;
 
+[Serializable]
 public class LogLine
 {
     public int Ordinal { get; set; }

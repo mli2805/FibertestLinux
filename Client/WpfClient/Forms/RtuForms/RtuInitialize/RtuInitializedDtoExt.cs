@@ -33,7 +33,7 @@ namespace Fibertest.WpfClient
                     return new MyMessageBoxViewModel(
                     MessageType.Error, new List<string>()
                         {
-                            string.Format(Resources.SID_RTU__0__is_busy_, rtuTitle), "", dto.RtuOccupationState.GetLocalized(),
+                            string.Format(Resources.SID_RTU__0__is_busy_, rtuTitle), "", dto.RtuOccupationState!.GetLocalized(),
                         }, 1);
                 case ReturnCode.RtuInitializationError:
                 case ReturnCode.OtauInitializationError:
@@ -46,7 +46,7 @@ namespace Fibertest.WpfClient
 
         public static string CreateLogMessage(this RtuInitializedDto dto)
         {
-            var rtuName = dto.RtuAddresses != null ? $@"RTU {dto.RtuAddresses.Main.Ip4Address}" : @"RTU";
+            var rtuName = $@"RTU {dto.RtuAddresses.Main.Ip4Address}";
             var message = dto.IsInitialized
                 ? $@"{rtuName} initialized successfully."
                 : $@"{rtuName} initialization failed. " + Environment.NewLine + dto.ReturnCode.GetLocalizedString();

@@ -4,6 +4,7 @@
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public class NetworkEvent
 {
     public int Ordinal;

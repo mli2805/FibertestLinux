@@ -10,7 +10,7 @@ namespace Fibertest.WpfClient
 {
     public class BopNetworkEventsViewModel : PropertyChangedBase
     {
-        public string TableTitle { get; set; }
+        public string TableTitle { get; set; } = null!;
 
         private readonly Model _readModel;
 

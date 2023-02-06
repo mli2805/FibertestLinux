@@ -2,6 +2,7 @@
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public class Trace
 {
     public Guid TraceId;

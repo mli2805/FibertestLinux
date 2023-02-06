@@ -41,7 +41,6 @@ namespace Fibertest.WpfCommonViews
             _okPlayer.Open(alertUri);
         }
 
-
         public void StartAlert()
         {
             _alertCounter++;

@@ -115,8 +115,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new())
         {
+            await Task.Delay(0);
             if (_isSoundForThisVmInstanceOn)
                 _soundManager.StopAlert();
             IsOpen = false;

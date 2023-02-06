@@ -8,7 +8,7 @@ public class DoClientMeasurementDto : BaseRtuRequest
         
     public string OtdrId = string.Empty; //  in VeEX RTU main OTDR has its own ID
         
-    public List<MeasParamByPosition> SelectedMeasParams = new List<MeasParamByPosition>();
+    public List<MeasParamByPosition>? SelectedMeasParams;
     public VeexMeasOtdrParameters VeexMeasOtdrParameters = new VeexMeasOtdrParameters();
     public AnalysisParameters AnalysisParameters = new AnalysisParameters();
         

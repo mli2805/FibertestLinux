@@ -55,7 +55,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ConfigurationViewModel(IWritableConfig<ClientConfig> config, CurrentClientConfiguration currentClientConfiguration, SoundManager soundManager)
+        public ConfigurationViewModel(IWritableConfig<ClientConfig> config, 
+            CurrentClientConfiguration currentClientConfiguration, SoundManager soundManager)
         {
             _config = config;
             _currentClientConfiguration = currentClientConfiguration;

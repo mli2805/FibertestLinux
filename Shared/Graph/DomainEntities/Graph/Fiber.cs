@@ -2,6 +2,7 @@
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public class Fiber
 {
     public Guid FiberId;
@@ -48,7 +49,7 @@ public class Fiber
     public void SetBadSegment(Guid traceId, FiberState lossCoeffSeriousness)
     {
         if (TracesWithExceededLossCoeff.ContainsKey(traceId))
-            TracesWithExceededLossCoeff[traceId] = lossCoeffSeriousness; 
+            TracesWithExceededLossCoeff[traceId] = lossCoeffSeriousness;
         else
             TracesWithExceededLossCoeff.Add(traceId, lossCoeffSeriousness);
     }

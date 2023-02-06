@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
         xmlns:wpfCommonViews="clr-namespace:Fibertest.WpfCommonViews;assembly=Fibertest.WpfCommonViews"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wpfClient="clr-namespace:Fibertest.WpfClient"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
@@ -20,13 +19,14 @@
                     IsEnabled="{Binding IsInterruptEnabled}"/>
         </StackPanel>
 
-        <wpfClient:OtdrParametersTemplatesView DockPanel.Dock="Top"
-                                            DataContext="{Binding WholeRtuMeasurementsExecutor.Model.OtdrParametersTemplatesViewModel}" />
-        <wpfClient:AutoAnalysisParamsView DockPanel.Dock="Top"  DataContext="{Binding WholeRtuMeasurementsExecutor.Model.AutoAnalysisParamsViewModel}"/>
+        <wpfClient:OtdrParametersTemplatesView DockPanel.Dock="Top" 
+                   DataContext="{Binding WholeRtuMeasurementsExecutor.Model.OtdrParametersTemplatesViewModel}" />
+        <wpfClient:AutoAnalysisParamsView DockPanel.Dock="Top"  
+                   DataContext="{Binding WholeRtuMeasurementsExecutor.Model.AutoAnalysisParamsViewModel}"/>
         <wpfClient:MeasurementProgressView DockPanel.Dock="Top" Margin="5,5"
-                                        DataContext="{Binding WholeRtuMeasurementsExecutor.Model.MeasurementProgressViewModel}"/>
-        <GroupBox Header="{x:Static stringResources:Resources.SID_Operations_result}" DockPanel.Dock="Top" Height="150" Width="450" Margin="5" 
-                BorderThickness="1" BorderBrush="Gray" >
+                   DataContext="{Binding WholeRtuMeasurementsExecutor.Model.MeasurementProgressViewModel}"/>
+        <GroupBox Header="{x:Static stringResources:Resources.SID_Operations_result}" 
+                  DockPanel.Dock="Top" Height="150" Width="450" Margin="5" BorderThickness="1" BorderBrush="Gray" >
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Text="{Binding WholeRtuMeasurementsExecutor.Model.TotalTraces}" Margin="7, 10, 0, 0"/>
                 <ListView ItemsSource="{Binding WholeRtuMeasurementsExecutor.Model.TraceResults}" BorderThickness="0, 1, 0, 0"

@@ -1,5 +1,6 @@
 ﻿namespace Fibertest.Graph;
 
+[Serializable]
 public class Zone
 {
     public Guid ZoneId;

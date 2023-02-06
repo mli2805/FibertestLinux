@@ -9,7 +9,6 @@ namespace Fibertest.WpfClient
         public Guid EquipmentId;
 
         private bool _isSelected;
-        private string _titleOfEquipment;
         private int _leftCableReserve;
         private int _rightCableReserve;
 
@@ -24,7 +23,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string TitleOfEquipment  
+        private string? _titleOfEquipment;
+        public string? TitleOfEquipment  
         {
             get => _titleOfEquipment;
             set

@@ -67,7 +67,7 @@ namespace Fibertest.WpfClient
             rtuLeaf.Color = string.IsNullOrEmpty(rtu.Serial) ? Brushes.DarkGray : Brushes.Black;
             rtuLeaf.RtuMaker = rtu.RtuMaker;
 
-            rtuLeaf.IsMainOtauOk = rtu.RtuMaker == RtuMaker.IIT || (rtu.MainVeexOtau?.connected ?? false);
+            rtuLeaf.IsMainOtauOk = rtu.RtuMaker == RtuMaker.IIT || rtu.MainVeexOtau.connected;
             rtuLeaf.OwnPortCount = rtu.OwnPortCount;
             rtuLeaf.FullPortCount = rtu.FullPortCount;
             rtuLeaf.Serial = rtu.Serial;
@@ -81,7 +81,8 @@ namespace Fibertest.WpfClient
 
             for (int i = 1; i <= rtuLeaf.OwnPortCount; i++)
             {
-                var port = _globalScope.Resolve<PortLeaf>(new NamedParameter(@"parent", rtuLeaf), new NamedParameter(@"portNumber", i));
+                var port = _globalScope.Resolve<PortLeaf>(
+                    new NamedParameter(@"parent", rtuLeaf), new NamedParameter(@"portNumber", i));
                 rtuLeaf.ChildrenImpresario.Children.Insert(i - 1, port);
                 port.Parent = rtuLeaf;
             }
@@ -94,7 +95,7 @@ namespace Fibertest.WpfClient
                 var otauLeaf = _globalScope.Resolve<OtauLeaf>();
                 otauLeaf.Id = otau.Id;
                 otauLeaf.Parent = rtuLeaf;
-                otauLeaf.Serial = otau.Serial;
+                otauLeaf.Serial = otau.Serial ?? "";
                 otauLeaf.OtauId = otau.Id.ToString();
                 otauLeaf.Title = string.Format(Resources.SID_Optical_switch_with_Address,  otau.NetAddress?.ToStringA());
                 otauLeaf.Color = Brushes.Black;
@@ -147,9 +148,9 @@ namespace Fibertest.WpfClient
 
         private void ConsiderTraceZonesChanges(Trace trace)
         {
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(trace.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(trace.RtuId);
             if (rtuLeaf == null) return; // RTU not in zone
-            var traceLeaf = (TraceLeaf)_treeOfRtuModel.GetById(trace.TraceId);
+            var traceLeaf = (TraceLeaf?)_treeOfRtuModel.GetById(trace.TraceId);
             if (traceLeaf == null)
             {
                 traceLeaf = _globalScope.Resolve<TraceLeaf>(new NamedParameter(@"parent", rtuLeaf));

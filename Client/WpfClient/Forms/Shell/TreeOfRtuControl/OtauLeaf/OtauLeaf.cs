@@ -20,9 +20,9 @@ namespace Fibertest.WpfClient
         private RtuPartState _otauState;
         public int OwnPortCount { get; set; }
         public int MasterPort { get; set; }
-        public NetAddress OtauNetAddress { get; set; }
-        public string Serial { get; set; }
-        public string OtauId { get; set; }
+        public NetAddress OtauNetAddress { get; set; } = null!;
+        public string Serial { get; set; } = "";
+        public string OtauId { get; set; } = "";
 
         public RtuPartState OtauState
         {
@@ -94,7 +94,7 @@ namespace Fibertest.WpfClient
                 {
                     result.ReturnCode.GetLocalizedString(),
                     "",
-                    result.ErrorMessage,
+                    result.ErrorMessage ?? "",
                 };
                 var vm = new MyMessageBoxViewModel(MessageType.Error, lines, 0);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);

@@ -9,13 +9,10 @@ namespace Fibertest.WpfClient
 {
     public class OtdrParametersTemplateModel : PropertyChangedBase, IDataErrorInfo
     {
-        private string _selectedUnit;
-        private double _backScatteredCoefficient;
-        private double _refractiveIndex;
-        private OtdrParametersTemplate _selectedOtdrParametersTemplate;
 
         public List<string> Units { get; set; }
 
+        private string _selectedUnit;
         public string SelectedUnit
         {
             get => _selectedUnit;
@@ -27,6 +24,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private double _backScatteredCoefficient;
         public double BackScatteredCoefficient
         {
             get => _backScatteredCoefficient;
@@ -38,6 +36,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private double _refractiveIndex;
         public double RefractiveIndex
         {
             get => _refractiveIndex;
@@ -53,6 +52,7 @@ namespace Fibertest.WpfClient
         public string Title { get; set; }
         public string Description { get; set; }
 
+        private OtdrParametersTemplate _selectedOtdrParametersTemplate;
         public OtdrParametersTemplate SelectedOtdrParametersTemplate
         {
             get => _selectedOtdrParametersTemplate;

@@ -13,9 +13,9 @@ namespace Fibertest.WpfClient
     {
         private readonly GraphReadModel _graphReadModel;
         private readonly Model _readModel;
-        public List<RadioButtonModel> Models { get; set; }
-        private List<Node> _neighbours;
-        private Node _selectedNode;
+        public List<RadioButtonModel> Models { get; set; } = null!;
+        private List<Node> _neighbours = null!;
+        private Node _selectedNode = null!;
 
         public StepChoiceViewModel(GraphReadModel graphReadModel, Model readModel)
         {
@@ -39,7 +39,8 @@ namespace Fibertest.WpfClient
                 {
                     Id = node.NodeId,
                     IsEnabled = true,
-                    Title = node.NodeId == previousNodeId ? node.Title + Resources.SID____previous_ : node.Title,
+                    Title = node.NodeId == previousNodeId 
+                        ? node.Title ?? "" + Resources.SID____previous_ : node.Title ?? "",
                 };
                 model.PropertyChanged += Model_PropertyChanged;
                 if (node.NodeId != previousNodeId)
@@ -48,8 +49,8 @@ namespace Fibertest.WpfClient
                     Models.Add(model); // previous node should be last in Models list
             }
 
-            _selectedNode = _neighbours.FirstOrDefault();
-            if (_selectedNode == null) return false;
+            _selectedNode = _neighbours.First();
+            // if (_selectedNode == null) return false;
             Models.First().IsChecked = true;
 
             var nodeVm = _graphReadModel.Data.Nodes.FirstOrDefault(n => n.Id == _selectedNode.NodeId);
@@ -64,9 +65,9 @@ namespace Fibertest.WpfClient
             return true;
         }
 
-        private async void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void Model_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var modelWithChanges = (RadioButtonModel)sender;
+            var modelWithChanges = (RadioButtonModel)sender!;
 
             if (modelWithChanges.IsChecked)
             {

@@ -2,6 +2,7 @@
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public struct TceTypeStruct
 {
     public int Id;

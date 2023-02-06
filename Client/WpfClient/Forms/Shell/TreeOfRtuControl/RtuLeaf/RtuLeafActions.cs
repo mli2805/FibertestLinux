@@ -31,7 +31,7 @@ namespace Fibertest.WpfClient
         private readonly LandmarksViewsManager _landmarksViewsManager;
 
         public RtuLeafActions(ILifetimeScope globalScope, ILogger logger,
-            CurrentUser currentUser, Model readModel, GraphReadModel graphReadModel,
+            Model readModel, GraphReadModel graphReadModel,
             IWindowManager windowManager, GrpcC2DRequests grpcC2DRequests, IWcfServiceCommonC2D commonC2DWcfManager,
             RtuRemover rtuRemover, TabulatorViewModel tabulatorViewModel,
             RtuAutoBaseViewModel rtuAutoBaseViewModel,
@@ -217,7 +217,7 @@ namespace Fibertest.WpfClient
             if (resultDto.ReturnCode != ReturnCode.MonitoringSettingsAppliedSuccessfully)
             {
                 var lines = new List<string>()
-                    {resultDto.ReturnCode.GetLocalizedString(), "", resultDto.ErrorMessage};
+                    {resultDto.ReturnCode.GetLocalizedString(), "", resultDto.ErrorMessage ?? ""};
                 var vm = new MyMessageBoxViewModel(MessageType.Error, lines, 0);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
             }
@@ -229,7 +229,8 @@ namespace Fibertest.WpfClient
             if (!(param is RtuLeaf rtuLeaf))
                 return;
 
-            if (!await _globalScope.Resolve<IRtuHolder>().SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.DetachTraces))
+            if (!await _globalScope.Resolve<IRtuHolder>()
+                    .SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.DetachTraces))
                 return;
 
             using (_globalScope.Resolve<IWaitCursor>())
@@ -269,17 +270,18 @@ namespace Fibertest.WpfClient
                 return;
             await Task.Delay(100);
 
-            if (!await _globalScope.Resolve<IRtuHolder>().SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.DoAutoBaseMeasurement))
+            if (!await _globalScope.Resolve<IRtuHolder>()
+                    .SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.DoAutoBaseMeasurement))
                 return;
 
             if (!_rtuAutoBaseViewModel.Initialize(rtuLeaf))
             {
                 var mb = new MyMessageBoxViewModel(MessageType.Error,
                     @"Can't start auto base assignment without RFTS template file!");
-                _windowManager.ShowDialogWithAssignedOwner(mb);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
                 return;
             }
-            _windowManager.ShowDialogWithAssignedOwner(_rtuAutoBaseViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_rtuAutoBaseViewModel);
         }
     }
 }

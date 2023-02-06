@@ -64,7 +64,7 @@ namespace Fibertest.WpfClient
                 CommandParameter = rtuLeaf
             });
 
-            menu.Add(null);
+            menu.Add(null!);
 
             menu.Add(new MenuItemVm()
             {
@@ -73,7 +73,7 @@ namespace Fibertest.WpfClient
                 CommandParameter = rtuLeaf
             });
 
-            menu.Add(null);
+            menu.Add(null!);
 
             menu.Add(new MenuItemVm()
             {
@@ -96,7 +96,7 @@ namespace Fibertest.WpfClient
                 CommandParameter = rtuLeaf
             });
 
-            menu.Add(null);
+            menu.Add(null!);
 
             menu.Add(new MenuItemVm()
             {
@@ -112,7 +112,7 @@ namespace Fibertest.WpfClient
                 CommandParameter = rtuLeaf
             });
 
-            menu.Add(null);
+            menu.Add(null!);
 
             menu.Add(new MenuItemVm()
             {

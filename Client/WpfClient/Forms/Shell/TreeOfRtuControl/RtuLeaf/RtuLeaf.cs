@@ -117,10 +117,10 @@ namespace Fibertest.WpfClient
         public RtuMaker RtuMaker { get; set; }
         public int OwnPortCount { get; set; }
         public int FullPortCount { get; set; }
-        public string Serial { get; set; }
-        public NetAddress OtauNetAddress { get; set; }
+        public string? Serial { get; set; }
+        public NetAddress? OtauNetAddress { get; set; }
         public override string Name => Title;
-        public TreeOfAcceptableMeasParams TreeOfAcceptableMeasParams { get; set; }
+        public TreeOfAcceptableMeasParams? TreeOfAcceptableMeasParams { get; set; }
 
         public ChildrenImpresario ChildrenImpresario { get; }
         public bool HasAttachedTraces => ChildrenImpresario.Children.Any(l => l is TraceLeaf && ((TraceLeaf)l).PortNumber > 0)
@@ -129,7 +129,7 @@ namespace Fibertest.WpfClient
         public int TraceCount => ChildrenImpresario.Children.Count(c => c is TraceLeaf) +
                 ChildrenImpresario.Children.Where(c => c is OtauLeaf).Sum(otauLeaf => ((OtauLeaf)otauLeaf).TraceCount);
 
-        public IPortOwner GetPortOwner(OtauPortDto otauPortDto)
+        public IPortOwner? GetPortOwner(OtauPortDto otauPortDto)
         {
             if (otauPortDto.IsPortOnMainCharon) return this;
 

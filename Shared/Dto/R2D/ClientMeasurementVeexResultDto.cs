@@ -3,7 +3,7 @@
 public class ClientMeasurementVeexResultDto : RequestAnswer
 {
     public string? VeexMeasurementStatus;
-    public List<ConnectionQuality>? ConnectionQuality;
+    public List<ConnectionQuality> ConnectionQuality = null! ;
         
     public byte[]? SorBytes;
 }

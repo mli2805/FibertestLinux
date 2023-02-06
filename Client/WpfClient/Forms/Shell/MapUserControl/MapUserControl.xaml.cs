@@ -35,7 +35,7 @@ namespace Fibertest.WpfClient
 
         private void MainMap_Loaded(object sender, RoutedEventArgs e)
         {
-            Window window = Window.GetWindow(this);
+            var window = Window.GetWindow(this);
             if (window != null)
             {
                 window.Closing += Window_Closing;

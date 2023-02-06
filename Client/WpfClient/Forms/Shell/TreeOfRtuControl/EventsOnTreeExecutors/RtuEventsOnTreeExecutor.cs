@@ -42,6 +42,7 @@ namespace Fibertest.WpfClient
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
             var rtu = _treeOfRtuModel.GetById(e.RtuId);
+            if (rtu == null) return;
             rtu.Title = e.Title;
         }
 
@@ -66,7 +67,8 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
             var otauLeaf = _globalScope.Resolve<OtauLeaf>();
 
             otauLeaf.Id = e.Id;
@@ -76,7 +78,7 @@ namespace Fibertest.WpfClient
             otauLeaf.MasterPort = e.MasterPort;
             otauLeaf.OwnPortCount = e.PortCount;
             otauLeaf.OtauNetAddress = e.NetAddress;
-            otauLeaf.Serial = e.Serial;
+            otauLeaf.Serial = e.Serial ?? "";
             otauLeaf.OtauId = e.Id.ToString();
             otauLeaf.OtauState = RtuPartState.Ok;
             otauLeaf.IsExpanded = true;
@@ -96,8 +98,10 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
-            var otauLeaf = (OtauLeaf)_treeOfRtuModel.GetById(e.Id);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
+            var otauLeaf = (OtauLeaf?)_treeOfRtuModel.GetById(e.Id);
+            if (otauLeaf == null) return;
             var port = otauLeaf.MasterPort;
 
             foreach (var traceLeaf in otauLeaf.ChildrenImpresario.Children.Where(c => c is TraceLeaf).ToList())
@@ -120,7 +124,8 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
             foreach (var child in rtuLeaf.ChildrenImpresario.Children.ToList())
             {
                 if (child is TraceLeaf traceLeaf)
@@ -139,9 +144,8 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
-            if (rtuLeaf == null)
-                return;
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
 
             rtuLeaf.MainChannelState = e.OnMainChannel.ChangeChannelState(rtuLeaf.MainChannelState);
             rtuLeaf.ReserveChannelState = e.OnReserveChannel.ChangeChannelState(rtuLeaf.ReserveChannelState);
@@ -152,9 +156,8 @@ namespace Fibertest.WpfClient
             if (_currentUser.ZoneId != Guid.Empty &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
-            if (rtuLeaf == null)
-                return;
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
 
             if (rtuLeaf.RtuMaker == RtuMaker.VeEX)
             {

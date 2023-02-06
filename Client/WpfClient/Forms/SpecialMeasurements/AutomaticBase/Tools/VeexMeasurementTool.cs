@@ -39,7 +39,7 @@ namespace Fibertest.WpfClient
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
                 return new LineParametersDto(){ReturnCode = startResult.ReturnCode};
 
-            ClientMeasurementVeexResultDto lineCheckResult = null;
+            ClientMeasurementVeexResultDto? lineCheckResult = null;
             var p = _config.Value.Miscellaneous.VeexLineParamsTimeoutMs;
             bool flag = false;
             while (!flag)
@@ -60,7 +60,7 @@ namespace Fibertest.WpfClient
                 flag = lineCheckResult.VeexMeasurementStatus == @"finished";
             }
 
-            var cq = lineCheckResult.ConnectionQuality[0];
+            var cq = lineCheckResult!.ConnectionQuality[0];
             _logger.LogInfo(Logs.Client,$@"lmax = {cq.lmaxKm:F},  loss = {cq.loss:F},  reflectance = {cq.reflectance:F},  SNR = {cq.snr:F}");
             return new LineParametersDto()
                 { ReturnCode = ReturnCode.Ok, ConnectionQuality = lineCheckResult.ConnectionQuality[0] };
@@ -89,7 +89,7 @@ namespace Fibertest.WpfClient
                                 {
                                     firstLine,
                                     "",
-                                    measResult.ErrorMessage,
+                                    measResult.ErrorMessage ?? "",
                                 });
                 }
 

@@ -23,7 +23,7 @@ namespace Fibertest.WpfClient
         }
 
         public static DoClientMeasurementDto SetParams(this DoClientMeasurementDto dto, bool isForAutoBase, bool isInsertIitEvents,
-            bool isAutoLmax, List<MeasParamByPosition> iitMeasParams, VeexMeasOtdrParameters veexMeasParams)
+            bool isAutoLmax, List<MeasParamByPosition>? iitMeasParams, VeexMeasOtdrParameters veexMeasParams)
         {
             // IIT
             dto.SelectedMeasParams = iitMeasParams;
@@ -83,7 +83,7 @@ namespace Fibertest.WpfClient
             return dto;
         }
 
-        public static VeexMeasOtdrParameters FillInWithTemplate
+        public static VeexMeasOtdrParameters? FillInWithTemplate
             (this VeexMeasOtdrParameters dto, ConnectionQuality connectionQuality, string omid)
         {
             var parameters = AutoBaseParams.GetPredefinedParamsForLmax(connectionQuality.lmaxKm, omid);

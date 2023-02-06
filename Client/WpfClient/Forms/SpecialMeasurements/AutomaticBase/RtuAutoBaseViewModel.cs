@@ -22,7 +22,6 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly ILogger _logger; 
-        private readonly CurrentUser _currentUser;
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
@@ -65,7 +64,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public RtuAutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, CurrentUser currentUser,
+        public RtuAutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, 
             IDispatcherProvider dispatcherProvider, Model readModel, IWindowManager windowManager,
             GrpcC2DRequests grpcC2DRequests,
             IWcfServiceCommonC2D commonC2DWcfManager,
@@ -74,7 +73,6 @@ namespace Fibertest.WpfClient
         {
             _globalScope = globalScope;
             _logger = logger;
-            _currentUser = currentUser;
             _dispatcherProvider = dispatcherProvider;
             _readModel = readModel;
             _windowManager = windowManager;
@@ -138,7 +136,8 @@ namespace Fibertest.WpfClient
 
             var progressItem = _progress.First();
             Task.Factory.StartNew(() =>
-                WholeRtuMeasurementsExecutor.StartOneMeasurement(progressItem, progressItem.Ordinal < _progress.Count));
+                WholeRtuMeasurementsExecutor
+                    .StartOneMeasurement(progressItem, progressItem.Ordinal < _progress.Count));
         }
 
         private string _brokenBop = "";
@@ -171,7 +170,7 @@ namespace Fibertest.WpfClient
 
         private async void MeasurementExecutor_MeasurementCompleted(object sender, MeasurementEventArgs result)
         {
-            _logger.LogInfo(Logs.Client,$@"Measurement on trace {result.Trace.Title}: {result.Code}");
+            _logger.LogInfo(Logs.Client,$@"Measurement on trace {result.Trace!.Title}: {result.Code}");
             var progressItem = _progress.First(i => i.Trace.TraceId == result.Trace.TraceId);
             if (result.Code == ReturnCode.RtuToggleToBopPortError)
             {
@@ -204,7 +203,8 @@ namespace Fibertest.WpfClient
                 else
                 {
                     _logger.LogInfo(Logs.Client,$@"Assign base refs for {result.Trace.Title}");
-                    await Task.Factory.StartNew(() => WholeRtuMeasurementsExecutor.SetAsBaseRef(result.SorBytes, result.Trace));
+                    await Task.Factory.StartNew(
+                        () => WholeRtuMeasurementsExecutor.SetAsBaseRef(result.SorBytes!, result.Trace));
                 }
             }
             else
@@ -240,9 +240,9 @@ namespace Fibertest.WpfClient
 
         private async void ProcessBaseRefAssignedResult(MeasurementEventArgs result)
         {
-            var progressItem = _progress.First(i => i.Trace.TraceId == result.Trace.TraceId);
+            var progressItem = _progress.First(i => i.Trace.TraceId == result.Trace!.TraceId);
             progressItem.BaseRefAssigned = true;
-            _logger.LogInfo(Logs.Client,$@"Assigned base ref for trace {result.Trace.Title}: {result.Code}");
+            _logger.LogInfo(Logs.Client,$@"Assigned base ref for trace {result.Trace!.Title}: {result.Code}");
 
             var line = $@"{progressItem.Ordinal}/{_progress.Count} {result.Trace.Title} : {result.Code.RtuAutoBaseStyle()}";
             _dispatcherProvider.GetDispatcher().Invoke(() =>
@@ -315,8 +315,10 @@ namespace Fibertest.WpfClient
 
         private async Task<string> StartMonitoring()
         {
-            WholeRtuMeasurementsExecutor.Model.MeasurementProgressViewModel.Message1 = Resources.SID_Starting_monitoring;
-            WholeRtuMeasurementsExecutor.Model.MeasurementProgressViewModel.Message = Resources.SID_Sending_command__Wait_please___;
+            WholeRtuMeasurementsExecutor.Model.MeasurementProgressViewModel.Message1 = 
+                Resources.SID_Starting_monitoring;
+            WholeRtuMeasurementsExecutor.Model.MeasurementProgressViewModel.Message = 
+                Resources.SID_Sending_command__Wait_please___;
             var monitoringSettingsModel = _monitoringSettingsModelFactory.Create(_rtuLeaf, false);
 
             using (_globalScope.Resolve<IWaitCursor>())

@@ -109,7 +109,7 @@ public class ClientCollection
         foreach (var deadStation in deadStations)
         {
             Logger.LogInfo(Logs.DataCenter,
-                $"Dead client {deadStation} with connectionId {deadStation.ConnectionId} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
+                $"Dead client {deadStation} with connectionId {deadStation.ConnectionId.Take(6)} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
 
             var command = new KeyValuePair<string, string>(deadStation.UserName, deadStation.ClientIp);
             commands.Add(command);

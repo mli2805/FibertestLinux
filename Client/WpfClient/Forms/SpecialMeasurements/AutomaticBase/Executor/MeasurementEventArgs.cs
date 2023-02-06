@@ -8,12 +8,12 @@ namespace Fibertest.WpfClient
     public class MeasurementEventArgs : EventArgs
     {
         public readonly ReturnCode Code;
-        public readonly Trace Trace;
-        public readonly List<string> AdditionalErrorLines;
-        public readonly byte[] SorBytes;
+        public readonly Trace? Trace;
+        public readonly List<string>? AdditionalErrorLines;
+        public readonly byte[]? SorBytes;
 
         // success
-        public MeasurementEventArgs(ReturnCode code, Trace trace, byte[] sorBytes)
+        public MeasurementEventArgs(ReturnCode code, Trace? trace, byte[]? sorBytes)
         {
             Code = code;
             Trace = trace;
@@ -29,7 +29,7 @@ namespace Fibertest.WpfClient
             SorBytes = null;
         }
 
-        public MeasurementEventArgs(ReturnCode code, Trace trace, List<string> additionalErrorLines)
+        public MeasurementEventArgs(ReturnCode code, Trace? trace, List<string> additionalErrorLines)
         {
             Code = code;
             Trace = trace;

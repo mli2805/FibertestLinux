@@ -25,14 +25,12 @@ namespace Fibertest.WpfClient
         private readonly TraceStateViewsManager _traceStateViewsManager;
         private readonly RtuFilterViewModel _rtuFilterViewModel;
         private readonly IWindowManager _windowManager;
-        private TraceStateFilter _selectedTraceStateFilter;
-        private EventStatusFilter _selectedEventStatusFilter;
-        private OpticalEventModel _selectedRow;
 
-        public string TableTitle { get; set; }
-        public ObservableCollection<OpticalEventModel> Rows { get; set; } = new ObservableCollection<OpticalEventModel>();
+        public string TableTitle { get; set; } = null!;
+        public ObservableCollection<OpticalEventModel> Rows { get; set; } = new();
 
-        public OpticalEventModel SelectedRow
+        private OpticalEventModel? _selectedRow;
+        public OpticalEventModel? SelectedRow
         {
             get => _selectedRow;
             set
@@ -43,8 +41,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public List<TraceStateFilter> TraceStateFilters { get; set; }
+        public List<TraceStateFilter> TraceStateFilters { get; set; } = null!;
 
+        private TraceStateFilter _selectedTraceStateFilter = null!;
         public TraceStateFilter SelectedTraceStateFilter
         {
             get => _selectedTraceStateFilter;
@@ -57,14 +56,12 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private RtuGuidFilter _selectedRtuFilter;
+        private RtuGuidFilter _selectedRtuFilter = null!;
         public RtuGuidFilter SelectedRtuFilter
         {
             get => _selectedRtuFilter;
             set
             {
-                if (Equals(value.RtuId, _selectedRtuFilter?.RtuId))
-                    return;
                 _selectedRtuFilter = value;
                 var view = CollectionViewSource.GetDefaultView(Rows);
 
@@ -76,8 +73,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public List<EventStatusFilter> EventStatusFilters { get; set; }
+        public List<EventStatusFilter> EventStatusFilters { get; set; } = null!;
 
+        private EventStatusFilter _selectedEventStatusFilter = null!;
         public EventStatusFilter SelectedEventStatusFilter
         {
             get => _selectedEventStatusFilter;
@@ -91,7 +89,6 @@ namespace Fibertest.WpfClient
         }
 
         private string _rtuFilterNow = Resources.SID__no_filter_;
-
         public string RtuFilterNow
         {
             get => _rtuFilterNow;
@@ -134,14 +131,17 @@ namespace Fibertest.WpfClient
 
         private void InitializeTraceStateFilters()
         {
-            TraceStateFilters = new List<TraceStateFilter>() { new TraceStateFilter() };
-            TraceStateFilters.Add(new TraceStateFilter(FiberState.Ok));
-            TraceStateFilters.Add(new TraceStateFilter(FiberState.Minor));
-            TraceStateFilters.Add(new TraceStateFilter(FiberState.Major));
-            TraceStateFilters.Add(new TraceStateFilter(FiberState.Critical));
-            TraceStateFilters.Add(new TraceStateFilter(FiberState.FiberBreak));
-            TraceStateFilters.Add(new TraceStateFilter(FiberState.NoFiber));
-            TraceStateFilters.Add(new TraceStateFilter(FiberState.User));
+            TraceStateFilters = new List<TraceStateFilter>
+            {
+                new(),
+                new(FiberState.Ok),
+                new(FiberState.Minor),
+                new(FiberState.Major),
+                new(FiberState.Critical),
+                new(FiberState.FiberBreak),
+                new(FiberState.NoFiber),
+                new(FiberState.User)
+            };
 
             SelectedTraceStateFilter = TraceStateFilters.First();
         }
@@ -160,9 +160,11 @@ namespace Fibertest.WpfClient
             return 
                 // STATE filter
                 (SelectedTraceStateFilter.IsOn == false || 
-                 (SelectedTraceStateFilter.TraceState == opticalEventVm.TraceState && opticalEventVm.BaseRefType != BaseRefType.Fast)) 
+                 (SelectedTraceStateFilter.TraceState == opticalEventVm.TraceState 
+                    && opticalEventVm.BaseRefType != BaseRefType.Fast)) 
                 // STATUS filter
-                   && (SelectedEventStatusFilter.IsOn == false || SelectedEventStatusFilter.EventStatus == opticalEventVm.EventStatus)
+                   && (SelectedEventStatusFilter.IsOn == false || 
+                       SelectedEventStatusFilter.EventStatus == opticalEventVm.EventStatus)
                 // RTU filter
                    && (SelectedRtuFilter.IsOn == false || SelectedRtuFilter.RtuId == opticalEventVm.RtuId);
         }
@@ -172,7 +174,7 @@ namespace Fibertest.WpfClient
             foreach (var opticalEventModel in Rows.Where(m => m.RtuId == rtuId).ToList())
             {
                 Rows.Remove(opticalEventModel);
-                opticalEventModel.RtuTitle = _readModel.Rtus.FirstOrDefault(r => r.Id == rtuId)?.Title;
+                opticalEventModel.RtuTitle = _readModel.Rtus.FirstOrDefault(r => r.Id == rtuId)?.Title ?? "";
                 Rows.Add(opticalEventModel);
             }
         }
@@ -182,7 +184,7 @@ namespace Fibertest.WpfClient
             foreach (var opticalEventModel in Rows.Where(m => m.TraceId == traceId).ToList())
             {
                 Rows.Remove(opticalEventModel);
-                opticalEventModel.TraceTitle = _readModel.Traces.FirstOrDefault(t => t.TraceId == traceId)?.Title;
+                opticalEventModel.TraceTitle = _readModel.Traces.FirstOrDefault(t => t.TraceId == traceId)?.Title ?? "";
                 Rows.Add(opticalEventModel);
             }
         }
@@ -196,9 +198,9 @@ namespace Fibertest.WpfClient
                 MeasurementTimestamp = measurement.MeasurementTimestamp,
                 EventRegistrationTimestamp = measurement.EventRegistrationTimestamp,
                 RtuId = measurement.RtuId,
-                RtuTitle = _readModel.Rtus.FirstOrDefault(r => r.Id == measurement.RtuId)?.Title,
+                RtuTitle = _readModel.Rtus.FirstOrDefault(r => r.Id == measurement.RtuId)?.Title ?? "",
                 TraceId = measurement.TraceId,
-                TraceTitle = _readModel.Traces.FirstOrDefault(t => t.TraceId == measurement.TraceId)?.Title,
+                TraceTitle = _readModel.Traces.FirstOrDefault(t => t.TraceId == measurement.TraceId)?.Title ?? "",
                 BaseRefType = measurement.BaseRefType,
                 TraceState = measurement.TraceState,
 
@@ -207,7 +209,7 @@ namespace Fibertest.WpfClient
                     ? measurement.StatusChangedTimestamp.ToString(Thread.CurrentThread.CurrentUICulture)
                     : "",
                 StatusChangedByUser = measurement.EventStatus.IsStatusAssignedByUser()
-                    ? measurement.StatusChangedByUser
+                    ? measurement.StatusChangedByUser!
                     : "",
 
                 Comment = measurement.Comment,
@@ -244,8 +246,9 @@ namespace Fibertest.WpfClient
             if (opticalEventModel.EventStatus != dto.EventStatus)
             {
                 opticalEventModel.EventStatus = dto.EventStatus;
-                opticalEventModel.StatusChangedByUser = dto.StatusChangedByUser;
-                opticalEventModel.StatusChangedTimestamp = dto.StatusChangedTimestamp.ToString(CultureInfo.CurrentCulture);
+                opticalEventModel.StatusChangedByUser = dto.StatusChangedByUser ?? "";
+                opticalEventModel.StatusChangedTimestamp = 
+                    dto.StatusChangedTimestamp.ToString(CultureInfo.CurrentCulture);
             }
             opticalEventModel.Comment = dto.Comment;
 
@@ -254,7 +257,8 @@ namespace Fibertest.WpfClient
 
         public void ShowReflectogram(int param)
         {
-            _reflectogramManager.SetTempFileName(SelectedRow.TraceTitle, SelectedRow.Nomer, SelectedRow.EventRegistrationTimestamp);
+            _reflectogramManager.SetTempFileName(SelectedRow!.TraceTitle, 
+                SelectedRow.Nomer, SelectedRow.EventRegistrationTimestamp);
             if (param == 2)
                 _reflectogramManager.ShowRefWithBase(SelectedRow.SorFileId);
             else
@@ -263,29 +267,30 @@ namespace Fibertest.WpfClient
 
         public void SaveReflectogramAs(bool shouldBaseRefBeExcluded)
         {
-            _reflectogramManager.SetTempFileName(SelectedRow.TraceTitle, SelectedRow.SorFileId, SelectedRow.EventRegistrationTimestamp);
+            _reflectogramManager.SetTempFileName(SelectedRow!.TraceTitle, 
+                SelectedRow.SorFileId, SelectedRow.EventRegistrationTimestamp);
             _reflectogramManager.SaveReflectogramAs(SelectedRow.SorFileId, shouldBaseRefBeExcluded);
         }
 
         public void ShowRftsEvents()
         {
-            _reflectogramManager.ShowRftsEvents(SelectedRow.SorFileId, SelectedRow.TraceTitle);
+            _reflectogramManager.ShowRftsEvents(SelectedRow!.SorFileId, SelectedRow.TraceTitle);
         }
 
         public void ShowTraceState()
         {
-            var lastMeasurement = _readModel.Measurements.LastOrDefault(m => m.TraceId == SelectedRow.TraceId);
-            var isLastMeasurement = lastMeasurement == null || lastMeasurement.SorFileId == SelectedRow.SorFileId;
+            var lastMeasurement = _readModel.Measurements.LastOrDefault(m => m.TraceId == SelectedRow!.TraceId);
+            var isLastMeasurement = lastMeasurement == null || lastMeasurement.SorFileId == SelectedRow!.SorFileId;
 
-            var lastEvent = _readModel.Measurements.LastOrDefault(m => m.TraceId == SelectedRow.TraceId
+            var lastEvent = _readModel.Measurements.LastOrDefault(m => m.TraceId == SelectedRow!.TraceId
                                                                && m.EventStatus > EventStatus.JustMeasurementNotAnEvent);
-            var isLastAccident = lastEvent == null || lastEvent.SorFileId <= SelectedRow.SorFileId;
-            _traceStateViewsManager.ShowTraceState(SelectedRow, isLastMeasurement, isLastAccident);
+            var isLastAccident = lastEvent == null || lastEvent.SorFileId <= SelectedRow!.SorFileId;
+            _traceStateViewsManager.ShowTraceState(SelectedRow!, isLastMeasurement, isLastAccident);
         }
 
         public async void RecalculateAccidents()
         {
-            byte[] sorBytes = await _reflectogramManager.GetSorBytes(SelectedRow.SorFileId);
+            byte[] sorBytes = await _reflectogramManager.GetSorBytes(SelectedRow!.SorFileId);
             var sorData = SorData.FromBytes(sorBytes);
             var _ =
                 _globalScope.Resolve<AccidentsFromSorExtractor>()

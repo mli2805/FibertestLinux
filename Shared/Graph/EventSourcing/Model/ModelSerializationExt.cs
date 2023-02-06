@@ -13,9 +13,7 @@ public static class ModelSerializationExt
 
             await Task.Delay(1);
             var binaryFormatter = new BinaryFormatter();
-#pragma warning disable SYSLIB0011
             binaryFormatter.Serialize(stream, model);
-#pragma warning restore SYSLIB0011
             var buf = stream.ToArray();
             logger.Log(LogLevel.Information, $@"Model serialization: data size = {buf.Length:0,0.#}");
             return buf;
@@ -35,11 +33,8 @@ public static class ModelSerializationExt
 
             await Task.Delay(1);
             var binaryFormatter = new BinaryFormatter();
-#pragma warning disable SYSLIB0011
             var model2 = (Model)binaryFormatter.Deserialize(stream);
-#pragma warning restore SYSLIB0011
             logger.Log(LogLevel.Information, @"Model deserialized successfully!");
-            model2.AdjustModelDeserializedFromSnapshotMadeByOldVersion();
             model.CopyFrom(model2);
 
             return model2.Rtus.Count == model.Rtus.Count;
@@ -51,27 +46,5 @@ public static class ModelSerializationExt
         }
     }
 
-    // if snapshot was made before v926
-    private static void AdjustModelDeserializedFromSnapshotMadeByOldVersion(this Model model)
-    {
-        model.Licenses = new List<License>()
-        {
-            new License()
-            {
-                LicenseId = new Guid(),
-                ClientStationCount = new LicenseParameter()
-                {
-                    Value = 1,
-                    ValidUntil = DateTime.MaxValue,
-                },
-                RtuCount = new LicenseParameter(),
-                WebClientCount = new LicenseParameter(),
-                SuperClientStationCount = new LicenseParameter(),
-                CreationDate = DateTime.Today,
-                LoadingDate = DateTime.Today,
-            }
-        };
-
-
-    }
+   
 }

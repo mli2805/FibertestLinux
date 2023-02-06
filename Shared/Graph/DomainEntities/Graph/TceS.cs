@@ -1,5 +1,6 @@
 ﻿namespace Fibertest.Graph;
 
+[Serializable]
 public class TceS
 {
     public Guid Id { get; set; } = Guid.NewGuid();

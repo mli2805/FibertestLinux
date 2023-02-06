@@ -50,7 +50,8 @@ namespace Fibertest.WpfClient
             var acceptable = ShouldAcceptEventForTrace(e.TraceId);
             if (acceptable == EventAcceptability.No) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(e.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(e.RtuId);
+            if (rtuLeaf == null) return;
             var traceLeaf = _globalScope.Resolve<TraceLeaf>(new NamedParameter(@"parent", rtuLeaf));
 
             traceLeaf.Id = e.TraceId;
@@ -68,6 +69,7 @@ namespace Fibertest.WpfClient
             if (ShouldAcceptEventForTrace(e.Id) == EventAcceptability.No) return;
 
             var traceLeaf = _treeOfRtuModel.GetById(e.Id);
+            if (traceLeaf == null) return;
             traceLeaf.Title = e.Title;
         }
 
@@ -94,8 +96,10 @@ namespace Fibertest.WpfClient
             var acceptable = ShouldAcceptEventForTrace(e.TraceId);
             if (acceptable == EventAcceptability.No) return;
 
-            TraceLeaf traceLeaf = (TraceLeaf)_treeOfRtuModel.GetById(e.TraceId);
-            RtuLeaf rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(traceLeaf.Parent.Id);
+            var traceLeaf = (TraceLeaf?)_treeOfRtuModel.GetById(e.TraceId);
+            if (traceLeaf == null) return;
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(traceLeaf.Parent.Id);
+            if (rtuLeaf == null) return;
             var portOwner = rtuLeaf.GetPortOwner(e.OtauPortDto);
             if (portOwner == null) return;
 
@@ -129,8 +133,9 @@ namespace Fibertest.WpfClient
             var acceptable = ShouldAcceptEventForTrace(traceId);
             if (acceptable == EventAcceptability.No) return;
 
-            var traceLeaf = (TraceLeaf) _treeOfRtuModel.GetById(traceId);
-            var owner = _treeOfRtuModel.GetById(traceLeaf.Parent.Id);
+            var traceLeaf = (TraceLeaf?) _treeOfRtuModel.GetById(traceId);
+            if (traceLeaf == null) return;
+            var owner = _treeOfRtuModel.GetById(traceLeaf.Parent.Id)!;
             var rtuLeaf = owner is RtuLeaf ? (RtuLeaf) owner : (RtuLeaf) (owner.Parent);
             int port = traceLeaf.PortNumber;
             if (port <= 0)
@@ -160,7 +165,7 @@ namespace Fibertest.WpfClient
             if (!_currentUser.IsDefaultZoneUser &&
                 !_readModel.Rtus.First(r => r.Id == e.RtuId).ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var traceLeaf = (TraceLeaf)_treeOfRtuModel.GetById(e.TraceId);
+            var traceLeaf = (TraceLeaf?)_treeOfRtuModel.GetById(e.TraceId);
             if (traceLeaf == null || traceLeaf.TraceState == FiberState.NotJoined)
                 return;
 
@@ -177,9 +182,8 @@ namespace Fibertest.WpfClient
                 var acceptable = ShouldAcceptEventForTrace(traceId);
                 if (acceptable == EventAcceptability.No) continue;
 
-                var traceLeaf = (TraceLeaf)_treeOfRtuModel.GetById(traceId);
-                if (traceLeaf == null)
-                    return;
+                var traceLeaf = (TraceLeaf?)_treeOfRtuModel.GetById(traceId);
+                if (traceLeaf == null) return;
 
                 traceLeaf.TraceToTceLinkState = TraceToTceLinkState.NoLink;
             }
@@ -189,9 +193,8 @@ namespace Fibertest.WpfClient
                 var acceptable = ShouldAcceptEventForTrace(portRelation.TraceId);
                 if (acceptable == EventAcceptability.No) continue;
 
-                var traceLeaf = (TraceLeaf)_treeOfRtuModel.GetById(portRelation.TraceId);
-                if (traceLeaf == null)
-                    return;
+                var traceLeaf = (TraceLeaf?)_treeOfRtuModel.GetById(portRelation.TraceId);
+                if (traceLeaf == null) return;
 
                 traceLeaf.TraceToTceLinkState = e.ProcessSnmpTraps ? TraceToTceLinkState.LinkTceOn : TraceToTceLinkState.LinkTceOff;
             }
@@ -204,9 +207,8 @@ namespace Fibertest.WpfClient
                 var acceptable = ShouldAcceptEventForTrace(traceId);
                 if (acceptable == EventAcceptability.No) continue;
 
-                var traceLeaf = (TraceLeaf)_treeOfRtuModel.GetById(traceId);
-                if (traceLeaf == null)
-                    return;
+                var traceLeaf = (TraceLeaf?)_treeOfRtuModel.GetById(traceId);
+                if (traceLeaf == null) return;
 
                 traceLeaf.TraceToTceLinkState = TraceToTceLinkState.NoLink;
             }

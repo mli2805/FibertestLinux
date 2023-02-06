@@ -86,9 +86,9 @@ namespace Fibertest.WpfClient
         }
 
 
-        private void EquipmentOfChoiceModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void EquipmentOfChoiceModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            EquipmentOfChoiceModel model = (EquipmentOfChoiceModel)sender;
+            var model = (EquipmentOfChoiceModel?)sender!;
             if (e.PropertyName == @"IsSelected" && model.IsSelected)
             {
                 foreach (var mo in EquipmentChoices.Where(m => m != model))
@@ -106,7 +106,7 @@ namespace Fibertest.WpfClient
             return NoEquipmentInNodeChoice.EquipmentId;
         }
 
-        public string GetSelectedDualName()
+        public string? GetSelectedDualName()
         {
             var result = NodeTitle;
             var selectedModel = EquipmentChoices.FirstOrDefault(m => m.IsSelected);
@@ -178,7 +178,7 @@ namespace Fibertest.WpfClient
                         _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendNodeTitle - {result.ErrorMessage}");
         }
 
-        private async Task SendEquipmentChanges(Equipment equipment, string newTitle, int leftCableReserve, int rightCableReserve)
+        private async Task SendEquipmentChanges(Equipment equipment, string? newTitle, int leftCableReserve, int rightCableReserve)
         {
             var cmd = new UpdateEquipment()
             {

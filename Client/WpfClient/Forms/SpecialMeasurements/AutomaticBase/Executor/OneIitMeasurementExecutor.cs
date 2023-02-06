@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
         private readonly LandmarksIntoBaseSetter _landmarksIntoBaseSetter;
         private readonly MeasurementAsBaseAssigner _measurementAsBaseAssigner;
 
-        private Trace _trace;
+        private Trace _trace = null!;
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
         public OneIitMeasurementExecutor(IWritableConfig<ClientConfig> config, ILogger logger, CurrentUser currentUser, Model readModel,
@@ -70,7 +70,7 @@ namespace Fibertest.WpfClient
                 Model.IsEnabled = true;
 
                 MeasurementCompleted?
-                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage));
+                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage ?? ""));
 
                 Model.IsEnabled = true;
                 return;
@@ -81,7 +81,7 @@ namespace Fibertest.WpfClient
            // RtuMaker is IIT - result will come through WCF contract
         }
 
-        private System.Timers.Timer _timer;
+        private System.Timers.Timer _timer = null!;
         private void StartTimer()
         {
             _logger.LogInfo(Logs.Client,@"Start a measurement timeout");
@@ -90,7 +90,7 @@ namespace Fibertest.WpfClient
             _timer.AutoReset = false;
             _timer.Start();
         }
-        private void TimeIsOver(object sender, System.Timers.ElapsedEventArgs e)
+        private void TimeIsOver(object? sender, System.Timers.ElapsedEventArgs e)
         {
             _logger.LogInfo(Logs.Client,@"Measurement timeout expired");
             _timer.Dispose();
@@ -133,11 +133,11 @@ namespace Fibertest.WpfClient
             MeasurementCompleted?
                 .Invoke(this, result.ReturnCode == ReturnCode.BaseRefAssignedSuccessfully
                     ? new MeasurementEventArgs(ReturnCode.BaseRefAssignedSuccessfully, _trace, sorData.ToBytes())
-                    : new MeasurementEventArgs(ReturnCode.BaseRefAssignmentFailed, _trace, result.ErrorMessage));
+                    : new MeasurementEventArgs(ReturnCode.BaseRefAssignmentFailed, _trace, result.ErrorMessage ?? ""));
         }
 
         public delegate void MeasurementHandler(object sender, MeasurementEventArgs e);
 
-        public event MeasurementHandler MeasurementCompleted;
+        public event MeasurementHandler? MeasurementCompleted;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public class Rtu
 {
     public Guid Id { get; set; }

@@ -10,13 +10,18 @@
 		<Copyright>Copyright © IIT Minsk 2017-2022</Copyright>
 		<Authors>Leanid Marholin</Authors>
 		<AssemblyName>Fibertest.Graph</AssemblyName>
+
+		<!-- Disable "BinaryFormatter is obsolete" warnings for entire project -->
+		<NoWarn>$(NoWarn);SYSLIB0011</NoWarn>
+		<!-- Warning: Setting the following switch is *NOT* recommended in web apps. -->
+		<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AutoMapper" Version="12.0.0" />
-	  <PackageReference Include="NEventStore" Version="9.0.1" />
-	  <PackageReference Include="Serilog" Version="2.12.0" />
-	  <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+		<PackageReference Include="AutoMapper" Version="12.0.0" />
+		<PackageReference Include="NEventStore" Version="9.0.1" />
+		<PackageReference Include="Serilog" Version="2.12.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -27,9 +32,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="Fibertest.OtdrDataFormat">
-	    <HintPath>..\..\OtdrDataFormat\Fibertest.OtdrDataFormat.dll</HintPath>
-	  </Reference>
+		<Reference Include="Fibertest.OtdrDataFormat">
+			<HintPath>..\..\OtdrDataFormat\Fibertest.OtdrDataFormat.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 </Project>

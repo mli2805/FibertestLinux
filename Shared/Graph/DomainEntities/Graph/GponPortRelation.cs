@@ -2,6 +2,7 @@
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public class GponPortRelation
 {
     // public Guid Id;

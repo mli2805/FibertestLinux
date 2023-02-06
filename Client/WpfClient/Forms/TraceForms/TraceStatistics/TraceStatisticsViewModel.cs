@@ -38,9 +38,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ObservableCollection<BaseRefModel> BaseRefs { get; set; } = new ObservableCollection<BaseRefModel>();
+        public ObservableCollection<BaseRefModel> BaseRefs { get; set; } = new();
 
-        public ObservableCollection<TraceMeasurementModel> Rows { get; set; } = new ObservableCollection<TraceMeasurementModel>();
+        public ObservableCollection<TraceMeasurementModel> Rows { get; set; } = new();
 
         private TraceMeasurementModel _selectedRow;
         public TraceMeasurementModel SelectedRow
@@ -150,8 +150,9 @@ namespace Fibertest.WpfClient
             _traceStateViewsManager.ShowTraceState(SelectedRow.Measurement, lastRow.Measurement.SorFileId == SelectedRow.Measurement.SorFileId, isLastAccident);
         }
 
-        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new())
         {
+            await Task.Delay(1);
             IsOpen = false;
             return true;
         }

@@ -5,7 +5,7 @@ namespace Fibertest.WpfClient
 {
     public class RadioButtonModel : PropertyChangedBase
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
 
         public Guid Id { get; set; }
 

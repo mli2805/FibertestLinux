@@ -9,7 +9,7 @@ namespace Fibertest.WpfClient
 {
     public class GponModel : PropertyChangedBase, IDataErrorInfo
     {
-        public TceS Tce { get; set; }
+        public TceS Tce { get; set; } = null!;
         public int SlotPosition { get; set; }
 
         public int GponInterface { get; set; }
@@ -38,8 +38,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _otauPortNumberStr;
-        public string OtauPortNumberStr
+        private string? _otauPortNumberStr;
+        public string? OtauPortNumberStr
         {
             get => _otauPortNumberStr;
             set
@@ -66,8 +66,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _traceAlreadyLinked;
-        public string TraceAlreadyLinked
+        private string? _traceAlreadyLinked;
+        public string? TraceAlreadyLinked
         {
             get => _traceAlreadyLinked;
             set

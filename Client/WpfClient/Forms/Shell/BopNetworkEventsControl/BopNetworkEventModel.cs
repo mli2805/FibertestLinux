@@ -11,7 +11,7 @@ namespace Fibertest.WpfClient
         public DateTime EventTimestamp { get; set; }
 
         public string Serial { get; set; }
-        public string OtauIp { get; set; }
+        public string? OtauIp { get; set; }
         public string BopName { get; set; }
         public int TcpPort { get; set; }
 

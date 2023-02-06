@@ -18,7 +18,7 @@ namespace Fibertest.WpfClient
             _currentDatacenterParameters = currentDatacenterParameters;
         }
 
-        public RtuStateModel Create(RtuLeaf rtuLeaf)
+        public RtuStateModel? Create(RtuLeaf rtuLeaf)
         {
             var rtu = _model.Rtus.FirstOrDefault(r => r.Id == rtuLeaf.Id);
             if (rtu == null) return null;

@@ -1,5 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
+[Serializable]
 public class OtauPortDto
 {
     public string? OtauId; // in VeEX RTU main OTAU has its own ID, for MAK it is a RTU ID

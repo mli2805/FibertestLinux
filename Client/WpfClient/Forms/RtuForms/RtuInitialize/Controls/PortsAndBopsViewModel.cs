@@ -43,7 +43,7 @@ namespace Fibertest.WpfClient
         {
             if (originalRtu.Serial != dto.Serial) // first initialization or RTU was changed
             {
-                FullPortCount = dto.FullPortCount - (dto.Children?.Count ?? 0);
+                FullPortCount = dto.FullPortCount - dto.Children.Count;
             }
             else // re-initialization of the same RTU
             {

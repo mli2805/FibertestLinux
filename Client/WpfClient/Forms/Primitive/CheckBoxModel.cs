@@ -7,12 +7,12 @@ namespace Fibertest.WpfClient
     {
         private bool _isChecked;
         public Guid Id { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
         public bool IsEnabled { get; set; } = true;
 
         public bool IsChecked
         {
-            get { return _isChecked; }
+            get => _isChecked;
             set
             {
                 if (value == _isChecked) return;

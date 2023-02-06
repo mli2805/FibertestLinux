@@ -133,7 +133,7 @@ namespace Fibertest.WpfClient
 
         private void SubscribeActualEventsRowChanged()
         {
-            _opticalEventsDoubleViewModel.ActualOpticalEventsViewModel.Rows.CollectionChanged += (s, e) =>
+            _opticalEventsDoubleViewModel.ActualOpticalEventsViewModel.Rows.CollectionChanged += (_, _) =>
             {
                 IsThereActualOpticalEventsPictogram =
                     _opticalEventsDoubleViewModel.ActualOpticalEventsViewModel.Rows.Any()
@@ -141,7 +141,7 @@ namespace Fibertest.WpfClient
                         : Visibility.Hidden;
                 NotifyOfPropertyChange(nameof(IsThereActualOpticalEventsPictogram));
             };
-            _networkEventsDoubleViewModel.ActualNetworkEventsViewModel.Rows.CollectionChanged += (s, e) =>
+            _networkEventsDoubleViewModel.ActualNetworkEventsViewModel.Rows.CollectionChanged += (_, _) =>
             {
                 IsThereActualNetworkEventsPictogram =
                     _networkEventsDoubleViewModel.ActualNetworkEventsViewModel.Rows.Any()
@@ -149,7 +149,7 @@ namespace Fibertest.WpfClient
                         : Visibility.Hidden;
                 NotifyOfPropertyChange(nameof(IsThereActualNetworkEventsPictogram));
             };
-            _bopNetworkEventsDoubleViewModel.ActualBopNetworkEventsViewModel.Rows.CollectionChanged += (s, e) =>
+            _bopNetworkEventsDoubleViewModel.ActualBopNetworkEventsViewModel.Rows.CollectionChanged += (_, _) =>
             {
                 IsThereActualBopEventsPictogram =
                     _bopNetworkEventsDoubleViewModel.ActualBopNetworkEventsViewModel.Rows.Any()

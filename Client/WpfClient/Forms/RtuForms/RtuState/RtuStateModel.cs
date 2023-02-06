@@ -10,20 +10,19 @@ namespace Fibertest.WpfClient
 {
     public class RtuStateModel : PropertyChangedBase
     {
-        private string _currentMeasurementStep;
         private FiberState _tracesState;
-        public string Title { get; set; }
-        public string ServerTitle { get; set; }
+        public string? Title { get; set; }
+        public string? ServerTitle { get; set; }
         public string RtuAvailabilityOnScreen => RtuAvailabilityToString();
         public Brush RtuAvailabilityBrush => RtuAvalilabilityToBrush(true);
 
-        public string MainAddress { get; set; }
+        public string? MainAddress { get; set; }
         public RtuPartState MainAddressState { get; set; }
         public string MainAddressStateOnScreen => MainAddressState.ToLocalizedString();
         public Brush MainAddressBrush => MainAddressState.GetBrush(true);
 
         public bool HasReserveAddress { get; set; }
-        public string ReserveAddress { get; set; }
+        public string? ReserveAddress { get; set; }
         public RtuPartState ReserveAddressState { get; set; }
         public string ReserveAddressStateOnScreen => ReserveAddressState.ToLocalizedString();
         public Brush ReserveAddressBrush => ReserveAddressState.GetBrush(true);
@@ -55,7 +54,8 @@ namespace Fibertest.WpfClient
         public string TracesStateOnScreen => TracesState.ToLocalizedString();
         public Brush TracesStateBrush => TracesState.GetBrush(true);
 
-        public string MonitoringMode
+        private string? _monitoringMode;
+        public string? MonitoringMode
         {
             get => _monitoringMode;
             set
@@ -66,7 +66,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string CurrentMeasurementStep
+        private string? _currentMeasurementStep;
+        public string? CurrentMeasurementStep
         {
             get => _currentMeasurementStep;
             set
@@ -85,9 +86,7 @@ namespace Fibertest.WpfClient
         }
 
         private bool _isSoundButtonEnabled;
-        private string _monitoringMode;
-
-        public bool IsSoundButtonEnabled
+       public bool IsSoundButtonEnabled
         {
             get { return _isSoundButtonEnabled; }
             set

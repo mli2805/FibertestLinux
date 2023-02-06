@@ -3,5 +3,5 @@
 public class TceRemoved
 {
     public Guid Id;
-    public List<Guid>? ExcludedTraceIds;
+    public List<Guid> ExcludedTraceIds = null!;
 }

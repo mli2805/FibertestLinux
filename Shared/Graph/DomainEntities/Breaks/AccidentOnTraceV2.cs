@@ -3,6 +3,7 @@ using GMap.NET;
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public class AccidentOnTraceV2
 {
     public int BrokenRftsEventNumber;

@@ -61,12 +61,12 @@ namespace Fibertest.WpfClient
             if (!(param is TraceLeaf traceLeaf))
                 return;
 
-            if (!_readModel.TryGetTrace(traceLeaf.Id, out Trace trace))
+            if (!_readModel.TryGetTrace(traceLeaf.Id, out Trace? trace))
                 return;
 
             var vm = _globalScope.Resolve<TraceInfoViewModel>();
-            await vm.Initialize(traceLeaf.Id, trace.EquipmentIds, trace.NodeIds, false);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await vm.Initialize(traceLeaf.Id, trace!.EquipmentIds, trace.NodeIds, false);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
         }
 
         public async Task ShowTrace(object param)
@@ -92,7 +92,7 @@ namespace Fibertest.WpfClient
             await Task.Delay(0);
             var trace = _readModel.Traces.First(t => t.TraceId == traceLeaf.Id);
             _baseRefsAssignViewModel.Initialize(trace);
-            _windowManager.ShowDialogWithAssignedOwner(_baseRefsAssignViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_baseRefsAssignViewModel);
         }
 
         public async Task ShowTraceState(object param)
@@ -203,7 +203,7 @@ namespace Fibertest.WpfClient
             var rtu = _readModel.Rtus.First(r => r.Id == rtuId);
 
             _outOfTurnPreciseMeasurementViewModel.Initialize(traceLeaf);
-            _windowManager.ShowDialogWithAssignedOwner(_outOfTurnPreciseMeasurementViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_outOfTurnPreciseMeasurementViewModel);
 
             await _globalScope.Resolve<IRtuHolder>()
                 .SetRtuOccupationState(rtuId, rtu.Title, RtuOccupation.None);
@@ -225,10 +225,10 @@ namespace Fibertest.WpfClient
             {
                 var mb = new MyMessageBoxViewModel(MessageType.Error,
                     @"Can't start auto base assignment without RFTS template file!");
-                _windowManager.ShowDialogWithAssignedOwner(mb);
+                await _windowManager.ShowDialogWithAssignedOwner(mb);
                 return;
             }
-            _windowManager.ShowDialogWithAssignedOwner(_autoBaseViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_autoBaseViewModel);
         }
     }
 }

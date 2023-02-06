@@ -19,7 +19,7 @@ namespace Fibertest.WpfClient
         public Dictionary<Guid, RtuChannelViewModel> LaunchedViews { get; set; } =
             new Dictionary<Guid, RtuChannelViewModel>();
 
-        public RtuChannelViewsManager(ILifetimeScope globalScope, IWindowManager windowManager, 
+        public RtuChannelViewsManager(ILifetimeScope globalScope, IWindowManager windowManager,
             Model readModel, CurrentUser currentUser, ChildrenViews childrenViews)
         {
             _globalScope = globalScope;
@@ -30,11 +30,11 @@ namespace Fibertest.WpfClient
             childrenViews.PropertyChanged += ChildrenViews_PropertyChanged;
         }
 
-        private void ChildrenViews_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs args)
+        private void ChildrenViews_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(ChildrenViews.ShouldBeClosed))
             {
-                if (((ChildrenViews) sender).ShouldBeClosed)
+                if (((ChildrenViews)sender!).ShouldBeClosed)
                 {
                     foreach (var pair in LaunchedViews.ToList())
                     {
@@ -73,20 +73,19 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void Show(NetworkEventAdded networkEventAdded)
+        private async void Show(NetworkEventAdded networkEventAdded)
         {
             ClearClosedViews();
 
-            var vm = LaunchedViews.FirstOrDefault(m => m.Key == networkEventAdded.RtuId).Value;
-            if (vm != null)
+            if (LaunchedViews.TryGetValue(networkEventAdded.RtuId, out var vm))
             {
-                vm.TryCloseAsync();
+                await vm.TryCloseAsync();
                 LaunchedViews.Remove(networkEventAdded.RtuId);
             }
 
             vm = _globalScope.Resolve<RtuChannelViewModel>();
             vm.Initialize(networkEventAdded);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
 
             LaunchedViews.Add(networkEventAdded.RtuId, vm);
             _childrenViews.ShouldBeClosed = false;

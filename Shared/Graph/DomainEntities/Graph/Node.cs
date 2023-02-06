@@ -3,6 +3,7 @@ using GMap.NET;
 
 namespace Fibertest.Graph;
 
+[Serializable]
 public class Node
 {
     public Guid NodeId;
@@ -16,7 +17,7 @@ public class Node
 
     public bool IsHighlighted
     {
-        get; 
+        get;
         set;
     }
 }
