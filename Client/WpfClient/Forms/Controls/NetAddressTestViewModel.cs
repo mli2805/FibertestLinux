@@ -116,8 +116,10 @@ namespace Fibertest.WpfClient
                     HasReserveAddress = false,
                     Main = NetAddressInputViewModel.GetNetAddress().Clone()
                 };
-                _grpcC2DRequests.ChangeAddress(addressForTesting);
-                var serverAnswer = await _grpcC2DRequests.SendAnyC2DRequest<CheckServerConnectionDto, RequestAnswer>(new CheckServerConnectionDto());
+                
+
+               // var serverAnswer = await _grpcC2DRequests.SendAnyC2DRequest<CheckServerConnectionDto, RequestAnswer>(new CheckServerConnectionDto());
+                var serverAnswer = await _grpcC2DRequests.CheckServerConnection(new CheckServerConnectionDto(), NetAddressInputViewModel.GetNetAddress().Ip4Address);
                 return serverAnswer.ReturnCode == ReturnCode.Ok;
             }
         }

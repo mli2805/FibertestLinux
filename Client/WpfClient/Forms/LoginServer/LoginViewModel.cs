@@ -154,7 +154,7 @@ namespace Fibertest.WpfClient
             }
 
             _grpcC2DRequests.SetClientConnectionId(ConnectionId);
-            _grpcC2DRequests.ChangeAddress(grpcIp);
+            //_grpcC2DRequests.ChangeAddress(grpcIp);
             _grpcC2RRequests.SetClientConnectionId(ConnectionId);
             Status = string.Format(Resources.SID_Performing_registration_on__0_, grpcIp);
             _logger.LogInfo(Logs.Client,$@"Performing registration on {grpcIp}");

@@ -89,7 +89,7 @@ namespace KadastrLoader
             _grpcC2DRequests = grpcC2DRequests;
             _globalScope = globalScope;
             ServerIp = config.Value.General.ServerAddress.Main.Ip4Address;
-            _grpcC2DRequests.ChangeAddress(ServerIp);
+            //_grpcC2DRequests.ChangeAddress(ServerIp);
             _loadedAlready = loadedAlready;
             _kadastrDbProvider = kadastrDbProvider;
             _kadastrFilesParser = kadastrFilesParser;

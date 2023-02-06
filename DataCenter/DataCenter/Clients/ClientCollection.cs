@@ -32,7 +32,7 @@ public class ClientCollection
         var licenseCheckResult = this.CheckLicense(dto);
         if (licenseCheckResult != null)
         {
-            Logger.LogError(Logs.Client, licenseCheckResult.ReturnCode.GetLocalizedString());
+            Logger.LogError(Logs.DataCenter, licenseCheckResult.ReturnCode.GetLocalizedString());
             return licenseCheckResult;
         }
 
@@ -109,7 +109,8 @@ public class ClientCollection
         foreach (var deadStation in deadStations)
         {
             Logger.LogInfo(Logs.DataCenter,
-                $"Dead client {deadStation} with connectionId {deadStation.ConnectionId.Take(6)} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
+                $@"Dead client {deadStation} with connectionId {
+                    deadStation.ConnectionId.Substring(0, 6)} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
 
             var command = new KeyValuePair<string, string>(deadStation.UserName, deadStation.ClientIp);
             commands.Add(command);

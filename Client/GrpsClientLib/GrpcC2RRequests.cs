@@ -9,17 +9,17 @@ namespace GrpsClientLib;
 
 public class GrpcC2RRequests
 {
+    private readonly IWritableConfig<ClientConfig> _config;
     private readonly ILogger _logger;
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
 
-    private string? _uri;
+    private string _uri => $"http://{_config.Value.General.ServerAddress.Main.Ip4Address}:{(int)TcpPorts.ServerListenToCommonClient}";
     private string _clientConnectionId = "";
 
     public GrpcC2RRequests(IWritableConfig<ClientConfig> config, ILogger logger)
     {
+        _config = config;
         _logger = logger;
-        var dcAddress = config.Value.General.ServerAddress.Main.Ip4Address;
-        _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
     }
 
     public void SetClientConnectionId(string clientConnectionId)
@@ -27,27 +27,15 @@ public class GrpcC2RRequests
         _clientConnectionId = clientConnectionId;
     }
 
-    public void ChangeAddress(string dcAddress)
-    {
-        _uri = $"http://{dcAddress}:{(int)TcpPorts.ServerListenToCommonClient}";
-        _logger.LogInfo(Logs.Client, $"C2R gRPC service sends to {_uri}");
-    }
-
     public async Task<TResult> SendAnyC2RRequest<T, TResult>(T dto) where T : BaseRtuRequest where TResult : RequestAnswer, new()
     {
-        if (_uri == null)
-            return new TResult
-            {
-                ReturnCode = ReturnCode.C2RGrpcOperationError,
-                ErrorMessage = "Data-center address not set",
-            };
         dto.ClientConnectionId = _clientConnectionId;
 
         using var grpcChannel = GrpcChannel.ForAddress(_uri);
         var grpcClient = new c2r.c2rClient(grpcChannel);
 
         var command = new c2rCommand()
-            { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
+        { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
         try
         {
@@ -71,7 +59,7 @@ public class GrpcC2RRequests
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.Client,e.Message);
+            _logger.LogError(Logs.Client, e.Message);
             return new TResult
             {
                 ReturnCode = ReturnCode.C2RGrpcOperationError,
