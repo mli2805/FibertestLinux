@@ -28,94 +28,40 @@ public class GrpcC2DRequests
     {
         _clientConnectionId = clientConnectionId;
     }
-    
-    public async Task<ClientRegisteredDto> RegisterClient(RegisterClientDto dto)
+
+    public async Task<TResult> SendAnyC2DRequest<T, TResult>(T dto) where T : BaseRequest where TResult : RequestAnswer, new()
     {
-        using var grpcChannel = GrpcChannel.ForAddress(ServerUri);
-        var grpcClient = new c2d.c2dClient(grpcChannel);
-        dto.ClientConnectionId = _clientConnectionId;
-        var command = new c2dCommand()
-            { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
+        return await SendAnyC2DRequest<T, TResult>(dto, ServerUri);
+    }
 
-        try
-        {
-            var response = await grpcClient.SendCommandAsync(command);
-            if (response == null)
-                return new ClientRegisteredDto(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "empty response" };
-
-            var result = JsonConvert.DeserializeObject<ClientRegisteredDto>(response.Json);
-            if (result == null)
-                return new ClientRegisteredDto(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "json deserialization error" };
-
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(Logs.Client,e.Message);
-            return new ClientRegisteredDto(ReturnCode.C2DGrpcOperationError) { ErrorMessage = e.Message };
-        }
+    public async Task<RequestAnswer> CheckServerConnection(CheckServerConnectionDto dto, string addressToCheck)
+    {
+        var uriToCheck = $"http://{addressToCheck}:{(int)TcpPorts.ServerListenToCommonClient}";
+        return await SendAnyC2DRequest<CheckServerConnectionDto, RequestAnswer>(dto, uriToCheck);
     }
 
     public async Task<RequestAnswer> SendEventSourcingCommand(object cmd)
     {
-        using var grpcChannel = GrpcChannel.ForAddress(ServerUri);
-        var grpcClient = new c2d.c2dClient(grpcChannel);
         var command = new c2dCommand { Json = JsonConvert.SerializeObject(cmd, JsonSerializerSettings), 
             IsEventSourcingCommand = true, ClientConnectionId = _clientConnectionId };
 
-        try
-        {
-            var response = await grpcClient.SendCommandAsync(command);
-            if (response == null)
-                return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "empty response" };
-
-            var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json);
-            if (result == null)
-                return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "json deserialization error" };
-
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(Logs.Client,e.Message);
-            return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = e.Message };
-        }
+        return await SendAnyC2DRequest<RequestAnswer>(ServerUri, command);
     }
 
-    public async Task<RequestAnswer> UnRegisterClient(UnRegisterClientDto dto)
+    private async Task<TResult> SendAnyC2DRequest<T, TResult>(T dto, string uri) where T : BaseRequest where TResult : RequestAnswer, new()
     {
-        using var grpcChannel = GrpcChannel.ForAddress(ServerUri);
-        var grpcClient = new c2d.c2dClient(grpcChannel);
-        dto.ClientConnectionId = _clientConnectionId;
-        var command = new c2dCommand()
-            { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
-
-        try
-        {
-            var response = await grpcClient.SendCommandAsync(command);
-            if (response == null)
-                return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "empty response" };
-
-            var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json);
-            if (result == null)
-                return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = "json deserialization error" };
-
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(Logs.Client,e.Message);
-            return new RequestAnswer(ReturnCode.C2DGrpcOperationError) { ErrorMessage = e.Message };
-        }
-    }
-
-    public async Task<TResult> SendAnyC2DRequest<T, TResult>(T dto) where T : BaseRequest where TResult : RequestAnswer, new()
-    {
-        using var grpcChannel = GrpcChannel.ForAddress(ServerUri);
-        var grpcClient = new c2d.c2dClient(grpcChannel);
-
         dto.ClientConnectionId = _clientConnectionId;
         var command = new c2dCommand { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
+
+        using var grpcChannel = GrpcChannel.ForAddress(uri);
+
+        return await SendAnyC2DRequest<TResult>(uri, command);
+    }
+
+    private async Task<TResult> SendAnyC2DRequest<TResult>(string uri, c2dCommand command) where TResult : RequestAnswer, new()
+    {
+        using var grpcChannel = GrpcChannel.ForAddress(uri);
+        var grpcClient = new c2d.c2dClient(grpcChannel);
 
         try
         {
@@ -147,48 +93,4 @@ public class GrpcC2DRequests
             };
         }
     }
-
-    public async Task<RequestAnswer> CheckServerConnection(CheckServerConnectionDto dto, string addressToCheck)
-    {
-        ///////////////////////////////////////////////////////////
-        var uriToCheck = $"http://{addressToCheck}:{(int)TcpPorts.ServerListenToCommonClient}";
-        using var grpcChannel = GrpcChannel.ForAddress(uriToCheck);
-        //////////////////////////////////////////////////////////////
-
-        var grpcClient = new c2d.c2dClient(grpcChannel);
-
-        dto.ClientConnectionId = _clientConnectionId;
-        var command = new c2dCommand { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
-
-        try
-        {
-            var response = await grpcClient.SendCommandAsync(command);
-            if (response == null)
-                return new RequestAnswer
-                {
-                    ReturnCode = ReturnCode.C2DGrpcOperationError,
-                    ErrorMessage = "Empty response",
-                };
-
-            var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json);
-            if (result == null)
-                return new RequestAnswer
-                {
-                    ReturnCode = ReturnCode.C2DGrpcOperationError,
-                    ErrorMessage = "Client failed to deserialize response",
-                };
-
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(Logs.Client,e.Message);
-            return new RequestAnswer
-            {
-                ReturnCode = ReturnCode.C2DGrpcOperationError,
-                ErrorMessage = e.Message,
-            };
-        }
-    }
-
 }

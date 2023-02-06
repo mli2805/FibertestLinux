@@ -111,15 +111,8 @@ namespace Fibertest.WpfClient
             }
             else // DataCenter testing
             {
-                var addressForTesting = new DoubleAddress()
-                {
-                    HasReserveAddress = false,
-                    Main = NetAddressInputViewModel.GetNetAddress().Clone()
-                };
-                
-
-               // var serverAnswer = await _grpcC2DRequests.SendAnyC2DRequest<CheckServerConnectionDto, RequestAnswer>(new CheckServerConnectionDto());
-                var serverAnswer = await _grpcC2DRequests.CheckServerConnection(new CheckServerConnectionDto(), NetAddressInputViewModel.GetNetAddress().Ip4Address);
+                var serverAnswer = await _grpcC2DRequests
+                    .CheckServerConnection(new CheckServerConnectionDto(), NetAddressInputViewModel.GetNetAddress().Ip4Address);
                 return serverAnswer.ReturnCode == ReturnCode.Ok;
             }
         }

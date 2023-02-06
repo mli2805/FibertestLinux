@@ -13,7 +13,7 @@ public class GrpcC2RRequests
     private readonly ILogger _logger;
     private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
 
-    private string _uri => $"http://{_config.Value.General.ServerAddress.Main.Ip4Address}:{(int)TcpPorts.ServerListenToCommonClient}";
+    private string ServerUri => $"http://{_config.Value.General.ServerAddress.Main.Ip4Address}:{(int)TcpPorts.ServerListenToCommonClient}";
     private string _clientConnectionId = "";
 
     public GrpcC2RRequests(IWritableConfig<ClientConfig> config, ILogger logger)
@@ -31,7 +31,7 @@ public class GrpcC2RRequests
     {
         dto.ClientConnectionId = _clientConnectionId;
 
-        using var grpcChannel = GrpcChannel.ForAddress(_uri);
+        using var grpcChannel = GrpcChannel.ForAddress(ServerUri);
         var grpcClient = new c2r.c2rClient(grpcChannel);
 
         var command = new c2rCommand()

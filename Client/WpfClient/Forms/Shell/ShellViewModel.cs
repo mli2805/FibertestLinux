@@ -23,7 +23,7 @@ namespace Fibertest.WpfClient
         private readonly Heartbeater _heartbeater;
         private readonly ClientPoller _clientPoller;
         private readonly ModelLoader _modelLoader;
-        private readonly ILogger _logger; 
+        private readonly ILogger _logger;
         private readonly CurrentClientConfiguration _currentClientConfiguration;
         private readonly CurrentUser _currentUser;
         private readonly DataCenterConfig _currentDatacenterParameters;
@@ -43,10 +43,10 @@ namespace Fibertest.WpfClient
         public NetworkEventsDoubleViewModel NetworkEventsDoubleViewModel { get; }
         public BopNetworkEventsDoubleViewModel BopNetworkEventsDoubleViewModel { get; }
 
-        public ShellViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger, 
+        public ShellViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger,
             CurrentClientConfiguration currentClientConfiguration, CurrentUser currentUser,
             DataCenterConfig currentDatacenterParameters, CommandLineParameters commandLineParameters,
-            IClientWcfServiceHost host, 
+            IClientWcfServiceHost host,
             GrpcC2DRequests grpcC2DRequests,
             IWcfServiceInSuperClient c2SWcfManager,
             GraphReadModel graphReadModel, IWindowManager windowManager,
@@ -126,19 +126,19 @@ namespace Fibertest.WpfClient
             var postfix = _commandLineParameters.IsUnderSuperClientStart ? _commandLineParameters.ClientOrdinal.ToString() : "";
             // _logFile.AssignFile($@"client{postfix}.log");
             _logger.StartLine(Logs.Client);
-            _logger.LogInfo(Logs.Client,$@"Client application {postfix} started!");
+            _logger.LogInfo(Logs.Client, $@"Client application {postfix} started!");
 
             if (_commandLineParameters.IsUnderSuperClientStart)
             {
-                _config.Update(c=>c.General.ServerAddress.Main = _commandLineParameters.ServerNetAddress);
-                _config.Update(c=>c.General.ServerTitle = _commandLineParameters.ServerTitle);
-                _config.Update(c=>c.General.Culture = _commandLineParameters.SuperClientCulture);
-                _config.Update(c=>c.General.ClientOrdinal = _commandLineParameters.ClientOrdinal);
+                _config.Update(c => c.General.ServerAddress.Main = _commandLineParameters.ServerNetAddress);
+                _config.Update(c => c.General.ServerTitle = _commandLineParameters.ServerTitle);
+                _config.Update(c => c.General.Culture = _commandLineParameters.SuperClientCulture);
+                _config.Update(c => c.General.ClientOrdinal = _commandLineParameters.ClientOrdinal);
                 await _loginViewModel.RegisterClientAsync(_commandLineParameters.Username, _commandLineParameters.Password,
                     _commandLineParameters.ConnectionId, true, _commandLineParameters.ClientOrdinal);
             }
             else
-               await _windowManager.ShowDialogWithAssignedOwner(_loginViewModel);
+                await _windowManager.ShowDialogWithAssignedOwner(_loginViewModel);
 
             ((App)Application.Current).ShutdownMode = ShutdownMode.OnMainWindowClose;
 
@@ -187,7 +187,7 @@ namespace Fibertest.WpfClient
             var freeSpace = $@"free space: {driveInfo.AvailableFreeSpace:0.0}Gb";
             var dataSize = $@"database size: {driveInfo.DataSize:0.0}Gb";
             var threshold = $@"threshold: {driveInfo.FreeSpaceThreshold:0.0}Gb";
-            _logger.LogInfo(Logs.Client,$@"{totalSize},  {dataSize},  {freeSpace},  {threshold}");
+            _logger.LogInfo(Logs.Client, $@"{totalSize},  {dataSize},  {freeSpace},  {threshold}");
             if (driveInfo.AvailableFreeSpace < driveInfo.FreeSpaceThreshold)
             {
                 var str = new List<string>()
@@ -208,7 +208,7 @@ namespace Fibertest.WpfClient
 
         private async Task NotifySuperClientImReady(int postfix)
         {
-            _logger.LogInfo(Logs.Client,@"Notify super-client I'm ready");
+            _logger.LogInfo(Logs.Client, @"Notify super-client I'm ready");
             Thread.Sleep(TimeSpan.FromMilliseconds(1));
             var isStateOk = !OpticalEventsDoubleViewModel.ActualOpticalEventsViewModel.Rows.Any() &&
                             !NetworkEventsDoubleViewModel.ActualNetworkEventsViewModel.Rows.Any() &&
@@ -266,11 +266,9 @@ namespace Fibertest.WpfClient
 
             if (_grpcC2DRequests == null)
                 return true;
-            else
-            {
-                await _grpcC2DRequests.UnRegisterClient(new UnRegisterClientDto(_currentUser.UserName))
-                    .ContinueWith(_ => { Environment.Exit(Environment.ExitCode); });
-            }
+
+            await _grpcC2DRequests.SendAnyC2DRequest<UnRegisterClientDto, RequestAnswer>(new UnRegisterClientDto(_currentUser.UserName))
+                .ContinueWith(_ => { Environment.Exit(Environment.ExitCode); });
 
             return true;
         }

@@ -137,7 +137,7 @@ namespace Fibertest.WpfClient
                     if (result.IsInitialized && isSynchronizationRequired)
                         await SynchronizeBaseRefs();
 
-                    _windowManager.ShowDialogWithAssignedOwner(result.CreateMessageBox(FullModel.OriginalRtu.Title));
+                    await _windowManager.ShowDialogWithAssignedOwner(result.CreateMessageBox(FullModel.OriginalRtu.Title));
                 }
             }
             catch (Exception e)

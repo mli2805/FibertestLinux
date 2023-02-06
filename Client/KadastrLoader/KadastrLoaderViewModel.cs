@@ -89,7 +89,6 @@ namespace KadastrLoader
             _grpcC2DRequests = grpcC2DRequests;
             _globalScope = globalScope;
             ServerIp = config.Value.General.ServerAddress.Main.Ip4Address;
-            //_grpcC2DRequests.ChangeAddress(ServerIp);
             _loadedAlready = loadedAlready;
             _kadastrDbProvider = kadastrDbProvider;
             _kadastrFilesParser = kadastrFilesParser;
@@ -138,7 +137,8 @@ namespace KadastrLoader
         private ClientRegisteredDto? _clientRegisteredDto;
         private async Task<bool> RegisterClientOnDataCenter()
         {
-            _clientRegisteredDto = await _grpcC2DRequests.RegisterClient(new RegisterClientDto("developer", "developer"));
+            _clientRegisteredDto = await _grpcC2DRequests
+                .SendAnyC2DRequest<RegisterClientDto, ClientRegisteredDto>(new RegisterClientDto("developer", "developer".GetSha256()));
             var isRegistered = _clientRegisteredDto.ReturnCode == ReturnCode.ClientRegisteredSuccessfully;
             if (isRegistered)
                 _grpcC2DRequests.SetClientConnectionId(_clientRegisteredDto.ConnectionId!);
