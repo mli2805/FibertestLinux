@@ -9,13 +9,13 @@ namespace Fibertest.Rtu
     public class GrpcR2DService
     {
         private readonly IWritableConfig<RtuConfig> _config;
-        private readonly ILogger _logger;
+        private readonly ILogger<GrpcR2DService> _logger;
 
         private static readonly JsonSerializerSettings JsonSerializerSettings =
             new() { TypeNameHandling = TypeNameHandling.All };
         private string ServerUri => $@"http://{_config.Value.General.ServerAddress.Main.Ip4Address}:{(int)TcpPorts.ServerListenToRtu}";
 
-        public GrpcR2DService(IWritableConfig<RtuConfig> config, ILogger logger)
+        public GrpcR2DService(IWritableConfig<RtuConfig> config, ILogger<GrpcR2DService> logger)
         {
             _config = config;
             _logger = logger;
