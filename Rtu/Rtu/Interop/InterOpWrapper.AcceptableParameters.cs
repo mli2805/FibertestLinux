@@ -57,7 +57,7 @@ public partial class InterOpWrapper
     {
         foreach (var measParam in list)
         {
-            _logger.LogInfo(Logs.RtuManager, $"{measParam.Param} - {measParam.Position}");
+            _logger.LogInfo(Logs.RtuManager, $"Set {measParam.Param} by position {measParam.Position}");
             if (!SetParam(measParam.Param, measParam.Position))
                 return false;
             Thread.Sleep(200);

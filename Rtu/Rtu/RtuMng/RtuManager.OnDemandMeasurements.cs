@@ -49,6 +49,7 @@ namespace Fibertest.Rtu
 
         private async void MeasureWrapped(DoClientMeasurementDto dto)
         {
+            _logger.LogDebug("Measurement client is in progress...");
             var result = await Measure(dto);
             _logger.LogInfo(Logs.RtuManager, result.SorBytes != null
                 ? $"Measurement Client done. Sor size is {result.SorBytes.Length}"
@@ -85,7 +86,8 @@ namespace Fibertest.Rtu
             var toggleResult = ToggleToPort2(dto.OtauPortDto[0]);
             if (toggleResult != CharonOperationResult.Ok)
                 return result.Set(dto.OtauPortDto[0],
-                    toggleResult == CharonOperationResult.MainOtauError ? ReturnCode.RtuToggleToPortError : ReturnCode.RtuToggleToBopPortError);
+                    toggleResult == CharonOperationResult.MainOtauError 
+                        ? ReturnCode.RtuToggleToPortError : ReturnCode.RtuToggleToBopPortError);
 
             var prepareResult = dto.IsAutoLmax
                 ? await PrepareAutoLmaxMeasurement(dto)
@@ -139,6 +141,7 @@ namespace Fibertest.Rtu
 
         private ReturnCode PrepareClientMeasurement(DoClientMeasurementDto dto)
         {
+            _logger.LogDebug(Logs.RtuManager,"PrepareClientMeasurement ...");
             if (!_interOpWrapper.SetMeasParamsByPosition(dto.SelectedMeasParams!))
             {
                 _logger.LogError(Logs.RtuManager,"Failed to set measurement parameters");

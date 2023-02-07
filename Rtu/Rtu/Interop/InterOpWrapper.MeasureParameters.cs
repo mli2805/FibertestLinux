@@ -35,16 +35,24 @@ public partial class InterOpWrapper
 
     private bool SetParam(ServiceFunctionFirstParam param, int indexInLine)
     {
-        int cmd = (int)ServiceFunctionCommand.SetParam;
-        int prm1 = (int)param;
-        IntPtr prm2 = new IntPtr(indexInLine);
-        var result = ServiceFunction(cmd, ref prm1, ref prm2);
-        if (result != 0)
+        try
         {
-            _logger.LogError(Logs.RtuManager, $"Set parameter error={result}!");
+            int cmd = (int)ServiceFunctionCommand.SetParam;
+            int prm1 = (int)param;
+            IntPtr prm2 = new IntPtr(indexInLine);
+            var result = ServiceFunction(cmd, ref prm1, ref prm2);
+            if (result != 0)
+            {
+                _logger.LogError(Logs.RtuManager, $"Set parameter error={result}!");
+                return false;
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(Logs.RtuManager, $"Set parameter: {e.Message}!");
             return false;
         }
-        return true;
     }
 
     public bool SetTuningApdMode(int mode)
