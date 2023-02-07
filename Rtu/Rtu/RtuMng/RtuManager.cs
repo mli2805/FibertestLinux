@@ -72,6 +72,7 @@ public partial class RtuManager
         InterOpWrapper interOpWrapper, OtdrManager otdrManager,
         GrpcR2DService grpcR2DService)
     {
+        IsRtuInitialized = false;
         _config = config;
         _logger = logger;
         _monitoringQueue = monitoringQueue;

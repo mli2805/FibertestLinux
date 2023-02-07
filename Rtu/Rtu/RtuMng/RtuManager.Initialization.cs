@@ -22,6 +22,9 @@ public partial class RtuManager
 
         var versionRtuManager = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
         _logger.LogInfo(Logs.RtuManager, $"RtuManager {versionRtuManager}");
+
+        IsRtuInitialized = false;
+
         var res = _serialPortManager.ResetCharon();
         if (res != ReturnCode.Ok)
             return new RtuInitializedDto(res);
@@ -50,6 +53,7 @@ public partial class RtuManager
         _treeOfAcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
         result2.AcceptableMeasParams = _treeOfAcceptableMeasParams;
 
+        IsRtuInitialized = true;
         _logger.LogInfo(Logs.RtuManager, "RTU initialized successfully!");
 
         _monitoringQueue.Load();

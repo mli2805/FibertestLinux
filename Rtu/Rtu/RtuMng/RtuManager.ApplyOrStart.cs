@@ -53,27 +53,5 @@ public partial class RtuManager
         RunMonitoringCycle();
     }
 
-    public async Task<RequestAnswer> StopMonitoring()
-    {
-        await Task.Delay(1);
-        StopMonitoring("Stop monitoring");
-        return new RequestAnswer(ReturnCode.Ok);
-    }
-
-    private void StopMonitoring(string caller)
-    {
-        if (!_config.Value.Monitoring.IsMonitoringOn)
-        {
-            _logger.LogInfo(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
-            return;
-        }
-
-        _config.Update(c => c.Monitoring.IsMonitoringOn = false);
-        _logger.LogInfo(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
-        _cancellationTokenSource?.Cancel();
-
-        // if Lmax = 240km and Time = 10min one step lasts 5-6 sec
-        Thread.Sleep(TimeSpan.FromSeconds(6));
-    }
-
+ 
 }
