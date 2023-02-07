@@ -27,6 +27,7 @@ public class R2DService : R2D.R2DBase
         switch (o)
         {
             case RtuChecksChannelDto dto: r = await RegisterHeartbeat(dto); break;
+            case ClientMeasurementResultDto dto: r = await NotifyClientMeasurementDone(dto); break;
             case MonitoringResultDto dto: r = await ProcessMonitoringResult(dto); break;
             case CurrentMonitoringStepDto dto: r = await TransmitCurrentMonitoringStep(dto); break;
             default: r = new RequestAnswer(ReturnCode.Error); break;
@@ -41,6 +42,13 @@ public class R2DService : R2D.R2DBase
         _logger.LogInfo(Logs.DataCenter, $"Command Register Heartbeat from RTU {dto.RtuId} received");
         var result = await _rtuStationsRepository.RegisterRtuHeartbeatAsync(dto);
         return new RequestAnswer(result == 1 ? ReturnCode.Ok : ReturnCode.Error);
+    }
+
+    private async Task<RequestAnswer> NotifyClientMeasurementDone(ClientMeasurementResultDto dto)
+    {
+        await Task.Delay(1);
+        _logger.LogInfo(Logs.DataCenter, $"Client measurement {dto.ClientMeasurementId.First6()} done");
+        return new RequestAnswer(ReturnCode.Ok);
     }
 
     private async Task<RequestAnswer> ProcessMonitoringResult(MonitoringResultDto dto)

@@ -29,9 +29,8 @@ public class RtuOccupationState
     }
 }
 
-public class OccupyRtuDto
+public class OccupyRtuDto : BaseRequest
 {
-    public string? ConnectionId;
     public Guid RtuId;
     public RtuOccupationState State;
 

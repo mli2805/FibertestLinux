@@ -42,8 +42,12 @@ public class ClientToIitRtuTransmitter
             object badResult;
             switch (JsonConvert.DeserializeObject(commandContent, JsonSerializerSettings))
             {
-                case InitializeRtuDto _: badResult = new RtuInitializedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
-                case AttachOtauDto _: badResult = new OtauAttachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
+                case InitializeRtuDto _: badResult = 
+                    new RtuInitializedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
+                case AttachOtauDto _: badResult = 
+                    new OtauAttachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
+                case DoClientMeasurementDto _: badResult =
+                    new ClientMeasurementStartedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 // case StopMonitoringDto _:
                 // case FreeOtdrDto _:
                 default: badResult = new RequestAnswer(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;

@@ -61,7 +61,8 @@ public class HeartbeatService : BackgroundService
                 _initializationInProgress = false;
                 _isLastAttemptSuccessful = await SendHeartbeat();
 
-                var rtuHeartbeatRate = _config.Value.General.RtuHeartbeatRate == 0 ? 30 : _config.Value.General.RtuHeartbeatRate;
+                var rtuHeartbeatRate = _config.Value.General.RtuHeartbeatRate == 0 
+                    ? 30 : _config.Value.General.RtuHeartbeatRate;
                 await Task.Delay(rtuHeartbeatRate * 1000, stoppingToken);
             }
         }

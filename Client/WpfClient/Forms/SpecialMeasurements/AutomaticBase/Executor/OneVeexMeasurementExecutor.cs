@@ -5,6 +5,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -13,7 +14,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
+        private readonly GrpcC2RRequests _grpcC2RRequests;
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly VeexMeasurementTool _veexMeasurementTool;
         private readonly LandmarksIntoBaseSetter _landmarksIntoBaseSetter;
@@ -23,14 +24,14 @@ namespace Fibertest.WpfClient
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
         public OneVeexMeasurementExecutor(IWritableConfig<ClientConfig> config, ILogger logger, CurrentUser currentUser, Model readModel,
-            IWcfServiceCommonC2D c2DWcfCommonManager, IDispatcherProvider dispatcherProvider,
+            GrpcC2RRequests grpcC2RRequests, IDispatcherProvider dispatcherProvider,
             AutoAnalysisParamsViewModel autoAnalysisParamsViewModel,
             VeexMeasurementTool veexMeasurementTool,
             LandmarksIntoBaseSetter landmarksIntoBaseSetter, MeasurementAsBaseAssigner measurementAsBaseAssigner)
         {
             _logger = logger;
             _readModel = readModel;
-            _c2DWcfCommonManager = c2DWcfCommonManager;
+            _grpcC2RRequests = grpcC2RRequests;
             _dispatcherProvider = dispatcherProvider;
             _veexMeasurementTool = veexMeasurementTool;
             _landmarksIntoBaseSetter = landmarksIntoBaseSetter;
@@ -92,7 +93,8 @@ namespace Fibertest.WpfClient
                 .CreateDoClientMeasurementDto(traceLeaf.PortNumber, false, _readModel, Model.CurrentUser)
                 .SetParams(true, Model.AutoAnalysisParamsViewModel.SearchNewEvents, false, null, veexMeasOtdrParameters);
 
-            var startResult = await _c2DWcfCommonManager.StartClientMeasurementAsync(dto);
+            var startResult =
+                await _grpcC2RRequests.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
             {
                 _timer.Stop();

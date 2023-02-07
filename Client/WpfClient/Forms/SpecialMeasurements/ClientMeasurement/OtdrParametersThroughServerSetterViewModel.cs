@@ -9,12 +9,12 @@ namespace Fibertest.WpfClient
 {
     public class OtdrParametersThroughServerSetterViewModel : Screen
     {
-        private readonly IWritableConfig<OtdrParametersConfig> _config;
+        private readonly IWritableConfig<ClientConfig> _config;
         public bool IsAnswerPositive { get; set; }
 
         public OtdrParametersViewModel OtdrParametersViewModel { get; set; } = new OtdrParametersViewModel();
 
-        public OtdrParametersThroughServerSetterViewModel(IWritableConfig<OtdrParametersConfig> config)
+        public OtdrParametersThroughServerSetterViewModel(IWritableConfig<ClientConfig> config)
         {
             _config = config;
         }

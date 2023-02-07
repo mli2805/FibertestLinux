@@ -9,7 +9,7 @@ namespace Fibertest.WpfClient
         // C2D
         
         // Task<ClientRegisteredDto> RegisterClientAsync(RegisterClientDto dto);
-        Task<RequestAnswer> SetRtuOccupationState(OccupyRtuDto dto);
+        // Task<RequestAnswer> SetRtuOccupationState(OccupyRtuDto dto);
         // Task<RequestAnswer> RegisterHeartbeat(string connectionId);
         // Task<int> UnregisterClientAsync(UnRegisterClientDto dto);
         Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto);
@@ -25,7 +25,7 @@ namespace Fibertest.WpfClient
         Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd);
         Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs);
         Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs);
-        Task<ClientMeasurementStartedDto> StartClientMeasurementAsync(DoClientMeasurementDto dto);
+        // Task<ClientMeasurementStartedDto> StartClientMeasurementAsync(DoClientMeasurementDto dto);
         Task<ClientMeasurementVeexResultDto> GetClientMeasurementAsync(GetClientMeasurementDto dto);
         Task<ClientMeasurementVeexResultDto> GetClientMeasurementSorBytesAsync(GetClientMeasurementDto dto);
         Task<RequestAnswer> PrepareReflectMeasurementAsync(PrepareReflectMeasurementDto dto);
@@ -51,10 +51,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<RequestAnswer> SetRtuOccupationState(OccupyRtuDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<RequestAnswer> SetRtuOccupationState(OccupyRtuDto dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<RequestAnswer> RegisterHeartbeat(string connectionId)
         {
@@ -121,10 +121,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<ClientMeasurementStartedDto> StartClientMeasurementAsync(DoClientMeasurementDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<ClientMeasurementStartedDto> StartClientMeasurementAsync(DoClientMeasurementDto dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<ClientMeasurementVeexResultDto> GetClientMeasurementAsync(GetClientMeasurementDto dto)
         {

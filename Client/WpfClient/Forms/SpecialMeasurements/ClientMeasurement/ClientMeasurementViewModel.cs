@@ -9,6 +9,7 @@ using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -20,7 +21,7 @@ namespace Fibertest.WpfClient
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly MeasurementInterrupter _measurementInterrupter;
-        private readonly IWcfServiceCommonC2D _c2RWcfManager;
+        private readonly GrpcC2RRequests _grpcC2RRequests;
         private readonly IWindowManager _windowManager;
         private readonly VeexMeasurementTool _veexMeasurementTool;
         private readonly ReflectogramManager _reflectogramManager;
@@ -58,7 +59,7 @@ namespace Fibertest.WpfClient
         public ClientMeasurementViewModel(ILifetimeScope globalScope, 
             ILogger logger,
             CurrentUser currentUser, Model readModel, MeasurementInterrupter measurementInterrupter,
-            IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager,
+            GrpcC2RRequests grpcC2RRequests, IWindowManager windowManager,
             VeexMeasurementTool veexMeasurementTool,
             ReflectogramManager reflectogramManager)
         {
@@ -67,7 +68,7 @@ namespace Fibertest.WpfClient
             _currentUser = currentUser;
             _readModel = readModel;
             _measurementInterrupter = measurementInterrupter;
-            _c2RWcfManager = c2RWcfManager;
+            _grpcC2RRequests = grpcC2RRequests;
             _windowManager = windowManager;
             _veexMeasurementTool = veexMeasurementTool;
             _reflectogramManager = reflectogramManager;
@@ -108,10 +109,11 @@ namespace Fibertest.WpfClient
             IsCancelButtonEnabled = false;
 
             Message = Resources.SID_Sending_command__Wait_please___;
-            var startResult = await _c2RWcfManager.StartClientMeasurementAsync(_dto);
+            var startResult =
+                await _grpcC2RRequests.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(_dto);
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
             {
-                var vm = new MyMessageBoxViewModel(MessageType.Error, startResult.ErrorMessage);
+                var vm = new MyMessageBoxViewModel(MessageType.Error, startResult.ErrorMessage ?? "");
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
                 await TryCloseAsync();
                 return;
@@ -135,7 +137,7 @@ namespace Fibertest.WpfClient
             if (dto.ReturnCode == ReturnCode.MeasurementInterrupted)
                 _logger.LogInfo(Logs.Client, @"Measurement interrupted");
             else
-                ShowReflectogram(dto.SorBytes);
+                ShowReflectogram(dto.SorBytes!);
         }
 
         private async void ShowReflectogram(byte[] sorBytes)

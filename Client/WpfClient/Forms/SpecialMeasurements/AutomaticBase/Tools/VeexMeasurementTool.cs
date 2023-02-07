@@ -6,6 +6,7 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 using Fibertest.Utils;
+using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient
@@ -16,14 +17,16 @@ namespace Fibertest.WpfClient
         private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
+        private readonly GrpcC2RRequests _grpcC2RRequests;
 
         public VeexMeasurementTool(IWritableConfig<ClientConfig> config, ILogger logger, 
-            Model readModel, IWcfServiceCommonC2D c2DWcfCommonManager)
+            Model readModel, IWcfServiceCommonC2D c2DWcfCommonManager,  GrpcC2RRequests grpcC2RRequests)
         {
             _config = config;
             _logger = logger;
             _readModel = readModel;
             _c2DWcfCommonManager = c2DWcfCommonManager;
+            _grpcC2RRequests = grpcC2RRequests;
         }
 
         public async Task<LineParametersDto> GetLineParametersAsync(MeasurementModel model, TraceLeaf traceLeaf)
@@ -35,7 +38,8 @@ namespace Fibertest.WpfClient
                 .SetParams(true, model.AutoAnalysisParamsViewModel.SearchNewEvents,true, null, veexMeasOtdrParameters);
 
             // with dto.VeexMeasOtdrParameters.measurementType == "auto_skip_measurement" - it is request of line quality
-            var startResult = await _c2DWcfCommonManager.StartClientMeasurementAsync(dto);
+            var startResult =
+                await _grpcC2RRequests.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
                 return new LineParametersDto(){ReturnCode = startResult.ReturnCode};
 

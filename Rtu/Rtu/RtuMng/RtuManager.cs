@@ -2,20 +2,18 @@
 using Fibertest.CharonLib;
 using Fibertest.Dto;
 using Fibertest.Utils;
-using Newtonsoft.Json;
 
 namespace Fibertest.Rtu;
 
 public partial class RtuManager
 {
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
 
     private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<RtuManager> _logger;
     private readonly SerialPortManager _serialPortManager;
     private readonly InterOpWrapper _interOpWrapper;
     private readonly OtdrManager _otdrManager;
-    private readonly GrpcSender _grpcSender;
+    private readonly GrpcR2DService _grpcR2DService;
 
     private Guid _id;
     private Charon _mainCharon = null!;
@@ -24,14 +22,55 @@ public partial class RtuManager
     private TimeSpan _preciseSaveTimespan;
     private TimeSpan _fastSaveTimespan;
 
+    private TreeOfAcceptableMeasParams? _treeOfAcceptableMeasParams;
     private CancellationTokenSource? _cancellationTokenSource;
     private MonitoringQueue _monitoringQueue;
     public readonly ConcurrentQueue<object> ShouldSendHeartbeat = new ConcurrentQueue<object>();
 
-    public RtuManager(IWritableConfig<RtuConfig> config, 
+    private readonly object _isMonitoringOnLocker = new object();
+    private bool _isMonitoringOn;
+    public bool IsMonitoringOn
+    {
+        get { lock (_isMonitoringOnLocker) { return _isMonitoringOn; } }
+        set { lock (_isMonitoringOnLocker) { _isMonitoringOn = value; } }
+    }
+    private bool _wasMonitoringOn;
+
+    private readonly object _keepOtdrConnectionLocker = new object();
+    private bool _keepOtdrConnection;
+    public bool KeepOtdrConnection
+    {
+        get { lock (_keepOtdrConnectionLocker) { return _keepOtdrConnection; } }
+        set { lock (_keepOtdrConnectionLocker) { _keepOtdrConnection = value; } }
+    }
+    private readonly object _lastSuccessfulMeasTimestampLocker = new object();
+    private DateTime _lastSuccessfulMeasTimestamp;
+    public DateTime LastSuccessfulMeasTimestamp
+    {
+        get { lock (_lastSuccessfulMeasTimestampLocker) { return _lastSuccessfulMeasTimestamp; } }
+        set { lock (_lastSuccessfulMeasTimestampLocker) { _lastSuccessfulMeasTimestamp = value; } }
+    }
+
+    private readonly object _isRtuInitializedLocker = new object();
+    private bool _isRtuInitialized;
+    public bool IsRtuInitialized
+    {
+        get { lock (_isRtuInitializedLocker) { return _isRtuInitialized; } }
+        set { lock (_isRtuInitializedLocker) { _isRtuInitialized = value; } }
+    }
+
+    private readonly object _isAutoBaseMeasurementInProgressLocker = new object();
+    private bool _isAutoBaseMeasurementInProgress;
+    public bool IsAutoBaseMeasurementInProgress
+    {
+        get { lock (_isAutoBaseMeasurementInProgressLocker) { return _isAutoBaseMeasurementInProgress; } }
+        set { lock (_isAutoBaseMeasurementInProgressLocker) { _isAutoBaseMeasurementInProgress = value; } }
+    }
+
+    public RtuManager(IWritableConfig<RtuConfig> config,
         ILogger<RtuManager> logger, MonitoringQueue monitoringQueue,
         InterOpWrapper interOpWrapper, OtdrManager otdrManager,
-        GrpcSender grpcSender)
+        GrpcR2DService grpcR2DService)
     {
         _config = config;
         _logger = logger;
@@ -40,7 +79,7 @@ public partial class RtuManager
         _serialPortManager.Initialize(_config.Value.Charon, logger);
         _interOpWrapper = interOpWrapper;
         _otdrManager = otdrManager;
-        _grpcSender = grpcSender;
+        _grpcR2DService = grpcR2DService;
 
         _id = config.Value.General.RtuId;
     }

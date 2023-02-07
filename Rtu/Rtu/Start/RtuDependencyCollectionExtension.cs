@@ -31,7 +31,7 @@ public static class RtuDependencyCollectionExtension
 
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
-        services.AddSingleton<GrpcSender>();
+        services.AddSingleton<GrpcR2DService>();
 
         services.AddSingleton<InterOpWrapper>();
         services.AddSingleton<MonitoringQueue>();

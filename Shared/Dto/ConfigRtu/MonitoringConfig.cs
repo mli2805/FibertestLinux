@@ -3,6 +3,8 @@
 public class MonitoringConfig
 {
     public bool IsMonitoringOn { get; set; }
+    public bool KeepOtdrConnection { get; set; }
+    public bool IsAutoBaseMeasurementInProgress { get; set; }
 
     public int PreciseMakeTimespan { get; set; } = 3600;
     public int PreciseSaveTimespan { get; set; } = 3600;

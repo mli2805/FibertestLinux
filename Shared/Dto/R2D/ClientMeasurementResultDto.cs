@@ -1,12 +1,16 @@
 ﻿namespace Fibertest.Dto;
 
-public class ClientMeasurementResultDto : RequestAnswer
+public class ClientMeasurementResultDto : BaseRequest
 {
+    public ReturnCode ReturnCode { get; set; }
+
     public Guid ClientMeasurementId;
     public OtauPortDto? OtauPortDto;
     public byte[]? SorBytes;
 
-    public ClientMeasurementResultDto(ReturnCode returnCode) : base(returnCode)
+    public ClientMeasurementResultDto() {}
+    public ClientMeasurementResultDto(ReturnCode returnCode)
     {
+        ReturnCode = returnCode;
     }
 }

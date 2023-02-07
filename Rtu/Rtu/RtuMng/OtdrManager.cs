@@ -89,7 +89,7 @@ public partial class OtdrManager
         return true;
     }
 
-    private async Task<bool> ConnectOtdr()
+    public async Task<bool> ConnectOtdr()
     {
         await Task.Delay(1);
         _logger.LogInfo(Logs.RtuManager, $"Connecting to OTDR {_charonIp}:{_otdrTcpPort}...");

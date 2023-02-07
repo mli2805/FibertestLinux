@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
-public class CurrentMonitoringStepDto
+public class CurrentMonitoringStepDto : BaseRequest
 {
     public Guid RtuId;
 

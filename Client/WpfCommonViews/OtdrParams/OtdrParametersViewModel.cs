@@ -10,11 +10,11 @@ namespace Fibertest.WpfCommonViews
     public class OtdrParametersViewModel : PropertyChangedBase
     {
         private TreeOfAcceptableMeasParams _treeOfAcceptableMeasParams = null!;
-        private IWritableConfig<OtdrParametersConfig> _config = null!;
+        private IWritableConfig<ClientConfig> _config = null!;
         public OtdrParametersModel Model { get; set; } = null!;
 
         public void Initialize(TreeOfAcceptableMeasParams treeOfAcceptableMeasParams, 
-            IWritableConfig<OtdrParametersConfig> config)
+            IWritableConfig<ClientConfig> config)
         {
             _treeOfAcceptableMeasParams = treeOfAcceptableMeasParams;
             _config = config;
@@ -38,7 +38,7 @@ namespace Fibertest.WpfCommonViews
 
         private void InitializeControls()
         {
-            var opUnit = _config.Value.OpUnit;
+            var opUnit = _config.Value.OtdrParameters.OpUnit;
             Model.Units = _treeOfAcceptableMeasParams.Units.Keys.ToList();
             Model.SelectedUnit = Model.Units.Count > opUnit ? Model.Units[opUnit] : Model.Units.First();
 
@@ -46,22 +46,22 @@ namespace Fibertest.WpfCommonViews
             Model.BackscatteredCoefficient = branchOfAcceptableMeasParams.BackscatteredCoefficient;
             Model.RefractiveIndex = branchOfAcceptableMeasParams.RefractiveIndex;
 
-            var opDistance = _config.Value.OpDistance;
+            var opDistance = _config.Value.OtdrParameters.OpDistance;
             Model.Distances = branchOfAcceptableMeasParams.Distances
                 .Keys.OrderBy(x => double.Parse(x, new CultureInfo(@"en-US"))).ToList();
             Model.SelectedDistance = Model.Distances.Count > opDistance ? Model.Distances[opDistance] : Model.Distances.First();
 
             var leafOfAcceptableMeasParams = branchOfAcceptableMeasParams.Distances[Model.SelectedDistance];
-            var opResolution = _config.Value.OpResolution;
+            var opResolution = _config.Value.OtdrParameters.OpResolution;
             Model.Resolutions = leafOfAcceptableMeasParams.Resolutions.ToList();
             Model.SelectedResolution = Model.Resolutions.Count > opResolution ? Model.Resolutions[opResolution] : Model.Resolutions.First();
 
-            var opPulseDuration = _config.Value.OpPulseDuration;
+            var opPulseDuration = _config.Value.OtdrParameters.OpPulseDuration;
             Model.PulseDurations = leafOfAcceptableMeasParams.PulseDurations.ToList();
             Model.SelectedPulseDuration = Model.PulseDurations.Count > opPulseDuration 
                 ? Model.PulseDurations[opPulseDuration] : Model.PulseDurations.First();
 
-            var opMeasurementTime = _config.Value.OpMeasurementTime;
+            var opMeasurementTime = _config.Value.OtdrParameters.OpMeasurementTime;
             Model.MeasurementTime = leafOfAcceptableMeasParams.PeriodsToAverage.ToList();
             Model.SelectedMeasurementTime = Model.MeasurementTime.Count > opMeasurementTime 
                 ? Model.MeasurementTime[opMeasurementTime] : Model.MeasurementTime.First();
@@ -165,11 +165,11 @@ namespace Fibertest.WpfCommonViews
 
         private void SaveOtdrParameters()
         {
-            _config.Update(c=>c.OpUnit = Model.Units.IndexOf(Model.SelectedUnit));
-            _config.Update(c=>c.OpDistance = Model.Distances.IndexOf(Model.SelectedDistance));
-            _config.Update(c=>c.OpResolution = Model.Resolutions.IndexOf(Model.SelectedResolution));
-            _config.Update(c=>c.OpPulseDuration = Model.PulseDurations.IndexOf(Model.SelectedPulseDuration));
-            _config.Update(c=>c.OpMeasurementTime = Model.MeasurementTime.IndexOf(Model.SelectedMeasurementTime));
+            _config.Update(c=>c.OtdrParameters.OpUnit = Model.Units.IndexOf(Model.SelectedUnit));
+            _config.Update(c=>c.OtdrParameters.OpDistance = Model.Distances.IndexOf(Model.SelectedDistance));
+            _config.Update(c=>c.OtdrParameters.OpResolution = Model.Resolutions.IndexOf(Model.SelectedResolution));
+            _config.Update(c=>c.OtdrParameters.OpPulseDuration = Model.PulseDurations.IndexOf(Model.SelectedPulseDuration));
+            _config.Update(c=>c.OtdrParameters.OpMeasurementTime = Model.MeasurementTime.IndexOf(Model.SelectedMeasurementTime));
         }
     }
 }

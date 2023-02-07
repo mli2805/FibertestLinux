@@ -46,7 +46,9 @@ public partial class RtuManager
         }
 
         result2.IsMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
-        result2.AcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
+
+        _treeOfAcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
+        result2.AcceptableMeasParams = _treeOfAcceptableMeasParams;
 
         _logger.LogInfo(Logs.RtuManager, "RTU initialized successfully!");
 
