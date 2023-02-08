@@ -111,7 +111,7 @@ namespace Fibertest.Rtu
             int bufferLength = _interOpWrapper.GetSorDataSize(_sorData);
             if (bufferLength == -1)
             {
-                _logger.LogInfo(Logs.RtuManager, "_sorData is null");
+                _logger.LogInfo(Logs.RtuManager, "  _sorData is null");
                 return null;
             }
             byte[] buffer = new byte[bufferLength];
@@ -119,7 +119,7 @@ namespace Fibertest.Rtu
             var size = _interOpWrapper.GetSordata(_sorData, buffer, bufferLength);
             if (size == -1)
             {
-                _logger.LogInfo(Logs.RtuManager, "Error in GetLastSorData");
+                _logger.LogInfo(Logs.RtuManager, "  Error in GetLastSorData");
                 return null;
             }
             return buffer;
@@ -128,19 +128,19 @@ namespace Fibertest.Rtu
         public byte[]? ApplyAutoAnalysis(byte[] measBytes)
         {
             var measIntPtr = _interOpWrapper.SetSorData(measBytes);
-            _logger.LogInfo(Logs.RtuManager, "SetSorData done.");
+            _logger.LogInfo(Logs.RtuManager, "  SetSorData done.");
 
             if (!_interOpWrapper.MakeAutoAnalysis(ref measIntPtr))
             {
-                _logger.LogInfo(Logs.RtuManager, "ApplyAutoAnalysis error.");
+                _logger.LogInfo(Logs.RtuManager, "  ApplyAutoAnalysis error.");
                 return null;
             }
-            _logger.LogInfo(Logs.RtuManager, "ApplyAutoAnalysis done.");
+            _logger.LogInfo(Logs.RtuManager, "  ApplyAutoAnalysis done.");
             var size = _interOpWrapper.GetSorDataSize(measIntPtr);
-            _logger.LogInfo(Logs.RtuManager, "GetSorDataSize done.");
+            _logger.LogInfo(Logs.RtuManager, "  GetSorDataSize done.");
             byte[] resultBytes = new byte[size];
             _interOpWrapper.GetSordata(measIntPtr, resultBytes, size);
-            _logger.LogInfo(Logs.RtuManager, "GetSorData done.");
+            _logger.LogInfo(Logs.RtuManager, "  GetSorData done.");
             _interOpWrapper.FreeSorDataMemory(measIntPtr);
             return resultBytes;
         }

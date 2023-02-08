@@ -36,20 +36,20 @@ public class SerialPortManager
         {
             var serialPort = new SerialPort(_comPortName, _comPortSpeed);
             serialPort.Open();
-            _logger.LogInfo(Logs.RtuManager, $"port {_comPortName} opened successfully");
+            _logger.LogInfo(Logs.RtuManager, $"  port {_comPortName} opened successfully");
 
             serialPort.RtsEnable = !serialPort.RtsEnable;
             Thread.Sleep(10);
-            _logger.LogInfo(Logs.RtuManager, $"Now RTS is toggled to {serialPort.RtsEnable}");
+            _logger.LogInfo(Logs.RtuManager, $"  Now RTS is toggled to {serialPort.RtsEnable}");
             serialPort.RtsEnable = !serialPort.RtsEnable;
             Thread.Sleep(10);
-            _logger.LogInfo(Logs.RtuManager, $"Now RTS is toggled to {serialPort.RtsEnable}");
+            _logger.LogInfo(Logs.RtuManager, $"  Now RTS is toggled to {serialPort.RtsEnable}");
             serialPort.Close();
-            _logger.LogInfo(Logs.RtuManager, $"port {_comPortName} closed successfully");
+            _logger.LogInfo(Logs.RtuManager, $"  port {_comPortName} closed successfully");
 
             _logger.LogInfo(Logs.RtuManager, $"Pause after charon reset {_pauseAfterReset} seconds...");
             Thread.Sleep(TimeSpan.FromSeconds(_pauseAfterReset));
-            _logger.LogInfo(Logs.RtuManager, "Charon reset finished");
+            _logger.LogInfo(Logs.RtuManager, "  Charon reset finished");
             return ReturnCode.Ok;
         }
         catch (Exception e)
@@ -61,7 +61,7 @@ public class SerialPortManager
 
     public void ShowOnLedDisplay(LedDisplayCode code)
     {
-        _logger.LogDebug(Logs.RtuManager, $"Write <{code}> on led display");
+        _logger.LogDebug(Logs.RtuManager, $"  Write <{code}> on led display");
 
         var serialPort = new SerialPort(_comPortName, _comPortSpeed);
         try
@@ -69,11 +69,11 @@ public class SerialPortManager
             serialPort.Open();
             Thread.Sleep(1000);
 
-            _logger.LogDebug(Logs.RtuManager, $"{_comPortName} opened successfully.");
+            _logger.LogDebug(Logs.RtuManager, $"  {_comPortName} opened successfully.");
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.RtuManager, $"Can't open {_comPortName}.  {e.Message}");
+            _logger.LogError(Logs.RtuManager, $"  Can't open {_comPortName}.  {e.Message}");
             return;
         }
 
@@ -82,13 +82,13 @@ public class SerialPortManager
         {
             serialPort.Write(buffer, 0, 1);
             Thread.Sleep(1000);
-            _logger.LogDebug(Logs.RtuManager, $"{(byte)code:X} sent successfully.");
+            _logger.LogDebug(Logs.RtuManager, $"  {(byte)code:X} sent successfully.");
             serialPort.Close();
-            _logger.LogDebug(Logs.RtuManager, $"{_comPortName} closed successfully.");
+            _logger.LogDebug(Logs.RtuManager, $"  {_comPortName} closed successfully.");
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.RtuManager, $"Can't send to {_comPortName}.  {e.Message}");
+            _logger.LogError(Logs.RtuManager, $"  Can't send to {_comPortName}.  {e.Message}");
         }
         Thread.Sleep(1000);
     }

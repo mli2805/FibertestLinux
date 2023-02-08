@@ -30,7 +30,7 @@ public partial class Charon
             byte[] bytesToSend = Encoding.ASCII.GetBytes(cmd);
 
             //---send the text---
-            _logger.LogDebug(Logs.RtuManager, $"Sending : {cmd.Trim()}");
+            _logger.LogDebug(Logs.RtuManager, $"    Sending : {cmd.Trim()}");
             nwStream.Write(bytesToSend, 0, bytesToSend.Length);
 
             // for bulk command could be needed
@@ -41,7 +41,7 @@ public partial class Charon
             int bytesRead = nwStream.Read(bytesToRead, 0, client.ReceiveBufferSize);
             client.Close();
             LastAnswer = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-            _logger.LogDebug(Logs.RtuManager, $"Received : {LastAnswer.Trim()}");
+            _logger.LogDebug(Logs.RtuManager, $"    Received : {LastAnswer.Trim()}");
             IsLastCommandSuccessful = true;
         }
         catch (Exception e)

@@ -18,7 +18,6 @@ namespace Fibertest.Rtu
                 StopMonitoring(customer);
 
             _logger.EmptyAndLog(Logs.RtuManager, $"Start {customer}.");
-            _logger.LogInfo(Logs.RtuManager, $"_wasMonitoringOn is {_wasMonitoringOn}.");
 
             if (!_wasMonitoringOn)
             {
