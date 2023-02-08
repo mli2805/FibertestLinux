@@ -3,6 +3,7 @@ using Fibertest.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 
 namespace Fibertest.DataCenter;
 
@@ -31,9 +32,9 @@ public class Program
         builder.Services
            .AddDependencies();
 
-        var logLevel = builder.Configuration.GetSection("General")["LogLevel"];
+        // var logLevel = builder.Configuration.GetSection("General")["LogLevel"];
         Logger logger = LoggerConfigurationFactory
-            .Configure(logLevel) // here is my configuration of log files
+            .Configure(LogEventLevel.Debug) // here is my configuration of log files
             .CreateLogger();
 
         builder.Logging.ClearProviders();

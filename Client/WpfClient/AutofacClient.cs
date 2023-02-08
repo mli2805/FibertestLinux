@@ -7,6 +7,7 @@ using Fibertest.WpfCommonViews;
 using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
 
 namespace Fibertest.WpfClient
 {
@@ -20,7 +21,7 @@ namespace Fibertest.WpfClient
                 b.AddDebug();  // Debug.WriteLine() - see Output window
                 b.AddConsole(); // in WPF does not work !!!
                 b.AddSerilog(LoggerConfigurationFactory
-                    .Configure("2") // here is my configuration of log files
+                    .Configure(LogEventLevel.Information) // here is my configuration of log files
                     .CreateLogger());
             });
 

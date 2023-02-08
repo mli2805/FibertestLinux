@@ -29,6 +29,7 @@ public sealed class Boot : IHostedService
 
         _logger.LogInfo(Logs.RtuService, 
             $"Minimum log level set as {LoggerConfigurationFactory.Parse(_config.Value.General.LogLevel)}");
+
         return Task.CompletedTask;
     }
 

@@ -43,13 +43,14 @@ public static class LoggerConfigurationFactory
         }
     }
 
-    public static LoggerConfiguration Configure(string logLevelConstant)
+    public static LoggerConfiguration Configure(LogEventLevel level)
     {
         var logFolder = Path.Combine(FileOperations.GetMainFolder(), @"log");
 
         var template = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
         var loggerConfiguration = new LoggerConfiguration()
-            .MinimumLevel.Is(Parse(logLevelConstant))
+            //.MinimumLevel.Is(Parse(logLevelConstant))
+            .MinimumLevel.Is(level)
             .Enrich.FromLogContext()
             .WriteTo.Logger(cc => cc
                 .Filter.ByIncludingOnly(WithEventId(Logs.Client.ToInt()))

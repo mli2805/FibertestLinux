@@ -2,6 +2,7 @@ using System.Net;
 using Fibertest.Dto;
 using Fibertest.Utils;
 using Serilog;
+using Serilog.Events;
 
 namespace Fibertest.Rtu;
 
@@ -25,7 +26,7 @@ public class Program
         builder.Services
             .AddDependencyGroup();
 
-        var logLevel = builder.Configuration.GetSection("General")["LogLevel"];
+        var logLevel = LogEventLevel.Debug;
         var logger = LoggerConfigurationFactory.Configure(logLevel).CreateLogger();
 
         builder.Logging.ClearProviders();
