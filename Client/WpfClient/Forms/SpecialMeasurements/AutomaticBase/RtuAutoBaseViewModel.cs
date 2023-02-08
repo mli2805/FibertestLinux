@@ -25,7 +25,7 @@ namespace Fibertest.WpfClient
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly FailedAutoBasePdfProvider _failedAutoBasePdfProvider;
         private readonly MonitoringSettingsModelFactory _monitoringSettingsModelFactory;
@@ -66,7 +66,7 @@ namespace Fibertest.WpfClient
 
         public RtuAutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, 
             IDispatcherProvider dispatcherProvider, Model readModel, IWindowManager windowManager,
-            GrpcC2DRequests grpcC2DRequests,
+            GrpcC2DService grpcC2DService,
             IWcfServiceCommonC2D commonC2DWcfManager,
             FailedAutoBasePdfProvider failedAutoBasePdfProvider,
             MonitoringSettingsModelFactory monitoringSettingsModelFactory)
@@ -76,7 +76,7 @@ namespace Fibertest.WpfClient
             _dispatcherProvider = dispatcherProvider;
             _readModel = readModel;
             _windowManager = windowManager;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _commonC2DWcfManager = commonC2DWcfManager;
             _failedAutoBasePdfProvider = failedAutoBasePdfProvider;
             _monitoringSettingsModelFactory = monitoringSettingsModelFactory;
@@ -332,7 +332,7 @@ namespace Fibertest.WpfClient
                 if (resultDto.ReturnCode == ReturnCode.MonitoringSettingsAppliedSuccessfully)
                 {
                     var cmd = dto.CreateCommand();
-                    var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                    var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
                     return result.ReturnCode == ReturnCode.Ok ? "" : result.ErrorMessage!;
                 }
                 else

@@ -13,13 +13,13 @@ namespace Fibertest.WpfClient
 {
     public class GrmFiberWithNodesRequest
     {
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly Model _model;
         private readonly IWindowManager _windowManager;
 
-        public GrmFiberWithNodesRequest(GrpcC2DRequests grpcC2DRequests, Model model, IWindowManager windowManager)
+        public GrmFiberWithNodesRequest(GrpcC2DService grpcC2DService, Model model, IWindowManager windowManager)
         {
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _model = model;
             _windowManager = windowManager;
         }
@@ -29,7 +29,7 @@ namespace Fibertest.WpfClient
             var cmd = await PrepareCommand(request);
             if (cmd == null)
                 return;
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
             {
                 await _windowManager.ShowDialogWithAssignedOwner(

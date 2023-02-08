@@ -16,7 +16,7 @@ namespace Fibertest.WpfClient
         public Guid NodeId;
         private ViewMode _mode;
         private readonly IWritableConfig<ClientConfig> _config;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
 
         public EquipmentInfoModel Model { get; set; } = new EquipmentInfoModel();
@@ -24,10 +24,10 @@ namespace Fibertest.WpfClient
         public object? Command { get; set; }
 
         public EquipmentInfoViewModel(IWritableConfig<ClientConfig> config, 
-            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)
+            GrpcC2DService grpcC2DService, IWindowManager windowManager)
         {
             _config = config;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
         }
 
@@ -91,7 +91,7 @@ namespace Fibertest.WpfClient
                     CableReserveRight = Model.CableReserveRight,
                     Comment = Model.Comment,
                 };
-                await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                await _grpcC2DService.SendEventSourcingCommand(cmd);
             }
 
             if (_mode == ViewMode.Add)

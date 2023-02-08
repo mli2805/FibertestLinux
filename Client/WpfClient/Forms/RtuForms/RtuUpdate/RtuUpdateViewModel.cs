@@ -23,7 +23,7 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
         private readonly GraphReadModel _graphReadModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private bool _isInCreationMode;
 
@@ -83,12 +83,12 @@ namespace Fibertest.WpfClient
 
         public RtuUpdateViewModel(ILifetimeScope globalScope, CurrentUser currentUser, CurrentGis currentGis,
             Model readModel, GraphReadModel graphReadModel,
-            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)
+            GrpcC2DService grpcC2DService, IWindowManager windowManager)
         {
             _globalScope = globalScope;
             _readModel = readModel;
             _graphReadModel = graphReadModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
             IsEditEnabled = true;
             HasPrivilegies = currentUser.Role <= Role.Root;
@@ -157,7 +157,7 @@ namespace Fibertest.WpfClient
             RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             }
 
             if (result.ReturnCode != ReturnCode.Ok)
@@ -183,7 +183,7 @@ namespace Fibertest.WpfClient
                 return false;
             }
             cmd.Position = position;
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
             {
                 var mb = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage!);

@@ -84,11 +84,11 @@ namespace Fibertest.Rtu
                     var buffer = GetLastSorDataBuffer();
                     if (buffer == null)
                         return ReturnCode.MeasurementError;
-                    _logger.LogInfo(Logs.RtuManager, $"MeasStep #{++step} returned {buffer.Length} bytes");
+                    _logger.LogInfo(Logs.RtuManager, $"  MeasStep #{++step} returned {buffer.Length} bytes");
 
                     if (result != 0 && result != 10001)
                     {
-                        _logger.LogInfo(Logs.RtuManager, $"MeasStep returned {result}");
+                        _logger.LogInfo(Logs.RtuManager, $"  MeasStep returned {result}");
                         return ReturnCode.MeasurementError;
                     }
                     hasMoreSteps = result == 0;

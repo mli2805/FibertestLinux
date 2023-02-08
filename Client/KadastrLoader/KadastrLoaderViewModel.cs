@@ -20,7 +20,7 @@ namespace KadastrLoader
     public class KadastrLoaderViewModel : Screen, IShell
     {
         private ILogger _logger;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly ILifetimeScope _globalScope;
         private readonly LoadedAlready _loadedAlready;
         private readonly KadastrDbProvider _kadastrDbProvider;
@@ -80,13 +80,13 @@ namespace KadastrLoader
         public ObservableCollection<string> ProgressLines { get; set; } = new ObservableCollection<string>();
 
         public KadastrLoaderViewModel(IWritableConfig<ClientConfig> config, ILogger logger,
-            GrpcC2DRequests grpcC2DRequests, ILifetimeScope globalScope,
+            GrpcC2DService grpcC2DService, ILifetimeScope globalScope,
             LoadedAlready loadedAlready, KadastrDbProvider kadastrDbProvider,
             KadastrFilesParser kadastrFilesParser)
         {
             _logger = logger;
             _logger.LogInfo(Logs.Client, "We are in c-tor");
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _globalScope = globalScope;
             ServerIp = config.Value.General.ServerAddress.Main.Ip4Address;
             _loadedAlready = loadedAlready;
@@ -137,11 +137,11 @@ namespace KadastrLoader
         private ClientRegisteredDto? _clientRegisteredDto;
         private async Task<bool> RegisterClientOnDataCenter()
         {
-            _clientRegisteredDto = await _grpcC2DRequests
+            _clientRegisteredDto = await _grpcC2DService
                 .SendAnyC2DRequest<RegisterClientDto, ClientRegisteredDto>(new RegisterClientDto("developer", "developer".GetSha256()));
             var isRegistered = _clientRegisteredDto.ReturnCode == ReturnCode.ClientRegisteredSuccessfully;
             if (isRegistered)
-                _grpcC2DRequests.SetClientConnectionId(_clientRegisteredDto.ConnectionId!);
+                _grpcC2DService.SetClientConnectionId(_clientRegisteredDto.ConnectionId!);
             ServerMessage = isRegistered ? Resources.SID_DataCenter_connected_successfully_ : Resources.SID_DataCenter_connection_failed_;
             _logger.LogInfo(Logs.Client, ServerMessage);
             return isRegistered;

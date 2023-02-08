@@ -14,7 +14,7 @@ namespace Fibertest.WpfClient
     public class OneTceViewModel : Screen
     {
         private readonly CurrentUser _currentUser;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
         private readonly TceReportProvider _tceReportProvider;
@@ -24,11 +24,11 @@ namespace Fibertest.WpfClient
 
         public bool IsSaveEnabled => !string.IsNullOrEmpty(TceInfoViewModel.Title) && _currentUser.Role <= Role.Root;
 
-        public OneTceViewModel(CurrentUser currentUser, GrpcC2DRequests grpcC2DRequests,
+        public OneTceViewModel(CurrentUser currentUser, GrpcC2DService grpcC2DService,
             Model readModel, IWindowManager windowManager, TceReportProvider tceReportProvider)
         {
             _currentUser = currentUser;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _readModel = readModel;
             _windowManager = windowManager;
             _tceReportProvider = tceReportProvider;
@@ -100,7 +100,7 @@ namespace Fibertest.WpfClient
                 AllRelationsOfTce = TceSlotsViewModel.Slots.SelectMany(s => s.GetGponPortsRelations()).ToList(),
             };
 
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
             {
                 var mb = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage!);

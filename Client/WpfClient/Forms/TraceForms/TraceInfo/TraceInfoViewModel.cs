@@ -22,7 +22,7 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
         private readonly CurrentGis _currentGis;
@@ -66,13 +66,13 @@ namespace Fibertest.WpfClient
         public bool IsCreatedSuccessfully { get; set; }
 
         public TraceInfoViewModel(ILifetimeScope globalScope, Model readModel, CurrentUser currentUser,
-            GrpcC2DRequests grpcC2DRequests, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager,
+            GrpcC2DService grpcC2DService, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager,
             CurrentGis currentGis, GraphGpsCalculator graphGpsCalculator)
         {
             _globalScope = globalScope;
             _readModel = readModel;
             _currentUser = currentUser;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _c2DWcfCommonManager = c2DWcfCommonManager;
             _windowManager = windowManager;
             _currentGis = currentGis;
@@ -236,7 +236,7 @@ namespace Fibertest.WpfClient
             RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             }
 
             if (result.ReturnCode == ReturnCode.Ok)
@@ -257,7 +257,7 @@ namespace Fibertest.WpfClient
             };
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                await _grpcC2DService.SendEventSourcingCommand(cmd);
             }
 
         }

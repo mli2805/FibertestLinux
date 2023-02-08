@@ -9,17 +9,17 @@ namespace Fibertest.WpfClient
     public class SmsSettingsViewModel : Screen
     {
         private readonly DataCenterConfig _currentDatacenterParameters;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
 
         public string GsmModemComPort { get; set; }
         public bool IsEditEnabled { get; set; }
 
         public SmsSettingsViewModel(DataCenterConfig currentDatacenterParameters, CurrentUser currentUser,
-            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager)
+            GrpcC2DService grpcC2DService, IWindowManager windowManager)
         {
             _currentDatacenterParameters = currentDatacenterParameters;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             IsEditEnabled = currentUser.Role <= Role.Root;
             _windowManager = windowManager;
 
@@ -39,7 +39,7 @@ namespace Fibertest.WpfClient
                 var dto = new ChangeDcConfigDto() { NewConfig = _currentDatacenterParameters };
                 dto.NewConfig.Broadcast.GsmModemComPort = GsmModemComPort;
 
-                result = await _grpcC2DRequests.SendAnyC2DRequest<ChangeDcConfigDto, RequestAnswer>(dto);
+                result = await _grpcC2DService.SendAnyC2DRequest<ChangeDcConfigDto, RequestAnswer>(dto);
             }
 
             if (result.ReturnCode == ReturnCode.Ok)

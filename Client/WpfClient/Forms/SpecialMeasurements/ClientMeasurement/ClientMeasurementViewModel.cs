@@ -21,7 +21,7 @@ namespace Fibertest.WpfClient
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly MeasurementInterrupter _measurementInterrupter;
-        private readonly GrpcC2RRequests _grpcC2RRequests;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IWindowManager _windowManager;
         private readonly VeexMeasurementTool _veexMeasurementTool;
         private readonly ReflectogramManager _reflectogramManager;
@@ -59,7 +59,7 @@ namespace Fibertest.WpfClient
         public ClientMeasurementViewModel(ILifetimeScope globalScope, 
             ILogger logger,
             CurrentUser currentUser, Model readModel, MeasurementInterrupter measurementInterrupter,
-            GrpcC2RRequests grpcC2RRequests, IWindowManager windowManager,
+            GrpcC2RService grpcC2RService, IWindowManager windowManager,
             VeexMeasurementTool veexMeasurementTool,
             ReflectogramManager reflectogramManager)
         {
@@ -68,7 +68,7 @@ namespace Fibertest.WpfClient
             _currentUser = currentUser;
             _readModel = readModel;
             _measurementInterrupter = measurementInterrupter;
-            _grpcC2RRequests = grpcC2RRequests;
+            _grpcC2RService = grpcC2RService;
             _windowManager = windowManager;
             _veexMeasurementTool = veexMeasurementTool;
             _reflectogramManager = reflectogramManager;
@@ -110,7 +110,7 @@ namespace Fibertest.WpfClient
 
             Message = Resources.SID_Sending_command__Wait_please___;
             var startResult =
-                await _grpcC2RRequests.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(_dto);
+                await _grpcC2RService.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(_dto);
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, startResult.ErrorMessage ?? "");

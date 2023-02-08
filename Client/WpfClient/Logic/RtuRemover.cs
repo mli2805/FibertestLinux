@@ -13,13 +13,13 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWindowManager _windowManager;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
 
-        public RtuRemover(ILifetimeScope globalScope, IWindowManager windowManager, GrpcC2DRequests grpcC2DRequests)
+        public RtuRemover(ILifetimeScope globalScope, IWindowManager windowManager, GrpcC2DService grpcC2DService)
         {
             _globalScope = globalScope;
             _windowManager = windowManager;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         public async Task Fire(Rtu rtu)
@@ -31,7 +31,7 @@ namespace Fibertest.WpfClient
             await _windowManager.ShowDialogWithAssignedOwner(vm);
             if (!vm.IsAnswerPositive) return;
             var cmd = new RemoveRtu() { RtuId = rtu.Id, RtuNodeId = rtu.NodeId };
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
     }
 }

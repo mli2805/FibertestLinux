@@ -16,7 +16,7 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly IWindowManager _windowManager;
         public MonitoringSettingsModel Model { get; set; }
@@ -51,14 +51,14 @@ namespace Fibertest.WpfClient
         public bool IsEditEnabled => _currentUser.Role <= Role.Operator && IsButtonsEnabled;
 
         public MonitoringSettingsViewModel(RtuLeaf rtuLeaf, ILifetimeScope globalScope, 
-            CurrentUser currentUser, Model readModel, GrpcC2DRequests grpcC2DRequests,
+            CurrentUser currentUser, Model readModel, GrpcC2DService grpcC2DService,
              IWcfServiceCommonC2D commonC2DWcfManager, IWindowManager windowManager,
             MonitoringSettingsModelFactory monitoringSettingsModelFactory)
         {
             _globalScope = globalScope;
             _currentUser = currentUser;
             _readModel = readModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _commonC2DWcfManager = commonC2DWcfManager;
             _windowManager = windowManager;
 
@@ -93,7 +93,7 @@ namespace Fibertest.WpfClient
                 if (resultDto.ReturnCode == ReturnCode.MonitoringSettingsAppliedSuccessfully)
                 {
                     var cmd = dto.CreateCommand();
-                    var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                    var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
                     MessageProp = result.ReturnCode.GetLocalizedString();
                 }
                 else

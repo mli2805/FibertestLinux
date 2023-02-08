@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly IWindowManager _windowManager;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private bool _isInCreationMode;
 
@@ -87,12 +87,12 @@ namespace Fibertest.WpfClient
 
         public Visibility ChangePasswordVisibility { get; set; }
 
-        public UserViewModel(ILifetimeScope globalScope, IWindowManager windowManager, GrpcC2DRequests grpcC2DRequests,
+        public UserViewModel(ILifetimeScope globalScope, IWindowManager windowManager, GrpcC2DService grpcC2DService,
             IWcfServiceDesktopC2D c2DWcfManager, Model readModel, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _windowManager = windowManager;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _c2DWcfManager = c2DWcfManager;
             _readModel = readModel;
             _currentUser = currentUser;
@@ -216,7 +216,7 @@ namespace Fibertest.WpfClient
                 };
 
 
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            await _grpcC2DService.SendEventSourcingCommand(cmd); 
             await TryCloseAsync(true);
         }
 

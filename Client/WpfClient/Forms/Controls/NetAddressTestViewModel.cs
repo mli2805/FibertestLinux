@@ -14,8 +14,8 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly CurrentUser _currentUser;
         private readonly IWindowManager _windowManager;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
-        private readonly GrpcC2RRequests _grpcC2RRequests;
+        private readonly GrpcC2DService _grpcC2DService;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly NetAddressForConnectionTest _netAddressForConnectionTest;
         private bool? _result;
         private NetAddressInputViewModel _netAddressInputViewModel;
@@ -45,14 +45,14 @@ namespace Fibertest.WpfClient
         }
 
         public NetAddressTestViewModel(ILifetimeScope globalScope, CurrentUser currentUser, IWindowManager windowManager,
-            GrpcC2DRequests grpcC2DRequests, GrpcC2RRequests grpcC2RRequests,
+            GrpcC2DService grpcC2DService, GrpcC2RService grpcC2RService,
             NetAddressForConnectionTest netAddressForConnectionTest)
         {
             _globalScope = globalScope;
             _currentUser = currentUser;
             _windowManager = windowManager;
-            _grpcC2DRequests = grpcC2DRequests;
-            _grpcC2RRequests = grpcC2RRequests;
+            _grpcC2DService = grpcC2DService;
+            _grpcC2RService = grpcC2RService;
             _netAddressForConnectionTest = netAddressForConnectionTest;
             _netAddressInputViewModel = new NetAddressInputViewModel(netAddressForConnectionTest.Address, currentUser.Role <= Role.Root);
             IsButtonEnabled = currentUser.Role <= Role.Operator;
@@ -101,7 +101,7 @@ namespace Fibertest.WpfClient
                     NetAddress = NetAddressInputViewModel.GetNetAddress().Clone()
                 };
 
-                var resultDto = await _grpcC2RRequests.SendAnyC2RRequest<CheckRtuConnectionDto, RtuConnectionCheckedDto>(dto);
+                var resultDto = await _grpcC2RService.SendAnyC2RRequest<CheckRtuConnectionDto, RtuConnectionCheckedDto>(dto);
                 if (resultDto.IsConnectionSuccessful && dto.NetAddress.Port != resultDto.NetAddress!.Port)
                 {
                     NetAddressInputViewModel = 
@@ -111,7 +111,7 @@ namespace Fibertest.WpfClient
             }
             else // DataCenter testing
             {
-                var serverAnswer = await _grpcC2DRequests
+                var serverAnswer = await _grpcC2DService
                     .CheckServerConnection(new CheckServerConnectionDto(), NetAddressInputViewModel.GetNetAddress().Ip4Address);
                 return serverAnswer.ReturnCode == ReturnCode.Ok;
             }

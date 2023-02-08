@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly EventArrivalNotifier _eventArrivalNotifier;
         private readonly IWindowManager _windowManager;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly CurrentUser _currentUser;
 
         private ObservableCollection<UserVm> _rows = new ObservableCollection<UserVm>();
@@ -55,13 +55,13 @@ namespace Fibertest.WpfClient
 
         public UserListViewModel(ILifetimeScope globalScope, Model readModel, 
             EventArrivalNotifier eventArrivalNotifier, IWindowManager windowManager, 
-            GrpcC2DRequests grpcC2DRequests, CurrentUser currentUser)
+            GrpcC2DService grpcC2DService, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _readModel = readModel;
             _eventArrivalNotifier = eventArrivalNotifier;
             _windowManager = windowManager;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _currentUser = currentUser;
 
             Initialize();
@@ -143,7 +143,7 @@ namespace Fibertest.WpfClient
         public async void RemoveUser()
         {
             var cmd = new RemoveUser() { UserId = SelectedUser!.UserId };
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            await _grpcC2DService.SendEventSourcingCommand(cmd); 
         }
         #endregion
 

@@ -14,7 +14,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
 
         public string NodeCountStr { get; set; }
@@ -23,12 +23,12 @@ namespace Fibertest.WpfClient
         public bool IsEnabled { get; set; }
 
         public GraphOptimizationViewModel(ILifetimeScope globalScope, CurrentUser currentUser, Model readModel,
-            GrpcC2DRequests grpcC2DRequests,
+            GrpcC2DService grpcC2DService,
             IWindowManager windowManager)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
 
             IsEnabled = currentUser.Role <= Role.Root;
@@ -62,7 +62,7 @@ namespace Fibertest.WpfClient
             RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _grpcC2DRequests.SendEventSourcingCommand(new RemoveUnused());
+                result = await _grpcC2DService.SendEventSourcingCommand(new RemoveUnused());
             }
 
             var vm = result.ReturnCode != ReturnCode.Ok

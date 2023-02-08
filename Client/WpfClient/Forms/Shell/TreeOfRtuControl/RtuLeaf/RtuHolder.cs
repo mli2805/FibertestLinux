@@ -18,18 +18,18 @@ namespace Fibertest.WpfClient
     public class RtuHolder : IRtuHolder
     {
         private readonly IWindowManager _windowManager;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
 
-        public RtuHolder(IWindowManager windowManager, GrpcC2DRequests grpcC2DRequests)
+        public RtuHolder(IWindowManager windowManager, GrpcC2DService grpcC2DService)
         {
             _windowManager = windowManager;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         public async Task<bool> SetRtuOccupationState(Guid rtuId, string rtuTitle, RtuOccupation rtuOccupation)
         {
             var result =
-                await _grpcC2DRequests.SendAnyC2DRequest<OccupyRtuDto, RequestAnswer>(
+                await _grpcC2DService.SendAnyC2DRequest<OccupyRtuDto, RequestAnswer>(
                     new OccupyRtuDto(rtuId, new RtuOccupationState(rtuOccupation, null)));
                 
             if (result.ReturnCode == ReturnCode.RtuIsBusy)

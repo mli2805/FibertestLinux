@@ -84,7 +84,7 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly LandmarksBaseParser _landmarksBaseParser;
         private readonly LandmarksGraphParser _landmarksGraphParser;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
         private List<Landmark> _landmarks = null!;
@@ -150,14 +150,14 @@ namespace Fibertest.WpfClient
 
         public LandmarksViewModel(ILifetimeScope globalScope, Model readModel, CurrentGis currentGis,
             LandmarksBaseParser landmarksBaseParser, LandmarksGraphParser landmarksGraphParser,
-             GrpcC2DRequests grpcC2DRequests, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)
+             GrpcC2DService grpcC2DService, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)
         {
             CurrentGis = currentGis;
             _globalScope = globalScope;
             _readModel = readModel;
             _landmarksBaseParser = landmarksBaseParser;
             _landmarksGraphParser = landmarksGraphParser;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _c2DWcfCommonManager = c2DWcfCommonManager;
             _windowManager = windowManager;
             _selectedGpsInputMode = GpsInputModes.First(i => i.Mode == CurrentGis.GpsInputMode);
@@ -274,7 +274,7 @@ namespace Fibertest.WpfClient
                     IndexInTrace = SelectedRow.NumberIncludingAdjustmentPoints,
                     EquipmentId = traceContentChoiceViewModel.GetSelectedEquipmentGuid()
                 };
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         public async void ExcludeEquipment()
@@ -285,7 +285,7 @@ namespace Fibertest.WpfClient
                 IndexInTrace = SelectedRow.NumberIncludingAdjustmentPoints,
                 EquipmentId = SelectedRow.EquipmentId,
             };
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         public void ExportToPdf()

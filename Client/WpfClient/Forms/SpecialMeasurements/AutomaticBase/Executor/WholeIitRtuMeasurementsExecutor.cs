@@ -12,7 +12,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly GrpcC2RRequests _grpcC2RRequests;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly LandmarksIntoBaseSetter _landmarksIntoBaseSetter;
         private readonly MeasurementAsBaseAssigner _measurementAsBaseAssigner;
@@ -23,14 +23,14 @@ namespace Fibertest.WpfClient
 
         public WholeIitRtuMeasurementsExecutor(IWritableConfig<ClientConfig> config, ILogger logger,
             CurrentUser currentUser, Model readModel,
-            GrpcC2RRequests grpcC2RRequests, IDispatcherProvider dispatcherProvider,
+            GrpcC2RService grpcC2RService, IDispatcherProvider dispatcherProvider,
             AutoAnalysisParamsViewModel autoAnalysisParamsViewModel,
             LandmarksIntoBaseSetter landmarksIntoBaseSetter, MeasurementAsBaseAssigner measurementAsBaseAssigner
             )
         {
             _logger = logger;
             _readModel = readModel;
-            _grpcC2RRequests = grpcC2RRequests;
+            _grpcC2RService = grpcC2RService;
             _dispatcherProvider = dispatcherProvider;
             _landmarksIntoBaseSetter = landmarksIntoBaseSetter;
             _measurementAsBaseAssigner = measurementAsBaseAssigner;
@@ -67,7 +67,7 @@ namespace Fibertest.WpfClient
                     Model.OtdrParametersTemplatesViewModel.GetVeexSelectedParameters());
 
             var startResult =
-                await _grpcC2RRequests.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
+                await _grpcC2RService.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
             {
                 _timer.Stop();

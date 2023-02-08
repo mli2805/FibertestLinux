@@ -21,7 +21,7 @@ namespace Fibertest.WpfClient
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly EquipmentOfChoiceModelFactory _equipmentOfChoiceModelFactory;
         private List<Equipment> _possibleEquipment;
@@ -46,14 +46,14 @@ namespace Fibertest.WpfClient
         public bool ShouldWeContinue { get; set; }
 
         public TraceContentChoiceViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config,
-            ILogger logger, Model readModel, GrpcC2DRequests grpcC2DRequests,
+            ILogger logger, Model readModel, GrpcC2DService grpcC2DService,
             IWindowManager windowManager, EquipmentOfChoiceModelFactory equipmentOfChoiceModelFactory)
         {
             _globalScope = globalScope;
             _config = config;
             _logger = logger;
             _readModel = readModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
             _equipmentOfChoiceModelFactory = equipmentOfChoiceModelFactory;
         }
@@ -173,7 +173,7 @@ namespace Fibertest.WpfClient
                 Title = NodeTitle.Trim(),
                 Comment = _node.Comment,
             };
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
                         _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendNodeTitle - {result.ErrorMessage}");
         }
@@ -189,7 +189,7 @@ namespace Fibertest.WpfClient
                 CableReserveRight = rightCableReserve,
                 Comment = equipment.Comment,
             };
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
                             _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendEquipmentChanges - {result.ErrorMessage}");
         }

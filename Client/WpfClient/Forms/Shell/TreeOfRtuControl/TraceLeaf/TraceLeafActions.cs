@@ -21,7 +21,7 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private readonly IWcfServiceCommonC2D _c2DCommonWcf;
         private readonly TabulatorViewModel _tabulatorViewModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly TraceStateViewsManager _traceStateViewsManager;
         private readonly TraceStatisticsViewsManager _traceStatisticsViewsManager;
         private readonly BaseRefsAssignViewModel _baseRefsAssignViewModel;
@@ -33,7 +33,7 @@ namespace Fibertest.WpfClient
         public TraceLeafActions(ILifetimeScope globalScope, CurrentUser currentUser, 
             Model readModel, GraphReadModel graphReadModel,
             IWindowManager windowManager, TabulatorViewModel tabulatorViewModel,
-            GrpcC2DRequests grpcC2DRequests, IWcfServiceCommonC2D c2DCommonWcf,
+            GrpcC2DService grpcC2DService, IWcfServiceCommonC2D c2DCommonWcf,
             TraceStateViewsManager traceStateViewsManager, TraceStatisticsViewsManager traceStatisticsViewsManager,
             BaseRefsAssignViewModel baseRefsAssignViewModel, LandmarksViewsManager landmarksViewsManager,
             OutOfTurnPreciseMeasurementViewModel outOfTurnPreciseMeasurementViewModel, AutoBaseViewModel autoBaseViewModel,
@@ -46,7 +46,7 @@ namespace Fibertest.WpfClient
             _windowManager = windowManager;
             _c2DCommonWcf = c2DCommonWcf;
             _tabulatorViewModel = tabulatorViewModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _traceStateViewsManager = traceStateViewsManager;
             _traceStatisticsViewsManager = traceStatisticsViewsManager;
             _baseRefsAssignViewModel = baseRefsAssignViewModel;
@@ -170,7 +170,7 @@ namespace Fibertest.WpfClient
             {
                 _commonStatusBarViewModel.StatusBarMessage2 = Resources.SID_Long_operation__Removing_trace_s_measurements____Please_wait_;
                 var cmd = isRemoval ? new RemoveTrace() { TraceId = traceId } : (object)new CleanTrace() { TraceId = traceId };
-                var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
                 _commonStatusBarViewModel.StatusBarMessage2 = result.ReturnCode == ReturnCode.Ok ? "" : result.ErrorMessage!;
             }
 

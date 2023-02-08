@@ -10,7 +10,7 @@ namespace Fibertest.WpfClient
 {
     public class ChangePasswordViewModel : Screen
     {
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private User _user = null!;
 
         public PasswordViewModel OldPasswordVm { get; set; } = new PasswordViewModel();
@@ -79,9 +79,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ChangePasswordViewModel(GrpcC2DRequests grpcC2DRequests)
+        public ChangePasswordViewModel(GrpcC2DService grpcC2DService)
         {
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         public void Initialize(User user)
@@ -124,7 +124,7 @@ namespace Fibertest.WpfClient
                 cfg => cfg.AddProfile<MappingModelToCmdProfile>()).CreateMapper();
             var cmd = mapper.Map<UpdateUser>(_user);
             cmd.EncodedPassword = NewPasswordVm1.Password.GetHashString();
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            await _grpcC2DService.SendEventSourcingCommand(cmd); 
             await TryCloseAsync();
         }
 

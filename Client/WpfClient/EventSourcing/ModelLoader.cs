@@ -12,14 +12,14 @@ namespace Fibertest.WpfClient
     {
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly GraphReadModel _graphReadModel;
         private readonly ZoneEventsOnTreeExecutor _zoneEventsOnTreeExecutor;
         private readonly OpticalEventsDoubleViewModel _opticalEventsDoubleViewModel;
         private readonly NetworkEventsDoubleViewModel _networkEventsDoubleViewModel;
         private readonly BopNetworkEventsDoubleViewModel _bopNetworkEventsDoubleViewModel;
 
-        public ModelLoader(ILogger logger, Model readModel, GrpcC2DRequests grpcC2DRequests, GraphReadModel graphReadModel,
+        public ModelLoader(ILogger logger, Model readModel, GrpcC2DService grpcC2DService, GraphReadModel graphReadModel,
             ZoneEventsOnTreeExecutor zoneEventsOnTreeExecutor,
             OpticalEventsDoubleViewModel opticalEventsDoubleViewModel,
             NetworkEventsDoubleViewModel networkEventsDoubleViewModel,
@@ -27,7 +27,7 @@ namespace Fibertest.WpfClient
         {
             _logger = logger;
             _readModel = readModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _graphReadModel = graphReadModel;
             _zoneEventsOnTreeExecutor = zoneEventsOnTreeExecutor;
             _opticalEventsDoubleViewModel = opticalEventsDoubleViewModel;
@@ -41,7 +41,7 @@ namespace Fibertest.WpfClient
             {
                 _logger.LogInfo(Logs.Client,@"Downloading model...");
                 var paramsDto =
-                    await _grpcC2DRequests.SendAnyC2DRequest<GetSerializedModelParamsDto, SerializedModelDto>(new GetSerializedModelParamsDto());
+                    await _grpcC2DService.SendAnyC2DRequest<GetSerializedModelParamsDto, SerializedModelDto>(new GetSerializedModelParamsDto());
                 _logger.LogInfo(Logs.Client,
                     $@"Model size is {paramsDto.Size} in {paramsDto.PortionsCount} portions, last event included {paramsDto.LastIncludedEvent}");
 
@@ -52,7 +52,7 @@ namespace Fibertest.WpfClient
                 {
 
                     var result =
-                        await _grpcC2DRequests.SendAnyC2DRequest<GetModelPortionDto, SerializedModelPortionDto>(
+                        await _grpcC2DService.SendAnyC2DRequest<GetModelPortionDto, SerializedModelPortionDto>(
                             new GetModelPortionDto(i));
                     result.Bytes.CopyTo(bb, offset);
                     offset += result.Bytes.Length;

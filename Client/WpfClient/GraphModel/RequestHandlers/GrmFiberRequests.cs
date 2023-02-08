@@ -12,15 +12,15 @@ namespace Fibertest.WpfClient
     public class GrmFiberRequests
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly Model _model;
         private readonly IWindowManager _windowManager;
 
 
-        public GrmFiberRequests(ILifetimeScope globalScope, GrpcC2DRequests grpcC2DRequests, Model model, IWindowManager windowManager)
+        public GrmFiberRequests(ILifetimeScope globalScope, GrpcC2DService grpcC2DService, Model model, IWindowManager windowManager)
         {
             _globalScope = globalScope;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _model = model;
             _windowManager = windowManager;
         }
@@ -29,7 +29,7 @@ namespace Fibertest.WpfClient
         {
             if (! await Validate(cmd)) return;
             cmd.FiberId = Guid.NewGuid();
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         private async Task<bool> Validate(AddFiber cmd)
@@ -47,7 +47,7 @@ namespace Fibertest.WpfClient
         {
             var cmd = await PrepareCommand(request);
             if (cmd == null) return;
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         private async Task<UpdateFiber> PrepareCommand(RequestUpdateFiber request)
@@ -61,7 +61,7 @@ namespace Fibertest.WpfClient
 
         public async Task RemoveFiber(RemoveFiber cmd)
         {
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
     }
 }

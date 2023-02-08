@@ -13,20 +13,20 @@ namespace Fibertest.WpfClient
 {
     public class GrmNodeRequests
     {
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly Model _model;
 
-        public GrmNodeRequests(GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager, Model model)
+        public GrmNodeRequests(GrpcC2DService grpcC2DService, IWindowManager windowManager, Model model)
         {
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
             _model = model;
         }
 
         public async Task MoveNode(MoveNode cmd)
         {
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         public async Task AddNodeIntoFiber(RequestAddNodeIntoFiber request)
@@ -34,7 +34,7 @@ namespace Fibertest.WpfClient
             var cmd = await PrepareAddNodeIntoFiber(request);
             if (cmd == null)
                 return;
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
                 await _windowManager.ShowDialogWithAssignedOwner(
                     new MyMessageBoxViewModel(MessageType.Error, @"Graph AddNodeIntoFiber: " + result.ErrorMessage));
@@ -82,7 +82,7 @@ namespace Fibertest.WpfClient
             if (detoursForGraph.Count == 0 && type == EquipmentType.AdjustmentPoint)
                 cmd.FiberIdToDetourAdjustmentPoint = Guid.NewGuid();
 
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
                 await _windowManager.ShowDialogWithAssignedOwner(
                     new MyMessageBoxViewModel(MessageType.Error, @"Graph RemoveNode: " + result.ErrorMessage));

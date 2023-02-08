@@ -15,7 +15,7 @@ namespace Fibertest.WpfClient
     {
         private readonly CurrentGis _currentGis;
         private readonly DataCenterConfig _currentDatacenterParameters;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly GraphReadModel _graphReadModel;
@@ -101,12 +101,12 @@ namespace Fibertest.WpfClient
 
         public GisSettingsViewModel(CurrentUser currentUser, CurrentGis currentGis,
             DataCenterConfig currentDatacenterParameters,
-            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager,
+            GrpcC2DService grpcC2DService, IWindowManager windowManager,
             IWritableConfig<ClientConfig> config, GraphReadModel graphReadModel)
         {
             _currentGis = currentGis;
             _currentDatacenterParameters = currentDatacenterParameters;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             IsInWithoutMapMode = currentGis.IsWithoutMapMode;
             _windowManager = windowManager;
 
@@ -140,7 +140,7 @@ namespace Fibertest.WpfClient
                 var dto = new ChangeDcConfigDto() { NewConfig = _currentDatacenterParameters };
                 dto.NewConfig.General.IsWithoutMapMode = !IsInWithoutMapMode;
 
-                result = await _grpcC2DRequests.SendAnyC2DRequest<ChangeDcConfigDto, RequestAnswer>(dto);
+                result = await _grpcC2DService.SendAnyC2DRequest<ChangeDcConfigDto, RequestAnswer>(dto);
             }
 
             if (result.ReturnCode == ReturnCode.Ok)

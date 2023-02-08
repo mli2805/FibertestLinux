@@ -35,8 +35,8 @@ namespace KadastrLoader
 
 
             builder.RegisterType<WaitCursor>().As<IWaitCursor>().InstancePerLifetimeScope();
-            builder.RegisterType<GrpcC2DRequests>().InstancePerLifetimeScope();
-            builder.RegisterType<GrpcC2DRequests>().InstancePerLifetimeScope();
+            builder.RegisterType<GrpcC2DService>().InstancePerLifetimeScope();
+            builder.RegisterType<GrpcC2DService>().InstancePerLifetimeScope();
 
             builder.RegisterType<KadastrDbProvider>().InstancePerLifetimeScope();
             builder.RegisterType<KadastrDbSettings>().InstancePerLifetimeScope();

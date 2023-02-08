@@ -13,14 +13,14 @@ namespace KadastrLoader
     {
         private readonly KadastrDbProvider _kadastrDbProvider;
         private readonly LoadedAlready _loadedAlready;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
 
         public ConpointParser(KadastrDbProvider kadastrDbProvider, LoadedAlready loadedAlready,
-             GrpcC2DRequests grpcC2DRequests)
+             GrpcC2DService grpcC2DService)
         {
             _kadastrDbProvider = kadastrDbProvider;
             _loadedAlready = loadedAlready;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         public void ParseConpoints(string folder, BackgroundWorker worker)
@@ -67,7 +67,7 @@ namespace KadastrLoader
             cmd.EquipmentId = Guid.NewGuid();
             cmd.Type = EquipmentType.Closure;
 
-            var result = _grpcC2DRequests.SendEventSourcingCommand(cmd).Result;
+            var result = _grpcC2DService.SendEventSourcingCommand(cmd).Result;
             return result.ErrorMessage;
         }
 

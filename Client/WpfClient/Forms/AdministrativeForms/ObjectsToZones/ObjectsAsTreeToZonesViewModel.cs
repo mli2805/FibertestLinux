@@ -11,16 +11,16 @@ namespace Fibertest.WpfClient
 {
     public class ObjectsAsTreeToZonesViewModel : Screen
     {
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         public Model ReadModel { get; }
         public List<ObjectToZonesModel> Rows { get; set; } = new  List<ObjectToZonesModel>();
         public ObjectToZonesModel? SelectedRow { get; set; }
 
         public bool IsEnabled { get; set; }
 
-        public ObjectsAsTreeToZonesViewModel(Model readModel, CurrentUser currentUser, GrpcC2DRequests grpcC2DRequests)
+        public ObjectsAsTreeToZonesViewModel(Model readModel, CurrentUser currentUser, GrpcC2DService grpcC2DService)
         {
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             ReadModel = readModel;
             IsEnabled = currentUser.Role <= Role.Root;
 
@@ -115,7 +115,7 @@ namespace Fibertest.WpfClient
         public async void Save()
         {
             var cmd = PrepareCommand();
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            await _grpcC2DService.SendEventSourcingCommand(cmd); 
 
             await TryCloseAsync();
         }

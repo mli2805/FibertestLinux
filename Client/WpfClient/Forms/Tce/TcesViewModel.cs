@@ -16,7 +16,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly CurrentUser _currentUser;
         private ObservableCollection<TceS> _tces;
@@ -36,11 +36,11 @@ namespace Fibertest.WpfClient
         public bool IsEnabled { get; set; }
 
         public TcesViewModel(ILifetimeScope globalScope, Model readModel, EventArrivalNotifier eventArrivalNotifier,
-            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager, CurrentUser currentUser)
+            GrpcC2DService grpcC2DService, IWindowManager windowManager, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
             _currentUser = currentUser;
             eventArrivalNotifier.PropertyChanged += _eventArrivalNotifier_PropertyChanged;
@@ -106,7 +106,7 @@ namespace Fibertest.WpfClient
                     .ToList(),
             };
 
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
             {
                 var mb = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage!);
@@ -183,7 +183,7 @@ namespace Fibertest.WpfClient
             if (! await ConfirmTceRemove()) return;
 
             var cmd = new RemoveTce() { Id = SelectedTce.Id };
-            if (await _grpcC2DRequests.SendEventSourcingCommand(cmd) == null)
+            if (await _grpcC2DService.SendEventSourcingCommand(cmd) == null)
             {
                 Tces.Remove(SelectedTce);
             }

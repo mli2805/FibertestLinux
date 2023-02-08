@@ -10,16 +10,16 @@ namespace Fibertest.WpfClient
     public class Heartbeater
     {
         private readonly ILogger _logger;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly CurrentUser _currentUser;
         private readonly int _heartbeatRate;
         private CancellationToken _token;
 
-        public Heartbeater(IWritableConfig<ClientConfig> config, ILogger logger, GrpcC2DRequests grpcC2DRequests,
+        public Heartbeater(IWritableConfig<ClientConfig> config, ILogger logger, GrpcC2DService grpcC2DService,
              CurrentUser currentUser)
         {
             _logger = logger;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _currentUser = currentUser;
             _heartbeatRate = config.Value.General.ClientHeartbeatRateMs;
         }
@@ -38,7 +38,7 @@ namespace Fibertest.WpfClient
             {
                 var dto = new ClientHeartbeatDto { ClientConnectionId = _currentUser.ConnectionId };
 
-                var ra = await _grpcC2DRequests.SendAnyC2DRequest<ClientHeartbeatDto, RequestAnswer>(dto);
+                var ra = await _grpcC2DService.SendAnyC2DRequest<ClientHeartbeatDto, RequestAnswer>(dto);
                 if (ra.ReturnCode != ReturnCode.Ok)
                     _logger.LogError(Logs.Client, $"Failed to send heartbeat! {ra.ErrorMessage}");
                 Thread.Sleep(TimeSpan.FromMilliseconds(_heartbeatRate));

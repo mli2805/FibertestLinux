@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
         public Guid RtuId;
 
         private readonly CurrentGis _currentGis;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly GraphReadModel _graphReadModel;
         private readonly Model _readModel;
@@ -168,7 +168,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public OneLandmarkViewModel(CurrentUser currentUser, CurrentGis currentGis, GrpcC2DRequests grpcC2DRequests,
+        public OneLandmarkViewModel(CurrentUser currentUser, CurrentGis currentGis, GrpcC2DService grpcC2DService,
             GpsInputSmallViewModel gpsInputSmallViewModel, IWindowManager windowManager,
             GraphReadModel graphReadModel, Model readModel,
             ReflectogramManager reflectogramManager, TabulatorViewModel tabulatorViewModel)
@@ -176,7 +176,7 @@ namespace Fibertest.WpfClient
             HasPrivileges = currentUser.Role <= Role.Root;
             IsEditEnabled = true;
             _currentGis = currentGis;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             GisVisibility = currentGis.IsGisOn ? Visibility.Visible : Visibility.Collapsed;
             _windowManager = windowManager;
             _graphReadModel = graphReadModel;
@@ -228,7 +228,7 @@ namespace Fibertest.WpfClient
                     CableReserveRight = equipment.CableReserveRight,
                     Comment = equipment.Comment,
                 };
-                return await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                return await _grpcC2DService.SendEventSourcingCommand(cmd);
             }
             return new RequestAnswer(ReturnCode.Ok);
         }
@@ -262,7 +262,7 @@ namespace Fibertest.WpfClient
                         Comment = SelectedLandmark.NodeComment,
                         Position = position,
                     };
-                return await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                return await _grpcC2DService.SendEventSourcingCommand(cmd);
             }
             return new RequestAnswer(ReturnCode.Ok);
         }

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace GrpsClientLib;
 
-public class GrpcC2RRequests
+public class GrpcC2RService
 {
     private readonly IWritableConfig<ClientConfig> _config;
     private readonly ILogger _logger;
@@ -16,7 +16,7 @@ public class GrpcC2RRequests
     private string ServerUri => $"http://{_config.Value.General.ServerAddress.Main.Ip4Address}:{(int)TcpPorts.ServerListenToCommonClient}";
     private string _clientConnectionId = "";
 
-    public GrpcC2RRequests(IWritableConfig<ClientConfig> config, ILogger logger)
+    public GrpcC2RService(IWritableConfig<ClientConfig> config, ILogger logger)
     {
         _config = config;
         _logger = logger;

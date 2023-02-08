@@ -13,7 +13,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly GrpcC2RRequests _grpcC2RRequests;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly VeexMeasurementTool _veexMeasurementTool;
         private readonly LandmarksIntoBaseSetter _landmarksIntoBaseSetter;
@@ -24,7 +24,7 @@ namespace Fibertest.WpfClient
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
         public WholeVeexRtuMeasurementsExecutor(IWritableConfig<ClientConfig> config, ILogger logger, CurrentUser currentUser, Model readModel,
-            GrpcC2RRequests grpcC2RRequests, IDispatcherProvider dispatcherProvider,
+            GrpcC2RService grpcC2RService, IDispatcherProvider dispatcherProvider,
             AutoAnalysisParamsViewModel autoAnalysisParamsViewModel,
             VeexMeasurementTool veexMeasurementTool,
             LandmarksIntoBaseSetter landmarksIntoBaseSetter, MeasurementAsBaseAssigner measurementAsBaseAssigner
@@ -32,7 +32,7 @@ namespace Fibertest.WpfClient
         {
             _logger = logger;
             _readModel = readModel;
-            _grpcC2RRequests = grpcC2RRequests;
+            _grpcC2RService = grpcC2RService;
             _dispatcherProvider = dispatcherProvider;
             _veexMeasurementTool = veexMeasurementTool;
             _landmarksIntoBaseSetter = landmarksIntoBaseSetter;
@@ -90,7 +90,7 @@ namespace Fibertest.WpfClient
                 .SetParams(true, Model.AutoAnalysisParamsViewModel.SearchNewEvents, false, null, veexMeasOtdrParameters);
 
             var startResult =
-                await _grpcC2RRequests.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
+                await _grpcC2RService.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
             {
                 DestroyTimer();

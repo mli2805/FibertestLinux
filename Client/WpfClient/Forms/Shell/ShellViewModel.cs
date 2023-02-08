@@ -29,7 +29,7 @@ namespace Fibertest.WpfClient
         private readonly DataCenterConfig _currentDatacenterParameters;
         private readonly CommandLineParameters _commandLineParameters;
         private readonly IClientWcfServiceHost _host;
-        private readonly GrpcC2DRequests? _grpcC2DRequests;
+        private readonly GrpcC2DService? _grpcC2DService;
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly IWcfServiceInSuperClient _c2SWcfManager;
@@ -47,7 +47,7 @@ namespace Fibertest.WpfClient
             CurrentClientConfiguration currentClientConfiguration, CurrentUser currentUser,
             DataCenterConfig currentDatacenterParameters, CommandLineParameters commandLineParameters,
             IClientWcfServiceHost host,
-            GrpcC2DRequests grpcC2DRequests,
+            GrpcC2DService grpcC2DService,
             IWcfServiceInSuperClient c2SWcfManager,
             GraphReadModel graphReadModel, IWindowManager windowManager,
             LoginViewModel loginViewModel,
@@ -82,7 +82,7 @@ namespace Fibertest.WpfClient
             _currentDatacenterParameters = currentDatacenterParameters;
             _commandLineParameters = commandLineParameters;
             _host = host;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
 
@@ -182,7 +182,7 @@ namespace Fibertest.WpfClient
         private async Task<bool> CheckFreeSpaceThreshold()
         {
             var dto = new GetDiskSpaceDto();
-            var driveInfo = await _grpcC2DRequests!.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
+            var driveInfo = await _grpcC2DService!.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
             var totalSize = $@"Database drive's size: {driveInfo.TotalSize:0.0}Gb";
             var freeSpace = $@"free space: {driveInfo.AvailableFreeSpace:0.0}Gb";
             var dataSize = $@"database size: {driveInfo.DataSize:0.0}Gb";
@@ -264,10 +264,10 @@ namespace Fibertest.WpfClient
             _clientPollerCts.Cancel();
             _logger.LogInfo(Logs.Client, @"Client application finished.");
 
-            if (_grpcC2DRequests == null)
+            if (_grpcC2DService == null)
                 return true;
 
-            await _grpcC2DRequests.SendAnyC2DRequest<UnRegisterClientDto, RequestAnswer>(new UnRegisterClientDto(_currentUser.UserName))
+            await _grpcC2DService.SendAnyC2DRequest<UnRegisterClientDto, RequestAnswer>(new UnRegisterClientDto(_currentUser.UserName))
                 .ContinueWith(_ => { Environment.Exit(Environment.ExitCode); });
 
             return true;

@@ -13,7 +13,7 @@ namespace Fibertest.WpfClient
     public class LicenseSender
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly LicenseCommandFactory _licenseCommandFactory;
         private readonly ILicenseFileChooser _licenseFileChooser;
         private readonly LicenseFromFileDecoder _licenseFromFileDecoder;
@@ -23,12 +23,12 @@ namespace Fibertest.WpfClient
 
         public string? SecurityAdminPassword;
 
-        public LicenseSender(ILifetimeScope globalScope, GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager,
+        public LicenseSender(ILifetimeScope globalScope, GrpcC2DService grpcC2DService, IWindowManager windowManager,
             LicenseCommandFactory licenseCommandFactory, ILicenseFileChooser licenseFileChooser,
             LicenseFromFileDecoder licenseFromFileDecoder, CurrentUser currentUser)
         {
             _globalScope = globalScope;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _licenseCommandFactory = licenseCommandFactory;
             _licenseFileChooser = licenseFileChooser;
             _licenseFromFileDecoder = licenseFromFileDecoder;
@@ -73,7 +73,7 @@ namespace Fibertest.WpfClient
 
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+                result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             }
 
             var vm = result.ReturnCode != ReturnCode.Ok

@@ -34,7 +34,7 @@ namespace Fibertest.WpfClient
         private readonly TraceStatisticsViewsManager _traceStatisticsViewsManager;
         private readonly LandmarksViewsManager _landmarksViewsManager;
         private readonly GraphReadModel _graphReadModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private bool _isSoundForThisVmInstanceOn;
         private bool _isTraceStateChanged;
         public bool IsOpen { get; private set; }
@@ -61,7 +61,7 @@ namespace Fibertest.WpfClient
         public TraceStateViewModel(ILogger logger, CurrentUser currentUser, CurrentGis currentGis,
              ReflectogramManager reflectogramManager,
             SoundManager soundManager, Model readModel, GraphReadModel graphReadModel,
-            GrpcC2DRequests grpcC2DRequests, IWcfServiceInSuperClient c2SWcfManager, 
+            GrpcC2DService grpcC2DService, IWcfServiceInSuperClient c2SWcfManager, 
             CommandLineParameters commandLineParameters, DataCenterConfig currentDataCenterParameters,
             TabulatorViewModel tabulatorViewModel, TraceStateReportProvider traceStateReportProvider,
             TraceStatisticsViewsManager traceStatisticsViewsManager, LandmarksViewsManager landmarksViewsManager)
@@ -82,7 +82,7 @@ namespace Fibertest.WpfClient
             _traceStatisticsViewsManager = traceStatisticsViewsManager;
             _landmarksViewsManager = landmarksViewsManager;
             _graphReadModel = graphReadModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         public void Initialize(TraceStateModel model, bool isTraceStateChanged)
@@ -253,7 +253,7 @@ namespace Fibertest.WpfClient
                     }
                 }
 
-                var result = await _grpcC2DRequests.SendEventSourcingCommand(dto);
+                var result = await _grpcC2DService.SendEventSourcingCommand(dto);
                 if (result.ReturnCode != ReturnCode.Ok)
                     _logger.LogInfo(Logs.Client,@"Cannot update measurement!");
                 IsEditEnabled = true;

@@ -17,15 +17,15 @@ namespace KadastrLoader
         private readonly ILogger _logger;
         private readonly KadastrDbProvider _kadastrDbProvider;
         private readonly LoadedAlready _loadedAlready;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
 
         public WellParser(ILogger logger, KadastrDbProvider kadastrDbProvider, 
-             LoadedAlready loadedAlready, GrpcC2DRequests grpcC2DRequests)
+             LoadedAlready loadedAlready, GrpcC2DService grpcC2DService)
         {
             _logger = logger;
             _kadastrDbProvider = kadastrDbProvider;
             _loadedAlready = loadedAlready;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         public void ParseWells(string folder, BackgroundWorker worker)
@@ -61,7 +61,7 @@ namespace KadastrLoader
             _kadastrDbProvider.AddWell(well).Wait();
 
             var cmd = CreateNodeCmd(fields, well.InFibertestId);
-            var result = _grpcC2DRequests.SendEventSourcingCommand(cmd).Result;
+            var result = _grpcC2DService.SendEventSourcingCommand(cmd).Result;
             _logger.LogInfo(Logs.Client, result.ReturnCode != ReturnCode.Error
                 ? $"Well {fields[1].Trim()} added successfully."
                 : $"Failed to add well {fields[1].Trim()}.  {result.ErrorMessage}");

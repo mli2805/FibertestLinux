@@ -15,14 +15,14 @@ namespace KadastrLoader
     {
         private readonly ILogger _logger;
         private readonly LoadedAlready _loadedAlready;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
 
         public ChannelParser(ILogger logger, LoadedAlready loadedAlready,
-            GrpcC2DRequests grpcC2DRequests)
+            GrpcC2DService grpcC2DService)
         {
             _logger = logger;
             _loadedAlready = loadedAlready;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         public void ParseChannels(string folder, BackgroundWorker worker)
@@ -48,7 +48,7 @@ namespace KadastrLoader
             if (cmd == null) return "invalid line";
             _logger.LogInfo(Logs.Client, $"command create fiber {cmd.FiberId.First6()} between: {cmd.NodeId1.First6()} and {cmd.NodeId2.First6()}");
 
-            var result = _grpcC2DRequests.SendEventSourcingCommand(cmd).Result;
+            var result = _grpcC2DService.SendEventSourcingCommand(cmd).Result;
             if (result.ReturnCode == ReturnCode.Error) 
                 return result.ErrorMessage;
 

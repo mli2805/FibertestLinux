@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
         private static readonly JsonSerializerSettings JsonSerializerSettings =
             new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly Model _readModel;
         private readonly ServerConnectionLostViewModel _serverConnectionLostViewModel;
@@ -60,7 +60,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ClientPoller(GrpcC2DRequests grpcC2DRequests, IDispatcherProvider dispatcherProvider,
+        public ClientPoller(GrpcC2DService grpcC2DService, IDispatcherProvider dispatcherProvider,
             IWindowManager windowManager, Model readModel,
             ServerConnectionLostViewModel serverConnectionLostViewModel,
             IWcfServiceInSuperClient c2SWcfManager, SystemState systemState, CurrentUser currentUser,
@@ -76,7 +76,7 @@ namespace Fibertest.WpfClient
 
             ILogger logger, IWritableConfig<ClientConfig> config, EventArrivalNotifier eventArrivalNotifier)
         {
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
             _readModel = readModel;
             _serverConnectionLostViewModel = serverConnectionLostViewModel;
@@ -133,7 +133,7 @@ namespace Fibertest.WpfClient
         public async Task<int> EventSourcingTick()
         {
             var getEventsDto = new GetEventsDto() { Revision = CurrentEventNumber, ClientConnectionId = _currentUser.ConnectionId };
-            var result = await _grpcC2DRequests.SendAnyC2DRequest<GetEventsDto, EventsDto>(getEventsDto);
+            var result = await _grpcC2DService.SendAnyC2DRequest<GetEventsDto, EventsDto>(getEventsDto);
             string[]? events = result.Events;
 
             if (events == null)

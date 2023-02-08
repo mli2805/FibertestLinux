@@ -16,7 +16,7 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
 
         private ObservableCollection<Zone> _rows;
@@ -49,11 +49,11 @@ namespace Fibertest.WpfClient
         public bool IsEnabled { get; set; }
 
         public ZonesViewModel(ILifetimeScope globalScope, Model readModel, EventArrivalNotifier eventArrivalNotifier,
-            GrpcC2DRequests grpcC2DRequests, IWindowManager windowManager, CurrentUser currentUser)
+            GrpcC2DService grpcC2DService, IWindowManager windowManager, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
             _rows = new ObservableCollection<Zone>(readModel.Zones);
             SelectedZone = Rows.First();
@@ -90,7 +90,7 @@ namespace Fibertest.WpfClient
             if (! await ConfirmZoneRemove()) return;
 
             var cmd = new RemoveZone() { ZoneId = SelectedZone!.ZoneId };
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd); 
             if (result.ReturnCode == ReturnCode.Ok)
             {
                 var zone = SelectedZone;

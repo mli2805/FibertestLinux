@@ -10,7 +10,7 @@ namespace Fibertest.WpfClient
 {
     public class ZoneViewModel : Screen, IDataErrorInfo
     {
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
 
         private static readonly IMapper Mapper = new MapperConfiguration(
             cfg => cfg.AddProfile<MappingViewModelToCommand>()).CreateMapper();
@@ -55,9 +55,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public ZoneViewModel(GrpcC2DRequests grpcC2DRequests)
+        public ZoneViewModel(GrpcC2DService grpcC2DService)
         {
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
         }
 
         protected override void OnViewLoaded(object view)
@@ -86,7 +86,7 @@ namespace Fibertest.WpfClient
                 cmd = Mapper.Map<AddZone>(this);
             else
                 cmd = Mapper.Map<UpdateZone>(this);
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            await _grpcC2DService.SendEventSourcingCommand(cmd); 
             await TryCloseAsync();
         }
 

@@ -8,12 +8,12 @@ namespace Fibertest.WpfClient
 {
     public class GrmEquipmentRequests
     {
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly AddEquipmentIntoNodeBuilder _addEquipmentIntoNodeBuilder;
 
-        public GrmEquipmentRequests(GrpcC2DRequests grpcC2DRequests, AddEquipmentIntoNodeBuilder addEquipmentIntoNodeBuilder)
+        public GrmEquipmentRequests(GrpcC2DService grpcC2DService, AddEquipmentIntoNodeBuilder addEquipmentIntoNodeBuilder)
         {
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _addEquipmentIntoNodeBuilder = addEquipmentIntoNodeBuilder;
         }
 
@@ -25,7 +25,7 @@ namespace Fibertest.WpfClient
                 NodeId = Guid.NewGuid(),
             };
             cmd.EmptyNodeEquipmentId = request.Type == EquipmentType.EmptyNode || request.Type == EquipmentType.AdjustmentPoint ? Guid.Empty : Guid.NewGuid();
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         public async Task AddEquipmentIntoNode(RequestAddEquipmentIntoNode request)
@@ -33,17 +33,17 @@ namespace Fibertest.WpfClient
             var cmd = await _addEquipmentIntoNodeBuilder.BuildCommand(request.NodeId);
             if (cmd == null)
                 return;
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         public async Task UpdateEquipment(UpdateEquipment cmd)
         {
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
         public async Task RemoveEquipment(RemoveEquipment cmd)
         {
-            await _grpcC2DRequests.SendEventSourcingCommand(cmd);
+            await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
 

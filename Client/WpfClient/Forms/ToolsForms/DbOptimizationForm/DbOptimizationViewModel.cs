@@ -19,7 +19,7 @@ namespace Fibertest.WpfClient
         private readonly ILogger _logger; 
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
-        private readonly GrpcC2DRequests _grpcC2DRequests;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
 
         public bool IsInProgress { get; set; }
@@ -27,21 +27,21 @@ namespace Fibertest.WpfClient
         public DbOptimizationModel Model { get; set; } = new DbOptimizationModel();
 
         public DbOptimizationViewModel(IWritableConfig<ClientConfig> config, ILogger logger, Model readModel, 
-            CurrentUser currentUser, GrpcC2DRequests grpcC2DRequests,
+            CurrentUser currentUser, GrpcC2DService grpcC2DService,
             IWindowManager windowManager)
         {
             _config = config;
             _logger = logger;
             _readModel = readModel;
             _currentUser = currentUser;
-            _grpcC2DRequests = grpcC2DRequests;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
         }
 
         public async Task Initialize()
         {
             var dto = new GetDiskSpaceDto();
-            var drive = await _grpcC2DRequests.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
+            var drive = await _grpcC2DService.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
             if (drive.ReturnCode != ReturnCode.Ok)
             {
                 _logger.LogError(Logs.Client,@"GetDiskSpaceGb error");
@@ -86,7 +86,7 @@ namespace Fibertest.WpfClient
                 {
                     UpTo = DateTime.Today,
                 };
-            var result = await _grpcC2DRequests.SendEventSourcingCommand(cmd); 
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd); 
             if (result.ReturnCode != ReturnCode.Ok)
             {
                 var vm = new MyMessageBoxViewModel(MessageType.Error, Resources.SID_DB_optimization__ + result);
