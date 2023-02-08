@@ -8,7 +8,6 @@ namespace Fibertest.Rtu
 {
     public partial class RtuManager
     {
-        public ClientMeasurementStartedDto? ClientMeasurementStartedDto;
         public async Task<ClientMeasurementStartedDto> DoClientMeasurement(DoClientMeasurementDto dto)
         {
             if (!IsRtuInitialized)

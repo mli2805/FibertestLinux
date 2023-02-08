@@ -22,10 +22,10 @@ namespace Fibertest.Rtu
 
             if (!_wasMonitoringOn)
             {
-                // var res = await _otdrManager.ConnectOtdr();
-                // if (!res)
-                var res = await _otdrManager.InitializeOtdr();
-                if (res.ReturnCode != ReturnCode.Ok)
+                var res = await _otdrManager.ConnectOtdr();
+                if (!res)
+                // var res = await _otdrManager.InitializeOtdr();
+                // if (res.ReturnCode != ReturnCode.Ok)
                 {
                     var recovery = await RunMainCharonRecovery(); // one of recovery steps inevitably exits process
                     // res = _otdrManager.ConnectOtdr(_mainCharon.NetAddress.Ip4Address);
