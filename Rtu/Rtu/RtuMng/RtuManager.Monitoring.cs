@@ -41,7 +41,7 @@ public partial class RtuManager
         _logger.LogInfo(Logs.RtuManager, "Monitoring stopped.");
 
         _config.Update(c => c.Monitoring.IsMonitoringOn = false);
-        await _otdrManager.DisconnectOtdr();
+        _otdrManager.DisconnectOtdr();
         _logger.LogInfo(Logs.RtuManager, "Rtu is turned into MANUAL mode.");
     }
 
@@ -218,7 +218,7 @@ public partial class RtuManager
             {
                 _logger.LogInfo(Logs.RtuManager, "Additional check after measurement failed!");
                 monitoringPort.SaveMeasBytes(baseRefType, buffer, SorType.Error, _logger); // save meas if error
-                await ReInitializeDlls();
+                ReInitializeDlls();
                 return new MoniResult() { MeasurementResult = MeasurementResult.HardwareProblem };
             }
         }
@@ -256,9 +256,9 @@ public partial class RtuManager
         return moniResult;
     }
 
-    private async Task ReInitializeDlls()
+    private void ReInitializeDlls()
     {
-        await _otdrManager.DisconnectOtdr();
+        _otdrManager.DisconnectOtdr();
         var otdrInitializationResult = _otdrManager.InitializeOtdr();
         _logger.LogInfo(Logs.RtuManager, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");
         _logger.LogInfo(Logs.RtuService, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");

@@ -34,7 +34,7 @@ public partial class RtuManager
 
         _serialPortManager.ShowOnLedDisplay(LedDisplayCode.Connecting); // "Connecting..."
 
-        var result = await _otdrManager.InitializeOtdr();
+        var result = _otdrManager.InitializeOtdr();
         result.RtuId = _config.Value.General.RtuId;
         if (result.ReturnCode != ReturnCode.Ok)
             return result;
@@ -67,7 +67,7 @@ public partial class RtuManager
         if (!_config.Value.Monitoring.IsMonitoringOn)
         {
             _logger.LogInfo(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
-            var unused = await _otdrManager.DisconnectOtdr();
+            var unused = _otdrManager.DisconnectOtdr();
         }
 
         // permit to send heartbeats
@@ -89,10 +89,10 @@ public partial class RtuManager
         return version;
     }
 
-    public async Task<RequestAnswer> FreeOtdr()
+    public RequestAnswer FreeOtdr()
     {
         _logger.LogInfo(Logs.RtuManager, "RtuManager: FreeOtdr");
-        var res = await _otdrManager.DisconnectOtdr();
+        var res = _otdrManager.DisconnectOtdr();
         return new RequestAnswer(res ? ReturnCode.Ok : ReturnCode.Error);
     }
 

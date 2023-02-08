@@ -73,7 +73,7 @@ namespace Fibertest.Rtu
             {
                 if (!KeepOtdrConnection)
                 {
-                    await _otdrManager.DisconnectOtdr();
+                    _otdrManager.DisconnectOtdr();
                     _logger.LogInfo(Logs.RtuManager, "RTU is in MANUAL mode.");
                 }
             }

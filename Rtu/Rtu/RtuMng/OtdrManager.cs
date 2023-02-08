@@ -29,7 +29,7 @@ public partial class OtdrManager
         _otdrTcpPort = config.Value.General.OtdrTcpPort;
     }
 
-    public async Task<RtuInitializedDto> InitializeOtdr()
+    public RtuInitializedDto InitializeOtdr()
     {
         try
         {
@@ -46,7 +46,7 @@ public partial class OtdrManager
             return new RtuInitializedDto(ReturnCode.OtdrInitializationCannotInitializeDll);
 
         Thread.Sleep(300);
-        if (!await ConnectOtdr())
+        if (!ConnectOtdr())
             return new RtuInitializedDto(ReturnCode.FailedToConnectOtdr);
 
         var result = new RtuInitializedDto(ReturnCode.Ok);
@@ -89,19 +89,17 @@ public partial class OtdrManager
         return true;
     }
 
-    public async Task<bool> ConnectOtdr()
+    public bool ConnectOtdr()
     {
         _logger.LogInfo(Logs.RtuManager, $"Connecting to OTDR {_charonIp}:{_otdrTcpPort}...");
         var isOtdrConnected = _interOpWrapper.InitOtdr(ConnectionTypes.Tcp, _charonIp, _otdrTcpPort);
         if (!isOtdrConnected)
             _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectOtdr);
-        await Task.Delay(1);
         return isOtdrConnected;
     }
 
-    public async Task<bool> DisconnectOtdr()
+    public bool DisconnectOtdr()
     {
-        await Task.Delay(1);
         _logger.LogInfo(Logs.RtuManager, $"Disconnecting OTDR {_charonIp}...");
         return _interOpWrapper.InitOtdr(ConnectionTypes.FreePort, _charonIp, _otdrTcpPort);
     }
