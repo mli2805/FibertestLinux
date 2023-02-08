@@ -91,11 +91,11 @@ public partial class OtdrManager
 
     public async Task<bool> ConnectOtdr()
     {
-        await Task.Delay(1);
         _logger.LogInfo(Logs.RtuManager, $"Connecting to OTDR {_charonIp}:{_otdrTcpPort}...");
         var isOtdrConnected = _interOpWrapper.InitOtdr(ConnectionTypes.Tcp, _charonIp, _otdrTcpPort);
         if (!isOtdrConnected)
             _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectOtdr);
+        await Task.Delay(1);
         return isOtdrConnected;
     }
 
