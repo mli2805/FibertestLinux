@@ -20,16 +20,13 @@ namespace Fibertest.Rtu;
 /// </summary>
 public partial class InterOpWrapper
 {
-    // EXTERN_C __declspec(dllexport) int MeasPrepare(int mMode);
-    [DllImport("iit_otdr.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "MeasPrepare")]
+    [DllImport("OtdrMeasEngine/iit_otdr.so")]
     public static extern int MeasPrepare(int measurementMode);
 
-    // EXTERN_C __declspec(dllexport) int MeasStep(TSorData** rezSD);
-    [DllImport("iit_otdr.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "MeasStep")]
+    [DllImport("OtdrMeasEngine/iit_otdr.so")]
     public static extern int MeasStep(ref IntPtr sorData);
 
-    // EXTERN_C __declspec(dllexport) int MeasStop(TSorData** fullSD, int stopMode);
-    [DllImport("iit_otdr.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "MeasStop")]
+    [DllImport("OtdrMeasEngine/iit_otdr.so")]
     public static extern int MeasStop(ref IntPtr sorData, int isImmediateStop);
 
     public int ConvertLmaxKmToNs()
