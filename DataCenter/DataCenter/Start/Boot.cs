@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using Serilog.Events;
 
 namespace Fibertest.DataCenter;
 
@@ -29,8 +30,7 @@ public sealed class Boot : IHostedService
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
         _logger.LogInfo(Logs.DataCenter, $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
-        _logger.LogInfo(Logs.DataCenter, 
-            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_config.Value.General.LogLevel)}");
+        _config.Update(c=>c.General.LogEventLevel = LogEventLevel.Debug.ToString());
 
         await _eventStoreService.InitializeBothDb();
     }

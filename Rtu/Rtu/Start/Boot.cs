@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using Serilog.Events;
 
 namespace Fibertest.Rtu;
 
@@ -27,8 +28,7 @@ public sealed class Boot : IHostedService
         _logger.LogInfo(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
         _logger.LogInfo(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
 
-        _logger.LogInfo(Logs.RtuService, 
-            $"Minimum log level set as {LoggerConfigurationFactory.Parse(_config.Value.General.LogLevel)}");
+        _config.Update(c=>c.General.LogEventLevel = LogEventLevel.Debug.ToString());
 
         return Task.CompletedTask;
     }

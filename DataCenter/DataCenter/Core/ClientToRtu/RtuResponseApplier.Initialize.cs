@@ -49,7 +49,7 @@ public partial class RtuResponseApplier
         };
         if (dto.RtuAddresses.HasReserveAddress)
         {
-            rtuStation.ReserveAddress = dto.RtuAddresses.Reserve.GetAddress();
+            rtuStation.ReserveAddress = dto.RtuAddresses.Reserve!.GetAddress();
             rtuStation.ReserveAddressPort = dto.RtuAddresses.Reserve.Port;
             rtuStation.LastConnectionByReserveAddressTimestamp = DateTime.Now;
         }

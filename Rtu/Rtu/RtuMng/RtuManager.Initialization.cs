@@ -12,16 +12,19 @@ public partial class RtuManager
         // prohibit to send heartbeats
         ShouldSendHeartbeat.TryDequeue(out _);
 
+        if (IsMonitoringOn || _wasMonitoringOn)
+        {
+            _wasMonitoringOn = IsMonitoringOn;
+            StopMonitoring("Initialize");
+        }
+
         if (dto != null)
-            SaveInitializationParameters(dto);
+             SaveParametersAndStates(dto);
 
-        var assembly = Assembly.GetExecutingAssembly();
-        FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
-        var creationTime = File.GetLastWriteTime(assembly.Location);
-        var version = $"{info.FileVersion}";
+        IsAutoBaseMeasurementInProgress = false;
+        _config.Update(c=>c.Monitoring.IsAutoBaseMeasurementInProgress = false);
 
-        var versionRtuManager = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
-        _logger.LogInfo(Logs.RtuManager, $"RtuManager {versionRtuManager}");
+        var version = LogInitializationStart();
 
         IsRtuInitialized = false;
 
@@ -73,6 +76,19 @@ public partial class RtuManager
         return result2;
     }
 
+    private string LogInitializationStart()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
+        var creationTime = File.GetLastWriteTime(assembly.Location);
+        var version = $"{info.FileVersion}";
+
+        var versionRtuManager = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
+        _logger.LogInfo(Logs.RtuManager, $"RtuManager {versionRtuManager}");
+
+        return version;
+    }
+
     public async Task<RequestAnswer> FreeOtdr()
     {
         _logger.LogInfo(Logs.RtuManager, "RtuManager: FreeOtdr");
@@ -80,12 +96,15 @@ public partial class RtuManager
         return new RequestAnswer(res ? ReturnCode.Ok : ReturnCode.Error);
     }
 
-    private void SaveInitializationParameters(InitializeRtuDto dto)
+    private void SaveParametersAndStates(InitializeRtuDto dto)
     {
         _config.Update(c => c.General.RtuId = dto.RtuId);
         _config.Update(c => c.General.ServerAddress = dto.ServerAddresses!);
 
+        IsMonitoringOn = false;
+        _wasMonitoringOn = false;
         _config.Update(c => c.Monitoring.IsMonitoringOn = false);
+
         _logger.EmptyAndLog(Logs.RtuManager, "Initialization by the USER puts RTU into MANUAL mode.");
     }
 

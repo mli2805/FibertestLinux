@@ -30,19 +30,6 @@ public static class LogsExt
 /// </summary>
 public static class LoggerConfigurationFactory
 {
-    public static LogEventLevel Parse(string logLevel)
-    {
-        switch (logLevel)
-        {
-            case "0" : return LogEventLevel.Fatal;
-            case "1" : return LogEventLevel.Warning;
-            case "2" : return LogEventLevel.Information;
-            case "3" : return LogEventLevel.Debug;
-            case "4" : return LogEventLevel.Verbose;
-            default: return LogEventLevel.Information;
-        }
-    }
-
     public static LoggerConfiguration Configure(LogEventLevel level)
     {
         var logFolder = Path.Combine(FileOperations.GetMainFolder(), @"log");
