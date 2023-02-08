@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
-using GrpsClientLib;
+using Fibertest.GrpcClientLib;
 
 namespace Fibertest.WpfClient
 {

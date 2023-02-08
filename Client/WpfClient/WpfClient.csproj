@@ -162,6 +162,7 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="6.5.0" />
 		<PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.51.0" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 	</ItemGroup>
 
@@ -171,8 +172,8 @@
 	  <ProjectReference Include="..\..\Shared\GMap.NET.WindowsPresentation\GMap.NET.WindowsPresentation.csproj" />
 	  <ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
 	  <ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
-	  <ProjectReference Include="..\GrpsClientLib\GrpsClientLib.csproj" />
 	  <ProjectReference Include="..\..\Shared\StringResources\StringResources.csproj" />
+	  <ProjectReference Include="..\GrpcClientLib\GrpcClientLib.csproj" />
 	  <ProjectReference Include="..\WpfCommonViews\WpfCommonViews.csproj" />
 	</ItemGroup>
 

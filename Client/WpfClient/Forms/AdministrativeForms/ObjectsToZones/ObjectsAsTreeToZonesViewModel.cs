@@ -4,8 +4,8 @@ using System.Linq;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
-using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {

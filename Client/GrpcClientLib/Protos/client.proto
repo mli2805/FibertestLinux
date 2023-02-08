@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpsClientLib";
+
+service toClient {
+	rpc SendCommand(.toClientCommand) returns (.toClientResponse);
+}
+
+message toClientCommand {
+	string json = 1;
+	bool isEventSourcingCommand = 2;
+	string clientConnectionId = 3;
+}
+
+message toClientResponse {
+	string json = 1;
+}

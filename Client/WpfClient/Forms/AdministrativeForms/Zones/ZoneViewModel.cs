@@ -3,8 +3,8 @@ using System.ComponentModel;
 using AutoMapper;
 using Caliburn.Micro;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
-using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {

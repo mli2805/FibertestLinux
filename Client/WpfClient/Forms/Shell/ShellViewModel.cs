@@ -8,10 +8,10 @@ using System.Windows;
 using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
-using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient

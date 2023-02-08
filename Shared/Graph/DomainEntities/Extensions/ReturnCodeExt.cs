@@ -75,18 +75,24 @@ public static class ReturnCodeExt
 
 
             // 2000
-            //case ReturnCode.C2DWcfConnectionError:
-            //    return Resources.SID_Cannot_establish_connection_with_DataCenter_;
-            //case ReturnCode.C2DWcfOperationError:
-            //    return Resources.SID_Error_during_Client_Datacenter_connection;
-            //case ReturnCode.D2RWcfConnectionError:
-            //    return Resources.SID_Cannot_establish_connection_with_RTU_;
-            //case ReturnCode.D2RWcfOperationError:
-            //    return Resources.SID_Error_during_Datacenter_Rtu_connection;
-            //case ReturnCode.C2RWcfConnectionError:
-            //    return Resources.SID_Cannot_establish_connection_with_RTU_;
-            //case ReturnCode.C2RWcfOperationError:
-            //    return Resources.SID_Error_during_Client_RTU_operation__;
+            case ReturnCode.C2DGrpcOperationError:
+                return "C2DGrpcOperationError";
+            case ReturnCode.D2RGrpcOperationError:
+                return "D2RGrpcOperationError";
+            case ReturnCode.C2RGrpcOperationError:
+                return "C2RGrpcOperationError";
+            case ReturnCode.R2DGrpcOperationError:
+                return "R2DGrpcOperationError";
+            case ReturnCode.ToClientGrpcOperationError:
+                return "ToClientGrpcOperationError";
+            case ReturnCode.FailedDeserializeJson:
+                return "FailedDeserializeJson";
+            case ReturnCode.UnAuthorizedAccess:
+                return "UnAuthorizedAccess";
+            case ReturnCode.RtuNotFound:
+                return "RtuNotFound";
+            case ReturnCode.RtuNotAvailable:
+                return "RtuNotAvailable";
 
             // 3000
             case ReturnCode.DbError:

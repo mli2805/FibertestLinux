@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
-using GrpsClientLib;
 
 namespace KadastrLoader
 {

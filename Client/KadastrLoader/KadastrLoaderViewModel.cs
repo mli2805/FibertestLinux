@@ -7,11 +7,11 @@ using System.Windows.Input;
 using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.Utils.Setup;
 using Fibertest.WpfCommonViews;
-using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 

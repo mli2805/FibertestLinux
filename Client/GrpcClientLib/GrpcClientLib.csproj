@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>Fibertest.GrpcClientLib</RootNamespace>
+    <AssemblyName>Fibertest.GrpcClientLib</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,5 +27,6 @@
 	<ItemGroup>
 		<Protobuf Include="../../DataCenter/DataCenter/Protos/c2d.proto" GrpcServices="Client" />
 		<Protobuf Include="../../DataCenter/DataCenter/Protos/c2r.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\client.proto" GrpcServices="Server" />
 	</ItemGroup>
 </Project>

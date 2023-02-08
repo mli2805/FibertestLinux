@@ -8,10 +8,10 @@ using AutoMapper;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.WpfCommonViews;
 using Fibertest.StringResources;
 using GMap.NET;
-using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {

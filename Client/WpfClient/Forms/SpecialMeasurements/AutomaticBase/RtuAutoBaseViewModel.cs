@@ -9,10 +9,10 @@ using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
-using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Trace = Fibertest.Graph.Trace;
 

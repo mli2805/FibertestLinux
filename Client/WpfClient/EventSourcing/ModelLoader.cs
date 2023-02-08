@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.Utils;
-using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.WpfClient

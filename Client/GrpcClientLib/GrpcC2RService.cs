@@ -5,7 +5,7 @@ using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace GrpsClientLib;
+namespace Fibertest.GrpcClientLib;
 
 public class GrpcC2RService
 {

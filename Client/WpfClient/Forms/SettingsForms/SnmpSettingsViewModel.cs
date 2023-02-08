@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Caliburn.Micro;
 using Fibertest.Dto;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
-using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {

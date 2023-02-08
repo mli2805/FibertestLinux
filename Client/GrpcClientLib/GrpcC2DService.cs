@@ -5,7 +5,7 @@ using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace GrpsClientLib;
+namespace Fibertest.GrpcClientLib;
 
 public class GrpcC2DService
 {
@@ -52,8 +52,6 @@ public class GrpcC2DService
     {
         dto.ClientConnectionId = _clientConnectionId;
         var command = new c2dCommand { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
-
-        using var grpcChannel = GrpcChannel.ForAddress(uri);
 
         return await SendAnyC2DRequest<TResult>(uri, command);
     }

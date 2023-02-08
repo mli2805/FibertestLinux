@@ -2,9 +2,9 @@
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
-using GrpsClientLib;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -33,8 +33,12 @@ namespace Fibertest.WpfClient
             builder.RegisterType<Model>().InstancePerLifetimeScope();
 
             builder.RegisterType<WaitCursor>().As<IWaitCursor>().InstancePerLifetimeScope();
+
             builder.RegisterType<GrpcC2DService>().InstancePerLifetimeScope();
             builder.RegisterType<GrpcC2RService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<ClientGrpcService>().InstancePerLifetimeScope();
+            builder.RegisterType<ClientGrpcServiceStarter>().InstancePerLifetimeScope();
 
             builder.RegisterType<WcfServiceDesktopC2D>().AsSelf().As<IWcfServiceDesktopC2D>().InstancePerLifetimeScope();
             builder.RegisterType<WcfServiceCommonC2D>().As<IWcfServiceCommonC2D>().InstancePerLifetimeScope();

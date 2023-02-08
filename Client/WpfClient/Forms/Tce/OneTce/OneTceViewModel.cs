@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
-using GrpsClientLib;
 using Trace = Fibertest.Graph.Trace;
 
 namespace Fibertest.WpfClient

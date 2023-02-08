@@ -6,9 +6,9 @@ using System.Windows;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.WpfCommonViews;
 using GMap.NET;
-using GrpsClientLib;
 
 namespace Fibertest.WpfClient
 {

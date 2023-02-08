@@ -27,7 +27,7 @@
 		<ProjectReference Include="..\..\Shared\Graph\Graph.csproj" />
 		<ProjectReference Include="..\..\Shared\StringResources\StringResources.csproj" />
 		<ProjectReference Include="..\..\Shared\Utils\Utils.csproj" />
-		<ProjectReference Include="..\GrpsClientLib\GrpsClientLib.csproj" />
+		<ProjectReference Include="..\GrpcClientLib\GrpcClientLib.csproj" />
 		<ProjectReference Include="..\WpfCommonViews\WpfCommonViews.csproj" />
 	</ItemGroup>
 
