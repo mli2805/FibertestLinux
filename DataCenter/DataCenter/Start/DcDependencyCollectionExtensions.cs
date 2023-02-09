@@ -96,6 +96,8 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<RtuResponseApplier>();
         services.AddSingleton<RtuResponseToEventSourcing>();
 
+        services.AddSingleton<GrpcToClient>();
+
         return services;
     }
 

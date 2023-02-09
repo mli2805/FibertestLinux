@@ -30,13 +30,11 @@ namespace Fibertest.GrpcClientLib
                 switch (request)
                 {
                 //TODO: process request - raise event ?
-                    case ClientMeasurementResultDto _:
-                        _logger.LogInfo(Logs.DataCenter, $"Client gets ClientMeasurementResult dto from DC"); break;
+                    case ClientMeasurementResultDto dto:
+                        _logger.LogInfo(Logs.Client, $"Client gets from DC ClientMeasurementResult {dto.SorBytes!.Length} sor bytes"); break;
                     case CurrentMonitoringStepDto _:
-                        _logger.LogInfo(Logs.DataCenter, $"Client gets CurrentMonitoringStepDto dto from DC"); break;
+                        _logger.LogInfo(Logs.Client, $"Client gets CurrentMonitoringStepDto dto from DC"); break;
                 }
-
-
 
                 return new toClientResponse()
                 { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.Ok), JsonSerializerSettings) };

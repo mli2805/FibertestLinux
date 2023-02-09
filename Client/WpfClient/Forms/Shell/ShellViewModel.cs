@@ -22,13 +22,13 @@ namespace Fibertest.WpfClient
         private readonly LoginViewModel _loginViewModel;
         private readonly Heartbeater _heartbeater;
         private readonly ClientPoller _clientPoller;
+        private readonly ClientGrpcServiceStarter _clientGrpcServiceStarter;
         private readonly ModelLoader _modelLoader;
         private readonly ILogger _logger;
         private readonly CurrentClientConfiguration _currentClientConfiguration;
         private readonly CurrentUser _currentUser;
         private readonly DataCenterConfig _currentDatacenterParameters;
         private readonly CommandLineParameters _commandLineParameters;
-        private readonly IClientWcfServiceHost _host;
         private readonly GrpcC2DService? _grpcC2DService;
         private readonly ILifetimeScope _globalScope;
         private readonly IWritableConfig<ClientConfig> _config;
@@ -46,12 +46,11 @@ namespace Fibertest.WpfClient
         public ShellViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, ILogger logger,
             CurrentClientConfiguration currentClientConfiguration, CurrentUser currentUser,
             DataCenterConfig currentDatacenterParameters, CommandLineParameters commandLineParameters,
-            IClientWcfServiceHost host,
             GrpcC2DService grpcC2DService,
             IWcfServiceInSuperClient c2SWcfManager,
             GraphReadModel graphReadModel, IWindowManager windowManager,
             LoginViewModel loginViewModel,
-            Heartbeater heartbeater, ClientPoller clientPoller,
+            Heartbeater heartbeater, ClientPoller clientPoller, ClientGrpcServiceStarter clientGrpcServiceStarter,
             MainMenuViewModel mainMenuViewModel, TreeOfRtuViewModel treeOfRtuViewModel,
             TabulatorViewModel tabulatorViewModel, CommonStatusBarViewModel commonStatusBarViewModel,
              OpticalEventsDoubleViewModel opticalEventsDoubleViewModel,
@@ -75,13 +74,13 @@ namespace Fibertest.WpfClient
             _loginViewModel = loginViewModel;
             _heartbeater = heartbeater;
             _clientPoller = clientPoller;
+            _clientGrpcServiceStarter = clientGrpcServiceStarter;
             _modelLoader = modelLoader;
             _logger = logger;
             _currentClientConfiguration = currentClientConfiguration;
             _currentUser = currentUser;
             _currentDatacenterParameters = currentDatacenterParameters;
             _commandLineParameters = commandLineParameters;
-            _host = host;
             _grpcC2DService = grpcC2DService;
         }
 
@@ -245,7 +244,8 @@ namespace Fibertest.WpfClient
             {
                 _clientPoller.Start(_clientPollerCts.Token); // graph events including monitoring results events
 
-                _host.StartWcfListener(); // Accepts only monitoring step messages and client's measurement results
+                // Accepts only monitoring step messages and client's measurement results
+                Task.Factory.StartNew(() => _clientGrpcServiceStarter.StartClientGrpcListener());
             }
         }
 

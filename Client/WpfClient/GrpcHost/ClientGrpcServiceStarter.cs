@@ -1,6 +1,8 @@
 ﻿using Fibertest.Dto;
+using Fibertest.GrpcClientLib;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fibertest.WpfClient
@@ -9,11 +11,14 @@ namespace Fibertest.WpfClient
     {
         private WebApplication? _app;
 
-        private void StartClientGrpcListener()
+        public void StartClientGrpcListener()
         {
             var builder = WebApplication.CreateBuilder();
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP((int)TcpPorts.ClientListenTo, o => o.Protocols = HttpProtocols.Http2);
 
-            builder.WebHost.UseUrls($"http://*:{TcpPorts.ClientListenTo}");
+            });
 
             builder.Services.AddGrpc();
 

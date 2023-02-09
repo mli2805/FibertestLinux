@@ -9,11 +9,14 @@ public class R2DService : R2D.R2DBase
 {
     private readonly ILogger<R2DService> _logger;
     private readonly RtuStationsRepository _rtuStationsRepository;
+    private readonly GrpcToClient _grpcToClient;
 
-    public R2DService(ILogger<R2DService> logger, RtuStationsRepository rtuStationsRepository)
+    public R2DService(ILogger<R2DService> logger, RtuStationsRepository rtuStationsRepository,
+        GrpcToClient grpcToClient)
     {
         _logger = logger;
         _rtuStationsRepository = rtuStationsRepository;
+        _grpcToClient = grpcToClient;
     }
 
     private static readonly JsonSerializerSettings JsonSerializerSettings =
@@ -48,7 +51,12 @@ public class R2DService : R2D.R2DBase
     {
         await Task.Delay(1);
         _logger.LogInfo(Logs.DataCenter, $"Client measurement {dto.ClientMeasurementId.First6()} done");
-        return new RequestAnswer(ReturnCode.Ok);
+        var result = await _grpcToClient.SendRequest(dto);
+        if (result.ReturnCode == ReturnCode.Ok) 
+            _logger.LogInfo(Logs.DataCenter, "Sent to client successfully!");
+        else
+            _logger.LogError(Logs.DataCenter, "Failed to send to client");
+        return result;
     }
 
     private async Task<RequestAnswer> ProcessMonitoringResult(MonitoringResultDto dto)
