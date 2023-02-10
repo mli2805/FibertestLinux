@@ -30,17 +30,10 @@ public sealed class Boot : IHostedService
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
 
-        _logger.LogInfo(Logs.DataCenter, $"GetMainFolder returns: {FileOperations.GetMainFolder()}");
-        _logger.LogInfo(Logs.DataCenter, $"GetParentFolder of GetMainFolder returns: {FileOperations.GetParentFolder(FileOperations.GetMainFolder())}");
-
-        var combine = Path.Combine(FileOperations.GetMainFolder(), "../config/dc.json");
-        _logger.LogInfo(Logs.DataCenter, $"combine of GetMainFolder & ../ returns: {combine}");
-
-
-        _config.Update(c=>c.General.DatacenterVersion = info.FileVersion!);
+        _config.Update(c => c.General.DatacenterVersion = info.FileVersion!);
         _logger.LogInfo(Logs.DataCenter, $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
-        _config.Update(c=>c.General.LogEventLevel = LogEventLevel.Debug.ToString());
+        _config.Update(c => c.General.LogEventLevel = LogEventLevel.Debug.ToString());
 
         await _eventStoreService.InitializeBothDb();
     }

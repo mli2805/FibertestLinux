@@ -18,7 +18,7 @@ namespace Fibertest.Utils
 
         public WritableConfig(string filename)
         {
-            _fullFilename = Path.Combine(FileOperations.GetMainFolder(), $"../config/{filename}");
+            _fullFilename = Path.Combine(FileOperations.GetMainFolder(), $"config/{filename}");
 
             ConfigUtils.EnsureCreation<T>(_fullFilename);
       
