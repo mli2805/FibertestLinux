@@ -4,6 +4,7 @@ using Fibertest.Utils;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Grpc.Core;
 
 namespace Fibertest.GrpcClientLib;
 
@@ -29,6 +30,7 @@ public class GrpcC2DService
         _clientConnectionId = clientConnectionId;
     }
 
+
     public async Task<TResult> SendAnyC2DRequest<T, TResult>(T dto) where T : BaseRequest where TResult : RequestAnswer, new()
     {
         return await SendAnyC2DRequest<T, TResult>(dto, ServerUri);
@@ -42,8 +44,12 @@ public class GrpcC2DService
 
     public async Task<RequestAnswer> SendEventSourcingCommand(object cmd)
     {
-        var command = new c2dCommand { Json = JsonConvert.SerializeObject(cmd, JsonSerializerSettings), 
-            IsEventSourcingCommand = true, ClientConnectionId = _clientConnectionId };
+        var command = new c2dCommand
+        {
+            Json = JsonConvert.SerializeObject(cmd, JsonSerializerSettings),
+            IsEventSourcingCommand = true,
+            ClientConnectionId = _clientConnectionId
+        };
 
         return await SendAnyC2DRequest<RequestAnswer>(ServerUri, command);
     }
@@ -58,12 +64,12 @@ public class GrpcC2DService
 
     private async Task<TResult> SendAnyC2DRequest<TResult>(string uri, c2dCommand command) where TResult : RequestAnswer, new()
     {
-        using var grpcChannel = GrpcChannel.ForAddress(uri);
-        var grpcClient = new c2d.c2dClient(grpcChannel);
+        using GrpcChannel grpcChannel = GrpcChannel.ForAddress(uri);
+        c2d.c2dClient grpcClient = new c2d.c2dClient(grpcChannel);
 
         try
         {
-            var response = await grpcClient.SendCommandAsync(command);
+            c2dResponse? response = await grpcClient.SendCommandAsync(command);
             if (response == null)
                 return new TResult
                 {
@@ -71,7 +77,7 @@ public class GrpcC2DService
                     ErrorMessage = "Empty response",
                 };
 
-            var result = JsonConvert.DeserializeObject<TResult>(response.Json);
+            TResult? result = JsonConvert.DeserializeObject<TResult>(response.Json);
             if (result == null)
                 return new TResult
                 {
@@ -83,12 +89,30 @@ public class GrpcC2DService
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.Client,e.Message);
+            _logger.LogError(Logs.Client, e.Message);
             return new TResult
             {
                 ReturnCode = ReturnCode.C2DGrpcOperationError,
                 ErrorMessage = e.Message,
             };
         }
+    }
+
+    public async Task<byte[]> DownloadModel(int modelSize)
+    {
+        using var grpcChannel = GrpcChannel.ForAddress(ServerUri);
+        var grpcClient = new c2d.c2dClient(grpcChannel);
+
+        var bb = new byte[modelSize];
+        var offset = 0;
+
+        var request = new serializedModelRequest() { ClientConnectionId = _clientConnectionId };
+        using AsyncServerStreamingCall<serializedModelPortion>? call = grpcClient.GetSerializedModel(request);
+        await foreach (var response in call.ResponseStream.ReadAllAsync())
+        {
+            response.Portion.CopyTo(bb, offset);
+            offset += response.Portion.Length;
+        }
+        return bb;
     }
 }

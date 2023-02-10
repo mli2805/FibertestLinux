@@ -4,6 +4,8 @@ option csharp_namespace = "Fibertest.DataCenter";
 
 service c2d {
 	rpc SendCommand(.c2dCommand) returns (.c2dResponse);
+
+	rpc GetSerializedModel(.serializedModelRequest) returns (stream .serializedModelPortion);
 }
 
 message c2dCommand {
@@ -14,4 +16,12 @@ message c2dCommand {
 
 message c2dResponse {
 	string json = 1;
+}
+
+message serializedModelRequest {
+	string clientConnectionId = 1;
+}
+
+message serializedModelPortion {
+	bytes portion = 1;
 }

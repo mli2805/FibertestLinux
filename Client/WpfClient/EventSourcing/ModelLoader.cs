@@ -41,25 +41,28 @@ namespace Fibertest.WpfClient
             {
                 _logger.LogInfo(Logs.Client,@"Downloading model...");
                 var paramsDto =
-                    await _grpcC2DService.SendAnyC2DRequest<GetSerializedModelParamsDto, SerializedModelDto>(new GetSerializedModelParamsDto());
+                    await _grpcC2DService
+                        .SendAnyC2DRequest<GetSerializedModelParamsDto, SerializedModelDto>(new GetSerializedModelParamsDto());
                 _logger.LogInfo(Logs.Client,
                     $@"Model size is {paramsDto.Size} in {paramsDto.PortionsCount} portions, last event included {paramsDto.LastIncludedEvent}");
+                
+                // var bb = new byte[paramsDto.Size];
+                // var offset = 0;
+                //
+                // for (int i = 0; i < paramsDto.PortionsCount; i++)
+                // {
+                //
+                //     var result =
+                //         await _grpcC2DService.SendAnyC2DRequest<GetModelPortionDto, SerializedModelPortionDto>(
+                //             new GetModelPortionDto(i));
+                //     result.Bytes.CopyTo(bb, offset);
+                //     offset += result.Bytes.Length;
+                //     _logger.LogInfo(Logs.Client,$@"portion {i}  {result.Bytes.Length} bytes received");
+                // }
 
-                var bb = new byte[paramsDto.Size];
-                var offset = 0;
+                var bb2 = await _grpcC2DService.DownloadModel(paramsDto.Size);
 
-                for (int i = 0; i < paramsDto.PortionsCount; i++)
-                {
-
-                    var result =
-                        await _grpcC2DService.SendAnyC2DRequest<GetModelPortionDto, SerializedModelPortionDto>(
-                            new GetModelPortionDto(i));
-                    result.Bytes.CopyTo(bb, offset);
-                    offset += result.Bytes.Length;
-                    _logger.LogInfo(Logs.Client,$@"portion {i}  {result.Bytes.Length} bytes received");
-                }
-
-                await _readModel.Deserialize(_logger, bb);
+                await _readModel.Deserialize(_logger, bb2);
                 await _graphReadModel.RefreshVisiblePart();
 
                 _zoneEventsOnTreeExecutor.RenderOfModelAfterSnapshot();
