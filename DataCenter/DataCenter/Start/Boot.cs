@@ -28,7 +28,7 @@ public sealed class Boot : IHostedService
         _logger.StartLine(Logs.DataCenter);
         var assembly = Assembly.GetExecutingAssembly();
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
-        _config.Update(c=>c.General.DatacenterVersion = info.FileVersion!);
+        _config.Update(c=>c.General.DatacenterVersion = info.FileVersion! + $"  checked at {DateTime.Now}");
         _logger.LogInfo(Logs.DataCenter, $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
         _config.Update(c=>c.General.LogEventLevel = LogEventLevel.Debug.ToString());
