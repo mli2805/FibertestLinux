@@ -32,6 +32,7 @@ public class C2DService : c2d.c2dBase
     {
         try
         {
+            ClientStation? client = null;
             if (command.IsEventSourcingCommand)
             {
                 _logger.LogInfo(Logs.DataCenter, "Event sourcing command");
@@ -52,7 +53,7 @@ public class C2DService : c2d.c2dBase
                 else
                 {
 
-                    var client = _clientCollection.Get(command.ClientConnectionId);
+                    client = _clientCollection.Get(command.ClientConnectionId);
                     if (client == null)
                         return CreateBadResponse(ReturnCode.NoSuchUserOrWrongPassword);
                     username = client.UserName;
@@ -74,13 +75,13 @@ public class C2DService : c2d.c2dBase
             }
             else
             {
-                var client = _clientCollection.Get(request.ClientConnectionId);
+                client = _clientCollection.Get(request.ClientConnectionId);
                 if (client == null)
                     return CreateBadResponse(ReturnCode.UnAuthorizedAccess);
             }
 
             if (request.What != "GetEvents" && request.What != "Heartbeat")
-                _logger.LogInfo(Logs.DataCenter, $"Client sent {request.What} request");
+                _logger.LogInfo(Logs.DataCenter, $"Client {client?.UserName ?? ""} sent {request.What} request");
 
             var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);
             return new c2dResponse { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
@@ -98,6 +99,7 @@ public class C2DService : c2d.c2dBase
         {
             CheckServerConnectionDto dto => dto,
             RegisterClientDto dto => dto,
+            UnRegisterClientDto dto => dto,
             ClientHeartbeatDto dto => dto,
             SetRtuOccupationDto dto => dto,
 

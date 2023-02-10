@@ -259,7 +259,7 @@ namespace Fibertest.WpfClient
                 var vm = new MyMessageBoxViewModel(MessageType.Confirmation, question);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
 
-                if (!vm.IsAnswerPositive) return true;
+                if (!vm.IsAnswerPositive) return false;
             }
 
             _heartbeaterCts.Cancel();

@@ -36,6 +36,8 @@ public partial class ClientGrpcRequestExecutor
                 return new RequestAnswer(ReturnCode.Ok);
             case RegisterClientDto dto:
                 return await _clientCollection.RegisterClientAsync(dto);
+            case UnRegisterClientDto dto:
+                return await _clientCollection.UnRegisterClientAsync(dto);
             case ClientHeartbeatDto dto:
                 return await _clientCollection.RegisterHeartbeat(dto);
             case SetRtuOccupationDto dto:
