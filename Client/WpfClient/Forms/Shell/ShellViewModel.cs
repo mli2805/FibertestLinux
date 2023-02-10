@@ -172,10 +172,12 @@ namespace Fibertest.WpfClient
         {
             const string separator = @"    >>    ";
             var server =
-                $@"{separator}{_currentDatacenterParameters.General.ServerTitle} ({_currentDatacenterParameters.General.ServerDoubleAddress.Main.Ip4Address}) v{_currentDatacenterParameters.General.DatacenterVersion}";
+                $@"{separator}{_config.Value.General.ServerTitle} ({
+                    _currentDatacenterParameters.General.ServerDoubleAddress.Main.Ip4Address}) v{
+                        _currentDatacenterParameters.General.DatacenterVersion}";
             var user = $@"{separator}{_currentUser.UserName} ({_currentUser.Role.ToString()})";
             var zone = $@"{separator}[{_currentUser.ZoneTitle}]";
-            DisplayName = DisplayName + $@" {server} {user} {zone}";
+            DisplayName += $@" {server} {user} {zone}";
         }
 
         private async Task<bool> CheckFreeSpaceThreshold()

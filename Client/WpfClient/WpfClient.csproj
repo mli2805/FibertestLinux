@@ -8,6 +8,10 @@
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 		<RootNamespace>Fibertest.WpfClient</RootNamespace>
 		<AssemblyName>Fibertest.WpfClient</AssemblyName>
+		<Version>3.0.0.0</Version>
+		<Company>IIT</Company>
+		<Copyright>Copyright © IIT Minsk 2017-2022</Copyright>
+		<Authors>Leanid Marholin</Authors>
 		<ApplicationIcon>FtClient6sizes.ico</ApplicationIcon>
 	</PropertyGroup>
 

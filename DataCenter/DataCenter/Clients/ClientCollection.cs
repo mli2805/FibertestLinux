@@ -3,13 +3,12 @@ using AutoMapper;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.Utils;
-using Microsoft.Extensions.Options;
 
 namespace Fibertest.DataCenter;
 
 public class ClientCollection
 {
-    public readonly IOptions<DataCenterConfig> FullConfig;
+    public readonly IWritableConfig<DataCenterConfig> Config;
     public readonly ILogger<ClientCollection> Logger;
     public readonly Model WriteModel;
     private readonly EventStoreService _eventStoreService;
@@ -17,10 +16,10 @@ public class ClientCollection
     // key is ConnectionId
     public readonly ConcurrentDictionary<string, ClientStation> Clients = new();
 
-    public ClientCollection(IOptions<DataCenterConfig> fullConfig, ILogger<ClientCollection> logger, Model writeModel,
-        EventStoreService eventStoreService)
+    public ClientCollection(IWritableConfig<DataCenterConfig> config, ILogger<ClientCollection> logger, 
+        Model writeModel, EventStoreService eventStoreService)
     {
-        FullConfig = fullConfig;
+        Config = config;
         Logger = logger;
         WriteModel = writeModel;
         _eventStoreService = eventStoreService;

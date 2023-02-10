@@ -150,7 +150,7 @@ namespace Fibertest.DataCenter
             result.ZoneId = zone.ZoneId;
             result.ZoneTitle = zone.Title;
             result.ConnectionId = dto.ClientConnectionId;
-            result.DcCurrentParameters = collection.FullConfig.Value;
+            result.DcCurrentParameters = collection.Config.Value;
 
             result.ReturnCode = ReturnCode.ClientRegisteredSuccessfully;
             return result;

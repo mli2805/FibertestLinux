@@ -224,7 +224,6 @@ namespace Fibertest.WpfClient
                 _currentUser.FillIn(result);
                 _currentUser.UserName = UserName;
 
-
                 _currentDatacenterParameters.FillIn(result.DcCurrentParameters);
 
                 _currentGis.IsWithoutMapMode = result.DcCurrentParameters.General.IsWithoutMapMode;
