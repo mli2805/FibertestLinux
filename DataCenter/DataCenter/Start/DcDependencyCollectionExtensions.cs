@@ -27,14 +27,14 @@ public static class DcDependencyCollectionExtensions
     private static IServiceCollection AddBootAndBackgroundServices(this IServiceCollection services)
     {
         services.AddSingleton<Boot>();
-        services.AddHostedService(x => x.GetService<Boot>());
+        services.AddHostedService(x => x.GetService<Boot>()!);
 
         services.AddSingleton<LastConnectionTimeChecker>();
-        services.AddHostedService(x => x.GetService<LastConnectionTimeChecker>());
+        services.AddHostedService(x => x.GetService<LastConnectionTimeChecker>()!);
         // services.AddSingleton<SnmpTrapListener>();
-        // services.AddHostedService(x => x.GetService<SnmpTrapListener>());
-        services.AddSingleton<MessageQueueService>();
-        services.AddHostedService(x => x.GetService<MessageQueueService>());
+        // services.AddHostedService(x => x.GetService<SnmpTrapListener>()!);
+        // services.AddSingleton<MessageQueueService>();
+        // services.AddHostedService(x => x.GetService<MessageQueueService>()!);
 
         return services;
     }

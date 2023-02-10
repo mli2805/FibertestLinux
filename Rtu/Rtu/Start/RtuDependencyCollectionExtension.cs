@@ -21,11 +21,11 @@ public static class RtuDependencyCollectionExtension
     private static IServiceCollection AddBootAndBackgroundServices(this IServiceCollection services)
     {
         services.AddSingleton<Boot>();
-        services.AddHostedService(x => x.GetService<Boot>());
+        services.AddHostedService(x => x.GetService<Boot>()!);
         services.AddSingleton<MonitoringService>();
-        services.AddHostedService(x => x.GetService<MonitoringService>());
+        services.AddHostedService(x => x.GetService<MonitoringService>()!);
         services.AddSingleton<HeartbeatService>();
-        services.AddHostedService(x => x.GetService<HeartbeatService>());
+        services.AddHostedService(x => x.GetService<HeartbeatService>()!);
         return services;
     }
 
