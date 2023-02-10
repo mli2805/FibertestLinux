@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-cd /home/leanid/FibertestLinux/DataCenter/DataCenter/bin/Release/net6.0/publish
+cd /home/leanid/FibertestLinux/DataCenter/DataCenter/bin/Release/net7.0/publish
 
 sudo systemctl stop Dc.service
 echo "сервис остановлен"

@@ -9,7 +9,7 @@ if [ "$?" -ne 0 ]; then read -p "нажми Enter для выхода" ; exit 1;
 
 rm -rf /home/leanid/FibertestLinux/Deploy
 mkdir -p /home/leanid/FibertestLinux/Deploy/rtu
-cp -r /home/leanid/FibertestLinux/Rtu/Rtu/bin/Release/net6.0/publish/* /home/leanid/FibertestLinux/Deploy/rtu
+cp -r /home/leanid/FibertestLinux/Rtu/Rtu/bin/Release/net7.0/publish/* /home/leanid/FibertestLinux/Deploy/rtu
 
 echo ""
 echo "не забудь выкачать свежие исходники и сбилдить iit_otdr & Co "
