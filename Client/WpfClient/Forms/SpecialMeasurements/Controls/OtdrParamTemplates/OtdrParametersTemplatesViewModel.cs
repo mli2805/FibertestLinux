@@ -12,7 +12,7 @@ namespace Fibertest.WpfClient
     {
         private readonly IWritableConfig<ClientConfig> _config;
         public OtdrParametersTemplateModel Model { get; set; } = new OtdrParametersTemplateModel();
-        private Rtu _rtu;
+        private Rtu _rtu = null!;
 
         public Visibility ListBoxVisibility { get; set; }
         public Visibility NoOptionsLineVisibility { get; set; }

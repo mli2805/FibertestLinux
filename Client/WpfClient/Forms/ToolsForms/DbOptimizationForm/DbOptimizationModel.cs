@@ -42,54 +42,10 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _driveSize;
-        public string DriveSize
-        {
-            get => _driveSize;
-            set
-            {
-                if (value.Equals(_driveSize)) return;
-                _driveSize = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        private string _dataSize;
-        public string DataSize
-        {
-            get => _dataSize;
-            set
-            {
-                if (value == _dataSize) return;
-                _dataSize = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-
-        private string _availableFreeSpace;
-        public string AvailableFreeSpace
-        {
-            get => _availableFreeSpace;
-            set
-            {
-                if (value == _availableFreeSpace) return;
-                _availableFreeSpace = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        private string _freeSpaceThreshold;
-        public string FreeSpaceThreshold
-        {
-            get => _freeSpaceThreshold;
-            set
-            {
-                if (value == _freeSpaceThreshold) return;
-                _freeSpaceThreshold = value;
-                NotifyOfPropertyChange();
-            }
-        }
+        public string DriveSize { get; set; } = null!;
+        public string DataSize { get; set; } = null!;
+        public string AvailableFreeSpace { get; set; } = null!;
+        public string FreeSpaceThreshold { get; set; } = null!;
         #endregion
 
         public bool IsRemoveMode { get; set; } = true;

@@ -4,9 +4,8 @@ namespace Fibertest.WpfClient
 {
     public class CommonStatusBarViewModel : PropertyChangedBase
     {
-        private string _statusBarMessage2;
-
-        public string StatusBarMessage2
+        private string? _statusBarMessage2;
+        public string? StatusBarMessage2
         {
             get { return _statusBarMessage2; }
             set

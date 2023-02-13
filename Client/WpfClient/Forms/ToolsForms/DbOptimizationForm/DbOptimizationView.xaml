@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:stringResources="clr-namespace:Fibertest.StringResources;assembly=Fibertest.StringResources"
         mc:Ignorable="d"
-        Width="800" SizeToContent="Height" WindowStartupLocation="CenterOwner" d:DataContext="{d:DesignData CleaningViewModel}">
+        Width="800" SizeToContent="Height" WindowStartupLocation="CenterOwner" 
+        d:DataContext="{d:DesignData DbOptimizationViewModel}">
     <DockPanel IsEnabled="{Binding Model.IsEnabled}">
         <DockPanel DockPanel.Dock="Top" Margin="33,15">
             <TextBlock DockPanel.Dock="Left" Text="{x:Static stringResources:Resources.SID_Attention_}" Width="120" 

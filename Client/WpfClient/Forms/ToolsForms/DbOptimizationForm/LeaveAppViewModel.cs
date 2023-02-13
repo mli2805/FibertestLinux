@@ -9,8 +9,8 @@ namespace Fibertest.WpfClient
 {
     public class LeaveAppViewModel : Screen
     {
-        public string Line1 { get; set; }
-        public string Line2 { get; set; }
+        public string Line1 { get; set; } = null!;
+        public string Line2 { get; set; } = null!;
       
         public void Initialize(UnRegisterReason reason, string username)
         {

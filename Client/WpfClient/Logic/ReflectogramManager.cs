@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
         private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
 
-        private string _tempSorFile;
+        private string _tempSorFile = string.Empty;
 
         public ReflectogramManager(IWritableConfig<ClientConfig> config, ILogger logger, 
              IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)

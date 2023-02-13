@@ -35,7 +35,7 @@ namespace Fibertest.WpfClient
         Task<string> UpdateMeasurement(string username, UpdateMeasurementDto dto);
 
         // C2Database
-        Task<byte[]> GetSorBytes(int sorFileId);
+        Task<byte[]?> GetSorBytes(int sorFileId);
         Task<RftsEventsDto> GetRftsEvents(int sorFileId);
     }
 

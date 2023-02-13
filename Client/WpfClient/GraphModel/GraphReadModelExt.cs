@@ -38,7 +38,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public static Guid ChooseEquipmentForNode(this GraphReadModel model, Guid nodeId, bool isLastNode, out string dualName)
+        public static Guid ChooseEquipmentForNode(this GraphReadModel model, Guid nodeId, bool isLastNode, out string? dualName)
         {
             dualName = null;
             var node = model.ReadModel.Nodes.First(n => n.NodeId == nodeId);
@@ -63,7 +63,7 @@ namespace Fibertest.WpfClient
 
             var traceContentChoiceViewModel = model.GlobalScope.Resolve<TraceContentChoiceViewModel>();
             traceContentChoiceViewModel.Initialize(allEquipmentInNode, node, isLastNode);
-            model.WindowManager.ShowDialogWithAssignedOwner(traceContentChoiceViewModel);
+            model.WindowManager.ShowDialogWithAssignedOwner(traceContentChoiceViewModel).Wait();
             model.ExtinguishAllNodes();
             if (!traceContentChoiceViewModel.ShouldWeContinue) // user left the process
                 return Guid.Empty;

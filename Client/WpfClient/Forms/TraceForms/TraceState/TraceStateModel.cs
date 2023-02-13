@@ -13,8 +13,8 @@ namespace Fibertest.WpfClient
     public class TraceStateModel : PropertyChangedBase
     {
         public Guid TraceId { get; set; }
-        public Trace Trace { get; set; }
-        public TraceStateModelHeader Header { get; set; }
+        public Trace Trace { get; set; } = null!;
+        public TraceStateModelHeader Header { get; set; } = null!;
         public FiberState TraceState { get; set; }
         public BaseRefType BaseRefType { get; set; }
 
@@ -40,7 +40,7 @@ namespace Fibertest.WpfClient
         public string TraceStateOnScreen => PrepareTraceStateOnScreen();
 
         public EventStatus EventStatus { get; set; } = EventStatus.EventButNotAnAccident;
-        public string Comment { get; set; }
+        public string Comment { get; set; } = null!;
 
         public DateTime MeasurementTimestamp { get; set; }
         public DateTime RegistrationTimestamp { get; set; }

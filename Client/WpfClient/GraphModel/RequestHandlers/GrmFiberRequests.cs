@@ -50,7 +50,7 @@ namespace Fibertest.WpfClient
             await _grpcC2DService.SendEventSourcingCommand(cmd);
         }
 
-        private async Task<UpdateFiber> PrepareCommand(RequestUpdateFiber request)
+        private async Task<UpdateFiber?> PrepareCommand(RequestUpdateFiber request)
         {
             var vm = _globalScope.Resolve<FiberUpdateViewModel>();
             await vm.Initialize(request.Id);

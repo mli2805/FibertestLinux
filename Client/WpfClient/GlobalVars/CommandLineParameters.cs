@@ -4,15 +4,15 @@ namespace Fibertest.WpfClient
 {
     public class CommandLineParameters
     {
-        public bool IsUnderSuperClientStart { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string ConnectionId { get; set; }
+        public bool IsUnderSuperClientStart;
+        public string? Username;
+        public string? Password;
+        public string? ConnectionId;
 
-        public NetAddress ServerNetAddress { get; set; }
-        public int ClientOrdinal { get; set; }
-        public string SuperClientCulture { get; set; }
-        public string ServerTitle { get; set; }
+        public NetAddress? ServerNetAddress;
+        public int ClientOrdinal;
+        public string? SuperClientCulture;
+        public string? ServerTitle;
 
     }
 }

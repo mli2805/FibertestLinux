@@ -42,7 +42,7 @@ namespace Fibertest.WpfClient
         public string? StatusChangedByUser { get; set; }
         public string? Comment { get; set; }
 
-        public List<AccidentOnTraceV2>? Accidents { get; set; }
+        public List<AccidentOnTraceV2> Accidents { get; set; } = null!;
         public int SorFileId { get; set; }
 
         private Brush GetBrush()

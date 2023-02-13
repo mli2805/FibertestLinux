@@ -39,7 +39,7 @@ namespace Fibertest.WpfClient
                 RegistrationTimestamp = measurement.EventRegistrationTimestamp,
                 SorFileId = measurement.SorFileId,
                 EventStatus = measurement.EventStatus,
-                Comment = measurement.Comment,
+                Comment = measurement.Comment ?? "",
 
                 IsLastStateForThisTrace = isLastStateForThisTrace,
                 IsLastAccidentForThisTrace = isLastAccidentForThisTrace,
@@ -50,7 +50,7 @@ namespace Fibertest.WpfClient
         }
 
         // Optical events
-        public TraceStateModel CreateModel(OpticalEventModel opticalEventModel, bool isLastStateForThisTrace, bool isLastAccidentForThisTrace)
+        public TraceStateModel? CreateModel(OpticalEventModel opticalEventModel, bool isLastStateForThisTrace, bool isLastAccidentForThisTrace)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Fibertest.WpfClient
                     SorFileId = opticalEventModel.SorFileId,
                     EventStatus = opticalEventModel.EventStatus,
                     Accidents = PrepareAccidents(opticalEventModel.Accidents),
-                    Comment = opticalEventModel.Comment,
+                    Comment = opticalEventModel.Comment ?? "",
                     IsLastStateForThisTrace = isLastStateForThisTrace,
                     IsLastAccidentForThisTrace = isLastAccidentForThisTrace
                 };
@@ -96,13 +96,18 @@ namespace Fibertest.WpfClient
                 return result;
 
             result.TraceTitle = trace.Title;
-            var rtu = _readModel.Rtus.FirstOrDefault(r => r.Id == trace.RtuId);
-            result.RtuPosition = _readModel.Nodes.FirstOrDefault(n => n.NodeId == rtu?.NodeId)?.Position;
-            result.RtuTitle = rtu?.Title;
             result.PortTitle = trace.OtauPort == null ? Resources.SID__not_attached_ : trace.OtauPort.IsPortOnMainCharon
                 ? trace.OtauPort.OpticalPort.ToString()
                 : $@"{trace.OtauPort.MainCharonPort}-{trace.OtauPort.OpticalPort}";
-            result.RtuSoftwareVersion = rtu?.Version;
+            
+            var rtu = _readModel.Rtus.FirstOrDefault(r => r.Id == trace.RtuId);
+            if (rtu == null)
+                return result;
+
+            result.RtuPosition = _readModel.Nodes.FirstOrDefault(n => n.NodeId == rtu.NodeId)?.Position;
+           
+            result.RtuTitle = rtu.Title;
+            result.RtuSoftwareVersion = rtu.Version ?? "";
 
             result.ServerTitle = _currentDatacenterParameters.General.ServerTitle;
             return result;

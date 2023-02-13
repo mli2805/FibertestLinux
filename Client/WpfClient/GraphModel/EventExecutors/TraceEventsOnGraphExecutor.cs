@@ -57,7 +57,7 @@ namespace Fibertest.WpfClient
                 if (_graphModel.Data.Fibers.Any(f => f.Node1.Id == nodeId || f.Node2.Id == nodeId))
                     continue;
                 var nodeVm = _graphModel.Data.Nodes.FirstOrDefault(n => n.Id == nodeId);
-                if (nodeVm?.Type != EquipmentType.Rtu)
+                if (nodeVm != null && nodeVm.Type != EquipmentType.Rtu)
                     _graphModel.Data.Nodes.Remove(nodeVm);
             }
         }

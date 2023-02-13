@@ -23,8 +23,8 @@ namespace Fibertest.WpfClient
         private readonly StepChoiceViewModel _stepChoiceViewModel;
         private readonly IWindowManager _windowManager;
         private readonly CommonStatusBarViewModel _commonStatusBarViewModel;
-        private NodeVm _currentHighlightedNodeVm;
-        public ObservableCollection<StepModel> Steps { get; set; }
+        private NodeVm? _currentHighlightedNodeVm;
+        public ObservableCollection<StepModel> Steps { get; set; } = null!;
         private Guid _newTraceId;
 
         private bool _isButtonsEnabled = true;
@@ -39,7 +39,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public TraceStepByStepViewModel(ILifetimeScope globalScope, IWindowManager windowManager, CommonStatusBarViewModel commonStatusBarViewModel,
+        public TraceStepByStepViewModel(ILifetimeScope globalScope, IWindowManager windowManager, 
+            CommonStatusBarViewModel commonStatusBarViewModel,
             GraphReadModel graphReadModel, Model readModel, StepChoiceViewModel stepChoiceViewModel)
         {
             _globalScope = globalScope;
@@ -144,7 +145,7 @@ namespace Fibertest.WpfClient
 
         private async Task<bool> ForkIt(List<Tuple<Guid, List<Guid>>> neighbours, Guid previousNodeId)
         {
-            _currentHighlightedNodeVm.IsHighlighted = false;
+            _currentHighlightedNodeVm!.IsHighlighted = false;
 
             if (!await _stepChoiceViewModel.Initialize(neighbours.Select(e => e.Item1).ToList(), previousNodeId))
                 return false;
@@ -163,7 +164,8 @@ namespace Fibertest.WpfClient
                 return false;
             }
 
-            Steps.Add(new StepModel() { NodeId = selectedNode.NodeId, Title = titleStr, EquipmentId = equipmentId, FiberIds = selectedTuple.Item2 });
+            Steps.Add(new StepModel() 
+                { NodeId = selectedNode.NodeId, Title = titleStr ?? "", EquipmentId = equipmentId, FiberIds = selectedTuple.Item2 });
             // _graphReadModel.MainMap.SetPosition(selectedNode.Position);
             _currentHighlightedNodeVm = _graphReadModel.Data.Nodes.First(n => n.Id == selectedNode.NodeId);
             _currentHighlightedNodeVm.IsHighlighted = true;
@@ -176,7 +178,7 @@ namespace Fibertest.WpfClient
         {
             var nextNode = _readModel.Nodes.First(n => n.NodeId == nextNodeId);
 
-            _currentHighlightedNodeVm.IsHighlighted = false;
+            _currentHighlightedNodeVm!.IsHighlighted = false;
             _graphReadModel.MainMap.SetPositionWithoutFiringEvent(nextNode.Position);
             var unused = await _graphReadModel.RefreshVisiblePart();
 
@@ -189,7 +191,7 @@ namespace Fibertest.WpfClient
                 return false;
             }
 
-            Steps.Add(new StepModel() { NodeId = nextNodeId, Title = titleStr, EquipmentId = equipmentId, FiberIds = fiberIdsToNode });
+            Steps.Add(new StepModel() { NodeId = nextNodeId, Title = titleStr ?? "", EquipmentId = equipmentId, FiberIds = fiberIdsToNode });
             _currentHighlightedNodeVm = _graphReadModel.Data.Nodes.First(n => n.Id == nextNodeId);
             _currentHighlightedNodeVm.IsHighlighted = true;
             SetFibersLight(fiberIdsToNode, true);
@@ -215,7 +217,7 @@ namespace Fibertest.WpfClient
         public async void CancelStep()
         {
             if (Steps.Count == 1) return;
-            _currentHighlightedNodeVm.IsHighlighted = false;
+            _currentHighlightedNodeVm!.IsHighlighted = false;
 
             SetFibersLight(Steps.Last().FiberIds, false);
             Steps.Remove(Steps.Last());
@@ -234,16 +236,16 @@ namespace Fibertest.WpfClient
 
         private async Task<bool> AcceptProcedure()
         {
-            if (!Validate()) return false;
+            if (!await Validate()) return false;
 
             GetListsAugmentedWithAdjustmentPoints(out var traceNodes, out var traceEquipments);
             var traceAddViewModel = _globalScope.Resolve<TraceInfoViewModel>();
             await traceAddViewModel.Initialize(_newTraceId, traceEquipments, traceNodes, true);
-            _windowManager.ShowDialogWithAssignedOwner(traceAddViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(traceAddViewModel);
 
             if (!traceAddViewModel.IsSavePressed) return false;
 
-            _currentHighlightedNodeVm.IsHighlighted = false;
+            _currentHighlightedNodeVm!.IsHighlighted = false;
             return true;
         }
 
@@ -273,7 +275,7 @@ namespace Fibertest.WpfClient
 
         public void AddNodeIntoFiber(NodeIntoFiberAdded evnt)
         {
-            StepModel step;
+            StepModel? step;
             while ((step = Steps.FirstOrDefault(s => s.FiberIds.Contains(evnt.FiberId))) != null)
             {
                 var pos = Steps.IndexOf(step);
@@ -321,7 +323,7 @@ namespace Fibertest.WpfClient
                 {
                     var step = Steps[i];
                     var nodeVm = _graphReadModel.Data.Nodes.First(n => n.Id == nodeId);
-                    step.Title = nodeVm.Title;
+                    step.Title = nodeVm.Title ?? "";
 
                     var equipment = _readModel.Equipments.FirstOrDefault(e => e.EquipmentId == step.EquipmentId);
                     if (equipment == null)
@@ -346,13 +348,14 @@ namespace Fibertest.WpfClient
             return Steps.Any(s => s.NodeId == nodeId);
         }
 
-        private bool Validate()
+        private async Task<bool> Validate()
         {
             if (Steps.Count <= 1) return false;
             var equipment = _readModel.Equipments.First(e => e.EquipmentId == Steps.Last().EquipmentId);
             if (equipment.Type <= EquipmentType.EmptyNode)
             {
-                _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Last_node_of_trace_must_contain_some_equipment));
+                await _windowManager.ShowDialogWithAssignedOwner(
+                        new MyMessageBoxViewModel(MessageType.Error, Resources.SID_Last_node_of_trace_must_contain_some_equipment));
                 return false;
             }
             return true;
@@ -360,7 +363,7 @@ namespace Fibertest.WpfClient
 
         public async void Cancel()
         {
-            _currentHighlightedNodeVm.IsHighlighted = false;
+            _currentHighlightedNodeVm!.IsHighlighted = false;
             foreach (var fiberIds in Steps.Select(s => s.FiberIds))
             {
                 SetFibersLight(fiberIds, false);
@@ -368,8 +371,9 @@ namespace Fibertest.WpfClient
             await TryCloseAsync();
         }
 
-        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new())
         {
+            await Task.Delay(0, cancellationToken);
             IsOpen = false;
             _graphReadModel.MainMap.IsInTraceDefinitionMode = false;
             _commonStatusBarViewModel.StatusBarMessage2 = "";

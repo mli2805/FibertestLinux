@@ -94,9 +94,9 @@ namespace Fibertest.WpfClient
             SetGraphVisibility(level);
         }
 
-        private void CurrentGis_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void CurrentGis_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            IsInGisVisibleMode = ((CurrentGis)sender).IsGisOn;
+            IsInGisVisibleMode = ((CurrentGis)sender!).IsGisOn;
         }
 
         public async Task<int> RefreshVisiblePart()

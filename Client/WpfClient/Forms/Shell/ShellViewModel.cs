@@ -129,12 +129,12 @@ namespace Fibertest.WpfClient
 
             if (_commandLineParameters.IsUnderSuperClientStart)
             {
-                _config.Update(c => c.General.ServerAddress.Main = _commandLineParameters.ServerNetAddress);
-                _config.Update(c => c.General.ServerTitle = _commandLineParameters.ServerTitle);
-                _config.Update(c => c.General.Culture = _commandLineParameters.SuperClientCulture);
+                _config.Update(c => c.General.ServerAddress.Main = _commandLineParameters.ServerNetAddress!);
+                _config.Update(c => c.General.ServerTitle = _commandLineParameters.ServerTitle!);
+                _config.Update(c => c.General.Culture = _commandLineParameters.SuperClientCulture!);
                 _config.Update(c => c.General.ClientOrdinal = _commandLineParameters.ClientOrdinal);
-                await _loginViewModel.RegisterClientAsync(_commandLineParameters.Username, _commandLineParameters.Password,
-                    _commandLineParameters.ConnectionId, true, _commandLineParameters.ClientOrdinal);
+                await _loginViewModel.RegisterClientAsync(_commandLineParameters.Username!, _commandLineParameters.Password!,
+                    _commandLineParameters.ConnectionId!, true, _commandLineParameters.ClientOrdinal);
             }
             else
                 await _windowManager.ShowDialogWithAssignedOwner(_loginViewModel);

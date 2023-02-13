@@ -44,11 +44,11 @@ namespace Fibertest.WpfClient
             childrenViews.PropertyChanged += ChildrenViewsPropertyChanged;
         }
 
-        private void ChildrenViewsPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void ChildrenViewsPropertyChanged(object? sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(ChildrenViews.ShouldBeClosed))
             {
-                if (((ChildrenViews)sender).ShouldBeClosed)
+                if (((ChildrenViews)sender!).ShouldBeClosed)
                 {
                     foreach (var traceStateViewModel in LaunchedViews.ToArray())
                     {
@@ -94,7 +94,7 @@ namespace Fibertest.WpfClient
                 if (viewModel.Model.SorFileId == evnt.SorFileId)
                 {
                     viewModel.Model.EventStatus = evnt.EventStatus;
-                    viewModel.Model.Comment = evnt.Comment;
+                    viewModel.Model.Comment = evnt.Comment ?? "";
                 }
             }
         }
@@ -159,11 +159,11 @@ namespace Fibertest.WpfClient
                 Show(traceStateModel);
         }
 
-        private void Show(TraceStateModel traceStateModel, bool isUserAskedToOpenView = true, bool isTraceStateChanged = false)
+        private async void Show(TraceStateModel traceStateModel, bool isUserAskedToOpenView = true, bool isTraceStateChanged = false)
         {
             LaunchedViews.RemoveAll(v => !v.IsOpen);
 
-            TraceStateViewModel vm;
+            TraceStateViewModel? vm;
             if (traceStateModel.IsLastStateForThisTrace)
             {
                 vm = LaunchedViews.FirstOrDefault(v => v.Model.TraceId == traceStateModel.TraceId &&
@@ -185,16 +185,16 @@ namespace Fibertest.WpfClient
 
             if (vm != null)
             {
-                vm.TryCloseAsync();
+                await vm.TryCloseAsync();
                 LaunchedViews.Remove(vm);
             }
 
             if (isOutOfTurnVmWaitsThisTrace)
-                _outOfTurnPreciseMeasurementViewModel.TryCloseAsync();
+                await _outOfTurnPreciseMeasurementViewModel.TryCloseAsync();
 
             vm = _globalScope.Resolve<TraceStateViewModel>();
             vm.Initialize(traceStateModel, isTraceStateChanged);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
 
             LaunchedViews.Add(vm);
             _childrenViews.ShouldBeClosed = false;

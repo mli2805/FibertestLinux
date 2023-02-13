@@ -110,7 +110,7 @@ public class AppBootstrapper : BootstrapperBase
 
         var currentCulture = postfix == ""
             ? clientConfig.Value.General.Culture
-            : parameters.SuperClientCulture;
+            : parameters.SuperClientCulture!;
         var cultureInfo = new CultureInfo(currentCulture) { NumberFormat = { NumberDecimalSeparator = @"." } };
         Thread.CurrentThread.CurrentCulture = cultureInfo;
         Thread.CurrentThread.CurrentUICulture = cultureInfo;

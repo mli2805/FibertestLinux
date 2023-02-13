@@ -33,10 +33,10 @@ namespace Fibertest.WpfClient
         public string PortTitle { get; set; } = "";
 
         public PointLatLng? RtuPosition { get; set; }
-        public string RtuSoftwareVersion { get; set; }
+        public string RtuSoftwareVersion { get; set; } = "";
         public string RtuCompilation => $@"{RtuTitle} (v. {RtuSoftwareVersion})";
 
-        public string ServerTitle { get; set; }
+        public string ServerTitle { get; set; } = string.Empty;
 
     }
 }

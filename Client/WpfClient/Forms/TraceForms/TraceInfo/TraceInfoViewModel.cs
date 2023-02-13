@@ -32,7 +32,7 @@ namespace Fibertest.WpfClient
         private bool _isInCreationMode;
 
 
-        private string _title;
+        private string _title = "";
         public string Title
         {
             get => _title;
@@ -142,7 +142,7 @@ namespace Fibertest.WpfClient
             else
                 Model.IsTraceModeDark = true;
             Model.PortNumber = GetPortString(trace);
-            Model.Comment = trace.Comment;
+            Model.Comment = trace.Comment ?? "";
 
             RelationModel = GetRelationInfo(trace);
 
@@ -170,7 +170,7 @@ namespace Fibertest.WpfClient
             return $@"{otau.MasterPort}-{trace.OtauPort.OpticalPort}";
         }
 
-        private async Task<OtdrDataKnownBlocks> GetBase(Guid baseId)
+        private async Task<OtdrDataKnownBlocks?> GetBase(Guid baseId)
         {
             if (baseId == Guid.Empty)
                 return null;
@@ -311,6 +311,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
 }

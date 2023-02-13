@@ -5,11 +5,11 @@ namespace Fibertest.WpfClient
 {
     public class RtuAskSerialViewModel : Screen
     {
-        public string Message1 { get; set; }
+        public string Message1 { get; set; } = null!;
         //public string Message2 { get; set; }
-        public string Message3 { get; set; }
+        public string Message3 { get; set; } = null!;
 
-        public string Serial { get; set; }
+        public string Serial { get; set; } = null!;
 
         public bool IsSavePressed;
 

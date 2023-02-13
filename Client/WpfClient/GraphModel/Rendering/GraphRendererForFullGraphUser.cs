@@ -78,8 +78,8 @@ namespace Fibertest.WpfClient
                     || !allTracesFibers.Contains(graphReadModel.ReadModel.Fibers[i].FiberId))
                 {
                     if (GraphRendererCommonDetails.FindFiberNodes(graphReadModel.ReadModel.Fibers[i], 
-                            graphReadModel.ReadModel, renderingResult, nodesNear, out NodeVm nodeVm1, out NodeVm nodeVm2))
-                        renderingResult.FiberVms.Add(ElementRenderer.MapWithStates(graphReadModel.ReadModel.Fibers[i], nodeVm1, nodeVm2));
+                            graphReadModel.ReadModel, renderingResult, nodesNear, out NodeVm? nodeVm1, out NodeVm? nodeVm2))
+                        renderingResult.FiberVms.Add(ElementRenderer.MapWithStates(graphReadModel.ReadModel.Fibers[i], nodeVm1!, nodeVm2!));
                 }
             }
 
@@ -103,8 +103,8 @@ namespace Fibertest.WpfClient
             for (int i = 0; i < graphReadModel.ReadModel.Fibers.Count; i++)
             {
                 if (GraphRendererCommonDetails.FindFiberNodes(
-                        graphReadModel.ReadModel.Fibers[i], graphReadModel.ReadModel, renderingResult, nodesNear, out NodeVm nodeVm1, out NodeVm nodeVm2))
-                    renderingResult.FiberVms.Add(ElementRenderer.MapWithStates(graphReadModel.ReadModel.Fibers[i], nodeVm1, nodeVm2));
+                        graphReadModel.ReadModel.Fibers[i], graphReadModel.ReadModel, renderingResult, nodesNear, out NodeVm? nodeVm1, out NodeVm? nodeVm2))
+                    renderingResult.FiberVms.Add(ElementRenderer.MapWithStates(graphReadModel.ReadModel.Fibers[i], nodeVm1!, nodeVm2!));
             }
             renderingResult.NodeVms.AddRange(nodesNear);
             return renderingResult;

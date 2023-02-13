@@ -29,11 +29,11 @@ namespace Fibertest.WpfClient
             childrenViews.PropertyChanged += ChildrenViews_PropertyChanged;
         }
 
-        private void ChildrenViews_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs args)
+        private void ChildrenViews_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(ChildrenViews.ShouldBeClosed))
             {
-                if (((ChildrenViews) sender).ShouldBeClosed)
+                if (((ChildrenViews) sender!).ShouldBeClosed)
                 {
                     foreach (var pair in LaunchedViews.ToList())
                     {
@@ -64,18 +64,18 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public void Show(Guid traceId)
+        public async void Show(Guid traceId)
         {
             ClearClosedViews();
             if (LaunchedViews.TryGetValue(traceId, out var vm))
             {
-                vm.TryCloseAsync();
+                await vm.TryCloseAsync();
                 LaunchedViews.Remove(traceId);
             }
 
             vm = _globalScope.Resolve<TraceStatisticsViewModel>();
             vm.Initialize(traceId);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
 
             LaunchedViews.Add(traceId, vm);
             _childrenViews.ShouldBeClosed = false;

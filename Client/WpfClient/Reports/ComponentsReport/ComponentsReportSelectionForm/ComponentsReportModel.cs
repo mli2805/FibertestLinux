@@ -7,8 +7,8 @@ namespace Fibertest.WpfClient
     {
         public bool IsZoneSelectionEnabled { get; set; }
 
-        public List<Zone> Zones { get; set; }
-        public Zone SelectedZone { get; set; }
+        public List<Zone> Zones { get; set; } = null!;
+        public Zone SelectedZone { get; set; } = null!;
 
     }
 }
