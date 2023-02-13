@@ -13,17 +13,17 @@ namespace Fibertest.WpfClient
     
     public class RftsParamsLevel
     {
-        public string LevelName;
+        public string? LevelName;
         public bool Enabled; // stored as 0 or 1
-        public RftsLevelThresholdSet LevelThresholdSet;
-        public Threshold Eelt;
+        public RftsLevelThresholdSet? LevelThresholdSet;
+        public Threshold? Eelt;
     }
 
     public class RftsLevelThresholdSet
     {
-        public Threshold Lt;
-        public Threshold Rt;
-        public Threshold Ct;
+        public Threshold? Lt;
+        public Threshold? Rt;
+        public Threshold? Ct;
     }
 
     public class Threshold
@@ -35,10 +35,10 @@ namespace Fibertest.WpfClient
 
     public class RftsUniParameter
     {
-        public string Name;
+        public string? Name;
         public int Value;
         public int Scale;
-        public string Comment;
+        public string? Comment;
 
         public override string ToString()
         {

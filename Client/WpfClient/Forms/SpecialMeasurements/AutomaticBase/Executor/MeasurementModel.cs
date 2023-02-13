@@ -7,15 +7,15 @@ namespace Fibertest.WpfClient
 {
     public class MeasurementModel : PropertyChangedBase
     {
-        public CurrentUser CurrentUser;
-        public Rtu Rtu;
+        public CurrentUser CurrentUser = null!;
+        public Rtu Rtu = null!;
         public int MeasurementTimeout;
 
         public bool InterruptedPressed;
 
-        public OtdrParametersTemplatesViewModel OtdrParametersTemplatesViewModel { get; set; }
-        public AutoAnalysisParamsViewModel AutoAnalysisParamsViewModel { get; set; }
-        public MeasurementProgressViewModel MeasurementProgressViewModel { get; set; }
+        public OtdrParametersTemplatesViewModel OtdrParametersTemplatesViewModel { get; set; } = null!;
+        public AutoAnalysisParamsViewModel AutoAnalysisParamsViewModel { get; set; } = null!;
+        public MeasurementProgressViewModel MeasurementProgressViewModel { get; set; } = null!;
 
         private bool _isEnabled;
         public bool IsEnabled
@@ -31,8 +31,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _totalTraces;
-        public string TotalTraces
+        private string? _totalTraces;
+        public string? TotalTraces
         {
             get => _totalTraces;
             set

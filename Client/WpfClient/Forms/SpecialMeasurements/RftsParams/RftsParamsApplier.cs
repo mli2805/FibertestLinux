@@ -21,13 +21,13 @@ namespace Fibertest.WpfClient
 
         private static RftsLevel RftsParamsLevelToSorFormat(this RftsParamsLevel rftsParamsLevel)
         {
-            var levelThresholdSet = rftsParamsLevel.LevelThresholdSet.ToSorFormat();
+            var levelThresholdSet = rftsParamsLevel.LevelThresholdSet!.ToSorFormat();
             var rftsLevel = new RftsLevel()
             {
-                LevelName = rftsParamsLevel.LevelName.ToRftsLevelType(),
+                LevelName = rftsParamsLevel.LevelName!.ToRftsLevelType(),
                 IsEnabled = rftsParamsLevel.Enabled,
                 LevelThresholdSet = levelThresholdSet,
-                EELT = rftsParamsLevel.Eelt.ToSorFormat(),
+                EELT = rftsParamsLevel.Eelt!.ToSorFormat(),
 
                 // just to have the same result as after Reflect.exe
                 ThresholdSets = new []{ levelThresholdSet, levelThresholdSet },
@@ -41,9 +41,9 @@ namespace Fibertest.WpfClient
         {
             return new RftsThresholdSet()
             {
-                AttenuationCoefThreshold = thresholdSet.Ct.ToSorFormat(),
-                AttenuationThreshold = thresholdSet.Lt.ToSorFormat(),
-                ReflectanceThreshold = thresholdSet.Rt.ToSorFormat(),
+                AttenuationCoefThreshold = thresholdSet.Ct!.ToSorFormat(),
+                AttenuationThreshold = thresholdSet.Lt!.ToSorFormat(),
+                ReflectanceThreshold = thresholdSet.Rt!.ToSorFormat(),
             };
         }
 
@@ -69,7 +69,7 @@ namespace Fibertest.WpfClient
         {
             return new RftsUniversalParameter()
             {
-                Name = uniParameter.Name,
+                Name = uniParameter.Name!,
                 Value = uniParameter.Value,
                 Scale = uniParameter.Scale,
             };

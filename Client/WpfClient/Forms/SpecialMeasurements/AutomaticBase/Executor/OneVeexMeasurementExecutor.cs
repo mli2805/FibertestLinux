@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
         private readonly LandmarksIntoBaseSetter _landmarksIntoBaseSetter;
         private readonly MeasurementAsBaseAssigner _measurementAsBaseAssigner;
 
-        private Trace _trace;
+        private Trace _trace = null!;
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
         public OneVeexMeasurementExecutor(IWritableConfig<ClientConfig> config, ILogger logger, CurrentUser currentUser, Model readModel,
@@ -52,7 +52,6 @@ namespace Fibertest.WpfClient
             return Model.AutoAnalysisParamsViewModel.Initialize();
         }
 
-        private CancellationTokenSource _cts;
         public async Task Start(TraceLeaf traceLeaf, bool keepOtdrConnection = false)
         {
             _trace = _readModel.Traces.First(t => t.TraceId == traceLeaf.Id);
@@ -60,7 +59,7 @@ namespace Fibertest.WpfClient
 
             Model.MeasurementProgressViewModel.DisplayStartMeasurement(traceLeaf.Title);
 
-            VeexMeasOtdrParameters veexMeasOtdrParameters;
+            VeexMeasOtdrParameters? veexMeasOtdrParameters;
             if (Model.OtdrParametersTemplatesViewModel.IsAutoLmaxSelected())
             {
                 var lineParamsDto = await _veexMeasurementTool.GetLineParametersAsync(Model, traceLeaf);
@@ -73,7 +72,7 @@ namespace Fibertest.WpfClient
 
                 veexMeasOtdrParameters = Model.OtdrParametersTemplatesViewModel.Model
                     .GetVeexMeasOtdrParametersBase(false)
-                    .FillInWithTemplate(lineParamsDto.ConnectionQuality, Model.Rtu.Omid);
+                    .FillInWithTemplate(lineParamsDto.ConnectionQuality!, Model.Rtu.Omid!);
 
                 if (veexMeasOtdrParameters == null)
                 {
@@ -103,7 +102,7 @@ namespace Fibertest.WpfClient
                 Model.IsEnabled = true;
 
                 MeasurementCompleted?
-                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage));
+                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage ?? ""));
 
                 Model.IsEnabled = true;
                 return;
@@ -111,9 +110,10 @@ namespace Fibertest.WpfClient
 
             Model.MeasurementProgressViewModel.Message = Resources.SID_Measurement__Client__in_progress__Please_wait___;
 
-            _cts = new CancellationTokenSource();
+            var cts = new CancellationTokenSource();
             await Task.Delay(veexMeasOtdrParameters.averagingTime == @"00:05" ? 10000 : 20000);
-            var veexResult = await _veexMeasurementTool.Fetch(dto.RtuId, _trace, startResult.ClientMeasurementId, _cts);
+            var veexResult = 
+                await _veexMeasurementTool.Fetch(dto.RtuId, _trace, startResult.ClientMeasurementId, cts);
             if (veexResult.Code == ReturnCode.MeasurementEndedNormally)
             {
                 var res = new ClientMeasurementResultDto(veexResult.Code) { SorBytes = veexResult.SorBytes };
@@ -128,7 +128,7 @@ namespace Fibertest.WpfClient
 
         }
 
-        private System.Timers.Timer _timer;
+        private System.Timers.Timer _timer = null!;
         private void StartTimer()
         {
             _logger.LogInfo(Logs.Client,@"Start a measurement timeout");
@@ -137,7 +137,7 @@ namespace Fibertest.WpfClient
             _timer.AutoReset = false;
             _timer.Start();
         }
-        private void TimeIsOver(object sender, System.Timers.ElapsedEventArgs e)
+        private void TimeIsOver(object? sender, System.Timers.ElapsedEventArgs e)
         {
             _logger.LogInfo(Logs.Client,@"Measurement timeout expired");
             _timer.Dispose();
@@ -186,7 +186,7 @@ namespace Fibertest.WpfClient
 
         public delegate void MeasurementHandler(object sender, MeasurementEventArgs e);
 
-        public event OneIitMeasurementExecutor.MeasurementHandler MeasurementCompleted;
+        public event OneIitMeasurementExecutor.MeasurementHandler? MeasurementCompleted;
     }
 
 }

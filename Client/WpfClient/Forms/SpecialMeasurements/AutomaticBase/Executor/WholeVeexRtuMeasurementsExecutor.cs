@@ -19,7 +19,7 @@ namespace Fibertest.WpfClient
         private readonly LandmarksIntoBaseSetter _landmarksIntoBaseSetter;
         private readonly MeasurementAsBaseAssigner _measurementAsBaseAssigner;
 
-        private Trace _trace;
+        private Trace _trace = null!;
 
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
@@ -55,7 +55,7 @@ namespace Fibertest.WpfClient
             return Model.AutoAnalysisParamsViewModel.Initialize();
         }
 
-        private CancellationTokenSource _cts;
+        private CancellationTokenSource? _cts;
         public async Task StartOneMeasurement(RtuAutoBaseProgress item, bool keepOtdrConnection = false)
         {
             _logger.EmptyAndLog(Logs.Client,$@"Start auto base measurement for {item.Trace.Title}.");
@@ -74,7 +74,7 @@ namespace Fibertest.WpfClient
 
             var veexMeasOtdrParameters = Model.OtdrParametersTemplatesViewModel.Model
                 .GetVeexMeasOtdrParametersBase(false)
-                .FillInWithTemplate(lineParamsDto.ConnectionQuality, Model.Rtu.Omid);
+                .FillInWithTemplate(lineParamsDto.ConnectionQuality!, Model.Rtu.Omid!);
 
             if (veexMeasOtdrParameters == null)
             {
@@ -87,7 +87,8 @@ namespace Fibertest.WpfClient
 
             var dto = item.TraceLeaf.Parent
                 .CreateDoClientMeasurementDto(item.TraceLeaf.PortNumber, false, _readModel, Model.CurrentUser)
-                .SetParams(true, Model.AutoAnalysisParamsViewModel.SearchNewEvents, false, null, veexMeasOtdrParameters);
+                .SetParams(true, Model.AutoAnalysisParamsViewModel.SearchNewEvents,
+                    false, null, veexMeasOtdrParameters);
 
             var startResult =
                 await _grpcC2RService.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
@@ -96,7 +97,7 @@ namespace Fibertest.WpfClient
                 DestroyTimer();
 
                 MeasurementCompleted?
-                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage));
+                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage ?? ""));
 
                 return;
             }
@@ -124,7 +125,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private System.Timers.Timer _timer;
+        private System.Timers.Timer _timer = null!;
         private void StartTimer()
         {
             _logger.LogInfo(Logs.Client,$@"Start a measurement timeout for trace {_trace.Title}");
@@ -141,7 +142,7 @@ namespace Fibertest.WpfClient
             _logger.LogInfo(Logs.Client,@"Timer destroyed");
         }
 
-        private void TimeIsOver(object sender, System.Timers.ElapsedEventArgs e)
+        private void TimeIsOver(object? sender, System.Timers.ElapsedEventArgs e)
         {
             _logger.LogInfo(Logs.Client,@"Measurement timeout expired");
             _timer.Dispose();
@@ -183,7 +184,7 @@ namespace Fibertest.WpfClient
             BaseRefAssigned?
                 .Invoke(this, result.ReturnCode == ReturnCode.BaseRefAssignedSuccessfully
                     ? new MeasurementEventArgs(ReturnCode.BaseRefAssignedSuccessfully, trace, sorData.ToBytes())
-                    : new MeasurementEventArgs(ReturnCode.BaseRefAssignmentFailed, trace, result.ErrorMessage));
+                    : new MeasurementEventArgs(ReturnCode.BaseRefAssignmentFailed, trace, result.ErrorMessage ?? ""));
         }
 
         public void InterruptMeasurement()
@@ -194,7 +195,7 @@ namespace Fibertest.WpfClient
         public delegate void MeasurementHandler(object sender, MeasurementEventArgs e);
         public delegate void BaseRefHandler(object sender, MeasurementEventArgs e);
 
-        public event WholeIitRtuMeasurementsExecutor.MeasurementHandler MeasurementCompleted;
-        public event WholeIitRtuMeasurementsExecutor.BaseRefHandler BaseRefAssigned;
+        public event WholeIitRtuMeasurementsExecutor.MeasurementHandler? MeasurementCompleted;
+        public event WholeIitRtuMeasurementsExecutor.BaseRefHandler? BaseRefAssigned;
     }
 }

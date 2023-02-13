@@ -25,10 +25,10 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private readonly VeexMeasurementTool _veexMeasurementTool;
         private readonly ReflectogramManager _reflectogramManager;
-        public RtuLeaf RtuLeaf { get; set; }
-        private Rtu _rtu;
-        private DoClientMeasurementDto _dto;
-        private OtdrParametersThroughServerSetterViewModel _vm;
+        public RtuLeaf RtuLeaf { get; set; } = null!;
+        private Rtu _rtu = null! ;
+        private DoClientMeasurementDto _dto = null!;
+        private OtdrParametersThroughServerSetterViewModel _vm = null!;
 
         public bool IsOpen { get; set; }
 
@@ -101,7 +101,7 @@ namespace Fibertest.WpfClient
                 .SetParams(false, false, false, iitMeasParams, veexMeasParams);
         }
 
-        private CancellationTokenSource _cts;
+        private CancellationTokenSource? _cts;
         protected override async void OnViewLoaded(object view)
         {
             DisplayName = Resources.SID_Measurement__Client_;
@@ -125,9 +125,10 @@ namespace Fibertest.WpfClient
             if (_rtu.RtuMaker == RtuMaker.VeEX)
             {
                 _cts = new CancellationTokenSource();
-                var veexResult = await _veexMeasurementTool.Fetch(_dto.RtuId, null, startResult.ClientMeasurementId, _cts);
+                var veexResult = 
+                    await _veexMeasurementTool.Fetch(_dto.RtuId, null, startResult.ClientMeasurementId, _cts);
                 if (veexResult.Code == ReturnCode.MeasurementEndedNormally)
-                    ShowReflectogram(veexResult.SorBytes);
+                    ShowReflectogram(veexResult.SorBytes!);
                 await TryCloseAsync(true);
             }
         }
@@ -146,8 +147,9 @@ namespace Fibertest.WpfClient
             await TryCloseAsync(true);
         }
 
-        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new())
         {
+            await Task.Delay(0, cancellationToken);
             IsOpen = false;
             return true;
         }
@@ -157,7 +159,7 @@ namespace Fibertest.WpfClient
             Message = Resources.SID_Interrupting_Measurement__Client___Wait_please___;
             IsCancelButtonEnabled = false;
             if (_rtu.RtuMaker == RtuMaker.VeEX)
-                _cts.Cancel();
+                _cts?.Cancel();
             await _measurementInterrupter.Interrupt(_rtu, @"measurement (Client)");
             await TryCloseAsync();
         }

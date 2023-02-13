@@ -21,10 +21,10 @@ namespace Fibertest.WpfClient
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    ApplyAddedFibers(e.NewItems);
+                    ApplyAddedFibers(e.NewItems!);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    ApplyRemovedFibers(e.OldItems);
+                    ApplyRemovedFibers(e.OldItems!);
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     break;

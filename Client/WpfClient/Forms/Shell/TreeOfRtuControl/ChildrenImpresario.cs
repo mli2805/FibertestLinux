@@ -20,14 +20,14 @@ namespace Fibertest.WpfClient
             Children.CollectionChanged += Children_CollectionChanged;
 
             _freePorts = freePorts;
-            freePorts.PropertyChanged += (s, e) =>
+            freePorts.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(FreePorts.AreVisible))
                     NotifyOfPropertyChange(nameof(EffectiveChildren));
             };
         }
 
-        private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Children_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Remove)
                 NotifyOfPropertyChange(nameof(EffectiveChildren));

@@ -9,8 +9,8 @@ namespace Fibertest.WpfClient
 {
     public class TracesToEquipmentInjectionViewModel : Screen
     {
-        public string Explanation { get; set; }
-        public List<CheckBoxModel> Choices { get; set; } // for binding
+        public string Explanation { get; set; } = null!;
+        public List<CheckBoxModel> Choices { get; set; } = null!; // for binding
         public bool ShouldWeContinue { get; set; }
         public bool IsClosed { get; set; }
 

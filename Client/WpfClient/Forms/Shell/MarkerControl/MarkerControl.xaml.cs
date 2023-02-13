@@ -47,7 +47,8 @@ namespace Fibertest.WpfClient
 
         public new ContextMenu ContextMenu { get; set; }
 
-        public MarkerControl(MapUserControl owner, GMapMarker gMapMarker, EquipmentType type, FiberState state, string title, ILifetimeScope globalScope)
+        public MarkerControl(MapUserControl owner, GMapMarker gMapMarker, EquipmentType type,
+            FiberState state, string title, ILifetimeScope globalScope)
         {
             InitializeComponent();
             Owner = owner;

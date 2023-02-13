@@ -30,7 +30,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private List<int> _zoomList;
+        private List<int> _zoomList = null!;
         public List<int> ZoomList
         {
             get => _zoomList;

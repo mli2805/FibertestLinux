@@ -97,7 +97,7 @@ namespace Fibertest.WpfClient
                 otauLeaf.Parent = rtuLeaf;
                 otauLeaf.Serial = otau.Serial ?? "";
                 otauLeaf.OtauId = otau.Id.ToString();
-                otauLeaf.Title = string.Format(Resources.SID_Optical_switch_with_Address,  otau.NetAddress?.ToStringA());
+                otauLeaf.Title = string.Format(Resources.SID_Optical_switch_with_Address,  otau.NetAddress.ToStringA());
                 otauLeaf.Color = Brushes.Black;
                 otauLeaf.MasterPort = otau.MasterPort;
                 otauLeaf.OwnPortCount = otau.PortCount;

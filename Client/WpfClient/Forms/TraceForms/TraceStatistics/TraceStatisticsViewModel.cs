@@ -19,15 +19,15 @@ namespace Fibertest.WpfClient
         private readonly TraceStateViewsManager _traceStateViewsManager;
         private readonly BaseRefModelFactory _baseRefModelFactory;
 
-        private Trace _trace;
+        private Trace? _trace;
         public bool IsOpen { get; private set; }
 
-        public string TraceTitle { get; set; }
-        public string RtuTitle { get; set; }
-        public string PortNumber { get; set; }
+        public string TraceTitle { get; set; } = null!;
+        public string RtuTitle { get; set; } = null!;
+        public string PortNumber { get; set; } = null!;
 
-        private BaseRefModel _selectedBaseRef;
-        public BaseRefModel SelectedBaseRef
+        private BaseRefModel? _selectedBaseRef;
+        public BaseRefModel? SelectedBaseRef
         {
             get { return _selectedBaseRef; }
             set
@@ -42,8 +42,8 @@ namespace Fibertest.WpfClient
 
         public ObservableCollection<TraceMeasurementModel> Rows { get; set; } = new();
 
-        private TraceMeasurementModel _selectedRow;
-        public TraceMeasurementModel SelectedRow
+        private TraceMeasurementModel? _selectedRow;
+        public TraceMeasurementModel? SelectedRow
         {
             get { return _selectedRow; }
             set
@@ -72,7 +72,7 @@ namespace Fibertest.WpfClient
             if (_trace == null)
                 return;
             TraceTitle = _trace.Title;
-            RtuTitle = _readModel.Rtus.FirstOrDefault(r => r.Id == _trace.RtuId)?.Title;
+            RtuTitle = _readModel.Rtus.First(r => r.Id == _trace.RtuId).Title;
             PortNumber = _trace.OtauPort == null ? Resources.SID__not_attached_ : _trace.OtauPort.IsPortOnMainCharon
                 ? _trace.OtauPort.OpticalPort.ToString()
                 : $@"{_trace.OtauPort.Serial}-{_trace.OtauPort.OpticalPort}";
@@ -84,13 +84,14 @@ namespace Fibertest.WpfClient
             }
 
             Rows.Clear();
-            foreach (var measurement in _readModel.Measurements.Where(m => m.TraceId == traceId).OrderBy(t => t.MeasurementTimestamp))
+            foreach (var measurement in _readModel.Measurements
+                         .Where(m => m.TraceId == traceId).OrderBy(t => t.MeasurementTimestamp))
                 Rows.Add(new TraceMeasurementModel(measurement));
         }
 
         public void AddNewMeasurement()
         {
-            var lastMeasurement = _readModel.Measurements.Last(m => m.TraceId == _trace.TraceId);
+            var lastMeasurement = _readModel.Measurements.Last(m => m.TraceId == _trace!.TraceId);
             Rows.Add(new TraceMeasurementModel(lastMeasurement));
         }
 

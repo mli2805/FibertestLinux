@@ -4,18 +4,15 @@ using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
 
-// ReSharper disable InconsistentNaming
-
 namespace Fibertest.WpfClient
 {
     public class NetworkEventModel
     {
         public int Ordinal { get; set; }
         public DateTime EventTimestamp { get; set; }
-        public string RtuTitle { get; set; }
+        public string RtuTitle { get; set; } = null!;
         public Guid RtuId { get; set; }
 
-      //  private bool IsRtuAvailable => MainChannel == RtuPartState.Ok || ReserveChannel == RtuPartState.Ok;
         public bool IsRtuAvailable;
         public string RtuAvailabilityString => IsRtuAvailable ? Resources.SID_Available : Resources.SID_Not_available;
         public Brush RtuAvailabilityBrush => GetAvailabilityBrush();
