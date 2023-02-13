@@ -61,7 +61,7 @@ namespace Fibertest.WpfClient
             }
 
             _traceToAttachViewModel.Initialize(rtu, otauPortDto);
-            _windowManager.ShowDialogWithAssignedOwner(_traceToAttachViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_traceToAttachViewModel);
         }
 
         public async Task AttachOtauAction(object param)
@@ -71,7 +71,7 @@ namespace Fibertest.WpfClient
 
             await Task.Delay(0);
             _otauToAttachViewModel.Initialize(portLeaf.Parent.Id, portLeaf.PortNumber);
-            _windowManager.ShowDialogWithAssignedOwner(_otauToAttachViewModel);
+            await _windowManager.ShowDialogWithAssignedOwner(_otauToAttachViewModel);
         }
 
         public bool CanAttachOtauAction(object param)

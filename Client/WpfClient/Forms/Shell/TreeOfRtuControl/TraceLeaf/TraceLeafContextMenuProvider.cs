@@ -19,44 +19,41 @@ namespace Fibertest.WpfClient
 
         public List<MenuItemVm> GetMenu(TraceLeaf traceLeaf)
         {
-            var menu = new List<MenuItemVm>();
-            menu.Add(new MenuItemVm()
+            var menu = new List<MenuItemVm>
             {
-                Header = Resources.SID_Information,
-                Command = new ContextMenuAsyncAction(_traceLeafActions.UpdateTrace, _traceLeafActionsPermissions.CanUpdateTrace),
-                CommandParameter = traceLeaf
-            });
+                new()
+                {
+                    Header = Resources.SID_Information,
+                    Command = new ContextMenuAsyncAction(_traceLeafActions.UpdateTrace, _traceLeafActionsPermissions.CanUpdateTrace),
+                    CommandParameter = traceLeaf
+                },
+                new()
+                {
+                    Header = Resources.SID_Show_trace,
+                    Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTrace, _traceLeafActionsPermissions.CanShowTrace),
+                    CommandParameter = traceLeaf
+                },
+                new()
+                {
+                    Header = Resources.SID_State,
+                    Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTraceState, _traceLeafActionsPermissions.CanShowTraceState),
+                    CommandParameter = traceLeaf
+                },
+                new()
+                {
+                    Header = Resources.SID_Statistics,
+                    Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTraceStatistics, _traceLeafActionsPermissions.CanShowTraceStatistics),
+                    CommandParameter = traceLeaf
+                },
+                new()
+                {
+                    Header = Resources.SID_Landmarks,
+                    Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTraceLandmarks, _traceLeafActionsPermissions.CanShowTraceLandmarks),
+                    CommandParameter = traceLeaf
+                },
+                null!
+            };
 
-            menu.Add(new MenuItemVm()
-            {
-                Header = Resources.SID_Show_trace,
-                Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTrace, _traceLeafActionsPermissions.CanShowTrace),
-                CommandParameter = traceLeaf
-            });
-
-
-            menu.Add(new MenuItemVm()
-            {
-                Header = Resources.SID_State,
-                Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTraceState, _traceLeafActionsPermissions.CanShowTraceState),
-                CommandParameter = traceLeaf
-            });
-
-            menu.Add(new MenuItemVm()
-            {
-                Header = Resources.SID_Statistics,
-                Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTraceStatistics, _traceLeafActionsPermissions.CanShowTraceStatistics),
-                CommandParameter = traceLeaf
-            });
-
-            menu.Add(new MenuItemVm()
-            {
-                Header = Resources.SID_Landmarks,
-                Command = new ContextMenuAsyncAction(_traceLeafActions.ShowTraceLandmarks, _traceLeafActionsPermissions.CanShowTraceLandmarks),
-                CommandParameter = traceLeaf
-            });
-
-            menu.Add(null);
 
             if (traceLeaf.PortNumber > 0)
             {
@@ -84,7 +81,7 @@ namespace Fibertest.WpfClient
                 });
             }
 
-            menu.Add(null);
+            menu.Add(null!);
 
             menu.Add(new MenuItemVm()
             {
@@ -105,7 +102,7 @@ namespace Fibertest.WpfClient
 
             if (traceLeaf.PortNumber > 0)
             {
-                menu.Add(null);
+                menu.Add(null!);
 
                 menu.Add(new MenuItemVm()
                 {

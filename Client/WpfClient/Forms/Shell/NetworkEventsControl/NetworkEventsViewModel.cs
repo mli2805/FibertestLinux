@@ -11,7 +11,7 @@ namespace Fibertest.WpfClient
 {
     public class NetworkEventsViewModel : PropertyChangedBase
     {
-        public string TableTitle { get; set; }
+        public string TableTitle { get; set; } = null!;
 
         private readonly Model _readModel;
       
@@ -43,7 +43,7 @@ namespace Fibertest.WpfClient
                 Ordinal = networkEvent.Ordinal,
                 EventTimestamp = networkEvent.EventTimestamp,
                 RtuId = networkEvent.RtuId,
-                RtuTitle = _readModel.Rtus.FirstOrDefault(r => r.Id == networkEvent.RtuId)?.Title,
+                RtuTitle = rtu.Title,
                 IsRtuAvailable = networkEvent.IsRtuAvailable,
                 OnMainChannel = networkEvent.OnMainChannel,
                 OnReserveChannel = networkEvent.OnReserveChannel,
@@ -78,10 +78,12 @@ namespace Fibertest.WpfClient
 
         public void RefreshRowsWithUpdatedRtu(Guid rtuId)
         {
+            var rtu = _readModel.Rtus.FirstOrDefault(r => r.Id == rtuId);
+            if (rtu == null) return;
             foreach (var networkEventModel in Rows.Where(m => m.RtuId == rtuId).ToList())
             {
                 Rows.Remove(networkEventModel);
-                networkEventModel.RtuTitle = _readModel.Rtus.FirstOrDefault(r => r.Id == rtuId)?.Title;
+                networkEventModel.RtuTitle = rtu.Title;
                 Rows.Add(networkEventModel);
             }
         }

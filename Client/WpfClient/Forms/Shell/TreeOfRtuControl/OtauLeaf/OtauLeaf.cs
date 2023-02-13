@@ -20,8 +20,8 @@ namespace Fibertest.WpfClient
         private RtuPartState _otauState;
         public int OwnPortCount { get; set; }
         public int MasterPort { get; set; }
-        public NetAddress OtauNetAddress { get; set; } = null!;
-        public string Serial { get; set; } = "";
+        public NetAddress? OtauNetAddress { get; set; }
+        public string? Serial { get; set; }
         public string OtauId { get; set; } = "";
 
         public RtuPartState OtauState
@@ -80,7 +80,7 @@ namespace Fibertest.WpfClient
             {
                 OtauId = Id,
                 OpticalPort = MasterPort,
-                NetAddress = OtauNetAddress.Clone(),
+                NetAddress = OtauNetAddress!.Clone(),
             };
             OtauDetachedDto result;
             using (_globalScope.Resolve<IWaitCursor>())

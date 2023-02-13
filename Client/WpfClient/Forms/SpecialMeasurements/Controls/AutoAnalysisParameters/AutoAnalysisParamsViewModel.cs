@@ -86,10 +86,12 @@ namespace Fibertest.WpfClient
             {
               var templateFileName = clientPath + $@"\ini\RftsParamsDefaultTemplate#{i}.rft";
 
-              RftsParamsParser.TryLoad(templateFileName, out RftsParams result, out Exception _);
-              result.UniParams.First(p => p.Name == @"AutoLT").Set(double.Parse(AutoLt));
-              result.UniParams.First(p => p.Name == @"AutoRT").Set(double.Parse(AutoRt));
-              result.Save(templateFileName);
+              if (RftsParamsParser.TryLoad(templateFileName, out RftsParams? result, out Exception? _))
+              {
+                  result!.UniParams.First(p => p.Name == @"AutoLT").Set(double.Parse(AutoLt));
+                  result.UniParams.First(p => p.Name == @"AutoRT").Set(double.Parse(AutoRt));
+                  result.Save(templateFileName);
+              }
             }
         }
 
@@ -98,17 +100,17 @@ namespace Fibertest.WpfClient
             var clientPath = FileOperations.GetParentFolder(AppDomain.CurrentDomain.BaseDirectory);
             var templateFileName = clientPath + $@"\ini\RftsParamsDefaultTemplate#{i}.rft";
 
-            if (!RftsParamsParser.TryLoad(templateFileName, out RftsParams result, out Exception exception))
+            if (!RftsParamsParser.TryLoad(templateFileName, out RftsParams? result, out Exception? exception))
             {
                 var mb = new MyMessageBoxViewModel(MessageType.Error, new List<string>()
                 {
-                    @"Failed to load RFTS parameters template from file:!", $@"{templateFileName}", exception.Message
+                    @"Failed to load RFTS parameters template from file:!", $@"{templateFileName}", exception!.Message
                 });
                 _windowManager.ShowDialogWithAssignedOwner(mb).Wait();
 
                 return new RftsParams();
             }
-            return result;
+            return result!;
         }
 
         public RftsParams GetRftsParams(OtdrDataKnownBlocks sorData, int templateId, Rtu rtu)

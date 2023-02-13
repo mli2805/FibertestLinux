@@ -9,7 +9,7 @@ namespace Fibertest.WpfClient
     {
         public Guid Id { get; set; }
 
-        private string _title;
+        private string _title = string.Empty;
         public string Title
         {
             get => _title;
@@ -22,7 +22,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private Brush _color;
+        private Brush _color = null!;
         public Brush Color
         {
             get => _color;
@@ -34,6 +34,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private Brush _backgroundBrush = null!;
         public Brush BackgroundBrush
         {
             get => _backgroundBrush;
@@ -45,18 +46,13 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = "";
 
         public List<MenuItemVm> MyContextMenu => GetMenuItems();
 
-        protected virtual List<MenuItemVm> GetMenuItems() { return null; }
+        protected virtual List<MenuItemVm> GetMenuItems() { return new List<MenuItemVm>(); }
 
-        public Leaf Parent { get; set; }
-
-        protected Leaf()
-        {
-
-        }
+        public Leaf Parent { get; set; } = null!;
 
         private bool _isSelected;
         public bool IsSelected
@@ -71,8 +67,6 @@ namespace Fibertest.WpfClient
         }
 
         private bool _isExpanded;
-        private Brush _backgroundBrush;
-
         public bool IsExpanded
         {
             get => _isExpanded;

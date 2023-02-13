@@ -18,7 +18,7 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
         private readonly TceReportProvider _tceReportProvider;
-        private TceS _tceInWork;
+        private TceS _tceInWork = null!;
         public TceInfoViewModel TceInfoViewModel { get; set; } = new TceInfoViewModel();
         public TceSlotsViewModel TceSlotsViewModel { get; set; } = new TceSlotsViewModel();
 
@@ -46,7 +46,7 @@ namespace Fibertest.WpfClient
             TceSlotsViewModel.Initialize(_readModel, tce, IsTraceLinked, _currentUser.Role <= Role.Root);
         }
 
-        private void TceInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void TceInfoViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"Title")
                 NotifyOfPropertyChange(nameof(IsSaveEnabled));

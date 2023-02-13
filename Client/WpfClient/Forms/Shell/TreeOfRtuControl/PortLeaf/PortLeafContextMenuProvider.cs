@@ -19,6 +19,7 @@ namespace Fibertest.WpfClient
             var menu = new List<MenuItemVm>();
 
             menu.AddRange(GetFreePortMenuItems(portLeaf));
+            menu.Add(null!);
             menu.AddRange(GetAnyPortMenuItems(portLeaf));
 
             return menu;
@@ -42,8 +43,6 @@ namespace Fibertest.WpfClient
 
         private IEnumerable<MenuItemVm> GetAnyPortMenuItems(PortLeaf portLeaf)
         {
-            yield return null;
-
             yield return new MenuItemVm()
             {
                 Header = Resources.SID_Measurement__Client_,

@@ -6,7 +6,7 @@ namespace Fibertest.WpfClient
     {
         int OwnPortCount { get; set; }
         ChildrenImpresario ChildrenImpresario { get; }
-        NetAddress OtauNetAddress { get; set; }
-        string Serial { get; set; }
+        NetAddress? OtauNetAddress { get; set; }
+        string? Serial { get; set; }
     }
 }

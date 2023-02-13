@@ -12,7 +12,7 @@ namespace Fibertest.WpfClient
         private const int LinesForRftsLevelThresholdSet = 3 * LinesForShortThreshold;
         private const int LinesForRftsLevel = 4 + LinesForRftsLevelThresholdSet + LinesForShortThreshold;
 
-        public static bool TryLoad(string filename, out RftsParams result, out Exception exception)
+        public static bool TryLoad(string filename, out RftsParams? result, out Exception? exception)
         {
             try
             {

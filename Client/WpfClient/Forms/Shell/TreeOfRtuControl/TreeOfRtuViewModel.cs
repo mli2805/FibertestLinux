@@ -10,8 +10,7 @@ namespace Fibertest.WpfClient
         public TreeOfRtuModel TreeOfRtuModel { get; set; }
         public FreePorts FreePorts { get; }
 
-        private string _textToFind;
-
+        private string _textToFind = "";
         public string TextToFind
         {
             get { return _textToFind; }
@@ -44,9 +43,9 @@ namespace Fibertest.WpfClient
             eventArrivalNotifier.PropertyChanged += _eventArrivalNotifier_PropertyChanged;
         }
 
-        private void CurrentClientConfiguration_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void CurrentClientConfiguration_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            SuspicionVisibility = ((CurrentClientConfiguration)sender).DoNotSignalAboutSuspicion ? Visibility.Visible : Visibility.Hidden;
+            SuspicionVisibility = ((CurrentClientConfiguration)sender!).DoNotSignalAboutSuspicion ? Visibility.Visible : Visibility.Hidden;
             NotifyOfPropertyChange(nameof(SuspicionVisibility));
         }
 
@@ -55,7 +54,7 @@ namespace Fibertest.WpfClient
             FreePorts.AreVisible = !FreePorts.AreVisible;
         }
 
-        private void _eventArrivalNotifier_PropertyChanged(object sender,
+        private void _eventArrivalNotifier_PropertyChanged(object? sender,
             System.ComponentModel.PropertyChangedEventArgs e)
         {
             TreeOfRtuModel.RefreshStatistics();

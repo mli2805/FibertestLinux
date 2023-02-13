@@ -12,10 +12,9 @@ namespace Fibertest.WpfClient
 {
     public class OutOfTurnPreciseMeasurementViewModel : Screen
     {
-        public TraceLeaf TraceLeaf { get; set; }
-        private IPortOwner _portOwner;
-        private Rtu _rtu;
-        private readonly CurrentUser _currentUser;
+        public TraceLeaf TraceLeaf { get; set; } = null!;
+        private IPortOwner _portOwner = null!;
+        private Rtu _rtu = null!;
         private readonly Model _readModel;
         private readonly MeasurementInterrupter _measurementInterrupter;
         private readonly IWcfServiceCommonC2D _c2RWcfManager;
@@ -47,10 +46,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public OutOfTurnPreciseMeasurementViewModel(CurrentUser currentUser, Model readModel, MeasurementInterrupter measurementInterrupter, 
+        public OutOfTurnPreciseMeasurementViewModel(Model readModel, MeasurementInterrupter measurementInterrupter, 
             IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager)
         {
-            _currentUser = currentUser;
             _readModel = readModel;
             _measurementInterrupter = measurementInterrupter;
             _c2RWcfManager = c2RWcfManager;
@@ -74,7 +72,7 @@ namespace Fibertest.WpfClient
             var result = await StartRequestedMeasurement();
             if (result.ReturnCode != ReturnCode.Ok)
             {
-                var vm = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage);
+                var vm = new MyMessageBoxViewModel(MessageType.Error, result.ErrorMessage ?? "");
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
                 await TryCloseAsync();
                 return;
@@ -111,6 +109,7 @@ namespace Fibertest.WpfClient
 
         public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+            await Task.Delay(0);
             IsOpen = false;
             return true;
         }
