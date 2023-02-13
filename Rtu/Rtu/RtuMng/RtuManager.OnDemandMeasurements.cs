@@ -39,6 +39,7 @@ namespace Fibertest.Rtu
                     DateTime.Now.ToString(CultureInfo.CurrentCulture));
             }
 
+            _logger.LogInfo(Logs.RtuService, "Start Measurement in another thread");
             await Task.Factory.StartNew(() => { MeasureWrapped(dto); });
             _logger.LogInfo(Logs.RtuService, "Measurement TASK started, return this fact to client");
 
