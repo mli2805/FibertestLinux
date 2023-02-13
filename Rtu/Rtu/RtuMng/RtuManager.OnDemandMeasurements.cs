@@ -40,6 +40,7 @@ namespace Fibertest.Rtu
             }
 
             await Task.Factory.StartNew(() => { MeasureWrapped(dto); });
+            _logger.LogInfo(Logs.RtuService, "Measurement TASK started, return this fact to client");
 
             return new ClientMeasurementStartedDto(ReturnCode.MeasurementClientStartedSuccessfully)
             { ClientMeasurementId = Guid.NewGuid() };
@@ -48,7 +49,7 @@ namespace Fibertest.Rtu
 
         private async void MeasureWrapped(DoClientMeasurementDto dto)
         {
-            _logger.LogDebug("Measurement client is in progress...");
+            _logger.LogDebug(Logs.RtuManager, "Measurement client is in progress...");
             var result = await Measure(dto);
             _logger.LogInfo(Logs.RtuManager, result.SorBytes != null
                 ? $"Measurement Client done. Sor size is {result.SorBytes.Length}"
