@@ -41,7 +41,7 @@ namespace Fibertest.Rtu
 
             _logger.LogInfo(Logs.RtuService, "Start Measurement in another thread");
             // await Task.Factory.StartNew(() => { MeasureWrapped(dto); }); // blocking call
-            Task.Factory.StartNew(() => { MeasureWrapped(dto); }); 
+            var unused = Task.Run(() => { MeasureWrapped(dto); }); 
             _logger.LogInfo(Logs.RtuService, "Measurement TASK started, return this fact to client");
 
             return new ClientMeasurementStartedDto(ReturnCode.MeasurementClientStartedSuccessfully)
