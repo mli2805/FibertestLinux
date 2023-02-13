@@ -30,7 +30,6 @@ namespace Fibertest.WpfClient
         }
 
         private string _selectedLanguage;
-
         public string SelectedLanguage
         {
             get => _selectedLanguage;
@@ -62,9 +61,9 @@ namespace Fibertest.WpfClient
             _currentClientConfiguration = currentClientConfiguration;
             _soundManager = soundManager;
 
-            SelectedLanguage = _config.Value.General.Culture;
+            _selectedLanguage = _config.Value.General.Culture;
             DoNotSignalAboutSuspicion = _config.Value.Miscellaneous.DoNotSignalAboutSuspicion;
-            SoundButtonContent = Resources.SID_Turn_alarm_on;
+            _soundButtonContent = Resources.SID_Turn_alarm_on;
             _isSoundOn = false;
         }
 

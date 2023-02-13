@@ -9,9 +9,9 @@ namespace Fibertest.WpfClient
     public class RtuFilterViewModel : Screen
     {
         private readonly Model _readModel;
-        private RtuGuidFilter _selectedRow;
-        public List<RtuGuidFilter> Rows { get; set; }
+        public List<RtuGuidFilter> Rows { get; set; } = null!;
 
+        private RtuGuidFilter _selectedRow = null!;
         public RtuGuidFilter SelectedRow
         {
             get { return _selectedRow; }

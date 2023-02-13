@@ -18,9 +18,8 @@ namespace Fibertest.WpfClient
     {
         private readonly ILogger _logger; 
         private readonly IWindowManager _windowManager;
-        private string _autoLt;
-        private string _autoRt;
 
+        private string _autoLt = null!;
         public string AutoLt
         {
             get => _autoLt;
@@ -32,6 +31,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private string _autoRt = null!;
         public string AutoRt
         {
             get => _autoRt;
@@ -104,9 +104,9 @@ namespace Fibertest.WpfClient
                 {
                     @"Failed to load RFTS parameters template from file:!", $@"{templateFileName}", exception.Message
                 });
-                _windowManager.ShowDialogWithAssignedOwner(mb);
+                _windowManager.ShowDialogWithAssignedOwner(mb).Wait();
 
-                return null;
+                return new RftsParams();
             }
             return result;
         }
@@ -118,7 +118,7 @@ namespace Fibertest.WpfClient
             {
                 var lmax = sorData.OwtToLenKm(sorData.FixedParameters.AcquisitionRange);
                 _logger.LogInfo(Logs.Client,$@"Fully automatic measurement: acquisition range = {lmax}");
-                var index = AutoBaseParams.GetTemplateIndexByLmaxInSorData(lmax, rtu.Omid);
+                var index = AutoBaseParams.GetTemplateIndexByLmaxInSorData(lmax, rtu.Omid!);
                 _logger.LogInfo(Logs.Client,$@"Supposedly used template #{index + 1}");
                 rftsParams = LoadFromTemplate(index + 1);
             }
@@ -166,6 +166,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
 }

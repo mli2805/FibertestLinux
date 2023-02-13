@@ -10,22 +10,22 @@ namespace Fibertest.WpfClient
     public class TraceInfoModel : PropertyChangedBase
     {
         public Guid TraceId { get; set; }
-        public Rtu Rtu;
-        public List<Guid> TraceEquipments;
-        public List<Guid> TraceNodes;
+        public Rtu Rtu = null!;
+        public List<Guid> TraceEquipments = null!;
+        public List<Guid> TraceNodes = null!;
 
 
-        public string RtuTitle { get; set; }
-        public string PortNumber { get; set; }
+        public string RtuTitle { get; set; } = null!;
+        public string PortNumber { get; set; } = null!;
 
-        public List<TraceInfoTableItem> NodesRows { get; set; }
-        public List<TraceInfoTableItem> EquipmentsRows { get; set; }
+        public List<TraceInfoTableItem> NodesRows { get; set; } = null!;
+        public List<TraceInfoTableItem> EquipmentsRows { get; set; } = null!;
 
-        public string AdjustmentPointsLine { get; set; }
+        public string AdjustmentPointsLine { get; set; } = null!;
         public Visibility AdjustmentPointsLineVisibility { get; set; } = Visibility.Collapsed;
 
-        public string PhysicalLength { get; set; }
-        public string OpticalLength { get; set; }
+        public string PhysicalLength { get; set; } = null!;
+        public string OpticalLength { get; set; } = null!;
       
         private bool _isTraceModeLight;
         public bool IsTraceModeLight
@@ -51,7 +51,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _comment;
+        private string _comment = string.Empty;
         public string Comment
         {
             get => _comment;
