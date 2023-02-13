@@ -13,15 +13,13 @@ namespace Fibertest.Rtu
             if (!IsRtuInitialized)
             {
                 _logger.LogInfo(Logs.RtuService, "I am initializing now. Ignore command.");
-                return new ClientMeasurementStartedDto(ReturnCode.RtuInitializationInProgress)
-                { ClientMeasurementId = Guid.NewGuid() };
+                return new ClientMeasurementStartedDto(ReturnCode.RtuInitializationInProgress);
             }
 
             if (IsAutoBaseMeasurementInProgress)
             {
                 _logger.LogInfo(Logs.RtuService, "Auto Base Measurement In Progress. Ignore command.");
-                return new ClientMeasurementStartedDto(ReturnCode.RtuAutoBaseMeasurementInProgress)
-                { ClientMeasurementId = Guid.NewGuid() };
+                return new ClientMeasurementStartedDto(ReturnCode.RtuAutoBaseMeasurementInProgress);
             }
 
             _logger.EmptyAndLog(Logs.RtuManager, "DoClientMeasurement command received");
@@ -41,12 +39,12 @@ namespace Fibertest.Rtu
 
             _logger.LogInfo(Logs.RtuService, "Start Measurement in another thread");
             // await Task.Factory.StartNew(() => { MeasureWrapped(dto); }); // blocking call
+            await Task.Delay(0);
             var unused = Task.Run(() => { MeasureWrapped(dto); }); 
             _logger.LogInfo(Logs.RtuService, "Measurement TASK started, return this fact to client");
 
             return new ClientMeasurementStartedDto(ReturnCode.MeasurementClientStartedSuccessfully)
             { ClientMeasurementId = Guid.NewGuid() };
-            // sends ClientMeasurementStartedDto (means "started successfully")
         }
 
         private async void MeasureWrapped(DoClientMeasurementDto dto)

@@ -23,8 +23,8 @@ public class RtuGrpcService : d2r.d2rBase
     {
         object? o = JsonConvert.DeserializeObject(d2RCommand.Json, JsonSerializerSettings);
         if (o == null)
-            return new d2rResponse()
-            { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.FailedDeserializeJson)) };
+            return new d2rResponse() { Json = JsonConvert
+                .SerializeObject(new RequestAnswer(ReturnCode.FailedDeserializeJson), JsonSerializerSettings) };
         var request = (BaseRtuRequest)o;
         _logger.LogInfo(Logs.RtuService, $"request {request.What} received");
 
@@ -44,7 +44,7 @@ public class RtuGrpcService : d2r.d2rBase
             default: result = new RequestAnswer(ReturnCode.Error); break;
         }
 
-        return new d2rResponse() { Json = JsonConvert.SerializeObject(result) };
+        return new d2rResponse() { Json = JsonConvert.SerializeObject(result, JsonSerializerSettings) };
     }
 
 

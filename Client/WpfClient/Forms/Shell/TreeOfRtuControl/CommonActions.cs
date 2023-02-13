@@ -46,15 +46,15 @@ namespace Fibertest.WpfClient
             var parent = GetParent(param);
             if (parent == null) return;
 
-            RtuLeaf rtuLeaf = parent is RtuLeaf leaf ? leaf : (RtuLeaf)parent.Parent;
-            if (!await _globalScope.Resolve<IRtuHolder>().SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.DoMeasurementClient))
-                return;
+            // RtuLeaf rtuLeaf = parent is RtuLeaf leaf ? leaf : (RtuLeaf)parent.Parent;
+            // if (!await _globalScope.Resolve<IRtuHolder>().SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.DoMeasurementClient))
+            //     return;
 
             if (await _clientMeasurementViewModel.Initialize(parent, GetPortNumber(param)))
                await _windowManager.ShowDialogWithAssignedOwner(_clientMeasurementViewModel);
 
-            await _globalScope.Resolve<IRtuHolder>()
-                .SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.None);
+            // await _globalScope.Resolve<IRtuHolder>()
+            //     .SetRtuOccupationState(rtuLeaf.Id, rtuLeaf.Title, RtuOccupation.None);
         }
 
         public async Task MeasurementRftsReflectAction(object param)
