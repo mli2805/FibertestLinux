@@ -34,6 +34,7 @@ public partial class RtuResponseApplier
         switch (command)
         {
             case CheckRtuConnectionDto _:
+            case DoClientMeasurementDto _:
                 return jsonResult;
 
             case InitializeRtuDto dto:

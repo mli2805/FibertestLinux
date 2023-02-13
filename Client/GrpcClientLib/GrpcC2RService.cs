@@ -47,7 +47,7 @@ public class GrpcC2RService
                     ErrorMessage = "Empty response",
                 };
 
-            var result = JsonConvert.DeserializeObject<TResult>(response.Json);
+            var result = JsonConvert.DeserializeObject<TResult>(response.Json, JsonSerializerSettings);
             if (result == null)
                 return new TResult
                 {
