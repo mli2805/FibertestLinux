@@ -1,4 +1,5 @@
 ﻿using Fibertest.Dto;
+using Fibertest.Graph;
 using Fibertest.Utils;
 using Grpc.Net.Client;
 using GrpsClientLib;
@@ -26,6 +27,7 @@ namespace Fibertest.DataCenter
             switch (o)
             {
                 case ClientMeasurementResultDto dto: return await SendClientMeasurementResult(dto);
+                case CurrentMonitoringStepDto dto: return await SendCurrentMeasurementStep(dto);
                 default: return new RequestAnswer(ReturnCode.Error);
             }
 
@@ -38,6 +40,18 @@ namespace Fibertest.DataCenter
 
             var commandContent = JsonConvert.SerializeObject(dto, JsonSerializerSettings);
             return await TransferToClient(clientStation.ClientIp, commandContent);
+        }
+
+        private async Task<RequestAnswer> SendCurrentMeasurementStep(CurrentMonitoringStepDto dto)
+        {
+            var commandContent = JsonConvert.SerializeObject(dto, JsonSerializerSettings);
+            foreach (var clientStation in _clientCollection.Clients.Values)
+            {
+                var transferResult = await TransferToClient(clientStation.ClientIp, commandContent);
+                _logger.LogInfo(Logs.DataCenter, $"transfer result is {transferResult.ReturnCode.GetLocalizedString()}");
+            }
+
+            return new RequestAnswer(ReturnCode.Ok);
         }
 
         private async Task<RequestAnswer> TransferToClient(string clientIp, string commandContent)

@@ -11,6 +11,7 @@ using System.Windows.Markup;
 using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
+using Fibertest.GrpcClientLib;
 using Fibertest.Utils;
 using Fibertest.WpfCommonViews;
 
@@ -154,5 +155,6 @@ public class AppBootstrapper : BootstrapperBase
     {
         yield return typeof(ShellView).Assembly; // this Assembly (.exe)
         yield return typeof(RftsEventsView).Assembly; // WpfCommonViews
+        yield return typeof(GrpcC2DService).Assembly; // GrpcClientLib
     }
 }

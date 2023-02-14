@@ -156,11 +156,11 @@ namespace Fibertest.WpfClient
 
         public async void Cancel()
         {
-            Message = Resources.SID_Interrupting_Measurement__Client___Wait_please___;
-            IsCancelButtonEnabled = false;
-            if (_rtu.RtuMaker == RtuMaker.VeEX)
-                _cts?.Cancel();
-            await _measurementInterrupter.Interrupt(_rtu, @"measurement (Client)");
+            // Message = Resources.SID_Interrupting_Measurement__Client___Wait_please___;
+            // IsCancelButtonEnabled = false;
+            // if (_rtu.RtuMaker == RtuMaker.VeEX)
+            //     _cts?.Cancel();
+            // await _measurementInterrupter.Interrupt(_rtu, @"measurement (Client)");
             await TryCloseAsync();
         }
     }

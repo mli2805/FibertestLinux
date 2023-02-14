@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -22,7 +23,8 @@ namespace Fibertest.WpfClient
         private readonly LoginViewModel _loginViewModel;
         private readonly Heartbeater _heartbeater;
         private readonly ClientPoller _clientPoller;
-        private readonly ClientGrpcServiceStarter _clientGrpcServiceStarter;
+        private readonly IGrpcHost _clientGrpcServiceHost;
+        private readonly GrpcInClientProcessor _grpcInClientProcessor;
         private readonly ModelLoader _modelLoader;
         private readonly ILogger _logger;
         private readonly CurrentClientConfiguration _currentClientConfiguration;
@@ -50,7 +52,8 @@ namespace Fibertest.WpfClient
             IWcfServiceInSuperClient c2SWcfManager,
             GraphReadModel graphReadModel, IWindowManager windowManager,
             LoginViewModel loginViewModel,
-            Heartbeater heartbeater, ClientPoller clientPoller, ClientGrpcServiceStarter clientGrpcServiceStarter,
+            Heartbeater heartbeater, ClientPoller clientPoller,
+            IGrpcHost clientGrpcServiceHost, GrpcInClientProcessor grpcInClientProcessor,
             MainMenuViewModel mainMenuViewModel, TreeOfRtuViewModel treeOfRtuViewModel,
             TabulatorViewModel tabulatorViewModel, CommonStatusBarViewModel commonStatusBarViewModel,
              OpticalEventsDoubleViewModel opticalEventsDoubleViewModel,
@@ -74,7 +77,10 @@ namespace Fibertest.WpfClient
             _loginViewModel = loginViewModel;
             _heartbeater = heartbeater;
             _clientPoller = clientPoller;
-            _clientGrpcServiceStarter = clientGrpcServiceStarter;
+
+            _clientGrpcServiceHost = clientGrpcServiceHost;
+            _grpcInClientProcessor = grpcInClientProcessor;
+
             _modelLoader = modelLoader;
             _logger = logger;
             _currentClientConfiguration = currentClientConfiguration;
@@ -172,9 +178,7 @@ namespace Fibertest.WpfClient
         {
             const string separator = @"    >>    ";
             var server =
-                $@"{separator}{_config.Value.General.ServerTitle} ({
-                    _currentDatacenterParameters.General.ServerDoubleAddress.Main.Ip4Address}) v{
-                        _currentDatacenterParameters.General.DatacenterVersion}";
+                $@"{separator}{_config.Value.General.ServerTitle} ({_currentDatacenterParameters.General.ServerDoubleAddress.Main.Ip4Address}) v{_currentDatacenterParameters.General.DatacenterVersion}";
             var user = $@"{separator}{_currentUser.UserName} ({_currentUser.Role.ToString()})";
             var zone = $@"{separator}[{_currentUser.ZoneTitle}]";
             DisplayName += $@" {server} {user} {zone}";
@@ -247,8 +251,15 @@ namespace Fibertest.WpfClient
                 _clientPoller.Start(_clientPollerCts.Token); // graph events including monitoring results events
 
                 // Accepts only monitoring step messages and client's measurement results
-                Task.Factory.StartNew(() => _clientGrpcServiceStarter.StartClientGrpcListener());
+                Task.Run(() => _clientGrpcServiceHost.Start());
+                _clientGrpcServiceHost.ClientGrpcData.GrpcMessageReceived += ClientGrpcData_GrpcMessageReceived;
             }
+        }
+
+        private void ClientGrpcData_GrpcMessageReceived(object sender, string json)
+        {
+            _logger.LogInfo(Logs.Client, "gRPC message received");
+            _grpcInClientProcessor.Apply(json);
         }
 
         public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())

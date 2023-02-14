@@ -106,7 +106,7 @@ namespace Fibertest.WpfClient
         {
             var sorbytes = await GetSorBytes(sorFileId);
 
-            OtdrDataKnownBlocks sorData;
+            OtdrDataKnownBlocks? sorData;
             var result = SorData.TryGetFromBytes(sorbytes, out sorData);
             if (result != "")
             {
@@ -115,8 +115,8 @@ namespace Fibertest.WpfClient
             }
 
             var vm = new RftsEventsViewModel(_windowManager);
-            vm.Initialize(sorData, traceTitle);
-            _windowManager.ShowWindowWithAssignedOwner(vm);
+            vm.Initialize(sorData!, traceTitle);
+            await _windowManager.ShowWindowWithAssignedOwner(vm);
         }
 
         //------------------------------------------------------------------------------------------------

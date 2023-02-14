@@ -1,40 +1,27 @@
 ﻿using Fibertest.Dto;
-using Fibertest.Utils;
 using Grpc.Core;
 using GrpsClientLib;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Fibertest.GrpcClientLib
 {
     public class ClientGrpcService : toClient.toClientBase
     {
+        private readonly ClientGrpcData _clientGrpcData;
+
         private static readonly JsonSerializerSettings JsonSerializerSettings =
             new() { TypeNameHandling = TypeNameHandling.All };
 
-        private readonly ILogger<ClientGrpcService> _logger;
-
-        public ClientGrpcService(ILogger<ClientGrpcService> logger)
+        public ClientGrpcService(ClientGrpcData clientGrpcData)
         {
-            _logger = logger;
+            _clientGrpcData = clientGrpcData;
         }
 
         public override async Task<toClientResponse> SendCommand(toClientCommand command, ServerCallContext context)
         {
             try
             {
-                var request = Deserialize(command.Json);
-                if (request == null)
-                    return CreateBadResponse(ReturnCode.FailedDeserializeJson);
-
-                switch (request)
-                {
-                //TODO: process request - raise event ?
-                    case ClientMeasurementResultDto dto:
-                        _logger.LogInfo(Logs.Client, $"Client gets from DC ClientMeasurementResult {dto.SorBytes!.Length} sor bytes"); break;
-                    case CurrentMonitoringStepDto _:
-                        _logger.LogInfo(Logs.Client, $"Client gets CurrentMonitoringStepDto dto from DC"); break;
-                }
+               _clientGrpcData.Raise(command.Json);
 
                 return new toClientResponse()
                 { Json = JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.Ok), JsonSerializerSettings) };
@@ -42,27 +29,14 @@ namespace Fibertest.GrpcClientLib
             catch (Exception e)
             {
                 await Task.Delay(0);
-                _logger.LogError(Logs.Client, e.Message);
-                return CreateBadResponse(ReturnCode.ToClientGrpcOperationError);
+                return new toClientResponse
+                {
+                    Json = JsonConvert
+                        .SerializeObject(
+                            new RequestAnswer(ReturnCode.ToClientGrpcOperationError){ErrorMessage = e.Message},
+                            JsonSerializerSettings)
+                };
             }
-        }
-
-        private BaseRequest? Deserialize(string json)
-        {
-            return JsonConvert.DeserializeObject(json, JsonSerializerSettings) switch
-            {
-                CurrentMonitoringStepDto dto => dto,
-                ClientMeasurementResultDto dto => dto,
-                _ => null
-            };
-        }
-
-        private toClientResponse CreateBadResponse(ReturnCode returnCode)
-        {
-            return new toClientResponse
-            {
-                Json = JsonConvert.SerializeObject(new RequestAnswer(returnCode), JsonSerializerSettings)
-            };
         }
     }
 }

@@ -161,7 +161,7 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<byte[]> GetSorBytes(int sorFileId)
+        public Task<byte[]?> GetSorBytes(int sorFileId)
         {
             throw new System.NotImplementedException();
         }

@@ -14,6 +14,7 @@ public class C2DService : c2d.c2dBase
     private readonly Model _writeModel;
     private readonly ClientGrpcRequestExecutor _clientGrpcRequestExecutor;
     private readonly EventStoreService _eventStoreService;
+    private const int PortionSize2Mb = 2 * 1024 * 1024;
 
     public C2DService(ILogger<C2DService> logger, ClientCollection clientCollection, Model writeModel,
         ClientGrpcRequestExecutor clientGrpcRequestExecutor, EventStoreService eventStoreService)
@@ -28,40 +29,6 @@ public class C2DService : c2d.c2dBase
     private static readonly JsonSerializerSettings JsonSerializerSettings =
         new() { TypeNameHandling = TypeNameHandling.All };
 
-
-    private const int PortionSize2Mb = 2 * 1024 * 1024;
-    public override async Task GetSerializedModel(serializedModelRequest request,
-        IServerStreamWriter<serializedModelPortion> responseStream, ServerCallContext context)
-    {
-        try
-        {
-            _logger.LogInfo(Logs.DataCenter, "Command 'Get model itself' received. (Model was serialized beforehand)");
-
-            // var serializedModel = _clientGrpcRequestExecutor.SerializeModel();
-            // if (serializedModel == null) return;
-            var portionOrdinal = 0;
-            int currentPortionSize;
-
-            do
-            {
-                currentPortionSize = PortionSize2Mb * (portionOrdinal + 1) < _clientGrpcRequestExecutor.SerializedModel!.Length
-                    ? PortionSize2Mb
-                    : _clientGrpcRequestExecutor.SerializedModel.Length - PortionSize2Mb * (portionOrdinal);
-
-                // var portion = _clientGrpcRequestExecutor.GetModelPortion(portionOrdinal);
-
-                 ByteString bs2 = ByteString
-                    .CopyFrom(_clientGrpcRequestExecutor.SerializedModel, PortionSize2Mb * portionOrdinal, currentPortionSize);
-
-                await responseStream.WriteAsync(new serializedModelPortion() { Portion = bs2 });
-
-            } while (currentPortionSize == PortionSize2Mb);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(Logs.DataCenter, $"GetSerializedModel: {e.Message}");
-        }
-    }
 
     public override async Task<c2dResponse> SendCommand(c2dCommand command, ServerCallContext context)
     {
@@ -125,6 +92,39 @@ public class C2DService : c2d.c2dBase
         {
             _logger.LogError(Logs.DataCenter, e.Message);
             return CreateBadResponse(ReturnCode.D2RGrpcOperationError);
+        }
+    }
+
+    public override async Task GetSerializedModel(serializedModelRequest request,
+        IServerStreamWriter<serializedModelPortion> responseStream, ServerCallContext context)
+    {
+        try
+        {
+            _logger.LogInfo(Logs.DataCenter, "Command 'Get model itself' received. (Model was serialized beforehand)");
+
+            // var serializedModel = _clientGrpcRequestExecutor.SerializeModel();
+            // if (serializedModel == null) return;
+            var portionOrdinal = 0;
+            int currentPortionSize;
+
+            do
+            {
+                currentPortionSize = PortionSize2Mb * (portionOrdinal + 1) < _clientGrpcRequestExecutor.SerializedModel!.Length
+                    ? PortionSize2Mb
+                    : _clientGrpcRequestExecutor.SerializedModel.Length - PortionSize2Mb * (portionOrdinal);
+
+                // var portion = _clientGrpcRequestExecutor.GetModelPortion(portionOrdinal);
+
+                 ByteString bs2 = ByteString
+                    .CopyFrom(_clientGrpcRequestExecutor.SerializedModel, PortionSize2Mb * portionOrdinal, currentPortionSize);
+
+                await responseStream.WriteAsync(new serializedModelPortion() { Portion = bs2 });
+
+            } while (currentPortionSize == PortionSize2Mb);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(Logs.DataCenter, $"GetSerializedModel: {e.Message}");
         }
     }
 

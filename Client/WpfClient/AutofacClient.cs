@@ -21,7 +21,7 @@ namespace Fibertest.WpfClient
                 b.AddDebug();  // Debug.WriteLine() - see Output window
                 b.AddConsole(); // in WPF does not work !!!
                 b.AddSerilog(LoggerConfigurationFactory
-                    .Configure(LogEventLevel.Information) // here is my configuration of log files
+                    .Configure(LogEventLevel.Debug) // here is my configuration of log files
                     .CreateLogger());
             });
 
@@ -37,8 +37,8 @@ namespace Fibertest.WpfClient
             builder.RegisterType<GrpcC2DService>().InstancePerLifetimeScope();
             builder.RegisterType<GrpcC2RService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<ClientGrpcService>().InstancePerLifetimeScope();
-            builder.RegisterType<ClientGrpcServiceStarter>().InstancePerLifetimeScope();
+            builder.RegisterType<GrpcInClientProcessor>().InstancePerLifetimeScope();
+            builder.RegisterType<ClientGrpcServiceHost>().As<IGrpcHost>().InstancePerLifetimeScope();
 
             builder.RegisterType<WcfServiceDesktopC2D>().AsSelf().As<IWcfServiceDesktopC2D>().InstancePerLifetimeScope();
             builder.RegisterType<WcfServiceCommonC2D>().As<IWcfServiceCommonC2D>().InstancePerLifetimeScope();
