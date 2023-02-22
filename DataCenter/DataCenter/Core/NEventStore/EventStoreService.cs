@@ -185,6 +185,8 @@ public class EventStoreService
     {
         try
         {
+            _logger.LogInfo(Logs.DataCenter, $"request GetEvents starting from revision {revision} : ");
+
             var events = StoreEvents
                 .OpenStream(StreamIdOriginal, revision + 1)
                 .CommittedEvents
@@ -192,11 +194,16 @@ public class EventStoreService
                 .Select(x => JsonConvert.SerializeObject(x, JsonSerializerSettings))
                 .Take(_eventsPortion) // it depends on tcp buffer size and performance of clients' pc
                 .ToArray();
+
+            _logger.LogInfo(Logs.DataCenter, $"{events.Length} found");
+
             return new EventsDto() { ReturnCode = ReturnCode.Ok, Events = events};
         }
         catch (StreamNotFoundException)
         {
             // it is a feature of NEventSourcing to return this exception if there is no new events
+            _logger.LogInfo(Logs.DataCenter, "No new events found");
+
             return new EventsDto() { ReturnCode = ReturnCode.Ok, Events = Array.Empty<string>() };
         }
         catch (Exception e)
