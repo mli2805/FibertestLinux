@@ -134,17 +134,17 @@ namespace Fibertest.WpfClient
         {
             var getEventsDto = new GetEventsDto() { Revision = CurrentEventNumber, ClientConnectionId = _currentUser.ConnectionId };
             var result = await _grpcC2DService.SendAnyC2DRequest<GetEventsDto, EventsDto>(getEventsDto);
-            string[]? events = result.Events;
 
-            if (events == null)
+            if (result.ReturnCode != ReturnCode.Ok || result.Events == null)
             {
                 _exceptionCount++;
-                _logger.LogError(Logs.Client,$@"Cannot establish connection with data-center. Exception count: {_exceptionCount}");
+                _logger.LogError(Logs.Client,$@"Cannot get events from data-center. {result.ErrorMessage}. Exception count: {_exceptionCount}");
                 if (_exceptionCount == _exceptionCountLimit) // blocks current thread till user clicks to close form
                     _dispatcherProvider.GetDispatcher().Invoke(NotifyUserConnectionProblems);
                 return -1;
             }
 
+            string[] events = result.Events!;
             _exceptionCount = 0;
 
             if (events.Length == 0)

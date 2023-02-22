@@ -196,12 +196,13 @@ public class EventStoreService
         }
         catch (StreamNotFoundException)
         {
-            return new EventsDto() { ReturnCode = ReturnCode.Error, Events = Array.Empty<string>() };
+            // it is a feature of NEventSourcing to return this exception if there is no new events
+            return new EventsDto() { ReturnCode = ReturnCode.Ok, Events = Array.Empty<string>() };
         }
         catch (Exception e)
         {
             _logger.LogError(Logs.DataCenter, e.Message);
-            return new EventsDto() { ReturnCode = ReturnCode.Error, Events = Array.Empty<string>() };
+            return new EventsDto() { ReturnCode = ReturnCode.Error, Events = null };
         }
     }
 }
