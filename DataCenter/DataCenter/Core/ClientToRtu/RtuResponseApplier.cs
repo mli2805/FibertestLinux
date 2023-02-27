@@ -45,6 +45,9 @@ public partial class RtuResponseApplier
                 return await ApplyOtauDetachmentResult(dto, jsonResult);
             case AssignBaseRefsDto dto:
                 return await ApplyBaseRefsAssignmentResult(dto, jsonResult);
+
+            case AttachTraceDto dto:
+                return await ApplyBaseRefsAssignmentResult(dto, jsonResult);
             default:
                 return JsonConvert
                     .SerializeObject(new RequestAnswer(ReturnCode.Error) { ErrorMessage = "Unknown command" },

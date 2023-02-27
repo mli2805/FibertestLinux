@@ -6,6 +6,20 @@ namespace Fibertest.DataCenter
 {
     public partial class RtuResponseApplier
     {
+        public async Task<string> ApplyBaseRefsAssignmentResult(AttachTraceDto dto, string jsonResult)
+        {
+            var result = Deserialize<BaseRefAssignedDto>(jsonResult);
+            if (result.ReturnCode == ReturnCode.BaseRefAssignedSuccessfully)
+            {
+                var commandForEventSourcing = new AttachTrace(dto.TraceId, dto.OtauPortDto!);
+                await _responseToEventSourcing.ApplyBaseSendingResult(dto, commandForEventSourcing);
+            }
+            else
+                _logger.LogError(Logs.DataCenter, "Failed to assign base refs!");
+
+            return jsonResult;
+        }
+
         public async Task<string> ApplyBaseRefsAssignmentResult(AssignBaseRefsDto dto, string jsonResult)
         {
             var result = Deserialize<BaseRefAssignedDto>(jsonResult);

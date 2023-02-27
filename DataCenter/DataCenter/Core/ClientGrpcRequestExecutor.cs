@@ -49,8 +49,6 @@ public partial class ClientGrpcRequestExecutor
                 return _eventStoreService.GetEvents(dto.Revision);
             case GetSerializedModelParamsDto _:
                 return await GetModelDownloadParams();
-            // case GetModelPortionDto dto:
-            //     return await GetModelPortion(dto.Portion);
 
             case ChangeDcConfigDto dto:
                 _config.Update(cfg=>cfg.FillIn(dto.NewConfig));

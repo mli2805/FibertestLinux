@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.OtdrDataFormat;
 using Fibertest.Utils;
 
@@ -9,15 +10,14 @@ namespace Fibertest.WpfClient
 {
     public class MeasurementAsBaseAssigner
     {
-        private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
-
         private readonly CurrentUser _currentUser;
-        private Rtu _rtu;
+        private readonly GrpcC2RService _grpcC2RService;
+        private Rtu _rtu = null!;
 
-        public MeasurementAsBaseAssigner(CurrentUser currentUser, IWcfServiceCommonC2D c2DWcfCommonManager)
+        public MeasurementAsBaseAssigner(CurrentUser currentUser, GrpcC2RService grpcC2RService)
         {
             _currentUser = currentUser;
-            _c2DWcfCommonManager = c2DWcfCommonManager;
+            _grpcC2RService = grpcC2RService;
         }
 
         public void Initialize(Rtu rtu)
@@ -28,14 +28,15 @@ namespace Fibertest.WpfClient
         public async Task<BaseRefAssignedDto> Assign(OtdrDataKnownBlocks sorData, Trace trace)
         {
             var dto = PrepareDto(sorData.ToBytes(), trace);
-            return await _c2DWcfCommonManager.AssignBaseRefAsync(dto); // send to Db and RTU
+            return await _grpcC2RService.SendAnyC2RRequest<AssignBaseRefsDto, BaseRefAssignedDto>(dto); // send to Db and RTU
         }
 
         private AssignBaseRefsDto PrepareDto(byte[] sorBytes, Trace trace)
         {
-            var dto = new AssignBaseRefsDto(trace.RtuId, _rtu.RtuMaker, trace.TraceId, new List<BaseRefDto>(), new List<int>())
+            var dto = new AssignBaseRefsDto(trace.RtuId, _rtu.RtuMaker, trace.TraceId,
+                new List<BaseRefDto>(), new List<int>())
             {
-                OtdrId = _rtu.OtdrId,
+                OtdrId = _rtu.OtdrId!,
                 OtauPortDto = trace.OtauPort,
             };
 

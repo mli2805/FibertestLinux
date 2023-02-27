@@ -102,8 +102,6 @@ public class C2DService : c2d.c2dBase
         {
             _logger.LogInfo(Logs.DataCenter, "Command 'Get model itself' received. (Model was serialized beforehand)");
 
-            // var serializedModel = _clientGrpcRequestExecutor.SerializeModel();
-            // if (serializedModel == null) return;
             var portionOrdinal = 0;
             int currentPortionSize;
 
@@ -112,8 +110,6 @@ public class C2DService : c2d.c2dBase
                 currentPortionSize = PortionSize2Mb * (portionOrdinal + 1) < _clientGrpcRequestExecutor.SerializedModel!.Length
                     ? PortionSize2Mb
                     : _clientGrpcRequestExecutor.SerializedModel.Length - PortionSize2Mb * (portionOrdinal);
-
-                // var portion = _clientGrpcRequestExecutor.GetModelPortion(portionOrdinal);
 
                  ByteString bs2 = ByteString
                     .CopyFrom(_clientGrpcRequestExecutor.SerializedModel, PortionSize2Mb * portionOrdinal, currentPortionSize);

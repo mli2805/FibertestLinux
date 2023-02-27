@@ -15,11 +15,9 @@ namespace Fibertest.WpfClient
     public class TraceLeafActions
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly GraphReadModel _graphReadModel;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceCommonC2D _c2DCommonWcf;
         private readonly TabulatorViewModel _tabulatorViewModel;
         private readonly GrpcC2DService _grpcC2DService;
         private readonly TraceStateViewsManager _traceStateViewsManager;
@@ -30,21 +28,18 @@ namespace Fibertest.WpfClient
         private readonly AutoBaseViewModel _autoBaseViewModel;
         private readonly CommonStatusBarViewModel _commonStatusBarViewModel;
 
-        public TraceLeafActions(ILifetimeScope globalScope, CurrentUser currentUser, 
-            Model readModel, GraphReadModel graphReadModel,
+        public TraceLeafActions(ILifetimeScope globalScope, Model readModel, GraphReadModel graphReadModel,
             IWindowManager windowManager, TabulatorViewModel tabulatorViewModel,
-            GrpcC2DService grpcC2DService, IWcfServiceCommonC2D c2DCommonWcf,
+            GrpcC2DService grpcC2DService, 
             TraceStateViewsManager traceStateViewsManager, TraceStatisticsViewsManager traceStatisticsViewsManager,
             BaseRefsAssignViewModel baseRefsAssignViewModel, LandmarksViewsManager landmarksViewsManager,
             OutOfTurnPreciseMeasurementViewModel outOfTurnPreciseMeasurementViewModel, AutoBaseViewModel autoBaseViewModel,
             CommonStatusBarViewModel commonStatusBarViewModel)
         {
             _globalScope = globalScope;
-            _currentUser = currentUser;
             _readModel = readModel;
             _graphReadModel = graphReadModel;
             _windowManager = windowManager;
-            _c2DCommonWcf = c2DCommonWcf;
             _tabulatorViewModel = tabulatorViewModel;
             _grpcC2DService = grpcC2DService;
             _traceStateViewsManager = traceStateViewsManager;
@@ -126,13 +121,15 @@ namespace Fibertest.WpfClient
             if (!(param is TraceLeaf traceLeaf))
                 return;
 
-            var detachTraceDto = new DetachTraceDto
-            {
-                TraceId = traceLeaf.Id,
-                ClientConnectionId = _currentUser.ConnectionId,
-            };
+            // var detachTraceDto = new DetachTraceDto
+            // {
+            //     TraceId = traceLeaf.Id,
+            //     ClientConnectionId = _currentUser.ConnectionId,
+            // };
 
-            var result = await _c2DCommonWcf.DetachTraceAsync(detachTraceDto);
+            var cmd = new DetachTrace() { TraceId = traceLeaf.Id };
+
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
 
             if (result.ReturnCode != ReturnCode.Ok)
             {

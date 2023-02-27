@@ -23,7 +23,7 @@ public class ClientToIitRtuTransmitter
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
         _logger.LogDebug(Logs.DataCenter, $"GrpcChannel for {rtuUri}");
         var grpcClientRtu = new d2r.d2rClient(grpcChannelRtu);
-        _logger.LogDebug(Logs.DataCenter, $"Command content {commandContent}");
+        // _logger.LogDebug(Logs.DataCenter, $"Command content {commandContent}");
 
         var rtuCommand = new d2rCommand() { Json = commandContent };
 
@@ -56,5 +56,6 @@ public class ClientToIitRtuTransmitter
             return JsonConvert.SerializeObject(badResult, JsonSerializerSettings);
         }
     }
+
 
 }

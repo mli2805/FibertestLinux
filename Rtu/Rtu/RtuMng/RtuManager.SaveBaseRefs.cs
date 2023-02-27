@@ -27,6 +27,7 @@ public partial class RtuManager
                 _logger.LogInfo(Logs.RtuService, $"Created: {portFolder}");
             }
 
+            _logger.LogDebug(Logs.RtuService, $"SaveBaseRefs: {dto.BaseRefs.Count} refs");
             foreach (var baseRef in dto.BaseRefs)
                 RemoveOldSaveNew(baseRef, portFolder);
             return new BaseRefAssignedDto(ReturnCode.BaseRefAssignedSuccessfully);

@@ -7,6 +7,7 @@ using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.Utils;
 using Fibertest.Utils.Setup;
@@ -25,8 +26,8 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private readonly CurrentUser _currentUser;
 
-        private readonly IWcfServiceCommonC2D _c2RWcfManager;
         private readonly CurrentGis _currentGis;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly GraphGpsCalculator _graphGpsCalculator;
         private readonly BaseRefMessages _baseRefMessages;
 
@@ -116,9 +117,8 @@ namespace Fibertest.WpfClient
         }
 
         public BaseRefsAssignViewModel(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config,
-            Model readModel, IWindowManager windowManager, 
-            CurrentUser currentUser, IWcfServiceCommonC2D c2RWcfManager,
-            CurrentGis currentGis, GraphGpsCalculator graphGpsCalculator,
+            Model readModel, IWindowManager windowManager, CurrentUser currentUser, CurrentGis currentGis, 
+            GrpcC2RService grpcC2RService, GraphGpsCalculator graphGpsCalculator,
              BaseRefMessages baseRefMessages)
         {
             _globalScope = globalScope;
@@ -126,8 +126,8 @@ namespace Fibertest.WpfClient
             _readModel = readModel;
             _windowManager = windowManager;
             _currentUser = currentUser;
-            _c2RWcfManager = c2RWcfManager;
             _currentGis = currentGis;
+            _grpcC2RService = grpcC2RService;
             _graphGpsCalculator = graphGpsCalculator;
             _baseRefMessages = baseRefMessages;
         }
@@ -233,7 +233,8 @@ namespace Fibertest.WpfClient
                 BaseRefAssignedDto result;
                 using (_globalScope.Resolve<IWaitCursor>())
                 {
-                    result = await _c2RWcfManager.AssignBaseRefAsync(dto); // send to Db and RTU
+                    result = await _grpcC2RService.SendAnyC2RRequest<AssignBaseRefsDto, BaseRefAssignedDto>(dto);
+                    // send to Db and RTU
                 }
 
                 if (result.ReturnCode != ReturnCode.BaseRefAssignedSuccessfully)

@@ -27,4 +27,9 @@ public class AssignBaseRefsDto : BaseRtuRequest
 
     public override string What => "AssignBaseRefs";
     public override RtuOccupation Why => RtuOccupation.AssignBaseRefs;
+
+    public AssignBaseRefsDto ShallowCopy()
+    {
+        return (AssignBaseRefsDto)MemberwiseClone();
+    }
 }

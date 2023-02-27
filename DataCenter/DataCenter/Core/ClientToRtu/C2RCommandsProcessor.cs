@@ -18,6 +18,7 @@ public class C2RCommandsProcessor
     private readonly Model _writeModel;
     private readonly BaseRefsCheckerOnServer _baseRefsCheckerOnServer;
     private readonly RtuStationsRepository _rtuStationsRepository;
+    private readonly SorFileRepository _sorFileRepository;
     private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
     private readonly RtuResponseApplier _rtuResponseApplier;
 
@@ -27,13 +28,15 @@ public class C2RCommandsProcessor
     private readonly DoubleAddress _serverDoubleAddress;
     public C2RCommandsProcessor(IWritableConfig<DataCenterConfig> config, ILogger<C2RCommandsProcessor> logger,
         Model writeModel, BaseRefsCheckerOnServer baseRefsCheckerOnServer,
-        RtuStationsRepository rtuStationsRepository, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
+        RtuStationsRepository rtuStationsRepository, SorFileRepository sorFileRepository,
+        ClientToIitRtuTransmitter clientToIitRtuTransmitter,
         RtuResponseApplier rtuResponseApplier)
     {
         _logger = logger;
         _writeModel = writeModel;
         _baseRefsCheckerOnServer = baseRefsCheckerOnServer;
         _rtuStationsRepository = rtuStationsRepository;
+        _sorFileRepository = sorFileRepository;
         _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
         _rtuResponseApplier = rtuResponseApplier;
 
@@ -45,7 +48,11 @@ public class C2RCommandsProcessor
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="command"></param>
-    /// <returns>json to send by gRPC</returns>
+    /// <returns>RTU returns json by gRPC,
+    /// so return json to return to desktop client by gRPC
+    /// for web client parsing should be done so far
+    /// (TODO refactoring in web client: accept json)
+    /// </returns>
     public async Task<string> SendCommand<T>(T command) where T : BaseRtuRequest
     {
         var rtuAddressTuple = await GetRtuAddress(command);
@@ -60,12 +67,26 @@ public class C2RCommandsProcessor
         if (command is CheckRtuConnectionDto checkDto)
             return await CheckRtuConnection(checkDto, rtuAddressTuple.Item2!);
 
+        string jsonToTransmit;
+        if (command is AttachTraceDto attachTraceDto)
+        {
+            var assignBaseRefsDto = await _writeModel.CreateAssignBaseRefsDto(attachTraceDto, _sorFileRepository);
+            if (assignBaseRefsDto == null)
+            {
+                var result = new BaseRefAssignedDto() { ReturnCode = ReturnCode.Error, ErrorMessage = "RTU or trace not found!" };
+                return JsonConvert.SerializeObject(result, JsonSerializerSettings);
+            }
+
+            jsonToTransmit = LogCommandReturnJson(assignBaseRefsDto);
+        }
+        else
+            jsonToTransmit = LogCommandReturnJson(command);
+
         var resultJson = command.RtuMaker == RtuMaker.IIT
             ? await _clientToIitRtuTransmitter
-                .TransferCommand(rtuAddressTuple.Item2!,
-                    JsonConvert.SerializeObject(command, JsonSerializerSettings))
-            : JsonConvert.SerializeObject(new RequestAnswer(ReturnCode.NotImplementedYet),
-                JsonSerializerSettings);
+                .TransferCommand(rtuAddressTuple.Item2!, jsonToTransmit)
+            : JsonConvert
+                .SerializeObject(new RequestAnswer(ReturnCode.NotImplementedYet), JsonSerializerSettings);
         ///////////////////////////////////////////////////////////////////
 
         // resultJson could be changed while post processing
@@ -181,5 +202,24 @@ public class C2RCommandsProcessor
         }
 
         return JsonConvert.SerializeObject(result, JsonSerializerSettings);
+    }
+
+    private string LogCommandReturnJson<T>(T command)
+    {
+        var jsonToTransmit = JsonConvert.SerializeObject(command, JsonSerializerSettings);
+
+        switch (command)
+        {
+            case AssignBaseRefsDto dto:
+                var print = JsonConvert.SerializeObject(dto.ShallowCopy(), JsonSerializerSettings);
+                _logger.LogDebug(Logs.DataCenter, $"Command content {print}");
+                _logger.LogDebug(Logs.DataCenter, $"  {dto.BaseRefs.Count} base refs");
+                break;
+            default:
+                _logger.LogDebug(Logs.DataCenter, $"Command content {jsonToTransmit}");
+                break;
+        }
+
+        return jsonToTransmit;
     }
 }

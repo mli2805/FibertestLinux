@@ -49,8 +49,8 @@ namespace Fibertest.WpfClient
                     Models.Add(model); // previous node should be last in Models list
             }
 
+            if (_neighbours.Count == 0) return false;
             _selectedNode = _neighbours.First();
-            // if (_selectedNode == null) return false;
             Models.First().IsChecked = true;
 
             var nodeVm = _graphReadModel.Data.Nodes.FirstOrDefault(n => n.Id == _selectedNode.NodeId);

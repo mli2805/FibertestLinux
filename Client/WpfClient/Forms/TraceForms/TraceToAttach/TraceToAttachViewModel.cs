@@ -6,6 +6,7 @@ using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
 
@@ -15,13 +16,13 @@ namespace Fibertest.WpfClient
     {
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly IWcfServiceCommonC2D _c2DCommonWcfManager;
         private readonly IWindowManager _windowManager;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly CurrentUser _currentUser;
-        private OtauPortDto _otauPortDto;
-        private Rtu _rtu;
+        private OtauPortDto _otauPortDto = null!;
+        private Rtu _rtu = null!;
 
-        private string _searchMask;
+        private string _searchMask = string.Empty;
         public string SearchMask    
         {
             get => _searchMask;
@@ -42,8 +43,8 @@ namespace Fibertest.WpfClient
 
         public ObservableCollection<Trace> Choices { get; set; } = new ObservableCollection<Trace>();
 
-        private Trace _selectedTrace;
-        public Trace SelectedTrace
+        private Trace? _selectedTrace;
+        public Trace? SelectedTrace
         {
             get => _selectedTrace;
             set
@@ -68,12 +69,12 @@ namespace Fibertest.WpfClient
         }
 
         public TraceToAttachViewModel(ILifetimeScope globalScope, Model readModel, CurrentUser currentUser,
-            IWcfServiceCommonC2D c2DCommonWcfManager, IWindowManager windowManager)
+            IWindowManager windowManager, GrpcC2RService grpcC2RService)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _c2DCommonWcfManager = c2DCommonWcfManager;
             _windowManager = windowManager;
+            _grpcC2RService = grpcC2RService;
             _currentUser = currentUser;
         }
 
@@ -99,10 +100,9 @@ namespace Fibertest.WpfClient
             if (SelectedTrace == null) return;
 
             IsButtonsEnabled = false;
-            var dto = new AttachTraceDto()
+            var dto = new AttachTraceDto(_rtu.Id, _rtu.RtuMaker)
             {
                 ClientConnectionId = _currentUser.ConnectionId,
-                RtuMaker = _rtu.RtuMaker,
                 TraceId = SelectedTrace.TraceId,
                 OtauPortDto = _otauPortDto,
                 MainOtauPortDto = new OtauPortDto( _otauPortDto.MainCharonPort, true)
@@ -114,27 +114,30 @@ namespace Fibertest.WpfClient
             RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _c2DCommonWcfManager.AttachTraceAndSendBaseRefs(dto);
+                result = await _grpcC2RService.SendAnyC2RRequest<AttachTraceDto, RequestAnswer>(dto);
             }
 
-            if (result.ReturnCode != ReturnCode.Ok)
-            {
-                var errs = new List<string>
-                {
-                    result.ReturnCode == ReturnCode.D2RGrpcOperationError
-                        ? Resources.SID_Cannot_send_base_refs_to_RTU
-                        : Resources.SID_Base_reference_assignment_failed
-                };
-
-                if (!string.IsNullOrEmpty(result.ErrorMessage))
-                    errs.Add(result.ErrorMessage);
-
-                var vm = new MyMessageBoxViewModel(MessageType.Error, errs);
-                await _windowManager.ShowDialogWithAssignedOwner(vm);
-            }
+            if (result.ReturnCode != ReturnCode.BaseRefAssignedSuccessfully)
+                await ShowError(result);
 
             IsButtonsEnabled = true;
             await TryCloseAsync();
+        }
+
+        private async Task ShowError(RequestAnswer result)
+        {
+            var errs = new List<string>
+            {
+                result.ReturnCode == ReturnCode.D2RGrpcOperationError
+                    ? Resources.SID_Cannot_send_base_refs_to_RTU
+                    : Resources.SID_Base_reference_assignment_failed
+            };
+
+            if (!string.IsNullOrEmpty(result.ErrorMessage))
+                errs.Add(result.ErrorMessage);
+
+            var vm = new MyMessageBoxViewModel(MessageType.Error, errs);
+            await _windowManager.ShowDialogWithAssignedOwner(vm);
         }
 
         public async void Cancel()

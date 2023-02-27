@@ -12,7 +12,7 @@ namespace Fibertest.WpfClient
         // Task<RequestAnswer> SetRtuOccupationState(OccupyRtuDto dto);
         // Task<RequestAnswer> RegisterHeartbeat(string connectionId);
         // Task<int> UnregisterClientAsync(UnRegisterClientDto dto);
-        Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto);
+        // Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto);
 
         // C2D2R
         // Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress);
@@ -21,8 +21,8 @@ namespace Fibertest.WpfClient
         Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto);
         Task<bool> StopMonitoringAsync(StopMonitoringDto dto);
         Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings);
-        Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs);
-        Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd);
+        // Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs);
+        // Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd);
         Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs);
         Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs);
         // Task<ClientMeasurementStartedDto> StartClientMeasurementAsync(DoClientMeasurementDto dto);
@@ -66,10 +66,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         // public Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress)
         // {
@@ -101,15 +101,15 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
-        public Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         public Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs)
         {

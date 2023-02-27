@@ -17,4 +17,6 @@ public partial class RtuResponseToEventSourcing
         _eventStoreService = eventStoreService;
         _clientCollection = clientCollection;
     }
+
+    // all parts could be hidden :))))))))))))))))))))))))))
 }
