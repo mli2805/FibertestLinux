@@ -41,30 +41,30 @@ public class RtuOccupations
         var action = newRtuOccupation == RtuOccupation.None
             ? $@"free RTU {rtuId.First6()}"
             : $@"occupy RTU {rtuId.First6()} for {newRtuOccupation}";
-        _logger.LogInfo(Logs.DataCenter, $@"Client {userName} asked to {action}");
+        _logger.Info(Logs.DataCenter, $@"Client {userName} asked to {action}");
         if (newRtuOccupation == RtuOccupation.None)
         {
             /////////////  it is a CHECK or CLEANUP  //////////////////////
             if (!RtuStates.TryGetValue(rtuId, out state))
             {
-                _logger.LogInfo(Logs.DataCenter, $@"RTU {rtuId.First6()} is free already");
+                _logger.Info(Logs.DataCenter, $@"RTU {rtuId.First6()} is free already");
                 return true;
             }
 
             if (state.UserName != userName)
             {
-                _logger.LogInfo(Logs.DataCenter,
+                _logger.Info(Logs.DataCenter,
                     $@"{userName} can't free RTU {rtuId.First6()}, cos it's occupied by {state.UserName}");
                 return false;
             }
 
             if (RtuStates.TryRemove(rtuId, out state))
             {
-                _logger.LogInfo(Logs.DataCenter, $@"RTU {rtuId.First6()} is free now");
+                _logger.Info(Logs.DataCenter, $@"RTU {rtuId.First6()} is free now");
                 return true;
             }
 
-            _logger.LogInfo(Logs.DataCenter, @"Something went wrong while dictionary cleanup!");
+            _logger.Info(Logs.DataCenter, @"Something went wrong while dictionary cleanup!");
             return false;
         }
 
@@ -80,11 +80,11 @@ public class RtuOccupations
                         Expired = DateTime.Now.AddSeconds(TimeoutSec),
                     }))
             {
-                _logger.LogInfo(Logs.DataCenter,
+                _logger.Info(Logs.DataCenter,
                     $@"Applied! RTU {rtuId.First6()} is occupied by {userName} for {newRtuOccupation}");
                 return true;
             }
-            _logger.LogInfo(Logs.DataCenter, @"Something went wrong while dictionary addition!");
+            _logger.Info(Logs.DataCenter, @"Something went wrong while dictionary addition!");
             return false;
         }
 
@@ -99,17 +99,17 @@ public class RtuOccupations
                 Expired = DateTime.Now.AddSeconds(TimeoutSec)
             }, state))
             {
-                _logger.LogInfo(Logs.DataCenter,
+                _logger.Info(Logs.DataCenter,
                     $@"Applied! RTU {rtuId.First6()} is occupied by {userName} for {newRtuOccupation}");
                 return true;
             }
-            _logger.LogInfo(Logs.DataCenter, @"Something went wrong while dictionary update!");
+            _logger.Info(Logs.DataCenter, @"Something went wrong while dictionary update!");
             return false;
         }
 
         ///////// DENY ///////////////
         var cs = $@"(current state is {currentState.RtuOccupation}, expires at {currentState.Expired:HH:mm:ss})";
-        _logger.LogInfo(Logs.DataCenter,
+        _logger.Info(Logs.DataCenter,
             $@"Denied! RTU {rtuId.First6()} is occupied by {currentState.UserName} {cs}");
         return false;
     }

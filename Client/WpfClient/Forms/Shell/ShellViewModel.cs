@@ -131,7 +131,7 @@ namespace Fibertest.WpfClient
             var postfix = _commandLineParameters.IsUnderSuperClientStart ? _commandLineParameters.ClientOrdinal.ToString() : "";
             // _logFile.AssignFile($@"client{postfix}.log");
             _logger.StartLine(Logs.Client);
-            _logger.LogInfo(Logs.Client, $@"Client application {postfix} started!");
+            _logger.Info(Logs.Client, $@"Client application {postfix} started!");
 
             if (_commandLineParameters.IsUnderSuperClientStart)
             {
@@ -192,7 +192,7 @@ namespace Fibertest.WpfClient
             var freeSpace = $@"free space: {driveInfo.AvailableFreeSpace:0.0}Gb";
             var dataSize = $@"database size: {driveInfo.DataSize:0.0}Gb";
             var threshold = $@"threshold: {driveInfo.FreeSpaceThreshold:0.0}Gb";
-            _logger.LogInfo(Logs.Client, $@"{totalSize},  {dataSize},  {freeSpace},  {threshold}");
+            _logger.Info(Logs.Client, $@"{totalSize},  {dataSize},  {freeSpace},  {threshold}");
             if (driveInfo.AvailableFreeSpace < driveInfo.FreeSpaceThreshold)
             {
                 var str = new List<string>()
@@ -213,7 +213,7 @@ namespace Fibertest.WpfClient
 
         private async Task NotifySuperClientImReady(int postfix)
         {
-            _logger.LogInfo(Logs.Client, @"Notify super-client I'm ready");
+            _logger.Info(Logs.Client, @"Notify super-client I'm ready");
             Thread.Sleep(TimeSpan.FromMilliseconds(1));
             var isStateOk = !OpticalEventsDoubleViewModel.ActualOpticalEventsViewModel.Rows.Any() &&
                             !NetworkEventsDoubleViewModel.ActualNetworkEventsViewModel.Rows.Any() &&
@@ -258,7 +258,7 @@ namespace Fibertest.WpfClient
 
         private void ClientGrpcData_GrpcMessageReceived(object sender, string json)
         {
-            _logger.LogInfo(Logs.Client, "gRPC message received");
+            _logger.Info(Logs.Client, "gRPC message received");
             _grpcInClientProcessor.Apply(json);
         }
 
@@ -275,7 +275,7 @@ namespace Fibertest.WpfClient
 
             _heartbeaterCts.Cancel();
             _clientPollerCts.Cancel();
-            _logger.LogInfo(Logs.Client, @"Client application finished.");
+            _logger.Info(Logs.Client, @"Client application finished.");
 
             if (_grpcC2DService == null)
                 return true;

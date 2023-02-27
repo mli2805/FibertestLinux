@@ -19,7 +19,7 @@ namespace Fibertest.WpfClient
 
         public async Task Interrupt(Rtu rtu, string log)
         {
-            _logger.LogInfo(Logs.Client,$@"Interrupting {log}...");
+            _logger.Info(Logs.Client,$@"Interrupting {log}...");
 
             var dto = new InterruptMeasurementDto(rtu.Id, rtu.RtuMaker);
             await _c2RWcfManager.InterruptMeasurementAsync(dto);

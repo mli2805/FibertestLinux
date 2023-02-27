@@ -23,7 +23,7 @@ public class SnmpEngine2
 
     public async Task Start(CancellationToken token)
     {
-            _logger.LogInfo(Logs.SnmpTraps, "SNMP engine starts");
+            _logger.Info(Logs.SnmpTraps, "SNMP engine starts");
         try
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -43,13 +43,13 @@ public class SnmpEngine2
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(Logs.SnmpTraps, $"Exception {ex.Message}");
+                    _logger.Error(Logs.SnmpTraps, $"Exception {ex.Message}");
                 }
             }
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.SnmpTraps, $"Failed to start listen to port 162. {e.Message}");
+            _logger.Error(Logs.SnmpTraps, $"Failed to start listen to port 162. {e.Message}");
         }
     }
 
@@ -82,7 +82,7 @@ public class SnmpEngine2
         else
         {
             if (inLen == 0)
-                _logger.LogError(Logs.SnmpTraps, "Zero length packet received.");
+                _logger.Error(Logs.SnmpTraps, "Zero length packet received.");
         }
     }
 }

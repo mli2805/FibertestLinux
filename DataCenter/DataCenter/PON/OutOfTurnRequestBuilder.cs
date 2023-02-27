@@ -29,7 +29,7 @@ namespace Fibertest.DataCenter
                                                                              && r.SlotPosition == res.Slot
                                                                              && r.GponInterface == res.GponInterface);
             if (relation == null)
-                _logger.LogInfo(Logs.SnmpTraps, $"There is no relation for gpon interface {res.GponInterface}");
+                _logger.Info(Logs.SnmpTraps, $"There is no relation for gpon interface {res.GponInterface}");
           
             return relation;
         }
@@ -39,19 +39,19 @@ namespace Fibertest.DataCenter
             var rtu = _writeModel.Rtus.FirstOrDefault(r => r.Id == relation.RtuId);
             if (rtu == null || rtu.MonitoringState != MonitoringState.On)
             {
-                _logger.LogInfo(Logs.SnmpTraps, "RTU is in Manual state or not found.");
+                _logger.Info(Logs.SnmpTraps, "RTU is in Manual state or not found.");
                 return null;
             }
 
             if (!_writeModel.TryGetTrace(relation.TraceId, out Trace? trace))
             {
-                _logger.LogInfo(Logs.SnmpTraps, $"There is no trace on gpon interface {relation.GponInterface}");
+                _logger.Info(Logs.SnmpTraps, $"There is no trace on gpon interface {relation.GponInterface}");
                 return null;
             }
 
             if (!trace!.IsIncludedInMonitoringCycle)
             {
-                _logger.LogInfo(Logs.SnmpTraps, "Trace excluded from monitoring cycle");
+                _logger.Info(Logs.SnmpTraps, "Trace excluded from monitoring cycle");
                 return null;
             }
 
@@ -67,7 +67,7 @@ namespace Fibertest.DataCenter
                 IsTrapCaused = true,
             };
 
-            _logger.LogInfo(Logs.SnmpTraps, $"Request for trace {trace.Title} created.");
+            _logger.Info(Logs.SnmpTraps, $"Request for trace {trace.Title} created.");
             return dto;
         }
 

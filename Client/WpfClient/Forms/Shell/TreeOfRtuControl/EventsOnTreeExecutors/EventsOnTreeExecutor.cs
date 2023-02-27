@@ -80,8 +80,8 @@ namespace Fibertest.WpfClient
             }
             catch (Exception exception)
             {
-                _logger.LogError(Logs.Client,exception.Message);
-                _logger.LogError(Logs.Client,$@"EventsOnTreeExecutor crashed while applying event {e.GetType().FullName}");
+                _logger.Error(Logs.Client,exception.Message);
+                _logger.Error(Logs.Client,$@"EventsOnTreeExecutor crashed while applying event {e.GetType().FullName}");
                 throw;
             }
         }

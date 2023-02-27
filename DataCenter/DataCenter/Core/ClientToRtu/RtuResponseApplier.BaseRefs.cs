@@ -15,7 +15,7 @@ namespace Fibertest.DataCenter
                 await _responseToEventSourcing.ApplyBaseSendingResult(dto, commandForEventSourcing);
             }
             else
-                _logger.LogError(Logs.DataCenter, "Failed to assign base refs!");
+                _logger.Error(Logs.DataCenter, "Failed to assign base refs!");
 
             return jsonResult;
         }
@@ -29,7 +29,7 @@ namespace Fibertest.DataCenter
                 await _responseToEventSourcing.ApplyBaseSendingResult(dto, commandForEventSourcing);
             }
             else
-                _logger.LogError(Logs.DataCenter, "Failed to assign base refs!");
+                _logger.Error(Logs.DataCenter, "Failed to assign base refs!");
 
             return jsonResult;
         }

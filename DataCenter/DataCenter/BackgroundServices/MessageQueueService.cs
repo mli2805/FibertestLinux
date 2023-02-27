@@ -16,7 +16,7 @@ public class MessageQueueService : BackgroundService
     {
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.LogInfo(Logs.DataCenter, $"Rabbit Message queue service started. Process {pid}, thread {tid}");
+        _logger.Info(Logs.DataCenter, $"Rabbit Message queue service started. Process {pid}, thread {tid}");
         await DoWork(stoppingToken);
     }
 

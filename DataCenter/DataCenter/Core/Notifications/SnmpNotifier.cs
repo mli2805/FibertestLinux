@@ -28,7 +28,7 @@ public class SnmpNotifier
         var data = MeasToSnmp(meas);
 
         _snmpAgent.SentRealTrap(data, FtTrapType.MeasurementAsSnmp);
-        _logger.LogInfo(Logs.DataCenter, "SNMP trap sent");
+        _logger.Info(Logs.DataCenter, "SNMP trap sent");
     }
 
     public void SendRtuNetworkEvent(NetworkEvent rtuEvent)

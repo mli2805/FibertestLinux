@@ -37,7 +37,7 @@ public class C2DService : c2d.c2dBase
             ClientStation? client = null;
             if (command.IsEventSourcingCommand)
             {
-                _logger.LogInfo(Logs.DataCenter, "Event sourcing command");
+                _logger.Info(Logs.DataCenter, "Event sourcing command");
                 var cmd = JsonConvert.DeserializeObject(command.Json, JsonSerializerSettings);
                 if (cmd == null)
                     return CreateBadResponse(ReturnCode.FailedDeserializeJson);
@@ -83,14 +83,14 @@ public class C2DService : c2d.c2dBase
             }
 
             if (request.What != "GetEvents" && request.What != "Heartbeat")
-                _logger.LogInfo(Logs.DataCenter, $"Client {client?.UserName ?? ""} sent {request.What} request");
+                _logger.Info(Logs.DataCenter, $"Client {client?.UserName ?? ""} sent {request.What} request");
 
             var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);
             return new c2dResponse { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, e.Message);
+            _logger.Error(Logs.DataCenter, e.Message);
             return CreateBadResponse(ReturnCode.D2RGrpcOperationError);
         }
     }
@@ -100,7 +100,7 @@ public class C2DService : c2d.c2dBase
     {
         try
         {
-            _logger.LogInfo(Logs.DataCenter, "Command 'Get model itself' received. (Model was serialized beforehand)");
+            _logger.Info(Logs.DataCenter, "Command 'Get model itself' received. (Model was serialized beforehand)");
 
             var portionOrdinal = 0;
             int currentPortionSize;
@@ -120,7 +120,7 @@ public class C2DService : c2d.c2dBase
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, $"GetSerializedModel: {e.Message}");
+            _logger.Error(Logs.DataCenter, $"GetSerializedModel: {e.Message}");
         }
     }
 

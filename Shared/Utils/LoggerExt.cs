@@ -36,7 +36,7 @@ public static class LoggerExt
         logger.Log(LogLevel.Error, log.ToInt(), message);
     }
 
-    public static void LogDebug(this ILogger logger, Logs log, string message = "")
+    public static void Debug(this ILogger logger, Logs log, string message = "")
     {
         logger.Log(LogLevel.Debug, log.ToInt(), message);
     }

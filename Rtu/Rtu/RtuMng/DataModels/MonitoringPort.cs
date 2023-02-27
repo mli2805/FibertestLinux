@@ -100,7 +100,7 @@ public class MonitoringPort
         var basefile = AppDomain.CurrentDomain.BaseDirectory + $@"..\PortData\{GetPortFolderName()}\{baseRefType.ToBaseFileName()}";
         if (File.Exists(basefile))
             return File.ReadAllBytes(basefile);
-        logger.LogError(Logs.RtuManager, $"Can't find {basefile}");
+        logger.Error(Logs.RtuManager, $"Can't find {basefile}");
         return null;
     }
 
@@ -117,8 +117,8 @@ public class MonitoringPort
         }
         catch (Exception e)
         {
-            logger.LogError(Logs.RtuManager, $"Failed to persist measurement data into {filename}");
-            logger.LogError(Logs.RtuManager, e.Message);
+            logger.Error(Logs.RtuManager, $"Failed to persist measurement data into {filename}");
+            logger.Error(Logs.RtuManager, e.Message);
         }
     }
 
@@ -141,8 +141,8 @@ public class MonitoringPort
         }
         catch (Exception e)
         {
-            logger.LogError(Logs.RtuManager, $"Failed to persist measurement data into {measfile}");
-            logger.LogError(Logs.RtuManager, e.Message);
+            logger.Error(Logs.RtuManager, $"Failed to persist measurement data into {measfile}");
+            logger.Error(Logs.RtuManager, e.Message);
         }
     }
 }

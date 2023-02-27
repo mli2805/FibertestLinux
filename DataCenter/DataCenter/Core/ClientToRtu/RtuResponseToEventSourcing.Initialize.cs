@@ -55,7 +55,7 @@ public partial class RtuResponseToEventSourcing
                     // This happens when Khazanov writes into RTU's ini file while RTU works
                     // should not happen in real life but anyway
                     result.Children.Remove(keyValuePair.Key);
-                    _logger.LogError(Logs.DataCenter,
+                    _logger.Error(Logs.DataCenter,
                         $"There is no bop with address {keyValuePair.Value.NetAddress.ToStringA()} in graph");
                     continue;
                 }

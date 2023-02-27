@@ -43,14 +43,14 @@ public partial class InterOpWrapper
             var result = ServiceFunction(cmd, ref prm1, ref prm2);
             if (result != 0)
             {
-                _logger.LogError(Logs.RtuManager, $"Set parameter error={result}!");
+                _logger.Error(Logs.RtuManager, $"Set parameter error={result}!");
                 return false;
             }
             return true;
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.RtuManager, $"Set parameter: {e.Message}!");
+            _logger.Error(Logs.RtuManager, $"Set parameter: {e.Message}!");
             return false;
         }
     }
@@ -63,7 +63,7 @@ public partial class InterOpWrapper
         var result = ServiceFunction(cmd, ref prm1, ref prm2);
         if (result != 0)
         {
-            _logger.LogError(Logs.RtuManager, $"Set TuningAPDMode error={result}!");
+            _logger.Error(Logs.RtuManager, $"Set TuningAPDMode error={result}!");
             return false;
         }
         return true;
@@ -76,7 +76,7 @@ public partial class InterOpWrapper
 
         var result = ServiceFunction(cmd, ref reserved, ref baseSorData);
         if (result != 0)
-            _logger.LogError(Logs.RtuManager, $"Set parameters from sor error={result}!");
+            _logger.Error(Logs.RtuManager, $"Set parameters from sor error={result}!");
         return result == 0;
     }
 
@@ -86,9 +86,9 @@ public partial class InterOpWrapper
         IntPtr reserved = IntPtr.Zero;
         var result = ServiceFunction(cmd, ref lmaxNs, ref reserved);
         if (result != 1)
-            _logger.LogError(Logs.RtuManager, $"Force Lmax {lmaxNs} ns: Error = {result}!");
+            _logger.Error(Logs.RtuManager, $"Force Lmax {lmaxNs} ns: Error = {result}!");
         else
-            _logger.LogInfo(Logs.RtuManager, $"Force Lmax {lmaxNs} ns: Ok");
+            _logger.Info(Logs.RtuManager, $"Force Lmax {lmaxNs} ns: Ok");
         return result == 1;
     }
 

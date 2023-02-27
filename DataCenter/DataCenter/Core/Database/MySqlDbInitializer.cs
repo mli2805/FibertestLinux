@@ -53,7 +53,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
                 .UsingCustomSerialization(_mySerializer)
                 .Build();
 
-            _logger.LogInfo(Logs.DataCenter,
+            _logger.Info(Logs.DataCenter,
                 $"Events store: MYSQL=localhost:{_mysqlTcpPort}   Database={EventSourcingScheme}");
 
             InitializeDataDir();
@@ -61,7 +61,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "MySqlDbInitializer exception : " + e.Message);
+            _logger.Error(Logs.DataCenter, "MySqlDbInitializer exception : " + e.Message);
             throw;
         }
     }
@@ -74,7 +74,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         DataDir = (string)(command.ExecuteScalar() ?? 0);
         connection.Close();
         Thread.Sleep(TimeSpan.FromMilliseconds(100));
-        _logger.LogInfo(Logs.DataCenter, $"MySQL data folder is {DataDir}");
+        _logger.Info(Logs.DataCenter, $"MySQL data folder is {DataDir}");
     }
 
     public int OptimizeSorFilesTable()
@@ -91,7 +91,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "OptimizeSorFilesTable: " + e.Message);
+            _logger.Error(Logs.DataCenter, "OptimizeSorFilesTable: " + e.Message);
             return -1;
         }
     }
@@ -113,7 +113,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, e.Message);
+            _logger.Error(Logs.DataCenter, e.Message);
             return -1;
         }
     }
@@ -141,7 +141,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "GetDataSize: " + e.Message);
+            _logger.Error(Logs.DataCenter, "GetDataSize: " + e.Message);
             return -1;
         }
 
@@ -160,7 +160,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, e.Message);
+            _logger.Error(Logs.DataCenter, e.Message);
             throw;
         }
     }
@@ -178,7 +178,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, e.Message);
+            _logger.Error(Logs.DataCenter, e.Message);
             throw;
         }
     }
@@ -198,7 +198,7 @@ public sealed class MySqlDbInitializer : IDbInitializer
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "GetStreamIdIfExists: " + e.Message);
+            _logger.Error(Logs.DataCenter, "GetStreamIdIfExists: " + e.Message);
             return Guid.Empty;
         }
 

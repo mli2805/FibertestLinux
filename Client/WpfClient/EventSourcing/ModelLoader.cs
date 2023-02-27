@@ -39,11 +39,11 @@ namespace Fibertest.WpfClient
         {
             try
             {
-                _logger.LogInfo(Logs.Client,@"Downloading model...");
+                _logger.Info(Logs.Client,@"Downloading model...");
                 var paramsDto =
                     await _grpcC2DService
                         .SendAnyC2DRequest<GetSerializedModelParamsDto, SerializedModelDto>(new GetSerializedModelParamsDto());
-                _logger.LogInfo(Logs.Client,
+                _logger.Info(Logs.Client,
                     $@"Model size is {paramsDto.Size} in {paramsDto.PortionsCount} portions, last event included {paramsDto.LastIncludedEvent}");
                 
                 // var bb = new byte[paramsDto.Size];
@@ -57,7 +57,7 @@ namespace Fibertest.WpfClient
                 //             new GetModelPortionDto(i));
                 //     result.Bytes.CopyTo(bb, offset);
                 //     offset += result.Bytes.Length;
-                //     _logger.LogInfo(Logs.Client,$@"portion {i}  {result.Bytes.Length} bytes received");
+                //     _logger.Info(Logs.Client,$@"portion {i}  {result.Bytes.Length} bytes received");
                 // }
 
                 var bb2 = await _grpcC2DService.DownloadModel(paramsDto.Size);
@@ -74,7 +74,7 @@ namespace Fibertest.WpfClient
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.Client,$@"DownloadModel : {e.Message}");
+                _logger.Error(Logs.Client,$@"DownloadModel : {e.Message}");
                 return -1;
             }
         }

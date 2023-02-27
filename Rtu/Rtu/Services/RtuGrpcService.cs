@@ -21,7 +21,7 @@ public class RtuGrpcService : d2r.d2rBase
 
     public override async Task<d2rResponse> SendCommand(d2rCommand d2RCommand, ServerCallContext context)
     {
-        _logger.LogDebug($"gRPC received: {d2RCommand.Json}");
+        _logger.Debug(Logs.RtuService, $"gRPC received: {d2RCommand.Json}");
         object? o = JsonConvert.DeserializeObject(d2RCommand.Json, JsonSerializerSettings);
         if (o == null)
             return new d2rResponse() { Json = JsonConvert

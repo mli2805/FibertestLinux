@@ -131,7 +131,7 @@ namespace Fibertest.WpfClient
         private System.Timers.Timer _timer = null!;
         private void StartTimer()
         {
-            _logger.LogInfo(Logs.Client,@"Start a measurement timeout");
+            _logger.Info(Logs.Client,@"Start a measurement timeout");
             _timer = new System.Timers.Timer(Model.MeasurementTimeout);
             _timer.Elapsed += TimeIsOver;
             _timer.AutoReset = false;
@@ -139,7 +139,7 @@ namespace Fibertest.WpfClient
         }
         private void TimeIsOver(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            _logger.LogInfo(Logs.Client,@"Measurement timeout expired");
+            _logger.Info(Logs.Client,@"Measurement timeout expired");
             _timer.Dispose();
 
             _dispatcherProvider.GetDispatcher().Invoke(() =>
@@ -164,7 +164,7 @@ namespace Fibertest.WpfClient
                 return;
             }
 
-            _logger.LogInfo(Logs.Client,@"Measurement (Client) result received");
+            _logger.Info(Logs.Client,@"Measurement (Client) result received");
 
             Model.MeasurementProgressViewModel.Message = Resources.SID_Applying_base_refs__Please_wait;
 

@@ -175,7 +175,7 @@ namespace Fibertest.WpfClient
             };
             var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
-                        _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendNodeTitle - {result.ErrorMessage}");
+                        _logger.Info(Logs.Client,$@"TraceContentChoiceViewModel - SendNodeTitle - {result.ErrorMessage}");
         }
 
         private async Task SendEquipmentChanges(Equipment equipment, string? newTitle, int leftCableReserve, int rightCableReserve)
@@ -191,7 +191,7 @@ namespace Fibertest.WpfClient
             };
             var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
             if (result.ReturnCode != ReturnCode.Ok)
-                            _logger.LogInfo(Logs.Client,$@"TraceContentChoiceViewModel - SendEquipmentChanges - {result.ErrorMessage}");
+                            _logger.Info(Logs.Client,$@"TraceContentChoiceViewModel - SendEquipmentChanges - {result.ErrorMessage}");
         }
 
         public async void CancelButton()

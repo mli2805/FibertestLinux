@@ -37,8 +37,8 @@ public class HeartbeatService : BackgroundService
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
         _version = info.FileVersion ?? "Unknown";
 
-        _logger.LogInfo(Logs.RtuService, $"RTU heartbeat service started. Process {pid}, thread {tid}");
-        _logger.LogInfo(Logs.RtuService,
+        _logger.Info(Logs.RtuService, $"RTU heartbeat service started. Process {pid}, thread {tid}");
+        _logger.Info(Logs.RtuService,
             $"Server address is {_config.Value.General.ServerAddress.Main.ToStringA()}");
         await DoWork(stoppingToken);
     }
@@ -52,7 +52,7 @@ public class HeartbeatService : BackgroundService
                 while (!_rtuManager.ShouldSendHeartbeat.TryPeek(out object? _))
                 {
                     if (!_initializationInProgress)
-                        _logger.LogInfo(Logs.RtuService, "Heartbeats are suspended during RTU initialization.");
+                        _logger.Info(Logs.RtuService, "Heartbeats are suspended during RTU initialization.");
 
                     _initializationInProgress = true;
                     Thread.Sleep(3000);
@@ -68,7 +68,7 @@ public class HeartbeatService : BackgroundService
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.RtuService, "Heartbeat service DoWork: " + e.Message);
+            _logger.Error(Logs.RtuService, "Heartbeat service DoWork: " + e.Message);
         }
     }
 
@@ -82,23 +82,23 @@ public class HeartbeatService : BackgroundService
             var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
             var dcUri = $"http://{serverAddress.Main.ToStringA()}";
-            _logger.LogInfo(Logs.RtuService, "SendHeartbeat: " + dcUri);
+            _logger.Info(Logs.RtuService, "SendHeartbeat: " + dcUri);
             using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
             var grpcClient = new R2D.R2DClient(grpcChannelDc);
 
             R2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
             if (!_isLastAttemptSuccessful)
-                _logger.LogInfo(Logs.RtuService, $"Got gRPC response {response.Json} from Data Center");
+                _logger.Info(Logs.RtuService, $"Got gRPC response {response.Json} from Data Center");
             else
-                _logger.LogInfo(Logs.RtuService, $"RTU heartbeat sent by gRPC channel {dcUri}");
+                _logger.Info(Logs.RtuService, $"RTU heartbeat sent by gRPC channel {dcUri}");
 
             return true;
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.RtuService, "SendHeartbeat: " + e.Message);
+            _logger.Error(Logs.RtuService, "SendHeartbeat: " + e.Message);
             if (e.InnerException != null)
-                _logger.LogError(Logs.RtuService, "SendHeartbeat: " + e.InnerException.Message);
+                _logger.Error(Logs.RtuService, "SendHeartbeat: " + e.InnerException.Message);
             return false;
         }
     }

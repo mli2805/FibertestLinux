@@ -13,7 +13,7 @@ namespace Fibertest.DataCenter
         public async Task<SerializedModelDto> GetModelDownloadParams()
         {
             await Task.Delay(1);
-            _logger.LogInfo(Logs.DataCenter, "Model asked by client");
+            _logger.Info(Logs.DataCenter, "Model asked by client");
             lock (LockObj)
             {
                 SerializedModel = _writeModel.Serialize(_logger).Result;
@@ -21,10 +21,10 @@ namespace Fibertest.DataCenter
 
             if (SerializedModel == null)
             {
-                _logger.LogError(Logs.DataCenter, "Failed to serialize Model");
+                _logger.Error(Logs.DataCenter, "Failed to serialize Model");
                 return new SerializedModelDto() { ReturnCode = ReturnCode.Error };
             }
-            _logger.LogInfo(Logs.DataCenter, "Model serialized successfully");
+            _logger.Info(Logs.DataCenter, "Model serialized successfully");
 
             return new SerializedModelDto()
             {

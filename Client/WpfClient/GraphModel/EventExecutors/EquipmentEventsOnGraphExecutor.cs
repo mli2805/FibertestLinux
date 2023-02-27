@@ -68,7 +68,7 @@ namespace Fibertest.WpfClient
             var equipment = _readModel.Equipments.FirstOrDefault(e => e.EquipmentId == evnt.EquipmentId);
             if (equipment == null)
             {
-                _model.Logger.LogError(Logs.Client,$@"UpdateEquipment: equipment {evnt.EquipmentId.First6()} not found");
+                _model.Logger.Error(Logs.Client,$@"UpdateEquipment: equipment {evnt.EquipmentId.First6()} not found");
                 if (_currentUser.Role <= Role.Root)
                     _windowManager.ShowDialogWithAssignedOwner($@"не найдено редактируемое оборудование");
                 return;

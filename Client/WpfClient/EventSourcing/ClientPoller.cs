@@ -106,7 +106,7 @@ namespace Fibertest.WpfClient
 
         public void Start(CancellationToken token)
         {
-            _logger.LogInfo(Logs.Client,$@"Polling started from {_currentEventNumber + 1}");
+            _logger.Info(Logs.Client,$@"Polling started from {_currentEventNumber + 1}");
             _eventLogComposer.Initialize();
             var pollerThread = new Thread(() => DoPolling(token)) { IsBackground = true };
             pollerThread.Start();
@@ -121,12 +121,12 @@ namespace Fibertest.WpfClient
                 await EventSourcingTick();
                 Thread.Sleep(TimeSpan.FromMilliseconds(_pollingRate));
             }
-            _logger.LogInfo(Logs.Client,@"Leaving DoPolling...");
+            _logger.Info(Logs.Client,@"Leaving DoPolling...");
         }
 
         private void _systemState_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            _logger.LogInfo(Logs.Client,@"Notify super-client system state changed.");
+            _logger.Info(Logs.Client,@"Notify super-client system state changed.");
             _c2SWcfManager.SetSystemState(_commandLineParameters.ClientOrdinal, !_systemState.HasAnyActualProblem);
         }
 
@@ -138,7 +138,7 @@ namespace Fibertest.WpfClient
             if (result.ReturnCode != ReturnCode.Ok || result.Events == null)
             {
                 _exceptionCount++;
-                _logger.LogError(Logs.Client,$@"Cannot get events from data-center. {result.ErrorMessage}. Exception count: {_exceptionCount}");
+                _logger.Error(Logs.Client,$@"Cannot get events from data-center. {result.ErrorMessage}. Exception count: {_exceptionCount}");
                 if (_exceptionCount == _exceptionCountLimit) // blocks current thread till user clicks to close form
                     _dispatcherProvider.GetDispatcher().Invoke(NotifyUserConnectionProblems);
                 return -1;
@@ -201,9 +201,9 @@ namespace Fibertest.WpfClient
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(Logs.Client,e.Message);
+                    _logger.Error(Logs.Client,e.Message);
                     var header = @"Timestamp";
-                    _logger.LogError(Logs.Client,$@"Exception thrown while processing event with timestamp {msg.Headers[header]} \n {evnt.GetType().FullName}");
+                    _logger.Error(Logs.Client,$@"Exception thrown while processing event with timestamp {msg.Headers[header]} \n {evnt.GetType().FullName}");
                 }
 
                 CurrentEventNumber++;

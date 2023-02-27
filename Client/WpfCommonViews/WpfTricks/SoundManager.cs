@@ -69,7 +69,7 @@ namespace Fibertest.WpfCommonViews
 
         public void PlayOk()
         {
-            _logger.LogInfo(Logs.Client, "PlayOk invocation");
+            _logger.Info(Logs.Client, "PlayOk invocation");
             _okPlayer.Position = TimeSpan.Zero;
             _okPlayer.Play();
         }

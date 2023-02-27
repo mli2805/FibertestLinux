@@ -85,7 +85,7 @@ namespace KadastrLoader
             KadastrFilesParser kadastrFilesParser)
         {
             _logger = logger;
-            _logger.LogInfo(Logs.Client, "We are in c-tor");
+            _logger.Info(Logs.Client, "We are in c-tor");
             _grpcC2DService = grpcC2DService;
             _globalScope = globalScope;
             ServerIp = config.Value.General.ServerAddress.Main.Ip4Address;
@@ -143,7 +143,7 @@ namespace KadastrLoader
             if (isRegistered)
                 _grpcC2DService.SetClientConnectionId(_clientRegisteredDto.ConnectionId!);
             ServerMessage = isRegistered ? Resources.SID_DataCenter_connected_successfully_ : Resources.SID_DataCenter_connection_failed_;
-            _logger.LogInfo(Logs.Client, ServerMessage);
+            _logger.Info(Logs.Client, ServerMessage);
             return isRegistered;
         }
 

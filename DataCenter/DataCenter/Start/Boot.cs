@@ -30,7 +30,7 @@ public sealed class Boot : IHostedService
         FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
 
         _config.Update(c => c.General.DatacenterVersion = info.FileVersion!);
-        _logger.LogInfo(Logs.DataCenter, $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
+        _logger.Info(Logs.DataCenter, $"Fibertest Data-Center {info.FileVersion}. Process {pid}, thread {tid}");
 
         _config.Update(c => c.General.LogEventLevel = LogEventLevel.Debug.ToString());
 
@@ -39,7 +39,7 @@ public sealed class Boot : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInfo(Logs.DataCenter, "Leave Fibertest Data-Center service");
+        _logger.Info(Logs.DataCenter, "Leave Fibertest Data-Center service");
         return Task.CompletedTask;
     }
 }

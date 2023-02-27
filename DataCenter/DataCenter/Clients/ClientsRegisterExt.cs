@@ -77,13 +77,13 @@ namespace Fibertest.DataCenter
                 // both clients are desktop
                 if (!dto.IsWebClient && !stationWithTheSameUser.IsWebClient)
                 {
-                    collection.Logger.LogInfo(Logs.DataCenter, $"The same user {dto.UserName} registered from device {stationWithTheSameUser.ClientIp}");
+                    collection.Logger.Info(Logs.DataCenter, $"The same user {dto.UserName} registered from device {stationWithTheSameUser.ClientIp}");
                     return new ClientRegisteredDto() { ReturnCode = ReturnCode.ThisUserRegisteredFromAnotherDevice };
                 }
                 else
                 // different types of clients or both clients are web
                 {
-                    collection.Logger.LogInfo(Logs.DataCenter, 
+                    collection.Logger.Info(Logs.DataCenter, 
                         $"The same client {stationWithTheSameUser.UserName}/{stationWithTheSameUser.ClientIp} with connectionId {stationWithTheSameUser.ConnectionId} removed.");
                     //TODO: notify old station
                     await Task.Delay(0);
@@ -108,7 +108,7 @@ namespace Fibertest.DataCenter
                     // await Task.Delay(1000);
 
                     if (collection.Clients.Remove(stationWithTheSameUser.ConnectionId, out ClientStation? _))
-                        collection.Logger.LogInfo(Logs.Client, "Old client deleted");
+                        collection.Logger.Info(Logs.Client, "Old client deleted");
                 }
             }
             return null;

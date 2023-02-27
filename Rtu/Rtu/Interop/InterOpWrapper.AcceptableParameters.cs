@@ -57,10 +57,10 @@ public partial class InterOpWrapper
     {
         foreach (var measParam in list)
         {
-            _logger.LogInfo(Logs.RtuManager, $"Set {measParam.Param} by position {measParam.Position}");
+            _logger.Info(Logs.RtuManager, $"Set {measParam.Param} by position {measParam.Position}");
             if (!SetParam(measParam.Param, measParam.Position))
             {
-                _logger.LogError(Logs.RtuManager, "Failed to set param");
+                _logger.Error(Logs.RtuManager, "Failed to set param");
                 return false;
             }
             Thread.Sleep(200);

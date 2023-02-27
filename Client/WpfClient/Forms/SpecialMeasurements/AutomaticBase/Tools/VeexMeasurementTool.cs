@@ -54,10 +54,10 @@ namespace Fibertest.WpfClient
                     VeexMeasurementId = startResult.ClientMeasurementId.ToString(),
                 };  
                 lineCheckResult = await _c2DWcfCommonManager.GetClientMeasurementAsync(getDto);
-                _logger.LogInfo(Logs.Client,$@"lineCheckResult: {lineCheckResult.ReturnCode}");
+                _logger.Info(Logs.Client,$@"lineCheckResult: {lineCheckResult.ReturnCode}");
                 if (lineCheckResult.ReturnCode != ReturnCode.Ok)
                 {
-                    _logger.LogError(Logs.Client,@"Failed to get line parameters");
+                    _logger.Error(Logs.Client,@"Failed to get line parameters");
                     return new LineParametersDto(){ReturnCode = lineCheckResult.ReturnCode};
                 }
 
@@ -65,7 +65,7 @@ namespace Fibertest.WpfClient
             }
 
             var cq = lineCheckResult!.ConnectionQuality[0];
-            _logger.LogInfo(Logs.Client,$@"lmax = {cq.lmaxKm:F},  loss = {cq.loss:F},  reflectance = {cq.reflectance:F},  SNR = {cq.snr:F}");
+            _logger.Info(Logs.Client,$@"lmax = {cq.lmaxKm:F},  loss = {cq.loss:F},  reflectance = {cq.reflectance:F},  SNR = {cq.snr:F}");
             return new LineParametersDto()
                 { ReturnCode = ReturnCode.Ok, ConnectionQuality = lineCheckResult.ConnectionQuality[0] };
         }
@@ -101,7 +101,7 @@ namespace Fibertest.WpfClient
                 if (measResult.ReturnCode == ReturnCode.Ok && measResult.VeexMeasurementStatus == @"finished")
                 {
                     var measResultWithSorBytes = await _c2DWcfCommonManager.GetClientMeasurementSorBytesAsync(getDto);
-                    _logger.LogInfo(Logs.Client,$@"Fetched measurement {clientMeasurementId.First6()} from VEEX RTU");
+                    _logger.Info(Logs.Client,$@"Fetched measurement {clientMeasurementId.First6()} from VEEX RTU");
                     return new MeasurementEventArgs(
                         ReturnCode.MeasurementEndedNormally, trace, measResultWithSorBytes.SorBytes);
                 }
@@ -109,7 +109,7 @@ namespace Fibertest.WpfClient
                 await Task.Delay(2000);
             }
 
-            _logger.LogInfo(Logs.Client,@"cancellation token received, stop fetching");
+            _logger.Info(Logs.Client,@"cancellation token received, stop fetching");
             return new MeasurementEventArgs(ReturnCode.MeasurementInterrupted, trace, new List<string>());
         }
 

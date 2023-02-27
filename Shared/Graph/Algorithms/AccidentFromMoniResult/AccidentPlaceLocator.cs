@@ -91,12 +91,12 @@ namespace Fibertest.Graph
 
             if (leftNode == null)
             {
-                _logger.LogError(Logs.Client,$@"Node {withoutPoints[accident.Left?.LandmarkIndex ?? -1].First6()} not found");
+                _logger.Error(Logs.Client,$@"Node {withoutPoints[accident.Left?.LandmarkIndex ?? -1].First6()} not found");
                 return null;
             }
             if (rightNode == null)
             {
-                _logger.LogError(Logs.Client,$@"Node {withoutPoints[accident.Right?.LandmarkIndex ?? -1].First6()} not found");
+                _logger.Error(Logs.Client,$@"Node {withoutPoints[accident.Right?.LandmarkIndex ?? -1].First6()} not found");
                 return null;
             }
 

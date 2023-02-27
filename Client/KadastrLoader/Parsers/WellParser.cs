@@ -62,7 +62,7 @@ namespace KadastrLoader
 
             var cmd = CreateNodeCmd(fields, well.InFibertestId);
             var result = _grpcC2DService.SendEventSourcingCommand(cmd).Result;
-            _logger.LogInfo(Logs.Client, result.ReturnCode != ReturnCode.Error
+            _logger.Info(Logs.Client, result.ReturnCode != ReturnCode.Error
                 ? $"Well {fields[1].Trim()} added successfully."
                 : $"Failed to add well {fields[1].Trim()}.  {result.ErrorMessage}");
             return result.ErrorMessage;

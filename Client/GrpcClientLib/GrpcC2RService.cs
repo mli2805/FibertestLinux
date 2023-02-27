@@ -59,7 +59,7 @@ public class GrpcC2RService
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.Client, e.Message);
+            _logger.Error(Logs.Client, e.Message);
             return new TResult
             {
                 ReturnCode = ReturnCode.C2RGrpcOperationError,

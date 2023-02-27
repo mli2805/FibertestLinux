@@ -22,13 +22,13 @@ namespace Fibertest.DataCenter
             var tce = _writeModel.TcesNew.FirstOrDefault(o => o.Ip == ss[0]);
             if (tce == null)
             {
-                _logger.LogInfo(Logs.SnmpTraps, $"Unknown trap source address: {ss[0]}");
+                _logger.Info(Logs.SnmpTraps, $"Unknown trap source address: {ss[0]}");
                 return null;
             }
 
             if (!tce.ProcessSnmpTraps)
             {
-                _logger.LogInfo(Logs.SnmpTraps, $"Trap processing of {tce.Title} {tce.Ip} is turned off");
+                _logger.Info(Logs.SnmpTraps, $"Trap processing of {tce.Title} {tce.Ip} is turned off");
                 return null;
             }
 
@@ -74,7 +74,7 @@ namespace Fibertest.DataCenter
                 case @"ZTE_C300M_v43": return pkt.ParseC300M43();
                 case @"ZTE_C320_v1": return pkt.ParseC320();
                 default:
-                    _logger.LogInfo(Logs.SnmpTraps, $"Parser for OLT model {tce.TceTypeStruct.Code} is not implemented");
+                    _logger.Info(Logs.SnmpTraps, $"Parser for OLT model {tce.TceTypeStruct.Code} is not implemented");
                     return null;
             }
         }

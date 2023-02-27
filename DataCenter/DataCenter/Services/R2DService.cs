@@ -42,7 +42,7 @@ public class R2DService : R2D.R2DBase
     private async Task<RequestAnswer> RegisterHeartbeat(RtuChecksChannelDto dto)
     {
         await Task.Delay(1);
-        _logger.LogInfo(Logs.DataCenter, $"Command Register Heartbeat from RTU {dto.RtuId} received");
+        _logger.Info(Logs.DataCenter, $"Command Register Heartbeat from RTU {dto.RtuId} received");
         var result = await _rtuStationsRepository.RegisterRtuHeartbeatAsync(dto);
         return new RequestAnswer(result == 1 ? ReturnCode.Ok : ReturnCode.Error);
     }
@@ -50,26 +50,26 @@ public class R2DService : R2D.R2DBase
     private async Task<RequestAnswer> NotifyClientMeasurementDone(ClientMeasurementResultDto dto)
     {
         await Task.Delay(1);
-        _logger.LogInfo(Logs.DataCenter, $"Client measurement {dto.ClientMeasurementId.First6()} done");
+        _logger.Info(Logs.DataCenter, $"Client measurement {dto.ClientMeasurementId.First6()} done");
         var result = await _grpcToClient.SendRequest(dto);
         if (result.ReturnCode == ReturnCode.Ok) 
-            _logger.LogInfo(Logs.DataCenter, "Sent to client successfully!");
+            _logger.Info(Logs.DataCenter, "Sent to client successfully!");
         else
-            _logger.LogError(Logs.DataCenter, "Failed to send to client");
+            _logger.Error(Logs.DataCenter, "Failed to send to client");
         return result;
     }
 
     private async Task<RequestAnswer> ProcessMonitoringResult(MonitoringResultDto dto)
     {
         await Task.Delay(1);
-        _logger.LogInfo(Logs.DataCenter, $"Monitoring Result from RTU {dto.RtuId} received");
+        _logger.Info(Logs.DataCenter, $"Monitoring Result from RTU {dto.RtuId} received");
         return new RequestAnswer(ReturnCode.Ok);
     }
 
     private async Task<RequestAnswer> TransmitCurrentMonitoringStep(CurrentMonitoringStepDto dto)
     {
         await Task.Delay(1);
-        _logger.LogInfo(Logs.DataCenter, $"Current monitoring step from RTU {dto.RtuId} received");
+        _logger.Info(Logs.DataCenter, $"Current monitoring step from RTU {dto.RtuId} received");
         return new RequestAnswer(ReturnCode.Ok);
     }
 }

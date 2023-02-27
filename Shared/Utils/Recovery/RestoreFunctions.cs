@@ -8,18 +8,18 @@ public static class RestoreFunctions
     public static void ClearArp(ILogger logger)
     {
         var res = Arp.GetTable();
-        logger.LogInfo(Logs.RtuService, res ?? "");
+        logger.Info(Logs.RtuService, res ?? "");
         Arp.ClearCache();
-        logger.LogInfo(Logs.RtuManager, "Recovery procedure: Clear ARP table.");
-        logger.LogInfo(Logs.RtuManager, "Recovery procedure: Reset Charon");
-        logger.LogInfo(Logs.RtuService, "Recovery procedure: Clear ARP table and Reset Charon.");
+        logger.Info(Logs.RtuManager, "Recovery procedure: Clear ARP table.");
+        logger.Info(Logs.RtuManager, "Recovery procedure: Reset Charon");
+        logger.Info(Logs.RtuService, "Recovery procedure: Clear ARP table and Reset Charon.");
         res = Arp.GetTable();
-        logger.LogInfo(Logs.RtuService, res ?? "");
+        logger.Info(Logs.RtuService, res ?? "");
     }
 
     public static void RebootSystem(ILogger logger, int delay)
     {
-        logger.LogInfo(Logs.RtuManager, $"Recovery procedure: System reboot in {delay} sec...");
+        logger.Info(Logs.RtuManager, $"Recovery procedure: System reboot in {delay} sec...");
         ProcessStartInfo proc = new ProcessStartInfo
         {
             FileName = "cmd",
@@ -33,7 +33,7 @@ public static class RestoreFunctions
         }
         catch (Exception e)
         {
-            logger.LogError(Logs.RtuManager, e.Message);
+            logger.Error(Logs.RtuManager, e.Message);
         }
     }
 }

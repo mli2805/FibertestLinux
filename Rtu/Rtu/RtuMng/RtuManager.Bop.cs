@@ -14,7 +14,7 @@ public partial class RtuManager
         var newCharon = _mainCharon.AttachOtauToPort(param.NetAddress, param.OpticalPort);
         if (newCharon != null)
         {
-            _logger.LogInfo(Logs.RtuManager,
+            _logger.Info(Logs.RtuManager,
                 $"Otau {param.NetAddress.ToStringA()} attached to port {param.OpticalPort} and has {newCharon.OwnPortCount} ports");
             result = new OtauAttachedDto(ReturnCode.OtauAttachedSuccessfully)
             {
@@ -30,7 +30,7 @@ public partial class RtuManager
                 ErrorMessage = _mainCharon.LastErrorMessage
             };
 
-        _logger.LogInfo(Logs.RtuManager,
+        _logger.Info(Logs.RtuManager,
             $"Now RTU has {_mainCharon.OwnPortCount}/{_mainCharon.FullPortCount} ports");
         return result;
     }
@@ -43,9 +43,9 @@ public partial class RtuManager
 
         if (_mainCharon.DetachOtauFromPort(param.OpticalPort))
         {
-            _logger.LogInfo(Logs.RtuManager,
+            _logger.Info(Logs.RtuManager,
                 $"Otau {param.NetAddress.ToStringA()} detached from port {param.OpticalPort}");
-            _logger.LogInfo(Logs.RtuManager,
+            _logger.Info(Logs.RtuManager,
                 $"Now RTU has {_mainCharon.OwnPortCount}/{_mainCharon.FullPortCount} ports");
 
             result = new OtauDetachedDto(ReturnCode.OtauDetachedSuccessfully);

@@ -26,7 +26,7 @@ namespace KadastrLoader
                 : doubleAddress.Main.HostName;
 
             _mysqlTcpPort = _config.Value.General.MysqlTcpPort;
-            _logger.LogInfo(Logs.Client, $"MySqlConnectionString = {MySqlConnectionString}");
+            _logger.Info(Logs.Client, $"MySqlConnectionString = {MySqlConnectionString}");
         }
         // private string MySqlConnectionString => $"server=localhost;port={_mysqlTcpPort};user id=root;password=root;database=ft30kadastr";
        private string MySqlConnectionString => $"server={_mysqlServerAddress};port={_mysqlTcpPort};user id=root;password=root;database=ft30kadastr";

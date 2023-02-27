@@ -25,8 +25,8 @@ public sealed class Boot : IHostedService
 
         _logger.StartLine(Logs.RtuService);
         _logger.StartLine(Logs.RtuManager);
-        _logger.LogInfo(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
-        _logger.LogInfo(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
+        _logger.Info(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
+        _logger.Info(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
 
         _config.Update(c=>c.General.LogEventLevel = LogEventLevel.Debug.ToString());
 
@@ -35,7 +35,7 @@ public sealed class Boot : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInfo(Logs.RtuService, "Leave Fibertest RTU service");
+        _logger.Info(Logs.RtuService, "Leave Fibertest RTU service");
         return Task.CompletedTask;
     }
 }

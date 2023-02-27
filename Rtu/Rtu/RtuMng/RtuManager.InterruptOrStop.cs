@@ -7,7 +7,7 @@ namespace Fibertest.Rtu
     {
         public void InterruptMeasurement(InterruptMeasurementDto dto)
         {
-            _logger.LogInfo(Logs.RtuManager, $"Client {dto.ClientConnectionId}: Interrupting current measurement...");
+            _logger.Info(Logs.RtuManager, $"Client {dto.ClientConnectionId}: Interrupting current measurement...");
             _cancellationTokenSource?.Cancel();
         }
 
@@ -46,12 +46,12 @@ namespace Fibertest.Rtu
         {
             if (!_config.Value.Monitoring.IsMonitoringOn)
             {
-                _logger.LogInfo(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
+                _logger.Info(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
                 return;
             }
 
             _config.Update(c => c.Monitoring.IsMonitoringOn = false);
-            _logger.LogInfo(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
+            _logger.Info(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
             _cancellationTokenSource?.Cancel();
 
             // if Lmax = 240km and Time = 10min one step lasts 5-6 sec

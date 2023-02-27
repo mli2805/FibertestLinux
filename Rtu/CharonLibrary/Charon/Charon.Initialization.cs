@@ -54,9 +54,9 @@ public partial class Charon
     /// <returns>null if initialization is successful, damaged OTAU address otherwise</returns>
     public NetAddress? InitializeOtauRecursively()
     {
-        _lll.LogError(Logs.RtuManager, "local logger");
+        _lll.Error(Logs.RtuManager, "local logger");
 
-        _logger.LogInfo(Logs.RtuManager, $"Initializing OTAU on {NetAddress.ToStringA()}");
+        _logger.Info(Logs.RtuManager, $"Initializing OTAU on {NetAddress.ToStringA()}");
         Children = new Dictionary<int, Charon>();
 
         Serial = GetSerial();
@@ -64,21 +64,21 @@ public partial class Charon
         {
             _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectOtau);
             LastErrorMessage = $"Get Serial for {NetAddress.ToStringA()} error {LastErrorMessage}";
-            _logger.LogInfo(Logs.RtuManager, LastErrorMessage);
+            _logger.Info(Logs.RtuManager, LastErrorMessage);
             return NetAddress;
         }
         Serial = Serial.Substring(0, Serial.Length - 2);
-        _logger.LogInfo(Logs.RtuManager, $"Serial {Serial}");
+        _logger.Info(Logs.RtuManager, $"Serial {Serial}");
 
         OwnPortCount = GetOwnPortCount();
         FullPortCount = OwnPortCount;
         if (!IsLastCommandSuccessful)
         {
             LastErrorMessage = $"Get own port count error {LastErrorMessage}";
-            _logger.LogError(Logs.RtuManager, LastErrorMessage);
+            _logger.Error(Logs.RtuManager, LastErrorMessage);
             return NetAddress;
         }
-        _logger.LogInfo(Logs.RtuManager, $"Own port count  {OwnPortCount}");
+        _logger.Info(Logs.RtuManager, $"Own port count  {OwnPortCount}");
         IsOk = true;
 
         if (IsMainCharon)
@@ -109,7 +109,7 @@ public partial class Charon
                 {
                     _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectOtau);
                     childCharon.LastErrorMessage = $"Get Serial for {expendedPort.ToStringA()} error {LastErrorMessage}";
-                    _logger.LogError(Logs.RtuManager, childCharon.LastErrorMessage);
+                    _logger.Error(Logs.RtuManager, childCharon.LastErrorMessage);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ public partial class Charon
                         _serialPort.ShowOnLedDisplay(LedDisplayCode.ErrorConnectBop);
                         IsLastCommandSuccessful = true; // child initialization shouldn't break full process
                         childCharon.LastErrorMessage = LastErrorMessage = $"Child charon {expendedPort.ToStringA()} initialization failed";
-                        _logger.LogError(Logs.RtuManager, childCharon.LastErrorMessage);
+                        _logger.Error(Logs.RtuManager, childCharon.LastErrorMessage);
                         continue;
                     }
                     FullPortCount += childCharon.FullPortCount;
@@ -129,8 +129,8 @@ public partial class Charon
             if (isBopRemoved)
                 RewriteIni(extendedPorts);
         }
-        _logger.LogInfo(Logs.RtuManager, $"Full port count  {FullPortCount}");
-        _logger.LogInfo(Logs.RtuManager, $"OTAU {Serial} initialized successfully.   {OwnPortCount}/{FullPortCount}.");
+        _logger.Info(Logs.RtuManager, $"Full port count  {FullPortCount}");
+        _logger.Info(Logs.RtuManager, $"OTAU {Serial} initialized successfully.   {OwnPortCount}/{FullPortCount}.");
         return null;
     }
 

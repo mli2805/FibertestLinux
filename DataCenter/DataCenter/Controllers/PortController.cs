@@ -32,7 +32,7 @@ public class PortController : ControllerBase
             {
                 body = await reader.ReadToEndAsync();
             }
-            _logger.LogInfo(Logs.WebApi, body);
+            _logger.Info(Logs.WebApi, body);
             //TODO: de-serialization from WEB Client , check JsonSerializerSettings
             var dto = JsonConvert.DeserializeObject<AttachTraceDto>(body);
             if (dto == null)
@@ -47,7 +47,7 @@ public class PortController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.WebApi, $"AttachTrace: {e.Message}");
+            _logger.Error(Logs.WebApi, $"AttachTrace: {e.Message}");
             return new RequestAnswer() { ReturnCode = ReturnCode.Error, ErrorMessage = e.Message };
         }
     }

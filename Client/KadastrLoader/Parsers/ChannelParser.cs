@@ -46,13 +46,13 @@ namespace KadastrLoader
 
             var cmd = CreateFiberCmd(fields);
             if (cmd == null) return "invalid line";
-            _logger.LogInfo(Logs.Client, $"command create fiber {cmd.FiberId.First6()} between: {cmd.NodeId1.First6()} and {cmd.NodeId2.First6()}");
+            _logger.Info(Logs.Client, $"command create fiber {cmd.FiberId.First6()} between: {cmd.NodeId1.First6()} and {cmd.NodeId2.First6()}");
 
             var result = _grpcC2DService.SendEventSourcingCommand(cmd).Result;
             if (result.ReturnCode == ReturnCode.Error) 
                 return result.ErrorMessage;
 
-            _logger.LogInfo(Logs.Client, result.ReturnCode != ReturnCode.Error
+            _logger.Info(Logs.Client, result.ReturnCode != ReturnCode.Error
                 ? "Fiber added successfully."
                 : $"Failed to add fiber. {result.ErrorMessage}");
             return result.ErrorMessage;

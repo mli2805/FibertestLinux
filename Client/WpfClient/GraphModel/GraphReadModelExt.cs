@@ -30,7 +30,7 @@ namespace Fibertest.WpfClient
                 model.Data.Nodes.RemoveAt(nodeVmsIndexes[i]);
             }
 
-            model.Logger.LogInfo(Logs.Client,$@"{nodeVmsIndexes.Count} accident nodes were cleaned");
+            model.Logger.Info(Logs.Client,$@"{nodeVmsIndexes.Count} accident nodes were cleaned");
 
             foreach (var fiberVm in model.Data.Fibers)
             {

@@ -44,7 +44,7 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
                         clientHandler.ServerCertificateCustomValidationCallback +=
                             (_, _, _, sslPolicyErrors) =>
                             {
-                                _logger.LogInfo(Logs.DataCenter, $"Negotiation with server returns sslPolicyErrors: {sslPolicyErrors}");
+                                _logger.Info(Logs.DataCenter, $"Negotiation with server returns sslPolicyErrors: {sslPolicyErrors}");
                                 return true;
                             };
                     return message;
@@ -55,15 +55,15 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
         _connection.Closed += async (error) =>
         {
             if (error != null)
-                _logger.LogError(Logs.DataCenter, $"FtSignalRClient connection was closed: {error.Message}");
-            //                _logger.LogInfo(Logs.DataCenter, "FtSignalRClient connection was closed.");
+                _logger.Error(Logs.DataCenter, $"FtSignalRClient connection was closed: {error.Message}");
+            //                _logger.Info(Logs.DataCenter, "FtSignalRClient connection was closed.");
             await Task.Delay(1);
         };
 
         _connection.On<string>("NotifyServer", connId =>
         {
             ServerConnectionId = connId;
-            //                _logger.LogInfo(Logs.DataCenter, $"NotifyServer returned id {connId}");
+            //                _logger.Info(Logs.DataCenter, $"NotifyServer returned id {connId}");
         });
     }
 
@@ -79,12 +79,12 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
             {
                 var unused = _connection.InvokeAsync("NotifyAll", eventType, dataInJson);
                 if (eventType != "NotifyMonitoringStep" && eventType != "NudgeSignalR") // too many
-                    _logger.LogInfo(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} sent successfully.");
+                    _logger.Info(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} sent successfully.");
             }
         }
         catch (Exception ex)
         {
-            _logger.LogInfo(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} " + ex.Message);
+            _logger.Info(Logs.DataCenter, $"FtSignalRClient NotifyAll: {eventType} " + ex.Message);
         }
     }
 
@@ -98,12 +98,12 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
             if (_connection != null && isConnected)
             {
                 var unused = _connection.InvokeAsync("SendToOne", connectionId, eventType, dataInJson);
-                _logger.LogInfo(Logs.DataCenter, $"FtSignalRClient: {eventType} sent successfully.");
+                _logger.Info(Logs.DataCenter, $"FtSignalRClient: {eventType} sent successfully.");
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(Logs.DataCenter, $"FtSignalRClient: {eventType} " + ex.Message);
+            _logger.Error(Logs.DataCenter, $"FtSignalRClient: {eventType} " + ex.Message);
         }
     }
 
@@ -121,7 +121,7 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "Exception in FtSignalRClient CheckServerIn: " + e.Message);
+            _logger.Error(Logs.DataCenter, "Exception in FtSignalRClient CheckServerIn: " + e.Message);
         }
         return false;
     }
@@ -131,35 +131,35 @@ public class FtSignalRClient : IFtSignalRClient, IDisposable
         if (!_isWebApiInstalled) return false;
         if (_connection == null)
         {
-            if (isLog) _logger.LogInfo(Logs.DataCenter, $"Build signalR connection to {_webApiUrl}");
+            if (isLog) _logger.Info(Logs.DataCenter, $"Build signalR connection to {_webApiUrl}");
             try
             {
                 Build();
             }
             catch (Exception e)
             {
-                if (isLog) _logger.LogError(Logs.DataCenter, $"Build signalR connection: " + e.Message);
+                if (isLog) _logger.Error(Logs.DataCenter, $"Build signalR connection: " + e.Message);
                 return false;
             }
             if (_connection != null && isLog) 
-                _logger.LogInfo(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
+                _logger.Info(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
             await Task.Delay(500);
         }
 
         if (_connection != null && _connection.State != HubConnectionState.Connected)
         {
-            if (isLog) _logger.LogInfo(Logs.DataCenter, $"Start signalR connection to {_webApiUrl}");
+            if (isLog) _logger.Info(Logs.DataCenter, $"Start signalR connection to {_webApiUrl}");
             try
             {
                 await _connection.StartAsync();
             }
             catch (Exception e)
             {
-                if (isLog) _logger.LogError(Logs.DataCenter, $"FtSignalRClient Start connection: " + e.Message);
+                if (isLog) _logger.Error(Logs.DataCenter, $"FtSignalRClient Start connection: " + e.Message);
                 _connection = null;
                 return false;
             }
-            if (isLog) _logger.LogInfo(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
+            if (isLog) _logger.Info(Logs.DataCenter, $"SignalR connection state is {_connection.State}");
             await Task.Delay(500);
         }
 

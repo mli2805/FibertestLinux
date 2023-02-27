@@ -133,7 +133,7 @@ namespace Fibertest.WpfClient
             var leftFiber = _graphModel.Data.Fibers.FirstOrDefault(f => f.Node2.Id == nodeId);
             if (leftFiber == null)
             {
-                _logger.LogError(Logs.Client,@"IsFiberContainedInAnyTraceWithBase: Left fiber not found");
+                _logger.Error(Logs.Client,@"IsFiberContainedInAnyTraceWithBase: Left fiber not found");
                 return;
             }
             var leftNode = leftFiber.Node1;
@@ -141,7 +141,7 @@ namespace Fibertest.WpfClient
             var rightFiber = _graphModel.Data.Fibers.FirstOrDefault(f => f.Node1.Id == nodeId);
             if (rightFiber == null)
             {
-                _logger.LogError(Logs.Client,@"IsFiberContainedInAnyTraceWithBase: Right fiber not found");
+                _logger.Error(Logs.Client,@"IsFiberContainedInAnyTraceWithBase: Right fiber not found");
                 return;
             }
             var rightNode = rightFiber.Node2;
@@ -153,7 +153,7 @@ namespace Fibertest.WpfClient
             var node = _graphModel.Data.Nodes.FirstOrDefault(n => n.Id == nodeId);
             if (node == null)
             {
-                _logger.LogError(Logs.Client,$@"RemoveNodeWithAllHis: Node {nodeId.First6()} not found");
+                _logger.Error(Logs.Client,$@"RemoveNodeWithAllHis: Node {nodeId.First6()} not found");
                 return;
             }
 

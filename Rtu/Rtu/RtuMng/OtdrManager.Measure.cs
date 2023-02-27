@@ -42,11 +42,11 @@ namespace Fibertest.Rtu
         /// <returns></returns>
         private ReturnCode Measure(CancellationTokenSource cts, Charon? bopCharonToShowPortOnDisplay)
         {
-            _logger.LogInfo(Logs.RtuManager, "Measurement begin.");
+            _logger.Info(Logs.RtuManager, "Measurement begin.");
 
             if (!_interOpWrapper.PrepareMeasurement(true))
             {
-                _logger.LogInfo(Logs.RtuManager, "Prepare measurement error!");
+                _logger.Info(Logs.RtuManager, "Prepare measurement error!");
                 return ReturnCode.MeasurementPreparationError;
             }
 
@@ -54,7 +54,7 @@ namespace Fibertest.Rtu
 
             if (!_interOpWrapper.SetTuningApdMode(1))
             {
-                _logger.LogInfo(Logs.RtuManager, "Prepare measurement error!");
+                _logger.Info(Logs.RtuManager, "Prepare measurement error!");
                 return ReturnCode.MeasurementPreparationError;
             }
 
@@ -76,7 +76,7 @@ namespace Fibertest.Rtu
                     if (cts.IsCancellationRequested)
                     {
                         _interOpWrapper.StopMeasurement(true);
-                        _logger.LogInfo(Logs.RtuManager, "Measurement interrupted.");
+                        _logger.Info(Logs.RtuManager, "Measurement interrupted.");
                         return ReturnCode.MeasurementInterrupted;
                     }
 
@@ -84,11 +84,11 @@ namespace Fibertest.Rtu
                     var buffer = GetLastSorDataBuffer();
                     if (buffer == null)
                         return ReturnCode.MeasurementError;
-                    _logger.LogInfo(Logs.RtuManager, $"  MeasStep #{++step} returned {buffer.Length} bytes");
+                    _logger.Info(Logs.RtuManager, $"  MeasStep #{++step} returned {buffer.Length} bytes");
 
                     if (result != 0 && result != 10001)
                     {
-                        _logger.LogInfo(Logs.RtuManager, $"  MeasStep returned {result}");
+                        _logger.Info(Logs.RtuManager, $"  MeasStep returned {result}");
                         return ReturnCode.MeasurementError;
                     }
                     hasMoreSteps = result == 0;
@@ -98,11 +98,11 @@ namespace Fibertest.Rtu
             }
             catch (Exception e)
             {
-                _logger.LogInfo(Logs.RtuManager, e.Message);
+                _logger.Info(Logs.RtuManager, e.Message);
                 return ReturnCode.MeasurementError;
             }
 
-            _logger.LogInfo(Logs.RtuManager, "Measurement ended normally.");
+            _logger.Info(Logs.RtuManager, "Measurement ended normally.");
             return ReturnCode.MeasurementEndedNormally;
         }
 
@@ -111,7 +111,7 @@ namespace Fibertest.Rtu
             int bufferLength = _interOpWrapper.GetSorDataSize(_sorData);
             if (bufferLength == -1)
             {
-                _logger.LogInfo(Logs.RtuManager, "  _sorData is null");
+                _logger.Info(Logs.RtuManager, "  _sorData is null");
                 return null;
             }
             byte[] buffer = new byte[bufferLength];
@@ -119,7 +119,7 @@ namespace Fibertest.Rtu
             var size = _interOpWrapper.GetSordata(_sorData, buffer, bufferLength);
             if (size == -1)
             {
-                _logger.LogInfo(Logs.RtuManager, "  Error in GetLastSorData");
+                _logger.Info(Logs.RtuManager, "  Error in GetLastSorData");
                 return null;
             }
             return buffer;
@@ -128,19 +128,19 @@ namespace Fibertest.Rtu
         public byte[]? ApplyAutoAnalysis(byte[] measBytes)
         {
             var measIntPtr = _interOpWrapper.SetSorData(measBytes);
-            _logger.LogInfo(Logs.RtuManager, "  SetSorData done.");
+            _logger.Info(Logs.RtuManager, "  SetSorData done.");
 
             if (!_interOpWrapper.MakeAutoAnalysis(ref measIntPtr))
             {
-                _logger.LogInfo(Logs.RtuManager, "  ApplyAutoAnalysis error.");
+                _logger.Info(Logs.RtuManager, "  ApplyAutoAnalysis error.");
                 return null;
             }
-            _logger.LogInfo(Logs.RtuManager, "  ApplyAutoAnalysis done.");
+            _logger.Info(Logs.RtuManager, "  ApplyAutoAnalysis done.");
             var size = _interOpWrapper.GetSorDataSize(measIntPtr);
-            _logger.LogInfo(Logs.RtuManager, "  GetSorDataSize done.");
+            _logger.Info(Logs.RtuManager, "  GetSorDataSize done.");
             byte[] resultBytes = new byte[size];
             _interOpWrapper.GetSordata(measIntPtr, resultBytes, size);
-            _logger.LogInfo(Logs.RtuManager, "  GetSorData done.");
+            _logger.Info(Logs.RtuManager, "  GetSorData done.");
             _interOpWrapper.FreeSorDataMemory(measIntPtr);
             return resultBytes;
         }

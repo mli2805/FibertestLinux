@@ -70,7 +70,7 @@ namespace Fibertest.WpfClient
         private void OneMeasurementExecutor_MeasurementCompleted(object sender, EventArgs e)
         {
             var result = (MeasurementEventArgs)e;
-            _logger.LogInfo(Logs.Client,$@"Measurement on trace {_traceLeaf.Title}: {result.Code}");
+            _logger.Info(Logs.Client,$@"Measurement on trace {_traceLeaf.Title}: {result.Code}");
 
             _dispatcherProvider.GetDispatcher().Invoke(() => Finish(result));
         }

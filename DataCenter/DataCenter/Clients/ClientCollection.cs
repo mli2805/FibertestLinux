@@ -31,7 +31,7 @@ public class ClientCollection
         var licenseCheckResult = this.CheckLicense(dto);
         if (licenseCheckResult != null)
         {
-            Logger.LogError(Logs.DataCenter, licenseCheckResult.ReturnCode.GetLocalizedString());
+            Logger.Error(Logs.DataCenter, licenseCheckResult.ReturnCode.GetLocalizedString());
             return licenseCheckResult;
         }
 
@@ -73,7 +73,7 @@ public class ClientCollection
         if (!Clients.TryAdd(clientStation.ConnectionId, clientStation))
             return new ClientRegisteredDto(ReturnCode.Error);
         var successfulResult = this.FillInSuccessfulResult(dto, user);
-        Logger.LogInfo(Logs.DataCenter,
+        Logger.Info(Logs.DataCenter,
             $"Client {clientStation.UserName} from {clientStation.ClientIp} registered successfully!");
         LogStations();
         return successfulResult;
@@ -107,7 +107,7 @@ public class ClientCollection
 
         foreach (var deadStation in deadStations)
         {
-            Logger.LogInfo(Logs.DataCenter,
+            Logger.Info(Logs.DataCenter,
                 $@"Dead client {deadStation} with connectionId {
                     deadStation.ConnectionId.Substring(0, 6)} and last checkout time {deadStation.LastConnectionTimestamp:T} removed.");
 
@@ -124,11 +124,11 @@ public class ClientCollection
     private void LogStations()
     {
         Logger.HyphenLine(Logs.DataCenter);
-        Logger.LogInfo(Logs.DataCenter, $"There are {Clients.Count} client(s):");
+        Logger.Info(Logs.DataCenter, $"There are {Clients.Count} client(s):");
         Logger.HyphenLine(Logs.RtuService);
         foreach (var station in Clients.Values)
         {
-            Logger.LogInfo(Logs.DataCenter,
+            Logger.Info(Logs.DataCenter,
                 $"{station.UserName}/{station.ClientIp}:{station.ClientAddressPort} with connection id {station.ConnectionId}");
         }
         Logger.HyphenLine(Logs.DataCenter);

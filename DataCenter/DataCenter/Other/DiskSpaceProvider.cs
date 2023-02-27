@@ -35,7 +35,7 @@ namespace Fibertest.DataCenter
             var freeSpace = $"free space is {result.AvailableFreeSpace:0.0}Gb";
             var threshold = $"threshold {result.FreeSpaceThreshold}Gb";
             var dbSize = $"DB size is {result.DataSize:0.0}Gb";
-            _logger.LogInfo(Logs.DataCenter, $@"{totalSize},  {freeSpace},  {threshold},  {dbSize}");
+            _logger.Info(Logs.DataCenter, $@"{totalSize},  {freeSpace},  {threshold},  {dbSize}");
             await Task.Delay(1);
             return result;
         }

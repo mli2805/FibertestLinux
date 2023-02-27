@@ -60,7 +60,7 @@ public partial class Charon
 
             var lines = LastAnswer.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             CharonIniSize = int.Parse(lines[0]);
-            _logger.LogInfo(Logs.RtuManager, $"Charon ini size is {CharonIniSize}");
+            _logger.Info(Logs.RtuManager, $"Charon ini size is {CharonIniSize}");
             return CharonIniSize;
         }
         catch (Exception e)
@@ -69,7 +69,7 @@ public partial class Charon
             {
                 IsLastCommandSuccessful = false;
                 LastErrorMessage = $"{e.Message} in GetIniSize!";
-                _logger.LogError(Logs.RtuManager, LastErrorMessage);
+                _logger.Error(Logs.RtuManager, LastErrorMessage);
             }
 
             return 0;
@@ -85,14 +85,14 @@ public partial class Charon
             {
                 // read iniFile error
                 LastErrorMessage = $"Get extended ports error {LastErrorMessage}";
-                _logger.LogInfo(Logs.RtuManager, LastErrorMessage);
+                _logger.Info(Logs.RtuManager, LastErrorMessage);
                 return null;
             }
 
             if (LastAnswer.Substring(0, 15) == "ERROR_COMMAND\r\n")
             {
                 // charon too old, knows nothing about extensions
-                _logger.LogError(Logs.RtuManager, "Charon too old, knows nothing about extensions");
+                _logger.Error(Logs.RtuManager, "Charon too old, knows nothing about extensions");
                 return new Dictionary<int, NetAddress>();
             }
 

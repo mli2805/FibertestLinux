@@ -88,7 +88,7 @@ namespace Fibertest.WpfClient
                 o.NetAddress.Port == bopNetworkEventAdded.TcpPort);
             if (otau == null)
             {
-                _logger.LogError(Logs.Client,$@"otau with address {bopNetworkEventAdded.OtauIp}:{bopNetworkEventAdded.TcpPort} not found.");
+                _logger.Error(Logs.Client,$@"otau with address {bopNetworkEventAdded.OtauIp}:{bopNetworkEventAdded.TcpPort} not found.");
                 return;
             }
           

@@ -24,7 +24,7 @@ public class RtuStationsRepository
             if (previousRtuStationRow == null)
             {
                 dbContext.RtuStations.Add(rtuStation);
-                _logger.LogInfo(Logs.DataCenter, 
+                _logger.Info(Logs.DataCenter, 
                     $"RtuStation {rtuStation.RtuGuid.First6()} successfully registered with main address {rtuStation.MainAddress}.");
             }
             else
@@ -35,7 +35,7 @@ public class RtuStationsRepository
                 previousRtuStationRow.IsReserveAddressSet = rtuStation.IsReserveAddressSet;
                 previousRtuStationRow.ReserveAddress = rtuStation.ReserveAddress;
                 previousRtuStationRow.ReserveAddressPort = rtuStation.ReserveAddressPort;
-                _logger.LogInfo(Logs.DataCenter, 
+                _logger.Info(Logs.DataCenter, 
                     $"RtuStation {rtuStation.RtuGuid.First6()} successfully updated.");
             }
 
@@ -43,7 +43,7 @@ public class RtuStationsRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "RegisterRtuInitializationResultAsync: " + e.Message);
+            _logger.Error(Logs.DataCenter, "RegisterRtuInitializationResultAsync: " + e.Message);
             return -1;
         }
     }
@@ -58,17 +58,17 @@ public class RtuStationsRepository
             {
                 dbContext.RtuStations.Remove(rtu);
                 await dbContext.SaveChangesAsync();
-                _logger.LogInfo(Logs.DataCenter, "RTU removed.");
+                _logger.Info(Logs.DataCenter, "RTU removed.");
                 return null;
             }
 
             var message = $"RTU with id {rtuId.First6()} not found";
-            _logger.LogInfo(Logs.DataCenter, message);
+            _logger.Info(Logs.DataCenter, message);
             return message;
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "RemoveRtuAsync: " + e.Message);
+            _logger.Error(Logs.DataCenter, "RemoveRtuAsync: " + e.Message);
             return e.Message;
         }
     }
@@ -82,12 +82,12 @@ public class RtuStationsRepository
             if (rtu != null)
                 return rtu.GetRtuDoubleAddress();
 
-            _logger.LogInfo(Logs.DataCenter, $"RTU with id {rtuId.First6()} not found");
+            _logger.Info(Logs.DataCenter, $"RTU with id {rtuId.First6()} not found");
             return null;
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "GetRtuAddresses: " + e.Message);
+            _logger.Error(Logs.DataCenter, "GetRtuAddresses: " + e.Message);
             return null;
         }
     }
@@ -100,7 +100,7 @@ public class RtuStationsRepository
             var rtu = dbContext.RtuStations.FirstOrDefault(r => r.RtuGuid == dto.RtuId);
             if (rtu == null)
             {
-                _logger.LogInfo(Logs.DataCenter, $"Unknown RTU's {dto.RtuId.First6()} heartbeat.");
+                _logger.Info(Logs.DataCenter, $"Unknown RTU's {dto.RtuId.First6()} heartbeat.");
             }
             else
             {
@@ -114,7 +114,7 @@ public class RtuStationsRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "RegisterRtuHeartbeatAsync: " + e.Message);
+            _logger.Error(Logs.DataCenter, "RegisterRtuHeartbeatAsync: " + e.Message);
             return -1;
         }
     }
@@ -127,13 +127,13 @@ public class RtuStationsRepository
             {
                 var rtu = await dbContext.RtuStations.FirstOrDefaultAsync(r => r.RtuGuid == rtuId);
                 if (rtu != null) return true;
-                _logger.LogInfo(Logs.DataCenter, $"Unknown RTU {rtuId.First6()}");
+                _logger.Info(Logs.DataCenter, $"Unknown RTU {rtuId.First6()}");
                 return false;
             }
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "IsRtuExist: " + e.Message);
+            _logger.Error(Logs.DataCenter, "IsRtuExist: " + e.Message);
             return false;
         }
     }
@@ -147,7 +147,7 @@ public class RtuStationsRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "GetAllRtuStations: " + e.Message);
+            _logger.Error(Logs.DataCenter, "GetAllRtuStations: " + e.Message);
             return new List<RtuStation>();
         }
     }
@@ -163,7 +163,7 @@ public class RtuStationsRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "GetRtuStation: " + e.Message);
+            _logger.Error(Logs.DataCenter, "GetRtuStation: " + e.Message);
             return null;
         }
     }
@@ -182,7 +182,7 @@ public class RtuStationsRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, "SaveAvailabilityChanges: " + e.Message);
+            _logger.Error(Logs.DataCenter, "SaveAvailabilityChanges: " + e.Message);
             return -1;
         }
     }

@@ -154,7 +154,7 @@ public class C2RCommandsProcessor
                 return new Tuple<string?, string?>(JsonConvert.SerializeObject(
                     new RequestAnswer(ReturnCode.RtuNotAvailable), JsonSerializerSettings), null);
         }
-        _logger.LogInfo(Logs.DataCenter, $"rtuAddress {rtuAddress}");
+        _logger.Info(Logs.DataCenter, $"rtuAddress {rtuAddress}");
 
         return new Tuple<string?, string?>(null, rtuAddress);
     }
@@ -187,7 +187,7 @@ public class C2RCommandsProcessor
                 dto.NetAddress.Port = (int)TcpPorts.RtuListenTo;
                 rtuAddress = dto.NetAddress.ToStringA();
                 //TODO check veex
-                _logger.LogError(Logs.DataCenter, $"Check for VEEX RTU {rtuAddress} is not implemented yet");
+                _logger.Error(Logs.DataCenter, $"Check for VEEX RTU {rtuAddress} is not implemented yet");
                 // only if failed
                 dto.NetAddress.Port = -1;
                 result = new RtuConnectionCheckedDto(ReturnCode.Error) { NetAddress = dto.NetAddress };
@@ -212,11 +212,11 @@ public class C2RCommandsProcessor
         {
             case AssignBaseRefsDto dto:
                 var print = JsonConvert.SerializeObject(dto.ShallowCopy(), JsonSerializerSettings);
-                _logger.LogDebug(Logs.DataCenter, $"Command content {print}");
-                _logger.LogDebug(Logs.DataCenter, $"  {dto.BaseRefs.Count} base refs");
+                _logger.Debug(Logs.DataCenter, $"Command content {print}");
+                _logger.Debug(Logs.DataCenter, $"  {dto.BaseRefs.Count} base refs");
                 break;
             default:
-                _logger.LogDebug(Logs.DataCenter, $"Command content {jsonToTransmit}");
+                _logger.Debug(Logs.DataCenter, $"Command content {jsonToTransmit}");
                 break;
         }
 

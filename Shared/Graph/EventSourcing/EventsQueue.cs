@@ -21,7 +21,7 @@ public class EventsQueue
         if (result == null)
             EventsWaitingForCommit.Add(e);
         else
-            _logger.LogError(Logs.DataCenter, result);
+            _logger.Error(Logs.DataCenter, result);
         return result;
 
     }

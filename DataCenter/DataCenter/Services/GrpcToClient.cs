@@ -48,7 +48,7 @@ namespace Fibertest.DataCenter
             foreach (var clientStation in _clientCollection.Clients.Values)
             {
                 var transferResult = await TransferToClient(clientStation.ClientIp, commandContent);
-                _logger.LogInfo(Logs.DataCenter, $"transfer result is {transferResult.ReturnCode.GetLocalizedString()}");
+                _logger.Info(Logs.DataCenter, $"transfer result is {transferResult.ReturnCode.GetLocalizedString()}");
             }
 
             return new RequestAnswer(ReturnCode.Ok);
@@ -58,7 +58,7 @@ namespace Fibertest.DataCenter
         {
             var clientUri = $"http://{clientIp}:{(int)TcpPorts.ClientListenTo}";
             using var grpcChannelToClient = GrpcChannel.ForAddress(clientUri);
-            _logger.LogDebug(Logs.DataCenter, $"GrpcChannel to client {clientUri}");
+            _logger.Debug(Logs.DataCenter, $"GrpcChannel to client {clientUri}");
             var grpcClientToClient = new toClient.toClientClient(grpcChannelToClient);
 
             var clientCommand = new toClientCommand { Json = commandContent };
@@ -66,15 +66,15 @@ namespace Fibertest.DataCenter
             try
             {
                 toClientResponse response = await grpcClientToClient.SendCommandAsync(clientCommand);
-                _logger.LogDebug(Logs.DataCenter, $"Got gRPC response from client: {response.Json}");
+                _logger.Debug(Logs.DataCenter, $"Got gRPC response from client: {response.Json}");
                 var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json, JsonSerializerSettings);
                 return result ?? new RequestAnswer(ReturnCode.FailedDeserializeJson);
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.DataCenter, "TransferToClient: " + e.Message);
+                _logger.Error(Logs.DataCenter, "TransferToClient: " + e.Message);
                 if (e.InnerException != null)
-                    _logger.LogError(Logs.DataCenter, "InnerException: " + e.InnerException.Message);
+                    _logger.Error(Logs.DataCenter, "InnerException: " + e.InnerException.Message);
 
                 return new RequestAnswer(ReturnCode.ToClientGrpcOperationError) { ErrorMessage = e.Message };
             }

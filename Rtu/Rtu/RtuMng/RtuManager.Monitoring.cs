@@ -10,12 +10,12 @@ public partial class RtuManager
     {
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
         _config.Update(c => c.Monitoring.IsMonitoringOn = true);
-        _logger.LogInfo(Logs.RtuManager, Environment.NewLine + "Start monitoring.");
-        _logger.LogInfo(Logs.RtuManager, $"_mainCharon.Serial = {_mainCharon.Serial}");
+        _logger.Info(Logs.RtuManager, Environment.NewLine + "Start monitoring.");
+        _logger.Info(Logs.RtuManager, $"_mainCharon.Serial = {_mainCharon.Serial}");
 
         if (_monitoringQueue.Count() < 1)
         {
-            _logger.LogInfo(Logs.RtuManager, "There are no ports in queue for monitoring.");
+            _logger.Info(Logs.RtuManager, "There are no ports in queue for monitoring.");
             _config.Update(c => c.Monitoring.IsMonitoringOn = false);
             return;
         }
@@ -38,11 +38,11 @@ public partial class RtuManager
                 break;
         }
 
-        _logger.LogInfo(Logs.RtuManager, "Monitoring stopped.");
+        _logger.Info(Logs.RtuManager, "Monitoring stopped.");
 
         _config.Update(c => c.Monitoring.IsMonitoringOn = false);
         _otdrManager.DisconnectOtdr();
-        _logger.LogInfo(Logs.RtuManager, "Rtu is turned into MANUAL mode.");
+        _logger.Info(Logs.RtuManager, "Rtu is turned into MANUAL mode.");
     }
 
     private async Task ProcessOnePort(MonitoringPort monitoringPort)
@@ -83,7 +83,7 @@ public partial class RtuManager
 
     private async Task<MoniResult> DoFastMeasurement(MonitoringPort monitoringPort)
     {
-        _logger.LogInfo(Logs.RtuManager,
+        _logger.Info(Logs.RtuManager,
             Environment.NewLine + $"MEAS. {_measurementNumber}, Fast, port {monitoringPort.ToStringB(_mainCharon)}");
 
         var moniResult = await DoMeasurement(BaseRefType.Fast, monitoringPort);
@@ -106,7 +106,7 @@ public partial class RtuManager
             }
             else if (_fastSaveTimespan != TimeSpan.Zero && DateTime.Now - monitoringPort.LastFastSavedTimestamp > _fastSaveTimespan)
             {
-                _logger.LogInfo(Logs.RtuManager,
+                _logger.Info(Logs.RtuManager,
                     $"last fast saved - {monitoringPort.LastFastSavedTimestamp}, _fastSaveTimespan - {_fastSaveTimespan.TotalMinutes} minutes");
                 message = "It's time to save fast reflectogram";
             }
@@ -115,7 +115,7 @@ public partial class RtuManager
 
             if (message != "")
             {
-                _logger.LogInfo(Logs.RtuManager, "Send by MSMQ:  " + message);
+                _logger.Info(Logs.RtuManager, "Send by MSMQ:  " + message);
                 SendByMsmq(CreateDto(moniResult, monitoringPort));
                 monitoringPort.LastFastSavedTimestamp = DateTime.Now;
             }
@@ -128,7 +128,7 @@ public partial class RtuManager
     private async Task<MoniResult> DoSecondMeasurement(MonitoringPort monitoringPort, bool hasFastPerformed,
         BaseRefType baseType, bool isOutOfTurnMeasurement = false)
     {
-        _logger.LogInfo(Logs.RtuManager,
+        _logger.Info(Logs.RtuManager,
             Environment.NewLine + $"MEAS. {_measurementNumber}, {baseType}, port {monitoringPort.ToStringB(_mainCharon)}");
 
         var moniResult = await DoMeasurement(baseType, monitoringPort, !hasFastPerformed);
@@ -155,7 +155,7 @@ public partial class RtuManager
 
             if (message != "")
             {
-                _logger.LogInfo(Logs.RtuManager, "Send by MSMQ:  " + message);
+                _logger.Info(Logs.RtuManager, "Send by MSMQ:  " + message);
                 SendByMsmq(CreateDto(moniResult, monitoringPort));
                 monitoringPort.LastPreciseSavedTimestamp = DateTime.Now;
             }
@@ -208,7 +208,7 @@ public partial class RtuManager
         if (_config.Value.Monitoring.ShouldSaveSorData)
             monitoringPort.SaveSorData(baseRefType, buffer, SorType.Raw, _logger); // for investigations purpose
         monitoringPort.SaveMeasBytes(baseRefType, buffer, SorType.Raw, _logger); // for investigations purpose
-        _logger.LogInfo(Logs.RtuManager, $"Measurement result ({buffer.Length} bytes).");
+        _logger.Info(Logs.RtuManager, $"Measurement result ({buffer.Length} bytes).");
 
         try
         {
@@ -216,7 +216,7 @@ public partial class RtuManager
             // just to check whether OTDR still works and measurement is reliable
             if (!_interOpWrapper.PrepareMeasurement(true))
             {
-                _logger.LogInfo(Logs.RtuManager, "Additional check after measurement failed!");
+                _logger.Info(Logs.RtuManager, "Additional check after measurement failed!");
                 monitoringPort.SaveMeasBytes(baseRefType, buffer, SorType.Error, _logger); // save meas if error
                 ReInitializeDlls();
                 return new MoniResult() { MeasurementResult = MeasurementResult.HardwareProblem };
@@ -224,20 +224,20 @@ public partial class RtuManager
         }
         catch (Exception e)
         {
-            _logger.LogInfo(Logs.RtuManager, $"Exception during PrepareMeasurement: {e.Message}");
+            _logger.Info(Logs.RtuManager, $"Exception during PrepareMeasurement: {e.Message}");
         }
 
         MoniResult moniResult;
         try
         {
-            _logger.LogInfo(Logs.RtuManager, "Start auto analysis.");
+            _logger.Info(Logs.RtuManager, "Start auto analysis.");
             var measBytes = _otdrManager.ApplyAutoAnalysis(buffer);
             if (measBytes == null)
                 return new MoniResult() { MeasurementResult = MeasurementResult.FailedGetSorBuffer }; 
             if (_config.Value.Monitoring.ShouldSaveSorData)
                 monitoringPort.SaveSorData(baseRefType, buffer, SorType.Analysis, _logger); // for investigations purpose
             monitoringPort.SaveMeasBytes(baseRefType, buffer, SorType.Analysis, _logger); // 
-            _logger.LogInfo(Logs.RtuManager, $"Auto analysis applied. Now sor data has {measBytes.Length} bytes.");
+            _logger.Info(Logs.RtuManager, $"Auto analysis applied. Now sor data has {measBytes.Length} bytes.");
             moniResult = _otdrManager.CompareMeasureWithBase(baseBytes, measBytes, true); // base is inserted into meas during comparison
             if (_config.Value.Monitoring.ShouldSaveSorData)
                 monitoringPort.SaveSorData(baseRefType, buffer, SorType.Meas, _logger); // for investigations purpose
@@ -246,13 +246,13 @@ public partial class RtuManager
         }
         catch (Exception e)
         {
-            _logger.LogInfo(Logs.RtuManager, $"Exception during measurement analysis: {e.Message}");
+            _logger.Info(Logs.RtuManager, $"Exception during measurement analysis: {e.Message}");
             return new MoniResult() { MeasurementResult = MeasurementResult.ComparisonFailed };
         }
 
-        _logger.LogInfo(Logs.RtuManager, $"Trace state is {moniResult.GetAggregatedResult()}");
+        _logger.Info(Logs.RtuManager, $"Trace state is {moniResult.GetAggregatedResult()}");
         foreach (var accidentInSor in moniResult.Accidents)
-            _logger.LogInfo(Logs.RtuManager, accidentInSor.ToString());
+            _logger.Info(Logs.RtuManager, accidentInSor.ToString());
         return moniResult;
     }
 
@@ -260,8 +260,8 @@ public partial class RtuManager
     {
         _otdrManager.DisconnectOtdr();
         var otdrInitializationResult = _otdrManager.InitializeOtdr();
-        _logger.LogInfo(Logs.RtuManager, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");
-        _logger.LogInfo(Logs.RtuService, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");
+        _logger.Info(Logs.RtuManager, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");
+        _logger.Info(Logs.RtuService, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");
     }
 
 
@@ -280,11 +280,11 @@ public partial class RtuManager
 
     private void SendByMsmq(MonitoringResultDto dto)
     {
-        _logger.LogError(Logs.RtuManager, dto.RtuId.First6());
+        _logger.Error(Logs.RtuManager, dto.RtuId.First6());
     }
 
     private void SendByMsmq(BopStateChangedDto dto)
     {
-        _logger.LogError(Logs.RtuManager, dto.RtuId.First6());
+        _logger.Error(Logs.RtuManager, dto.RtuId.First6());
     }
 }

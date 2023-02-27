@@ -128,7 +128,7 @@ namespace Fibertest.WpfClient
         private System.Timers.Timer _timer = null!;
         private void StartTimer()
         {
-            _logger.LogInfo(Logs.Client,$@"Start a measurement timeout for trace {_trace.Title}");
+            _logger.Info(Logs.Client,$@"Start a measurement timeout for trace {_trace.Title}");
             _timer = new System.Timers.Timer(Model.MeasurementTimeout);
             _timer.Elapsed += TimeIsOver;
             _timer.AutoReset = false;
@@ -139,12 +139,12 @@ namespace Fibertest.WpfClient
         {
             _timer.Stop();
             _timer.Dispose();
-            _logger.LogInfo(Logs.Client,@"Timer destroyed");
+            _logger.Info(Logs.Client,@"Timer destroyed");
         }
 
         private void TimeIsOver(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            _logger.LogInfo(Logs.Client,@"Measurement timeout expired");
+            _logger.Info(Logs.Client,@"Measurement timeout expired");
             _timer.Dispose();
 
             MeasurementCompleted?
@@ -155,7 +155,7 @@ namespace Fibertest.WpfClient
         {
             DestroyTimer();
 
-            _logger.LogInfo(Logs.Client,$@"Measurement (Client) result for trace {_trace.Title} received");
+            _logger.Info(Logs.Client,$@"Measurement (Client) result for trace {_trace.Title} received");
 
             if (dto.SorBytes == null)
             {

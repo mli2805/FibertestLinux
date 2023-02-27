@@ -116,7 +116,7 @@ namespace Fibertest.WpfClient
 
             if (port < 1 || port > portOwner.ChildrenImpresario.Children.Count)
             {
-                _logger.LogInfo(Logs.Client,$@"Trace {traceLeaf.Title}, port = {port} is wrong");
+                _logger.Info(Logs.Client,$@"Trace {traceLeaf.Title}, port = {port} is wrong");
             }
             portOwner.ChildrenImpresario.Children[port - 1] = newTraceLeaf;
             newTraceLeaf.BaseRefsSet = traceLeaf.BaseRefsSet;

@@ -110,7 +110,7 @@ namespace Fibertest.WpfClient
             var result = SorData.TryGetFromBytes(sorbytes, out sorData);
             if (result != "")
             {
-                _logger.LogInfo(Logs.Client, result);
+                _logger.Info(Logs.Client, result);
                 return;
             }
 
@@ -125,7 +125,7 @@ namespace Fibertest.WpfClient
             var sorbytes = await _c2DWcfCommonManager.GetSorBytes(sorFileId);
             if (sorbytes == null)
             {
-                _logger.LogError(Logs.Client, $@"Cannot get reflectogram for measurement {sorFileId}");
+                _logger.Error(Logs.Client, $@"Cannot get reflectogram for measurement {sorFileId}");
                 return new byte[0];
             }
             return sorbytes;

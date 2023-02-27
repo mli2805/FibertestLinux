@@ -119,9 +119,9 @@ namespace Fibertest.WpfClient
             if (templateId == 0)
             {
                 var lmax = sorData.OwtToLenKm(sorData.FixedParameters.AcquisitionRange);
-                _logger.LogInfo(Logs.Client,$@"Fully automatic measurement: acquisition range = {lmax}");
+                _logger.Info(Logs.Client,$@"Fully automatic measurement: acquisition range = {lmax}");
                 var index = AutoBaseParams.GetTemplateIndexByLmaxInSorData(lmax, rtu.Omid!);
-                _logger.LogInfo(Logs.Client,$@"Supposedly used template #{index + 1}");
+                _logger.Info(Logs.Client,$@"Supposedly used template #{index + 1}");
                 rftsParams = LoadFromTemplate(index + 1);
             }
             else

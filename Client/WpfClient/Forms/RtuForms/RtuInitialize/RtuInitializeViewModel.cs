@@ -129,7 +129,7 @@ namespace Fibertest.WpfClient
                 }
                 else
                 {
-                    _logger.LogInfo(Logs.Client,result.CreateLogMessage());
+                    _logger.Info(Logs.Client,result.CreateLogMessage());
 
                     if (result.IsInitialized)
                         FullModel.UpdateWithDto(result);
@@ -142,7 +142,7 @@ namespace Fibertest.WpfClient
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.Client,$@"InitializeRtu : {e.Message}");
+                _logger.Error(Logs.Client,$@"InitializeRtu : {e.Message}");
                 var vm = new MyMessageBoxViewModel(MessageType.Error, Resources.SID_RTU_initialization_error_);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
             }

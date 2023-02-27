@@ -60,7 +60,7 @@ namespace Fibertest.WpfClient
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                _logger.LogError(Logs.Client,exception.Message);
+                _logger.Error(Logs.Client,exception.Message);
             }
 
         }

@@ -157,7 +157,7 @@ namespace Fibertest.WpfClient
             //_grpcC2DService.ChangeAddress(grpcIp);
             _grpcC2RService.SetClientConnectionId(ConnectionId);
             Status = string.Format(Resources.SID_Performing_registration_on__0_, grpcIp);
-            _logger.LogInfo(Logs.Client,$@"Performing registration on {grpcIp}");
+            _logger.Info(Logs.Client,$@"Performing registration on {grpcIp}");
         }
 
         private async Task<bool> ProcessRegistrationResult(RegisterClientDto sendDto)
@@ -228,9 +228,9 @@ namespace Fibertest.WpfClient
 
                 _currentGis.IsWithoutMapMode = result.DcCurrentParameters.General.IsWithoutMapMode;
 
-                _logger.LogInfo(Logs.Client,
+                _logger.Info(Logs.Client,
                     $@"Successfully registered on server {_currentDatacenterParameters.General.ServerTitle}");
-                _logger.LogInfo(Logs.Client,
+                _logger.Info(Logs.Client,
                     $@"StreamIdOriginal = {result.DcCurrentParameters.EventSourcing.StreamIdOriginal
                     }  Last event number in snapshot {result.DcCurrentParameters.EventSourcing.SnapshotLastEvent}");
                 IsRegistrationSuccessful = true;
@@ -238,7 +238,7 @@ namespace Fibertest.WpfClient
             }
             else
             {
-                _logger.LogError(Logs.Client,result.ReturnCode.ToString());
+                _logger.Error(Logs.Client,result.ReturnCode.ToString());
                 Status = result.ReturnCode.GetLocalizedWithOsInfo(result.ErrorMessage);
             }
         }

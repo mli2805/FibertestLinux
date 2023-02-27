@@ -31,7 +31,7 @@ public partial class Charon
 
     public CharonOperationResult SetExtendedActivePort(string serial, int port)
     {
-        _logger.LogInfo(Logs.RtuManager, $"Toggling to port {port} on {serial}...");
+        _logger.Info(Logs.RtuManager, $"Toggling to port {port} on {serial}...");
         if (Serial == serial)
             return SetActivePortOnMainCharon(port);
         else
@@ -53,13 +53,13 @@ public partial class Charon
         if (activePort == port)
             return CharonOperationResult.Ok;
 
-        _logger.LogInfo(Logs.RtuManager, "Toggling second attempt...");
+        _logger.Info(Logs.RtuManager, "Toggling second attempt...");
         activePort = SetActivePort(port);
         if (activePort == port)
             return CharonOperationResult.Ok;
 
         LastErrorMessage = $"Can't toggle switch into {port} port";
-        _logger.LogError(Logs.RtuManager, LastErrorMessage);
+        _logger.Error(Logs.RtuManager, LastErrorMessage);
         return CharonOperationResult.MainOtauError;
     }
 
@@ -70,7 +70,7 @@ public partial class Charon
         if (charon == null)
         {
             LastErrorMessage = "There is no such optical switch";
-            _logger.LogError(Logs.RtuManager, LastErrorMessage);
+            _logger.Error(Logs.RtuManager, LastErrorMessage);
         }
         return charon;
     }
@@ -87,14 +87,14 @@ public partial class Charon
         if (activePort == port)
             return CharonOperationResult.Ok;
 
-        _logger.LogInfo(Logs.RtuManager, "Toggling second attempt...");
+        _logger.Info(Logs.RtuManager, "Toggling second attempt...");
         activePort = charon.SetActivePort(port);
         if (activePort == port)
             return CharonOperationResult.Ok;
 
         LastErrorMessage = charon.LastErrorMessage;
         IsLastCommandSuccessful = charon.IsLastCommandSuccessful;
-        _logger.LogError(Logs.RtuManager, LastErrorMessage);
+        _logger.Error(Logs.RtuManager, LastErrorMessage);
         return CharonOperationResult.AdditionalOtauError;
     }
 }

@@ -44,7 +44,7 @@ namespace Fibertest.WpfClient
             var drive = await _grpcC2DService.SendAnyC2DRequest<GetDiskSpaceDto, DiskSpaceDto>(dto);
             if (drive.ReturnCode != ReturnCode.Ok)
             {
-                _logger.LogError(Logs.Client,@"GetDiskSpaceGb error");
+                _logger.Error(Logs.Client,@"GetDiskSpaceGb error");
                 return;
             }
             Model.DriveSize = $@"{drive.TotalSize:0.0} Gb";

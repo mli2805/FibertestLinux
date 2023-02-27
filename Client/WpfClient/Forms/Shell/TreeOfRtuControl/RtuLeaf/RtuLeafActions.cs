@@ -143,7 +143,7 @@ namespace Fibertest.WpfClient
                         new StopMonitoringDto(rtuLeaf.Id, rtu!.RtuMaker));
             }
 
-            _logger.LogInfo(Logs.Client, $@"Stop monitoring result - {result}");
+            _logger.Info(Logs.Client, $@"Stop monitoring result - {result}");
         }
 
 
@@ -221,7 +221,7 @@ namespace Fibertest.WpfClient
                 var vm = new MyMessageBoxViewModel(MessageType.Error, lines, 0);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
             }
-            _logger.LogInfo(Logs.Client, $@"Start monitoring result - {resultDto.ReturnCode == ReturnCode.MonitoringSettingsAppliedSuccessfully}");
+            _logger.Info(Logs.Client, $@"Start monitoring result - {resultDto.ReturnCode == ReturnCode.MonitoringSettingsAppliedSuccessfully}");
         }
 
         public async Task DetachAllTraces(object param)

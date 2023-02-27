@@ -51,34 +51,34 @@ public class EventStoreService
         var resetDb = _config.Value.MySql.ResetDb; // default = false
         if (resetDb)
         {
-            _logger.LogInfo(Logs.DataCenter, "ResetDb flag is TRUE! DB will be deleted...");
+            _logger.Info(Logs.DataCenter, "ResetDb flag is TRUE! DB will be deleted...");
             await using (var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions))
             {
                 await dbContext.Database.EnsureDeletedAsync();
             }
          //   _dbInitializer.DropDatabase();
             _config.Update(o => o.MySql.ResetDb = false);
-            _logger.LogInfo(Logs.DataCenter, "Db deleted successfully.");
+            _logger.Info(Logs.DataCenter, "Db deleted successfully.");
         }
         else
             StreamIdOriginal = _dbInitializer.GetStreamIdIfExists();
 
         if (StreamIdOriginal != Guid.Empty)
-            _logger.LogInfo(Logs.DataCenter, $"Found DB with StreamIdOriginal {StreamIdOriginal}");
+            _logger.Info(Logs.DataCenter, $"Found DB with StreamIdOriginal {StreamIdOriginal}");
         else
         {
             StreamIdOriginal = Guid.NewGuid();
-            _logger.LogInfo(Logs.DataCenter, $"DB will be created with StreamIdOriginal {StreamIdOriginal}");
+            _logger.Info(Logs.DataCenter, $"DB will be created with StreamIdOriginal {StreamIdOriginal}");
         }
         _config.Update(o=>o.EventSourcing.StreamIdOriginal = StreamIdOriginal);
 
         await using (var dbContext = new FtDbContext(_dbInitializer.FtDbContextOptions))
         {
             await dbContext.Database.EnsureCreatedAsync();
-            _logger.LogInfo(Logs.DataCenter, $"{_dbInitializer.ConnectionLogLine}");
+            _logger.Info(Logs.DataCenter, $"{_dbInitializer.ConnectionLogLine}");
         }
         var eventCount = await InitializeEventStoreService();
-        _logger.LogInfo(Logs.DataCenter, $"Event store service initialization: {eventCount} events");
+        _logger.Info(Logs.DataCenter, $"Event store service initialization: {eventCount} events");
     }
 
 
@@ -107,24 +107,24 @@ public class EventStoreService
         {
             foreach (var cmd in DbSeeds.Collection)
                 await SendCommand(cmd, "developer", "OnServer");
-            _logger.LogInfo(Logs.DataCenter, "Empty graph is seeded with default zone and users.");
+            _logger.Info(Logs.DataCenter, "Empty graph is seeded with default zone and users.");
         }
 
         var eventMessages = eventStream.CommittedEvents.ToList();
-        _logger.LogInfo(Logs.DataCenter, $"{eventMessages.Count} events should be applied...");
+        _logger.Info(Logs.DataCenter, $"{eventMessages.Count} events should be applied...");
         foreach (var eventMessage in eventMessages)
         {
             _writeModel.Apply(eventMessage.Body);
             _eventLogComposer.AddEventToLog(eventMessage);
         }
-        _logger.LogInfo(Logs.DataCenter, "Events applied successfully.");
-        _logger.LogInfo(Logs.DataCenter, $"Last event number is {LastEventNumberInSnapshot + eventMessages.Count}");
+        _logger.Info(Logs.DataCenter, "Events applied successfully.");
+        _logger.Info(Logs.DataCenter, $"Last event number is {LastEventNumberInSnapshot + eventMessages.Count}");
 
         var msg = eventStream.CommittedEvents.LastOrDefault();
         if (msg != null)
-            _logger.LogInfo(Logs.DataCenter, $@"Last applied event has timestamp {msg.Headers[Timestamp]:O}");
+            _logger.Info(Logs.DataCenter, $@"Last applied event has timestamp {msg.Headers[Timestamp]:O}");
 
-        _logger.LogInfo(Logs.DataCenter, $"{_writeModel.Rtus.Count} RTU found");
+        _logger.Info(Logs.DataCenter, $"{_writeModel.Rtus.Count} RTU found");
 
         return eventMessages.Count;
     }
@@ -136,7 +136,7 @@ public class EventStoreService
         {
             var result = _commandAggregator.Validate(cmd);
             if (!string.IsNullOrEmpty(result))
-                _logger.LogError(Logs.DataCenter, result);
+                _logger.Error(Logs.DataCenter, result);
         }
 
         StoreEventsInDb(username, clientIp);
@@ -201,7 +201,7 @@ public class EventStoreService
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.DataCenter, e.Message);
+            _logger.Error(Logs.DataCenter, e.Message);
             return new EventsDto() { ReturnCode = ReturnCode.Error, Events = null };
         }
     }

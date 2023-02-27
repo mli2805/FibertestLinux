@@ -18,7 +18,7 @@ namespace Fibertest.DataCenter
         {
             var pid = Process.GetCurrentProcess().Id;
             var tid = Thread.CurrentThread.ManagedThreadId;
-            _logger.LogInfo(Logs.DataCenter, $"SNMP trap listener starts. Process {pid}, thread {tid}");
+            _logger.Info(Logs.DataCenter, $"SNMP trap listener starts. Process {pid}, thread {tid}");
             await DoWork(stoppingToken);
         }
 

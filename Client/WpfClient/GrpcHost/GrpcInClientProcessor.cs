@@ -43,7 +43,7 @@ namespace Fibertest.WpfClient
 
         private void ProcessMeasurementResult(ClientMeasurementResultDto dto)
         {
-            _logger.LogInfo(Logs.Client, $"Client measurement result {dto.ReturnCode.GetLocalizedString()}");
+            _logger.Info(Logs.Client, $"Client measurement result {dto.ReturnCode.GetLocalizedString()}");
             if (_clientMeasurementViewModel.IsOpen)
                 Task.Factory.StartNew(() => _clientMeasurementViewModel.ShowResult(dto));
             if (_autoBaseViewModel.IsOpen)

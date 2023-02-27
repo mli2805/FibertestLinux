@@ -40,7 +40,7 @@ namespace Fibertest.Graph
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.Client,@"GetAccidents: " + e.Message);
+                _logger.Error(Logs.Client,@"GetAccidents: " + e.Message);
                 return new List<AccidentOnTraceV2>();
             }
         }
@@ -147,7 +147,7 @@ namespace Fibertest.Graph
         {
             if (keyEventIndex == 0)
             {
-                _logger.LogInfo(Logs.Client,@"Loss coeff accident could not happen in RTU!");
+                _logger.Info(Logs.Client,@"Loss coeff accident could not happen in RTU!");
                 keyEventIndex = 1;
             }
             var landmarkIndexToTheLeft = _sorData.GetLandmarkIndexForKeyEventIndex(keyEventIndex - 1);

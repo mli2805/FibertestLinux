@@ -28,7 +28,7 @@ namespace Fibertest.Rtu
             {
                 var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
-                _logger.LogInfo(Logs.RtuService, $"SendHeartbeat: {ServerUri}");
+                _logger.Info(Logs.RtuService, $"SendHeartbeat: {ServerUri}");
                 using var grpcChannelDc = GrpcChannel.ForAddress(ServerUri);
                 var grpcClient = new R2D.R2DClient(grpcChannelDc);
 
@@ -43,7 +43,7 @@ namespace Fibertest.Rtu
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.Client, "RTU failed to send gRPC message: " + e.Message);
+                _logger.Error(Logs.Client, "RTU failed to send gRPC message: " + e.Message);
                 var result = new RequestAnswer(ReturnCode.Error) { ErrorMessage = e.Message };
                 return (TResult)result;
             }

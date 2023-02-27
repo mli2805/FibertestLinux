@@ -170,7 +170,7 @@ namespace Fibertest.WpfClient
 
             if (_commandLineParameters.IsUnderSuperClientStart)
             {
-                _logger.LogInfo(Logs.Client,$@"Ask super-client to switch onto this system (postfix = {_commandLineParameters.ClientOrdinal}).");
+                _logger.Info(Logs.Client,$@"Ask super-client to switch onto this system (postfix = {_commandLineParameters.ClientOrdinal}).");
                 await _c2SWcfManager.SwitchOntoSystem(_commandLineParameters.ClientOrdinal);
             }
         }
@@ -194,7 +194,7 @@ namespace Fibertest.WpfClient
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.Client,@"ShowReport: " + e.Message);
+                _logger.Error(Logs.Client,@"ShowReport: " + e.Message);
             }
         }
 
@@ -255,7 +255,7 @@ namespace Fibertest.WpfClient
 
                 var result = await _grpcC2DService.SendEventSourcingCommand(dto);
                 if (result.ReturnCode != ReturnCode.Ok)
-                    _logger.LogInfo(Logs.Client,@"Cannot update measurement!");
+                    _logger.Info(Logs.Client,@"Cannot update measurement!");
                 IsEditEnabled = true;
             }
             await TryCloseAsync();

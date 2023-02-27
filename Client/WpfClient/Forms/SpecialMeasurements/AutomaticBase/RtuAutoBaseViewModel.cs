@@ -170,7 +170,7 @@ namespace Fibertest.WpfClient
 
         private async void MeasurementExecutor_MeasurementCompleted(object sender, MeasurementEventArgs result)
         {
-            _logger.LogInfo(Logs.Client,$@"Measurement on trace {result.Trace!.Title}: {result.Code}");
+            _logger.Info(Logs.Client,$@"Measurement on trace {result.Trace!.Title}: {result.Code}");
             var progressItem = _progress.First(i => i.Trace.TraceId == result.Trace.TraceId);
             if (result.Code == ReturnCode.RtuToggleToBopPortError)
             {
@@ -202,7 +202,7 @@ namespace Fibertest.WpfClient
                 }
                 else
                 {
-                    _logger.LogInfo(Logs.Client,$@"Assign base refs for {result.Trace.Title}");
+                    _logger.Info(Logs.Client,$@"Assign base refs for {result.Trace.Title}");
                     await Task.Factory.StartNew(
                         () => WholeRtuMeasurementsExecutor.SetAsBaseRef(result.SorBytes!, result.Trace));
                 }
@@ -242,7 +242,7 @@ namespace Fibertest.WpfClient
         {
             var progressItem = _progress.First(i => i.Trace.TraceId == result.Trace!.TraceId);
             progressItem.BaseRefAssigned = true;
-            _logger.LogInfo(Logs.Client,$@"Assigned base ref for trace {result.Trace!.Title}: {result.Code}");
+            _logger.Info(Logs.Client,$@"Assigned base ref for trace {result.Trace!.Title}: {result.Code}");
 
             var line = $@"{progressItem.Ordinal}/{_progress.Count} {result.Trace.Title} : {result.Code.RtuAutoBaseStyle()}";
             _dispatcherProvider.GetDispatcher().Invoke(() =>
@@ -266,14 +266,14 @@ namespace Fibertest.WpfClient
         {
             if (_finishInProgress) return;
             _finishInProgress = true;
-            _logger.LogInfo(Logs.Client,@"Terminating process...");
+            _logger.Info(Logs.Client,@"Terminating process...");
 
             _waitCursor.Dispose();
             if (_rtu.RtuMaker == RtuMaker.IIT)
             {
                 var r = await _commonC2DWcfManager.FreeOtdrAsync(
                     new FreeOtdrDto(_rtu.Id, _rtu.RtuMaker));
-                _logger.LogInfo(Logs.Client,$@"Free OTDR result is {r.ReturnCode}");
+                _logger.Info(Logs.Client,$@"Free OTDR result is {r.ReturnCode}");
             }
 
             if (_interruptPressed)
@@ -364,7 +364,7 @@ namespace Fibertest.WpfClient
                 IsInterruptEnabled = false;
                 ButtonName = Resources.SID_Wait___;
                 WholeRtuMeasurementsExecutor.Model.MeasurementProgressViewModel.DisplayFinishInProgress();
-                _logger.LogInfo(Logs.Client,@"Interrupt process pressed...");
+                _logger.Info(Logs.Client,@"Interrupt process pressed...");
             }
         }
 

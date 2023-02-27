@@ -136,7 +136,7 @@ namespace Fibertest.WpfClient
         public void ShowResult(ClientMeasurementResultDto dto)
         {
             if (dto.ReturnCode == ReturnCode.MeasurementInterrupted)
-                _logger.LogInfo(Logs.Client, @"Measurement interrupted");
+                _logger.Info(Logs.Client, @"Measurement interrupted");
             else
                 ShowReflectogram(dto.SorBytes!);
         }

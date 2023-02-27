@@ -47,7 +47,7 @@ public partial class RtuManager
             : await InitializeOtau(result); // on service or module restart
         if (!result2.IsInitialized)
         {
-            _logger.LogError(Logs.RtuManager, "Failed initialize RTU!");
+            _logger.Error(Logs.RtuManager, "Failed initialize RTU!");
             return result2;
         }
 
@@ -57,7 +57,7 @@ public partial class RtuManager
         result2.AcceptableMeasParams = _treeOfAcceptableMeasParams;
 
         IsRtuInitialized = true;
-        _logger.LogInfo(Logs.RtuManager, "RTU initialized successfully!");
+        _logger.Info(Logs.RtuManager, "RTU initialized successfully!");
 
         _monitoringQueue.Load();
         EvaluateFrequencies();
@@ -66,7 +66,7 @@ public partial class RtuManager
 
         if (!_config.Value.Monitoring.IsMonitoringOn)
         {
-            _logger.LogInfo(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
+            _logger.Info(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
             var unused = _otdrManager.DisconnectOtdr();
         }
 
@@ -84,14 +84,14 @@ public partial class RtuManager
         var version = $"{info.FileVersion}";
 
         var versionRtuManager = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
-        _logger.LogInfo(Logs.RtuManager, $"RtuManager {versionRtuManager}");
+        _logger.Info(Logs.RtuManager, $"RtuManager {versionRtuManager}");
 
         return version;
     }
 
     public RequestAnswer FreeOtdr()
     {
-        _logger.LogInfo(Logs.RtuManager, "RtuManager: FreeOtdr");
+        _logger.Info(Logs.RtuManager, "RtuManager: FreeOtdr");
         var res = _otdrManager.DisconnectOtdr();
         return new RequestAnswer(res ? ReturnCode.Ok : ReturnCode.Error);
     }

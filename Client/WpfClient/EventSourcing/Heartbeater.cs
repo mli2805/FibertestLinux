@@ -27,7 +27,7 @@ namespace Fibertest.WpfClient
         public void Start(CancellationToken token)
         {
             _token = token;
-            _logger.LogInfo(Logs.Client, @"Heartbeats started");
+            _logger.Info(Logs.Client, @"Heartbeats started");
             var heartbeaterThread = new Thread(SendHeartbeats) { IsBackground = true };
             heartbeaterThread.Start();
         }
@@ -40,10 +40,10 @@ namespace Fibertest.WpfClient
 
                 var ra = await _grpcC2DService.SendAnyC2DRequest<ClientHeartbeatDto, RequestAnswer>(dto);
                 if (ra.ReturnCode != ReturnCode.Ok)
-                    _logger.LogError(Logs.Client, $"Failed to send heartbeat! {ra.ErrorMessage}");
+                    _logger.Error(Logs.Client, $"Failed to send heartbeat! {ra.ErrorMessage}");
                 Thread.Sleep(TimeSpan.FromMilliseconds(_heartbeatRate));
             }
-            _logger.LogInfo(Logs.Client, @"Leaving Heartbeats...");
+            _logger.Info(Logs.Client, @"Leaving Heartbeats...");
         }
     }
 }

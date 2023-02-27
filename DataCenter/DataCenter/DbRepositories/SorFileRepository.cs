@@ -27,7 +27,7 @@ namespace Fibertest.DataCenter
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.DataCenter, "AddSorBytesAsync: " + e.Message);
+                _logger.Error(Logs.DataCenter, "AddSorBytesAsync: " + e.Message);
                 return -1;
             }
         }
@@ -45,7 +45,7 @@ namespace Fibertest.DataCenter
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.DataCenter, "AddMultipleSorBytesAsync: " + e.Message);
+                _logger.Error(Logs.DataCenter, "AddMultipleSorBytesAsync: " + e.Message);
                 return null;
             }
         }
@@ -62,7 +62,7 @@ namespace Fibertest.DataCenter
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.DataCenter, "UpdateSorBytesAsync: " + e.Message);
+                _logger.Error(Logs.DataCenter, "UpdateSorBytesAsync: " + e.Message);
                 return -1;
             }
         }
@@ -77,7 +77,7 @@ namespace Fibertest.DataCenter
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.DataCenter, "GetSorBytesAsync: " + e.Message);
+                _logger.Error(Logs.DataCenter, "GetSorBytesAsync: " + e.Message);
                 return null;
             }
         }
@@ -94,7 +94,7 @@ namespace Fibertest.DataCenter
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.DataCenter, "RemoveSorBytesAsync: " + e.Message);
+                _logger.Error(Logs.DataCenter, "RemoveSorBytesAsync: " + e.Message);
                 return -1;
             }
         }
@@ -111,7 +111,7 @@ namespace Fibertest.DataCenter
             }
             catch (Exception e)
             {
-                _logger.LogError(Logs.DataCenter, "RemoveManySorAsync: " + e.Message);
+                _logger.Error(Logs.DataCenter, "RemoveManySorAsync: " + e.Message);
                 return -1;
             }
         }

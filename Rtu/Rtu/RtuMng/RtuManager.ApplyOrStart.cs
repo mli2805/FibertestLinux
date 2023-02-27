@@ -14,7 +14,7 @@ public partial class RtuManager
 
         SaveNewFrequenciesInConfig(dto.Timespans);
         _monitoringQueue.ComposeNewQueue(dto.Ports);
-        _logger.LogInfo(Logs.RtuManager, $"Queue merged. {_monitoringQueue.Count()} port(s) in queue");
+        _logger.Info(Logs.RtuManager, $"Queue merged. {_monitoringQueue.Count()} port(s) in queue");
         _monitoringQueue.Save();
         _monitoringQueue.SaveBackup();
 
@@ -44,7 +44,7 @@ public partial class RtuManager
         if (!wasMonitoringOn)
             _monitoringQueue.RaiseMonitoringModeChangedFlag();
 
-        _logger.LogInfo(Logs.RtuManager, Environment.NewLine + "RTU is turned into AUTOMATIC mode.");
+        _logger.Info(Logs.RtuManager, Environment.NewLine + "RTU is turned into AUTOMATIC mode.");
 
         // с этого начинается цикл мониторинга
         // _monitoringConfig.Update(c=>c.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
