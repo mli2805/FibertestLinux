@@ -26,12 +26,12 @@ public static class LoggerExt
         logger.Log(LogLevel.Information, log.ToInt(), message);
     }
 
-    public static void LogInfo(this ILogger logger, Logs log, string message = "")
+    public static void Info(this ILogger logger, Logs log, string message = "")
     {
         logger.Log(LogLevel.Information, log.ToInt(), message);
     }
 
-    public static void LogError(this ILogger logger, Logs log, string message = "")
+    public static void Error(this ILogger logger, Logs log, string message = "")
     {
         logger.Log(LogLevel.Error, log.ToInt(), message);
     }

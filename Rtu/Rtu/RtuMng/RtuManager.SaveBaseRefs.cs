@@ -17,14 +17,14 @@ public partial class RtuManager
             if (!Directory.Exists(portDataFolder))
             {
                 Directory.CreateDirectory(portDataFolder);
-                _logger.LogInfo(Logs.RtuService, $"Created: {portDataFolder}");
+                _logger.Info(Logs.RtuService, $"Created: {portDataFolder}");
             }
 
             var portFolder = portDataFolder + $"/{dto.OtauPortDto!.Serial}p{dto.OtauPortDto!.OpticalPort:000}";
             if (!Directory.Exists(portFolder))
             {
                 Directory.CreateDirectory(portFolder);
-                _logger.LogInfo(Logs.RtuService, $"Created: {portFolder}");
+                _logger.Info(Logs.RtuService, $"Created: {portFolder}");
             }
 
             _logger.Debug(Logs.RtuService, $"SaveBaseRefs: {dto.BaseRefs.Count} refs");
@@ -34,7 +34,7 @@ public partial class RtuManager
         }
         catch (Exception e)
         {
-            _logger.LogError(Logs.RtuService, $"SaveBaseRefs: {e.Message}");
+            _logger.Error(Logs.RtuService, $"SaveBaseRefs: {e.Message}");
             return new BaseRefAssignedDto(ReturnCode.BaseRefAssignmentFailed);
         }
     }
@@ -52,7 +52,7 @@ public partial class RtuManager
     {
         var filename = baseRefType.ToBaseFileName();
         var fullPath = Path.Combine(fullFolderName, filename);
-        _logger.LogInfo(Logs.RtuService, $"{fullPath}");
+        _logger.Info(Logs.RtuService, $"{fullPath}");
         return fullPath;
     }
 }
