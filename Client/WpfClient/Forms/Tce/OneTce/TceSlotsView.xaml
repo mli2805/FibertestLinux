@@ -14,7 +14,7 @@
             <TabControl.ItemTemplate>
                 <DataTemplate DataType="wpfClient:SlotViewModel">
                     <DockPanel>
-                        <TextBlock Text="{Binding Title}"  Width="50" TextAlignment="Center"/>
+                        <TextBlock Text="{Binding Title}"  Width="68" TextAlignment="Center"/>
                     </DockPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
