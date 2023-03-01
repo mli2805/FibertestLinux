@@ -61,8 +61,10 @@ namespace Fibertest.WpfClient
 
                     else
                     {
-                        if (_isTraceLinked(trace))
-                            GponInWork.TraceAlreadyLinked = string.Format(Resources.SID_Trace___0___has_already_linked_to_another_interface, trace.Title);
+                        GponInWork.TraceAlreadyLinked = _isTraceLinked(trace)
+                            ? string.Format(
+                                Resources.SID_Trace___0___has_already_linked_to_another_interface, trace.Title)
+                            : "";
                         GponInWork.Trace = trace;
                     }
                 }

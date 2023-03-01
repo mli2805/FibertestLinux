@@ -104,7 +104,8 @@ namespace Fibertest.WpfClient
                 var errorMessage = string.Empty;
                 switch (columnName)
                 {
-                    case "OtauPortDto":
+                    case "OtauPortDto":  // ??
+                    case "OtauPortNumberStr":
                         if (string.IsNullOrEmpty(OtauPortNumberStr))
                             break;
                         if (!int.TryParse(OtauPortNumberStr, out int port))
