@@ -14,20 +14,29 @@ namespace Fibertest.Graph
         public List<Landmark> GetLandmarks(Trace trace)
         {
             var previousNode = _readModel.Nodes.First(n => n.NodeId == trace.NodeIds[0]);
-            var result = new List<Landmark> { CreateRtuLandmark(previousNode) };
+            var rtuLandmark = CreateRtuLandmark(previousNode);
+            rtuLandmark.FiberId = Guid.Empty;
+            var result = new List<Landmark> { rtuLandmark };
 
             var distance = 0.0;
             var j = 1;
             for (var i = 1; i < trace.NodeIds.Count; i++)
             {
-                var nodeId = trace.NodeIds[i];
-                var node = _readModel.Nodes.First(n => n.NodeId == nodeId);
-                distance = distance + GisLabCalculator.GetDistanceBetweenPointLatLng(previousNode.Position, node.Position) / 1000;
+                var node = _readModel.Nodes.First(n => n.NodeId == trace.NodeIds[i]);
+                var fiber = _readModel.Fibers.First(f => f.FiberId == trace.FiberIds[i-1]);
+                var section = fiber.UserInputedLength > 0
+                    ? fiber.UserInputedLength
+                    : GisLabCalculator.GetDistanceBetweenPointLatLng(previousNode.Position, node.Position) / 1000;
+                distance += section;
                 previousNode = node;
                 if (node.TypeOfLastAddedEquipment == EquipmentType.AdjustmentPoint) continue;
 
                 var lm = CreateLandmark(node, trace.EquipmentIds[i], j++, i);
-                lm.Distance = distance;
+                lm.FiberId = fiber.FiberId;
+                lm.GpsDistance = distance;
+                lm.GpsSection = section;
+                lm.OpticalDistance = 0.0;
+                lm.OpticalSection = 0.0;
                 result.Add(lm);
             }
 
@@ -42,6 +51,7 @@ namespace Fibertest.Graph
                 : node.Comment;
             return new Landmark()
             {
+                IsFromBase = false,
                 Number = number,
                 NumberIncludingAdjustmentPoints = numberIncludingAdjustmentPoints,
                 NodeId = node.NodeId,
@@ -51,6 +61,8 @@ namespace Fibertest.Graph
                 EquipmentTitle = equipment.Title,
                 EquipmentType = equipment.Type,
                 EventNumber = -1,
+                LeftCableReserve = equipment.CableReserveLeft,
+                RightCableReserve = equipment.CableReserveRight,
                 GpsCoors = node.Position,
             };
         }
@@ -65,7 +77,7 @@ namespace Fibertest.Graph
                 NodeTitle = rtu.Title,
                 NodeComment = rtu.Comment,
                 EquipmentType = EquipmentType.Rtu,
-                Distance = 0,
+                OpticalDistance = 0,
                 EventNumber = -1,
                 GpsCoors = node.Position,
             };

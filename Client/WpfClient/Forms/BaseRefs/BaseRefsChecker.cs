@@ -127,7 +127,7 @@ namespace Fibertest.WpfClient
 
         private async Task<bool> IsDistanceLengthAcceptable(OtdrDataKnownBlocks otdrKnownBlocks, Trace trace)
         {
-            var gpsDistance = $@"{_graphGpsCalculator.CalculateTraceGpsLengthKm(trace):#,0.##}";
+            var gpsDistance = $@"{_graphGpsCalculator.CalculateTraceGpsLengthKm2(trace):#,0.##}";
             var opticalLength = $@"{otdrKnownBlocks.GetTraceLengthKm():#,0.##}";
             var message = string.Format(Resources.SID_Trace_length_on_map_is__0__km, gpsDistance) +
                    Environment.NewLine + string.Format(Resources.SID_Optical_length_is__0__km, opticalLength);

@@ -57,7 +57,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string MouseCurrentCoorsString => 
+        public string MouseCurrentCoorsString =>
             CurrentGis.IsGisOn
                 ? CurrentGis.ThresholdZoom + " / " + Zoom + " ; " + CurrentGis.ScreenPartAsMargin + " ; " + _mouseCurrentCoors.ToDetailedString(CurrentGis.GpsInputMode)
                 : "";
@@ -113,7 +113,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string MeasuredDistance => 
+        public string MeasuredDistance =>
             IsInDistanceMeasurementMode ? $"{_lastDistance} m  / {Distances!.Sum() + _lastDistance} m" : "";
         #endregion
 
@@ -132,10 +132,11 @@ namespace Fibertest.WpfClient
             IsInDistanceMeasurementMode = false;
             if (DistanceFiberUnderCreation != Guid.Empty)
                 Markers.Remove(Markers.Single(m => m.Id == DistanceFiberUnderCreation));
-            foreach (var marker in DistanceMarkers!)
-            {
-                Markers.Remove(marker);
-            }
+            if (DistanceMarkers != null)
+                foreach (var marker in DistanceMarkers!)
+                {
+                    Markers.Remove(marker);
+                }
 
             DistanceFiberUnderCreation = Guid.Empty;
             Distances = new List<int>();

@@ -276,7 +276,7 @@ namespace Fibertest.WpfClient
             var message = SorData.TryGetFromBytes(precise.SorBytes, out var otdrKnownBlocks);
             if (message != "") return true;
 
-            var gpsDistance = $@"{_graphGpsCalculator.CalculateTraceGpsLengthKm(trace):#,0.##}";
+            var gpsDistance = $@"{_graphGpsCalculator.CalculateTraceGpsLengthKm2(trace):#,0.##}";
             var opticalLength = $@"{otdrKnownBlocks!.GetTraceLengthKm():#,0.##}";
             return await _baseRefMessages.IsLengthDifferenceAcceptable(gpsDistance, opticalLength);
         }

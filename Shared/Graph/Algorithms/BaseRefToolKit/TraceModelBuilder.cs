@@ -4,19 +4,11 @@ namespace Fibertest.Graph
 {
     public class TraceModelBuilder
     {
-        private readonly GraphGpsCalculator _graphGpsCalculator;
-
-        public TraceModelBuilder(GraphGpsCalculator graphGpsCalculator)
-        {
-            _graphGpsCalculator = graphGpsCalculator;
-        }
-
         public TraceModelForBaseRef GetTraceModelWithoutAdjustmentPoints(TraceModelForBaseRef traceModel)
         {
             var fullModel = GetTraceModel(traceModel);
             return ExcludeAdjustmentPoints(fullModel);
         }
-
         
         private TraceModelForBaseRef GetTraceModel(TraceModelForBaseRef model)
         {
@@ -25,10 +17,11 @@ namespace Fibertest.Graph
             {
                 var fiber = model.FiberArray[i];
                 if (!fiber.UserInputedLength.Equals(0))
-                    model.DistancesMm[i] = (int)fiber.UserInputedLength * 100;
+                    model.DistancesMm[i] = (int)fiber.UserInputedLength * 1000;
                 else
-                    model.DistancesMm[i] = _graphGpsCalculator.CalculateDistanceBetweenNodesMm(
-                        model.NodeArray[i], model.EquipArray[i], model.NodeArray[i + 1], model.EquipArray[i + 1]);
+                    model.DistancesMm[i] = (int)Math.Round(
+                        GisLabCalculator.GetDistanceBetweenPointLatLng(
+                            model.NodeArray[i].Position, model.NodeArray[i + 1].Position) * 1000, 0);
             }
 
             return model;
@@ -43,7 +36,7 @@ namespace Fibertest.Graph
             var distance = 0;
             for (int i = 1; i < originalModel.EquipArray.Length; i++)
             {
-                distance += originalModel.DistancesMm![i - 1];
+                distance = distance + originalModel.DistancesMm![i - 1];
 
                 if (originalModel.EquipArray[i].Type != EquipmentType.AdjustmentPoint)
                 {
@@ -54,7 +47,10 @@ namespace Fibertest.Graph
                 }
             }
 
-            return new TraceModelForBaseRef(nodes.ToArray(),equipments.ToArray(), distances.ToArray());
+            return new TraceModelForBaseRef(nodes.ToArray(), equipments.ToArray(), originalModel.FiberArray!)
+            {
+                DistancesMm = distances.ToArray(),
+            };
         }
 
     }

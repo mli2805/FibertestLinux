@@ -154,7 +154,7 @@ namespace Fibertest.WpfClient
 
             Model.PhysicalLength = _currentGis.IsWithoutMapMode
                 ? Resources.SID_Without_map_mode
-                : $@"{_graphGpsCalculator.CalculateTraceGpsLengthKm(trace):#,0.##} {km}";
+                : $@"{_graphGpsCalculator.CalculateTraceGpsLengthKm2(trace):#,0.##} {km}";
 
 
             return true;

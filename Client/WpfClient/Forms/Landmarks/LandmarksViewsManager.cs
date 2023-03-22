@@ -87,7 +87,7 @@ namespace Fibertest.WpfClient
 //            return res;
         }
 
-        public void Apply(object e)
+        public async Task Apply(object e)
         {
             switch (e)
             {
@@ -97,8 +97,10 @@ namespace Fibertest.WpfClient
                 case EquipmentFromTraceExcluded _:
                 case NodeUpdatedAndMoved _:
                 case NodeUpdated _: 
-                case NodeMoved _: LaunchedViews.ForEach(v=>v.RefreshAsChangesReaction()); return;
-            }
+                case NodeMoved _: 
+                    foreach (var v in LaunchedViews) 
+                        await v.RefreshAsChangesReaction(); 
+                    return; }
         }
 
     }

@@ -13,23 +13,27 @@
         <FrameworkElement x:Key="ProxyElement" DataContext="{Binding GisVisibility}"/>
     </Window.Resources>
 
-    <DockPanel>
+   <DockPanel>
         <DockPanel DockPanel.Dock="Top" Margin="5" >
             <GroupBox Width="345" Header="{x:Static stringResources:Resources.SID_Traces}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox ItemsSource="{Binding Traces}" SelectedItem="{Binding SelectedTrace}" Width="235" Height="25" Margin="5"/>
-                        <Button Margin="5" Content="{x:Static stringResources:Resources.SID_Refresh}" Width="80" Name="RefreshOrChangeTrace"/>
+                        <ComboBox ItemsSource="{Binding Traces}" 
+                                  SelectedItem="{Binding SelectedTrace}" Width="235" Height="25" Margin="5"/>
+                        <Button Margin="5" Content="{x:Static stringResources:Resources.SID_Refresh}"
+                                Width="80" Name="RefreshOrChangeTrace"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Width="150" Header="{x:Static stringResources:Resources.SID_GPS_coordinates_format}" Visibility="{Binding GisVisibility}">
-                <ComboBox ItemsSource="{Binding GpsInputModes}" SelectedItem="{Binding SelectedGpsInputMode}" 
-                               Height="25" Margin="5,5,5,5"/>
+            <GroupBox Width="150" Header="{x:Static stringResources:Resources.SID_GPS_coordinates_format}" 
+                      Visibility="{Binding GisVisibility}">
+                <ComboBox ItemsSource="{Binding GpsInputModes}" Height="25" Margin="5"
+                          SelectedItem="{Binding SelectedGpsInputMode}" />
             </GroupBox>
             <GroupBox Header="{x:Static stringResources:Resources.SID_Filter}" Width="170">
                 <StackPanel >
-                    <CheckBox Margin="5,3,5,0" IsChecked="{Binding IsFilterOn, Mode=TwoWay}" HorizontalAlignment="Center">
+                    <CheckBox Margin="5,3,5,0" IsChecked="{Binding IsFilterOn, Mode=TwoWay}" 
+                              HorizontalAlignment="Center">
                         <TextBlock Text="{x:Static stringResources:Resources.SID_Nodes_with_equipment_only}" TextWrapping="Wrap"/>
                     </CheckBox>
                 </StackPanel>
@@ -38,20 +42,64 @@
                 <Button Margin="5" Content="PDF" Name="ExportToPdf"/>
             </GroupBox>
         </DockPanel>
-        <wpfClient:OneLandmarkView DockPanel.Dock="Bottom" DataContext="{Binding OneLandmarkViewModel}" Width="790" HorizontalAlignment="Left" />
+        <wpfClient:OneLandmarkView DockPanel.Dock="Bottom" DataContext="{Binding OneLandmarkViewModel}" 
+                                 HorizontalAlignment="Stretch" />
 
         <GroupBox Header="{x:Static stringResources:Resources.SID_Landmarks}" Margin="5">
-            <DataGrid Margin="5" ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRow, Mode=TwoWay}" CanUserSortColumns="False" 
+            <DataGrid Margin="5" ItemsSource="{Binding Rows}" 
+                      SelectedItem="{Binding SelectedRow, Mode=TwoWay}" CanUserSortColumns="False" 
                       AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" 
                       HorizontalAlignment="Left" Width="{Binding DataGridWidth}" HorizontalScrollBarVisibility="Disabled">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="No" Binding="{Binding Number}" Width="30"/>
-                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Node}" Binding="{Binding NodeTitle}" Width="120"/>
-                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Type}" Binding="{Binding EquipmentType}" Width="120"/>
-                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Equipm__title}" Binding="{Binding EquipmentTitle}" Width="120"/>
-                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Distance__km}" Binding="{Binding Distance}" Width="100"/>
-                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Event}" Binding="{Binding EventNumber}" Width="80"/>
-                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_GPS_coordinates}" Binding="{Binding GpsCoors}" Width="174" 
+                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Node}" 
+                                        Binding="{Binding NodeTitle}" Width="120"/>
+                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Type}" 
+                                        Binding="{Binding EquipmentType}" Width="120"/>
+                    <DataGridTextColumn Binding="{Binding EquipmentTitle}" Width="120">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Equipm__title}" TextWrapping="Wrap"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding CableReserves}" Width="65">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Cable_reserve_m}" TextWrapping="Wrap"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Gps_km}" 
+                                        Binding="{Binding GpsDistance}" Width="65"/>
+
+
+                    <DataGridTemplateColumn Width="70">
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Gps_section_km}" TextWrapping="Wrap"/>
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate DataType="{x:Type wpfClient:LandmarkRow}">
+                                <TextBlock Text="{Binding GpsSection}" 
+                                           Background="{Binding GpsSectionBrush}" 
+                                            />
+                            
+                                <!-- FontStyle="{Binding GpsSectionFontStyle}" -->
+
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Optical_km}" 
+                                        Binding="{Binding OpticalDistance}" Width="65"/>
+                    <DataGridTextColumn Binding="{Binding OpticalSection}" Width="85">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{x:Static stringResources:Resources.SID_Optical_section_km}" TextWrapping="Wrap"/>
+                        </DataGridTextColumn.Header>
+
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_Event}" 
+                                        Binding="{Binding EventNumber}" Width="50"/>
+                    <DataGridTextColumn Header="{x:Static stringResources:Resources.SID_GPS_coordinates}" 
+                                        Binding="{Binding GpsCoors}" Width="174" 
                                         Visibility="{Binding DataContext, Source={StaticResource ProxyElement}}"/>
                 </DataGrid.Columns>
                 <DataGrid.Resources>
@@ -72,9 +120,13 @@
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="{x:Static stringResources:Resources.SID_Include_equipment_into_trace}"
-                                  cal:Message.Attach="IncludeEquipment" IsEnabled="{Binding OneLandmarkViewModel.IsIncludeEquipmentEnabled}"/>
+                                  cal:Message.Attach="IncludeEquipment" 
+                                  IsEnabled="{Binding OneLandmarkViewModel.IsIncludeEquipmentEnabled}"/>
                         <MenuItem Header="{x:Static stringResources:Resources.SID_Exclude_equipment_from_trace}" 
-                                  cal:Message.Attach="ExcludeEquipment" IsEnabled="{Binding OneLandmarkViewModel.IsExcludeEquipmentEnabled}"/>
+                                  cal:Message.Attach="ExcludeEquipment" 
+                                  IsEnabled="{Binding OneLandmarkViewModel.IsExcludeEquipmentEnabled}"/>
+                        <MenuItem Header="{x:Static stringResources:Resources.SID_Edit_node}" cal:Message.Attach="EditNode" />
+                        <MenuItem Header="{x:Static stringResources:Resources.SID_Edit_fiber}" cal:Message.Attach="EditFiber" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>

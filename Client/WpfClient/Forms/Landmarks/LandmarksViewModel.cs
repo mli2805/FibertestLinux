@@ -230,7 +230,7 @@ namespace Fibertest.WpfClient
             OneLandmarkViewModel.SorFileId = baseRef.SorFileId;
             OneLandmarkViewModel.PreciseTimestamp = baseRef.SaveTimestamp;
             var sorBytes = await _c2DWcfCommonManager.GetSorBytes(baseRef.SorFileId);
-            return SorData.FromBytes(sorBytes);
+            return sorBytes != null ? SorData.FromBytes(sorBytes) : null;
         }
 
         public async Task<int> RefreshOrChangeTrace() // button
@@ -242,7 +242,7 @@ namespace Fibertest.WpfClient
             return 0;
         }
 
-        public async void RefreshAsChangesReaction()
+        public async Task RefreshAsChangesReaction()
         {
             var index = Rows.IndexOf(SelectedRow);
 
@@ -256,6 +256,32 @@ namespace Fibertest.WpfClient
         {
             await OneLandmarkViewModel.Cancel(OneLandmarkViewModel.CanClose);
             return true;
+        }
+
+        public async void EditNode()
+        {
+            if (SelectedRow.NodeId == Rows.First().NodeId)
+                return;
+
+            var vm = _globalScope.Resolve<NodeUpdateViewModel>();
+            var node = _readModel.Nodes.First(n => n.NodeId == SelectedRow.NodeId);
+            vm.Initialize(node.NodeId);
+           await _windowManager.ShowDialogWithAssignedOwner(vm);
+        }
+
+        public async void EditFiber()
+        {
+            if (SelectedRow.FiberId == Guid.Empty) return;
+            var vm = _globalScope.Resolve<FiberUpdateViewModel>();
+            var fiber = _readModel.Fibers.First(f => f.FiberId == SelectedRow.FiberId);
+            await vm.Initialize(fiber.FiberId);
+            await _windowManager.ShowDialogWithAssignedOwner(vm);
+            if (vm.Command != null)
+            {
+                var result = await _grpcC2DService.SendEventSourcingCommand(vm.Command);
+                if (result.ReturnCode == ReturnCode.Ok)
+                    await RefreshAsChangesReaction();
+            }
         }
 
         public async void IncludeEquipment()

@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 
-namespace Fibertest.Graph;
-
-public class MappingModelToCmdProfile : Profile
+namespace Fibertest.Graph
 {
-    public MappingModelToCmdProfile()
+    public class MappingModelToCmdProfile : Profile
     {
-        CreateMap<User, UpdateUser>();
-        CreateMap<User, AssignUsersMachineKey>();
+        public MappingModelToCmdProfile()
+        {
+            CreateMap<User, UpdateUser>();
+            CreateMap<User, AssignUsersMachineKey>();
+            CreateMap<Equipment, UpdateEquipment>();
+        }
     }
 }

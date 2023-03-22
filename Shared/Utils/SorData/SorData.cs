@@ -92,12 +92,12 @@ public static class SorData
     }
 
 
-    public static int GetDistanceBetweenLandmarksInMm(
+    public static double GetDistanceBetweenLandmarksInMm(
         this OtdrDataKnownBlocks sorData, int leftIndex, int rightIndex)
     {
         var owt1 = sorData.LinkParameters.LandmarkBlocks[leftIndex].Location;
         var owt2 = sorData.LinkParameters.LandmarkBlocks[rightIndex].Location;
-        return (int)((owt2 - owt1) * GetOwtToMmCoeff(sorData));
+        return (owt2 - owt1) * GetOwtToMmCoeff(sorData);
     }
 
     public static int GetOwtFromMm(this OtdrDataKnownBlocks sorData, int distance)
@@ -120,7 +120,7 @@ public static class SorData
             var embData = sorData.EmbeddedData.EmbeddedDataBlocks[i];
             var stream = new MemoryStream(embData.Data, 0, embData.DataSize);
             var reader = new BinaryReader(stream);
-            var opxReader = new Fibertest.OtdrDataFormat.IO.BinaryReader(reader);
+            var opxReader = new OtdrDataFormat.IO.BinaryReader(reader);
             var revNumber = opxReader.ReadUInt16();
 
             var deserializer = new OpxDeserializer(opxReader, revNumber);

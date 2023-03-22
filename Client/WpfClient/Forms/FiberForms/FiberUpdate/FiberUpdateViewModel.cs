@@ -21,13 +21,13 @@ namespace Fibertest.WpfClient
         private readonly GraphGpsCalculator _graphGpsCalculator;
         private readonly ReflectogramManager _reflectogramManager;
         private Fiber _fiber = null!;
+        private string _userInputedLength = null!;
 
         public string GpsLength { get; set; } = null!;
 
         public string? NodeAtitle { get; set; }
         public string? NodeBtitle { get; set; }
 
-        private string _userInputedLength = null!;
         public string UserInputedLength
         {
             get => _userInputedLength;
@@ -86,8 +86,7 @@ namespace Fibertest.WpfClient
             }
             SelectedTrace = TracesThrough.FirstOrDefault();
 
-            UserInputedLength = _fiber.UserInputedLength.Equals(0) 
-                ? "" : _fiber.UserInputedLength.ToString(CultureInfo.InvariantCulture);
+            UserInputedLength = _fiber.UserInputedLength.Equals(0) ? "" : _fiber.UserInputedLength.ToString(CultureInfo.InvariantCulture);
         }
 
         private int GetRealFiberIndex(Trace trace, int fiberIndexWithAdjustmentPoints)
@@ -111,8 +110,10 @@ namespace Fibertest.WpfClient
             var sorFileId = _readModel.BaseRefs.First(b => b.Id == trace.PreciseId).SorFileId;
             var sorBytes = await _reflectogramManager.GetSorBytes(sorFileId);
             var otdrKnownBlocks = SorData.FromBytes(sorBytes);
-            var result = otdrKnownBlocks.GetDistanceBetweenLandmarksInMm(index, index + 1) / 1000;
-            return result.ToString();
+            var distanceM = otdrKnownBlocks.GetDistanceBetweenLandmarksInMm(index, index + 1);
+            var distanceMm = Math.Round(distanceM / 1000.0, 3);
+            var str = $@"{distanceMm:F0}";
+            return str;
         }
 
         protected override void OnViewLoaded(object view)
@@ -143,6 +144,7 @@ namespace Fibertest.WpfClient
         {
             Command = null;
             await TryCloseAsync();
+
         }
 
         public string this[string columnName]

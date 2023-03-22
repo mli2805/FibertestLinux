@@ -192,7 +192,7 @@ namespace Fibertest.WpfClient
                     _rtuStateViewsManager.Apply(evnt);
                     _traceStateViewsManager.Apply(evnt);
                     _traceStatisticsViewsManager.Apply(evnt);
-                    _landmarksViewsManager.Apply(evnt);
+                    await _landmarksViewsManager.Apply(evnt);
                     _rtuChannelViewsManager.Apply(evnt);
                     _bopStateViewsManager.Apply(evnt);
                     _bopNetworkEventsDoubleViewModel.Apply(evnt);

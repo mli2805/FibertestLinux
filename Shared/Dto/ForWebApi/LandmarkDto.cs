@@ -1,12 +1,20 @@
-﻿namespace Fibertest.Dto;
-
-public class LandmarkDto
+﻿namespace Fibertest.Dto
 {
-    public int Ordinal;
-    public string? NodeTitle;
-    public EquipmentType EqType;
-    public string? EquipmentTitle;
-    public double DistanceKm;
-    public int EventOrdinal;
-    public GeoPoint? Coors;
+    public class LandmarkDto
+    {
+        public int Ordinal;
+        public string? NodeTitle;
+        public EquipmentType EquipmentType;
+        public string? EquipmentTitle;
+
+        public string? CableReserves;
+        public string? GpsDistance;
+        public string? GpsSection;
+        public bool IsUserInput;
+        public string? OpticalDistance;
+        public string? OpticalSection;
+
+        public int EventOrdinal;
+        public GeoPoint? Coors;
+    }
 }

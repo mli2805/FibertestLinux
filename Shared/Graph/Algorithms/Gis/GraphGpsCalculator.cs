@@ -11,55 +11,42 @@ namespace Fibertest.Graph
             _model = model;
         }
 
-        public double CalculateTraceGpsLengthKm(Trace trace)
+        public double CalculateTraceGpsLengthKm2(Trace trace)
         {
             double result = 0;
-            for (int i = 0; i < trace.NodeIds.Count - 1; i++)
-            {
-                var node1 = _model.Nodes.FirstOrDefault(n => n.NodeId == trace.NodeIds[i]);
-                if (node1 == null) return 0;
-                var node2 = _model.Nodes.FirstOrDefault(n => n.NodeId == trace.NodeIds[i + 1]);
-                if (node2 == null) return 0;
 
-                var equipment1 = i == 0
+            for (int i = 0; i < trace.FiberIds.Count; i++)
+            {
+                var fiber = _model.Fibers.FirstOrDefault(f => f.FiberId == trace.FiberIds[i]);
+                if (fiber == null) return 0;
+
+                var nodeA = _model.Nodes.FirstOrDefault(n => n.NodeId == trace.NodeIds[i]);
+                if (nodeA == null) return 0;
+                var equipmentA = i == 0
                     ? new Equipment() { Type = EquipmentType.Rtu, CableReserveLeft = 0, CableReserveRight = 0 }
                     : _model.Equipments.FirstOrDefault(e => e.EquipmentId == trace.EquipmentIds[i]);
-                var equipment2 = _model.Equipments.FirstOrDefault(e => e.EquipmentId == trace.EquipmentIds[i + 1]);
+                if (equipmentA == null) return 0;
 
-                if (equipment1 == null || equipment2 == null)
-                    return 0;
-                result = result +
-                         GisLabCalculator.GetDistanceBetweenPointLatLng(node1.Position, node2.Position) +
-                         GetReserveFromTheLeft(equipment1) + GetReserveFromTheRight(equipment2);
+                var nodeB = _model.Nodes.FirstOrDefault(n => n.NodeId == trace.NodeIds[i + 1]);
+                if (nodeB == null) return 0;
+                var equipmentB = _model.Equipments.FirstOrDefault(e => e.EquipmentId == trace.EquipmentIds[i + 1]);
+                if (equipmentB == null) return 0;
+
+                var distance = GisLabCalculator.GetDistanceBetweenPointLatLng(nodeA.Position, nodeB.Position);
+                result += distance;
+
             }
+
             return result / 1000;
         }
 
         public int CalculateDistanceBetweenNodesMm(Node leftNode, Equipment leftEquipment, Node rightNode, Equipment rightEquipment)
         {
             var gpsDistance = (int)GisLabCalculator.GetDistanceBetweenPointLatLng(leftNode.Position, rightNode.Position);
-
-            return (int)((gpsDistance + GetReserveFromTheLeft(leftEquipment) + GetReserveFromTheRight(rightEquipment)) * 1000);
-        }
-
-        private double GetReserveFromTheLeft(Equipment leftEquipment)
-        {
-            var leftReserve = 0.0;
-            if (leftEquipment.Type == EquipmentType.CableReserve)
-                leftReserve = (double)leftEquipment.CableReserveLeft / 2;
-            else if (leftEquipment.Type > EquipmentType.CableReserve)
-                leftReserve = leftEquipment.CableReserveRight;
-            return leftReserve;
-        }
-
-        private double GetReserveFromTheRight(Equipment rightEquipment)
-        {
-            var rightReserve = 0.0;
-            if (rightEquipment.Type == EquipmentType.CableReserve)
-                rightReserve = (double)rightEquipment.CableReserveLeft / 2;
-            else if (rightEquipment.Type > EquipmentType.CableReserve)
-                rightReserve = rightEquipment.CableReserveLeft;
-            return rightReserve;
+            
+            // cable reserve is not a GPS 
+            // return (int)((gpsDistance + GetReserveFromTheLeft(leftEquipment) + GetReserveFromTheRight(rightEquipment)) * 1000);
+            return gpsDistance * 1000;
         }
 
         public double GetFiberFullGpsDistance(Guid fiberId, out Node node1, out Node node2)
@@ -85,7 +72,7 @@ namespace Fibertest.Graph
                 fiber = _model.GetAnotherFiberOfAdjustmentPoint(node2, fId);
                 var previousNode2 = node2;
                 node2 = _model.Nodes.First(n => n.NodeId == fiber.NodeId2);
-                result = result + GisLabCalculator.GetDistanceBetweenPointLatLng(node2.Position, previousNode2.Position);
+                result += GisLabCalculator.GetDistanceBetweenPointLatLng(node2.Position, previousNode2.Position);
                 fId = fiber.FiberId;
             }
 
