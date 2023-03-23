@@ -10,7 +10,7 @@ namespace Fibertest.WpfClient
     public class SlotViewModel : Screen
     {
         private readonly Model _readModel;
-        private TceS _tce;
+        private TceS _tce = null!;
         public int SlotPosition { get; set; }
 
         private int _interfaceCount;
@@ -41,12 +41,12 @@ namespace Fibertest.WpfClient
 
         public string Title => InterfaceCount == 0 ? $@"{SlotPosition} -  " : $@"{SlotPosition} - {InterfaceCount} / {RelationsOnSlot}";
 
-        public List<Rtu> Rtus { get; set; }
+        public List<Rtu> Rtus { get; set; } = null!;
 
         public ObservableCollection<GponViewModel> Gpons { get; set; } =
             new ObservableCollection<GponViewModel>();
 
-        private Func<Trace, bool> _isTraceLinked;
+        private Func<Trace, bool> _isTraceLinked = null!;
 
         private bool _isEnabled;
         public bool IsEnabled
@@ -102,11 +102,11 @@ namespace Fibertest.WpfClient
 
                     lineViewModel.CollectOtausOnRtuChanged(lineModel.Rtu);
 
-                    lineModel.Otau = lineViewModel.Otaus.FirstOrDefault(o => o.Id.ToString() == relation.OtauPortDto.OtauId) ??
+                    lineModel.Otau = lineViewModel.Otaus.FirstOrDefault(o => o.Id.ToString() == relation.OtauPortDto!.OtauId) ??
                                           // Veex RTU main otau has no Id (Veex id are the same for all main otaus)
                                           lineViewModel.Otaus.FirstOrDefault(o => o.RtuId == lineModel.Rtu.Id && o.IsMainOtau);
 
-                    lineModel.OtauPortNumberStr = relation.OtauPortDto.OpticalPort.ToString();
+                    lineModel.OtauPortNumberStr = relation.OtauPortDto!.OpticalPort.ToString();
                     lineModel.Trace = _readModel.Traces.FirstOrDefault(t => t.TraceId == relation.TraceId);
                 }
 
@@ -117,7 +117,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void GponInWork_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void GponInWork_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"Trace")
             {

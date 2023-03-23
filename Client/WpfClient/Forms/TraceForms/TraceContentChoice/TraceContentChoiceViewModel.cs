@@ -24,11 +24,11 @@ namespace Fibertest.WpfClient
         private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly EquipmentOfChoiceModelFactory _equipmentOfChoiceModelFactory;
-        private List<Equipment> _possibleEquipment;
-        private Node _node;
-        public string NodeTitle { get; set; }
-        public List<EquipmentOfChoiceModel> EquipmentChoices { get; set; }
-        public EquipmentOfChoiceModel NoEquipmentInNodeChoice { get; set; }
+        private List<Equipment> _possibleEquipment = null!;
+        private Node _node = null!;
+        public string NodeTitle { get; set; } = null!;
+        public List<EquipmentOfChoiceModel> EquipmentChoices { get; set; } = null!;
+        public EquipmentOfChoiceModel NoEquipmentInNodeChoice { get; set; } = null!;
 
         private Visibility _leftAndRightVisibility = Visibility.Collapsed;
         public Visibility LeftAndRightVisibility
@@ -61,7 +61,7 @@ namespace Fibertest.WpfClient
         public void Initialize(List<Equipment> possibleEquipment, Node node, bool isLastNode)
         {
             _node = node;
-            NodeTitle = node.Title;
+            NodeTitle = node.Title ?? "";
 
             _possibleEquipment = possibleEquipment;
             EquipmentChoices = new List<EquipmentOfChoiceModel>();

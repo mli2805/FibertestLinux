@@ -138,7 +138,7 @@ namespace Fibertest.WpfClient
 
         private async Task<NetAddress?> PrepareIitRtu(RtuLeaf rtuLeaf, Rtu rtu, Leaf parent, int portNumber)
         {
-            var isMak100 = rtuLeaf.OtauNetAddress.Ip4Address == @"192.168.88.101";
+            var isMak100 = rtuLeaf.OtauNetAddress!.Ip4Address == @"192.168.88.101";
             var isUcc = rtuLeaf.OtauNetAddress.Ip4Address == @"192.168.88.102"; // БУС
 
             var mainCharonAddress = isMak100 || isUcc
@@ -154,9 +154,9 @@ namespace Fibertest.WpfClient
             string serialOfCharonWithThisPort;
             if (parent is OtauLeaf otauLeaf)
             {
-                serialOfCharonWithThisPort = otauLeaf.Serial;
+                serialOfCharonWithThisPort = otauLeaf.Serial!;
 
-                var bopCharon = new Charon(otauLeaf.OtauNetAddress, false, _config.Value.CharonConfig,
+                var bopCharon = new Charon(otauLeaf.OtauNetAddress!, false, _config.Value.CharonConfig,
                      _logger);
                 bopCharon.Serial = otauLeaf.Serial;
                 bopCharon.OwnPortCount = otauLeaf.OwnPortCount;
@@ -164,7 +164,7 @@ namespace Fibertest.WpfClient
             }
             else
             {
-                serialOfCharonWithThisPort = mainCharon.Serial;
+                serialOfCharonWithThisPort = mainCharon.Serial!;
             }
 
             var toggleResult = await ToggleToPort(mainCharon, serialOfCharonWithThisPort, portNumber);

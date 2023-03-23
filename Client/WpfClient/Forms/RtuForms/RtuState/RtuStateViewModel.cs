@@ -16,10 +16,10 @@ namespace Fibertest.WpfClient
         private bool _isSoundForThisVmInstanceOn;
         private bool _isUserAskedToOpenView;
         private RtuPartStateChanges _changes;
-        private RtuStateModel _model;
 
         public bool IsOpen { get; private set; }
 
+        private RtuStateModel _model = null!;
         public RtuStateModel Model
         {
             get { return _model; }
@@ -65,7 +65,7 @@ namespace Fibertest.WpfClient
 
         public void RefreshModel(RtuLeaf rtuLeaf)
         {
-            Model = _rtuStateModelFactory.Create(rtuLeaf);
+            Model = _rtuStateModelFactory.Create(rtuLeaf)!;
         }
 
         public void MonitoringStarted()
@@ -105,7 +105,7 @@ namespace Fibertest.WpfClient
                 var portLineVm = Model.Ports.FirstOrDefault(p => p.TraceId == dto.PortWithTraceDto.TraceId);
                 if (portLineVm != null)
                 {
-                    traceTitle = portLineVm.TraceTitle;
+                    traceTitle = portLineVm.TraceTitle!;
                     portName = portLineVm.Number;
                 }
             }
@@ -150,6 +150,7 @@ namespace Fibertest.WpfClient
 
         public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+            await Task.Delay(0);
             if (_isSoundForThisVmInstanceOn)
                 _soundManager.StopAlert();
             IsOpen = false;

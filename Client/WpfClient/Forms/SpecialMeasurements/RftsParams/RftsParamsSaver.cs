@@ -21,17 +21,18 @@ namespace Fibertest.WpfClient
 
         private static List<string> ForFile(this RftsParamsLevel level)
         {
-            var result = new List<string>() { @"LevelName", level.LevelName, @"Enabled", level.Enabled ? 1.ToString() : 0.ToString() };
-            result.AddRange(level.LevelThresholdSet.ForFile());
-            result.AddRange(level.Eelt.ForFile().ToList());
+            var result = new List<string>() 
+                { @"LevelName", level.LevelName ?? "", @"Enabled", level.Enabled ? 1.ToString() : 0.ToString() };
+            result.AddRange(level.LevelThresholdSet!.ForFile());
+            result.AddRange(level.Eelt!.ForFile().ToList());
             return result;
         }
 
         private static List<string> ForFile(this RftsLevelThresholdSet thresholdSet)
         {
-            var result = thresholdSet.Lt.ForFile().ToList();
-            result.AddRange(thresholdSet.Rt.ForFile());
-            result.AddRange(thresholdSet.Ct.ForFile());
+            var result = thresholdSet.Lt!.ForFile().ToList();
+            result.AddRange(thresholdSet.Rt!.ForFile());
+            result.AddRange(thresholdSet.Ct!.ForFile());
             return result;
         }
 
@@ -48,7 +49,7 @@ namespace Fibertest.WpfClient
         private static IEnumerable<string> ForFile(this RftsUniParameter uniParameter)
         {
             yield return @"Name";
-            yield return uniParameter.Name + @" " + uniParameter.Name.GetUniParamLocalizedName();
+            yield return uniParameter.Name + @" " + uniParameter.Name!.GetUniParamLocalizedName();
             yield return @"Value";
             yield return uniParameter.Value.ToString();
             yield return @"Scale";

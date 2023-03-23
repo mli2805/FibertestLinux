@@ -6,11 +6,11 @@ namespace Fibertest.WpfClient
     public class CurrentUser
     {
         public Guid UserId { get; set; }
-        public string UserName { get; set; }
+        public string UserName { get; set; } = null!;
         public Role Role { get; set; }
         public Guid ZoneId { get; set; }
-        public string ZoneTitle { get; set; }
-        public string ConnectionId { get; set; }
+        public string ZoneTitle { get; set; } = null!;
+        public string ConnectionId { get; set; } = null!;
 
         public bool IsDefaultZoneUser => ZoneId == Guid.Empty;
 
@@ -19,8 +19,8 @@ namespace Fibertest.WpfClient
             UserId = dto.UserId;
             Role = dto.Role;
             ZoneId = dto.ZoneId;
-            ZoneTitle = dto.ZoneTitle;
-            ConnectionId = dto.ConnectionId;
+            ZoneTitle = dto.ZoneTitle ?? "";
+            ConnectionId = dto.ConnectionId ?? "";
         }
     }
 }

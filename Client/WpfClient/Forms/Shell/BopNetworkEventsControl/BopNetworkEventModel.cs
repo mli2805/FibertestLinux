@@ -10,12 +10,12 @@ namespace Fibertest.WpfClient
         public int Nomer { get; set; }
         public DateTime EventTimestamp { get; set; }
 
-        public string Serial { get; set; }
-        public string? OtauIp { get; set; }
-        public string BopName { get; set; }
+        public string Serial { get; set; } = "";
+        public string OtauIp { get; set; } = null!;
+        public string BopName { get; set; } = null!;
         public int TcpPort { get; set; }
 
-        public string RtuTitle { get; set; }
+        public string RtuTitle { get; set; } = null!;
         public Guid RtuId { get; set; }
 
         public bool IsOk { get; set; }

@@ -19,7 +19,7 @@ public class Rtu
 
     public Guid NodeId;
     public string Title { get; set; } = "";
-    public string? Comment;
+    public string Comment = "";
 
     public NetAddress MainChannel = new(@"", -1);
     public RtuPartState MainChannelState;

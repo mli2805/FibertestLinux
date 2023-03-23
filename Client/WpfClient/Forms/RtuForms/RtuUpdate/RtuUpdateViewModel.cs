@@ -18,8 +18,8 @@ namespace Fibertest.WpfClient
     public class RtuUpdateViewModel : Screen, IDataErrorInfo
     {
         public Guid RtuId;
-        private Rtu _originalRtu;
-        private Node _originalNode;
+        private Rtu _originalRtu = null!;
+        private Node _originalNode = null!;
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
         private readonly GraphReadModel _graphReadModel;
@@ -27,7 +27,7 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private bool _isInCreationMode;
 
-        private string _title;
+        private string _title = "";
         public string Title
         {
             get => _title;
@@ -39,7 +39,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _comment;
+        private string _comment = "";
         public string Comment
         {
             get => _comment;
@@ -63,7 +63,8 @@ namespace Fibertest.WpfClient
                 NotifyOfPropertyChange();
             }
         }
-        public GpsInputViewModel GpsInputViewModel { get; set; }
+
+        public GpsInputViewModel GpsInputViewModel { get; set; } = null!;
         public bool HasPrivilegies { get; set; }
         public Visibility GisVisibility { get; set; }
 
@@ -223,7 +224,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
 
 

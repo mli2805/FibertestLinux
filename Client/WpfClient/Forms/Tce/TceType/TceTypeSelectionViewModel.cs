@@ -7,7 +7,7 @@ namespace Fibertest.WpfClient
 {
     public class TceTypeSelectionViewModel : PropertyChangedBase
     {
-        public List<TceTypeStruct> TceTypes { get; set; }
+        public List<TceTypeStruct> TceTypes { get; set; } = null!;
         public TceTypeStruct SelectedType { get; set; }
 
         public void Initialize(List<TceTypeStruct> tceTypes, TceTypeStruct tceTypeStruct)

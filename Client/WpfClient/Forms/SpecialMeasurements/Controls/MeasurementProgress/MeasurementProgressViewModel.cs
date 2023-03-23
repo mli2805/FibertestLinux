@@ -18,7 +18,7 @@ namespace Fibertest.WpfClient
         }
 
 
-        private string _message1;
+        private string _message1 = "";
         public string Message1
         {
             get => _message1;

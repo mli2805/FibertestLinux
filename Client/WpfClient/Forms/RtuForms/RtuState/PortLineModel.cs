@@ -9,9 +9,9 @@ namespace Fibertest.WpfClient
 {
     public class PortLineModel : PropertyChangedBase
     {
-        public string Number { get; set; }
+        public string Number { get; set; } = null!;
         public Guid TraceId { get; set; } = Guid.Empty;
-        public string TraceTitle { get; set; }
+        public string? TraceTitle { get; set; }
 
         private FiberState _traceState;
         public FiberState TraceState

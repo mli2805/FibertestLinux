@@ -19,12 +19,13 @@ namespace Fibertest.WpfClient
         private readonly CurrentUser _currentUser;
         private bool _isCreationMode;
 
-        public TceTypeSelectionViewModel HuaweiSelectionViewModel { get; set; }
-        public TceTypeSelectionViewModel ZteSelectionViewModel { get; set; }
+        public TceTypeSelectionViewModel HuaweiSelectionViewModel { get; set; } = null!;
+        public TceTypeSelectionViewModel ZteSelectionViewModel { get; set; } = null!;
         public Visibility ReSeedVisibility { get; set; }
         public int SelectedTabItem { get; set; }
 
-        public TceTypeViewModel(Model readModel, GrpcC2DService grpcC2DService, IWindowManager windowManager, CurrentUser currentUser)
+        public TceTypeViewModel(Model readModel, GrpcC2DService grpcC2DService, 
+            IWindowManager windowManager, CurrentUser currentUser)
         {
             _readModel = readModel;
             _grpcC2DService = grpcC2DService;
@@ -52,8 +53,8 @@ namespace Fibertest.WpfClient
         {
             var cmd = new ReSeedTceTypeStructList() { TceTypes = TceTypeStructExt.Generate().ToList() };
             var res = await _grpcC2DService.SendEventSourcingCommand(cmd);
-            if (res != null)
-                _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error,
+            if (res.ReturnCode != ReturnCode.Ok)
+                await _windowManager.ShowDialogWithAssignedOwner(new MyMessageBoxViewModel(MessageType.Error,
                     @"Can't send Tce Types List!"));
             await TryCloseAsync(false);
         }

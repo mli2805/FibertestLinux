@@ -103,7 +103,8 @@ namespace Fibertest.WpfClient
             var rtu = _reaModel.Rtus.FirstOrDefault(r => r.Id == bopNetworkEventAdded.RtuId);
             if (rtu == null || !rtu.ZoneIds.Contains(_currentUser.ZoneId)) return;
 
-            var rtuLeaf = (RtuLeaf)_treeOfRtuModel.GetById(bopNetworkEventAdded.RtuId);
+            var rtuLeaf = (RtuLeaf?)_treeOfRtuModel.GetById(bopNetworkEventAdded.RtuId);
+            if (rtuLeaf == null) return;
             if (LaunchedViews.TryGetValue(rtuLeaf.Id, out var vm))
                 vm.RefreshModel(rtuLeaf);
         }
@@ -176,7 +177,9 @@ namespace Fibertest.WpfClient
 
 
             vm = _globalScope.Resolve<RtuStateViewModel>();
-            vm.Initialize(_rtuStateModelFactory.Create(rtuLeaf), isUserAskedToOpenView, changes);
+            var rtuStateModel = _rtuStateModelFactory.Create(rtuLeaf);
+            if (rtuStateModel == null) return;
+            vm.Initialize(rtuStateModel, isUserAskedToOpenView, changes);
             await _windowManager.ShowWindowWithAssignedOwner(vm);
 
             LaunchedViews.Add(rtuId, vm);

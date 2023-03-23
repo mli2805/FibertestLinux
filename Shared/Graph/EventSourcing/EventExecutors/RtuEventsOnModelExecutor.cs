@@ -33,7 +33,7 @@ public static class RtuEventsOnModelExecutor
             return $@"RtuUpdated: RTU {e.RtuId.First6()} not found";
         }
         rtu.Title = e.Title;
-        rtu.Comment = e.Comment;
+        rtu.Comment = e.Comment ?? "";
         var nodeOfRtu = model.Nodes.First(n => n.NodeId == rtu.NodeId);
         nodeOfRtu.Title = e.Title;
         nodeOfRtu.Position = e.Position;

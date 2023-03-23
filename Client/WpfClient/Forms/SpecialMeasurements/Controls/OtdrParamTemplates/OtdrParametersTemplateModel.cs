@@ -10,9 +10,9 @@ namespace Fibertest.WpfClient
     public class OtdrParametersTemplateModel : PropertyChangedBase, IDataErrorInfo
     {
 
-        public List<string> Units { get; set; }
+        public List<string> Units { get; set; } = null!;
 
-        private string _selectedUnit;
+        private string _selectedUnit = null!;
         public string SelectedUnit
         {
             get => _selectedUnit;
@@ -49,10 +49,10 @@ namespace Fibertest.WpfClient
         }
 
         public List<OtdrParametersTemplate> OtdrParametersTemplates { get; set; } = new List<OtdrParametersTemplate>();
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = null!;
+        public string Description { get; set; } = null!;
 
-        private OtdrParametersTemplate _selectedOtdrParametersTemplate;
+        private OtdrParametersTemplate _selectedOtdrParametersTemplate = null!;
         public OtdrParametersTemplate SelectedOtdrParametersTemplate
         {
             get => _selectedOtdrParametersTemplate;
@@ -81,7 +81,7 @@ namespace Fibertest.WpfClient
             SelectedOtdrParametersTemplate = OtdrParametersTemplates[defaultTemplate];
         }
 
-        private void Template_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Template_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == @"IsChecked")
             {
@@ -110,6 +110,6 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string Error { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
 }

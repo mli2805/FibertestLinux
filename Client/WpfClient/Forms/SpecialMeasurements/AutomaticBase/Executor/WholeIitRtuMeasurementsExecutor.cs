@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
         private readonly LandmarksIntoBaseSetter _landmarksIntoBaseSetter;
         private readonly MeasurementAsBaseAssigner _measurementAsBaseAssigner;
 
-        private Trace _trace;
+        private Trace _trace = null!;
 
         public MeasurementModel Model { get; set; } = new MeasurementModel();
 
@@ -70,11 +70,11 @@ namespace Fibertest.WpfClient
                 await _grpcC2RService.SendAnyC2RRequest<DoClientMeasurementDto, ClientMeasurementStartedDto>(dto);
             if (startResult.ReturnCode != ReturnCode.MeasurementClientStartedSuccessfully)
             {
-                _timer.Stop();
+                _timer!.Stop();
                 _timer.Dispose();
 
                 MeasurementCompleted?
-                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage));
+                    .Invoke(this, new MeasurementEventArgs(startResult.ReturnCode, _trace, startResult.ErrorMessage!));
 
                 return;
             }
@@ -88,7 +88,7 @@ namespace Fibertest.WpfClient
 
         }
 
-        private System.Timers.Timer _timer;
+        private System.Timers.Timer? _timer;
         private void StartTimer()
         {
             _logger.Info(Logs.Client,$@"Start a measurement timeout for trace {_trace.Title}");
@@ -97,10 +97,10 @@ namespace Fibertest.WpfClient
             _timer.AutoReset = false;
             _timer.Start();
         }
-        private void TimeIsOver(object sender, System.Timers.ElapsedEventArgs e)
+        private void TimeIsOver(object? sender, System.Timers.ElapsedEventArgs e)
         {
             _logger.Info(Logs.Client,@"Measurement timeout expired");
-            _timer.Dispose();
+            _timer?.Dispose();
 
             MeasurementCompleted?
                   .Invoke(this, new MeasurementEventArgs(ReturnCode.MeasurementTimeoutExpired, _trace));
@@ -108,7 +108,7 @@ namespace Fibertest.WpfClient
 
         public void ProcessMeasurementResult(ClientMeasurementResultDto dto)
         {
-            _timer.Stop();
+            _timer!.Stop();
             _timer.Dispose();
 
             _logger.Info(Logs.Client,$@"Measurement (Client) result for trace {_trace.Title} received");
@@ -140,7 +140,7 @@ namespace Fibertest.WpfClient
             BaseRefAssigned?
                 .Invoke(this, result.ReturnCode == ReturnCode.BaseRefAssignedSuccessfully
                     ? new MeasurementEventArgs(ReturnCode.BaseRefAssignedSuccessfully, trace, sorData.ToBytes())
-                    : new MeasurementEventArgs(ReturnCode.BaseRefAssignmentFailed, trace, result.ErrorMessage));
+                    : new MeasurementEventArgs(ReturnCode.BaseRefAssignmentFailed, trace, result.ErrorMessage!));
         }
 
         public void InterruptMeasurement()
@@ -151,7 +151,7 @@ namespace Fibertest.WpfClient
         public delegate void MeasurementHandler(object sender, MeasurementEventArgs e);
         public delegate void BaseRefHandler(object sender, MeasurementEventArgs e);
 
-        public event MeasurementHandler MeasurementCompleted;
-        public event BaseRefHandler BaseRefAssigned;
+        public event MeasurementHandler? MeasurementCompleted;
+        public event BaseRefHandler? BaseRefAssigned;
     }
 }

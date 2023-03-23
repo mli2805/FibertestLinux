@@ -17,8 +17,8 @@ namespace Fibertest.WpfClient
         private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
 
-        public string NodeCountStr { get; set; }
-        public string FiberCountStr { get; set; }
+        public string NodeCountStr { get; set; } = null!;
+        public string FiberCountStr { get; set; } = null!;
 
         public bool IsEnabled { get; set; }
 

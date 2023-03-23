@@ -19,8 +19,8 @@ namespace Fibertest.WpfClient
         private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
         private readonly CurrentUser _currentUser;
-        private ObservableCollection<TceS> _tces;
 
+        private ObservableCollection<TceS> _tces = null!;
         public ObservableCollection<TceS> Tces
         {
             get => _tces;
@@ -32,7 +32,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public TceS SelectedTce { get; set; }
+        public TceS? SelectedTce { get; set; }
         public bool IsEnabled { get; set; }
 
         public TcesViewModel(ILifetimeScope globalScope, Model readModel, EventArrivalNotifier eventArrivalNotifier,
@@ -83,7 +83,7 @@ namespace Fibertest.WpfClient
 
         public async void ChangeTceType()
         {
-            var typeId = SelectedTce.TceTypeStruct.Id;
+            var typeId = SelectedTce!.TceTypeStruct.Id;
             if (!AskNewTceTypeSelection(ref typeId))
                 return;
 
@@ -123,7 +123,7 @@ namespace Fibertest.WpfClient
         {
             var oldTypeId = newTceTypeId;
             var vm = _globalScope.Resolve<TceTypeViewModel>();
-            vm.Initialize(SelectedTce.TceTypeStruct, false);
+            vm.Initialize(SelectedTce!.TceTypeStruct, false);
             if (_windowManager.ShowDialogWithAssignedOwner(vm).Result != true)
                 return false;
 
@@ -135,9 +135,9 @@ namespace Fibertest.WpfClient
 
         private List<GponPortRelation> AdjustSelectedTceToNewType(TceTypeStruct newTceType)
         {
-            var temp = new TceS(SelectedTce);
+            var temp = new TceS(SelectedTce!);
 
-            SelectedTce.TceTypeStruct = newTceType;
+            SelectedTce!.TceTypeStruct = newTceType;
             var relationsForRemoval = new List<GponPortRelation>();
             foreach (var slot in temp.Slots)
             {
@@ -183,7 +183,8 @@ namespace Fibertest.WpfClient
             if (! await ConfirmTceRemove()) return;
 
             var cmd = new RemoveTce() { Id = SelectedTce.Id };
-            if (await _grpcC2DService.SendEventSourcingCommand(cmd) == null)
+            var result = await _grpcC2DService.SendEventSourcingCommand(cmd);
+            if (result.ReturnCode == ReturnCode.Ok)
             {
                 Tces.Remove(SelectedTce);
             }
@@ -193,7 +194,7 @@ namespace Fibertest.WpfClient
         {
             var strs = new List<string>()
             {
-                string.Format(Resources.SID_Equipment__0__will_be_deleted, SelectedTce.Title),
+                string.Format(Resources.SID_Equipment__0__will_be_deleted, SelectedTce!.Title),
                 "",
                 Resources.SID_RTU_port_links_to_this_equipment_will_be_deleted
             };
