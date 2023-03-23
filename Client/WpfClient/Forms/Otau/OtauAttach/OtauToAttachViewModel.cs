@@ -13,17 +13,17 @@ namespace Fibertest.WpfClient
 {
     public class OtauToAttachViewModel : Screen
     {
-        private Rtu _rtu;
+        private Rtu _rtu = null!;
         private int _portNumberForAttachment;
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
         private readonly IWcfServiceCommonC2D _c2RWcfManager;
         private readonly IWindowManager _windowManager;
 
-        public string RtuTitle { get; set; }
+        public string RtuTitle { get; set; } = null!;
         public int RtuPortNumber { get; set; }
 
-        private NetAddressInputViewModel _netAddressInputViewModel;
+        private NetAddressInputViewModel _netAddressInputViewModel = null!;
         public NetAddressInputViewModel NetAddressInputViewModel
         {
             get => _netAddressInputViewModel;
@@ -35,7 +35,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _otauSerial;
+        private string _otauSerial = null!;
         public string OtauSerial
         {
             get => _otauSerial;
@@ -59,7 +59,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _attachmentProgress;
+        private string _attachmentProgress = null!;
         public string AttachmentProgress
         {
             get => _attachmentProgress;
@@ -140,8 +140,8 @@ namespace Fibertest.WpfClient
             {
                 AttachmentProgress = Resources.SID_Successful_;
                 OtauSerial = _rtu.RtuMaker == RtuMaker.IIT
-                    ? result.Serial.Substring(0, result.Serial.Length - 1)
-                    : result.Serial;
+                    ? result.Serial!.Substring(0, result.Serial.Length - 1)
+                    : result.Serial!;
                 OtauPortCount = result.PortCount;
             }
             else
@@ -151,7 +151,7 @@ namespace Fibertest.WpfClient
                 {
                     $@"{result.ReturnCode.GetLocalizedString()}",
                     "",
-                    result.ErrorMessage,
+                    result.ErrorMessage!,
                 };
                 var vm = new MyMessageBoxViewModel(MessageType.Error, strs, 0);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);

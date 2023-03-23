@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
 using Fibertest.Dto;
@@ -113,8 +115,8 @@ namespace Fibertest.WpfClient
             _config = config;
             _graphReadModel = graphReadModel;
 
-            // AccessModes = Enum.GetValues(typeof(AccessMode))
-            //     .Cast<AccessMode>().Select(x => x.ToLocalizedString()).ToList();
+            AccessModes = Enum.GetValues(typeof(AccessMode))
+                .Cast<AccessMode>().Select(x => x.ToLocalizedString()).ToList();
             // var str = _config.Value.Map.MapAccessMode;
 
             // _selectedAccessMode = AccessModeExt.FromEnumConstant(str).ToLocalizedString();

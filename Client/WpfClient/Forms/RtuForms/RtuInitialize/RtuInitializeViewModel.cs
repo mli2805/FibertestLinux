@@ -121,7 +121,8 @@ namespace Fibertest.WpfClient
                 {
                     var vm = new RtuAskSerialViewModel();
                     vm.Initialize(!FullModel.OriginalRtu.IsInitialized,
-                        FullModel.MainChannelTestViewModel.NetAddressInputViewModel.GetNetAddress().ToStringA(), result.Serial);
+                        FullModel.MainChannelTestViewModel.NetAddressInputViewModel.GetNetAddress().ToStringA(),
+                        result.Serial ?? "");
                     await _windowManager.ShowDialogWithAssignedOwner(vm);
                     if (!vm.IsSavePressed) return;
                     FullModel.OriginalRtu.Serial = vm.Serial.ToUpper();
@@ -172,7 +173,7 @@ namespace Fibertest.WpfClient
                 foreach (var reSendBaseRefsDto in list)
                 {
                     _commonStatusBarViewModel.StatusBarMessage2 
-                        = string.Format(Resources.SID_Sending_base_refs_for_port__0_, reSendBaseRefsDto.OtauPortDto.ToStringB());
+                        = string.Format(Resources.SID_Sending_base_refs_for_port__0_, reSendBaseRefsDto.OtauPortDto!.ToStringB());
                     var resultDto =
                         await _grpcC2RService
                             .SendAnyC2RRequest<ReSendBaseRefsDto, BaseRefAssignedDto>(reSendBaseRefsDto);

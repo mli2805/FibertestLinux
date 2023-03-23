@@ -21,7 +21,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private List<string> _bops;
+        private List<string> _bops = null!;
         public List<string> Bops
         {
             get => _bops;
@@ -53,7 +53,7 @@ namespace Fibertest.WpfClient
             Bops = FillInOtauList(dto.Children);
         }
 
-        private List<string> FillInOtauList(Dictionary<int, OtauDto> otaus)
+        private List<string> FillInOtauList(Dictionary<int, OtauDto>? otaus)
         {
             var bops = new List<string>();
             if (otaus != null)

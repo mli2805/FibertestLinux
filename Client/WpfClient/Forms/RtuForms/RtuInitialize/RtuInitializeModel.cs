@@ -24,7 +24,7 @@ namespace Fibertest.WpfClient
         public RtuVeexInfoViewModel VeexInfoModel { get; set; } = new RtuVeexInfoViewModel();
         public PortsAndBopsViewModel PortsAndBopsViewModel { get; set; } = new PortsAndBopsViewModel();
 
-        private Rtu _originalRtu;
+        private Rtu _originalRtu = null!;
         public Rtu OriginalRtu
         {
             get => _originalRtu;
@@ -37,9 +37,9 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public NetAddressTestViewModel MainChannelTestViewModel { get; set; }
+        public NetAddressTestViewModel MainChannelTestViewModel { get; set; } = null!;
         public bool IsReserveChannelEnabled { get; set; }
-        public NetAddressTestViewModel ReserveChannelTestViewModel { get; set; }
+        public NetAddressTestViewModel ReserveChannelTestViewModel { get; set; } = null!;
 
         public string OtdrAddress => OriginalRtu.OtdrNetAddress.Ip4Address == @"192.168.88.101" // fake address on screen
             ? OriginalRtu.MainChannel.Ip4Address
@@ -112,7 +112,7 @@ namespace Fibertest.WpfClient
         public void UpdateWithDto(RtuInitializedDto dto)
         {
             OriginalRtu.MainChannel = MainChannelTestViewModel.NetAddressInputViewModel.GetNetAddress();
-            OriginalRtu.OtdrNetAddress = dto.OtdrAddress.Clone();
+            OriginalRtu.OtdrNetAddress = dto.OtdrAddress!.Clone();
             OriginalRtu.ReserveChannel = ReserveChannelTestViewModel.NetAddressInputViewModel.GetNetAddress();
 
             OtdrAddressViewModel.FromRtu(OriginalRtu);

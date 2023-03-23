@@ -58,7 +58,7 @@ namespace Fibertest.WpfClient
         private MonitoringCharonModel PrepareMainCharonModel(bool isEditEnabled)
         {
             var rtu = _readModel.Rtus.First(r => r.Id == _rtuLeaf.Id);
-            var mainCharonModel = new MonitoringCharonModel(_rtuLeaf.Serial)
+            var mainCharonModel = new MonitoringCharonModel(_rtuLeaf.Serial!)
             {
                 Title = _rtuLeaf.Title,
                 IsMainCharon = true,
@@ -72,9 +72,9 @@ namespace Fibertest.WpfClient
         private MonitoringCharonModel PrepareBopCharonModel(OtauLeaf otauLeaf, bool isEditEnabled)
         {
             var otau = _readModel.Otaus.First(o => o.Id == otauLeaf.Id);
-            var bopCharonModel = new MonitoringCharonModel(otauLeaf.Serial)
+            var bopCharonModel = new MonitoringCharonModel(otauLeaf.Serial!)
             {
-                Title = otauLeaf.OtauNetAddress.ToStringA(),
+                Title = otauLeaf.OtauNetAddress!.ToStringA(),
                 IsMainCharon = false,
                 OtauId = otau.Id.ToString(),
                 MainCharonPort = otau.MasterPort,

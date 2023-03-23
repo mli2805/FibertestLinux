@@ -35,7 +35,7 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public string TypeOfEquipment { get; set; }
+        public string? TypeOfEquipment { get; set; }
 
         public int LeftCableReserve
         {

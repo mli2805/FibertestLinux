@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
@@ -63,14 +64,14 @@ namespace Fibertest.WpfClient
                 nodeVm.Type = evnt.Type;
         }
 
-        public void UpdateEquipment(EquipmentUpdated evnt)
+        public async Task UpdateEquipment(EquipmentUpdated evnt)
         {
             var equipment = _readModel.Equipments.FirstOrDefault(e => e.EquipmentId == evnt.EquipmentId);
             if (equipment == null)
             {
                 _model.Logger.Error(Logs.Client,$@"UpdateEquipment: equipment {evnt.EquipmentId.First6()} not found");
                 if (_currentUser.Role <= Role.Root)
-                    _windowManager.ShowDialogWithAssignedOwner($@"не найдено редактируемое оборудование");
+                    await _windowManager.ShowDialogWithAssignedOwner($@"не найдено редактируемое оборудование");
                 return;
             }
 

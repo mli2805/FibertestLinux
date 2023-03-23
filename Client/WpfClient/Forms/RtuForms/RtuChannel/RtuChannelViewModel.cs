@@ -18,18 +18,18 @@ namespace Fibertest.WpfClient
     {
         private readonly SoundManager _soundManager;
         private readonly Model _readModel;
-        public string RtuTitle { get; set; }
-        public string RtuAvailability { get; set; }
-        public Brush AvailabilityBrush { get; set; }
+        public string RtuTitle { get; set; } = null!;
+        public string RtuAvailability { get; set; } = null!;
+        public Brush AvailabilityBrush { get; set; } = null!;
 
-        public string StateOn { get; set; }
+        public string StateOn { get; set; } = null!;
 
-        public string OnMainChannel { get; set; }
-        public Brush OnMainChannelBrush { get; set; }
+        public string OnMainChannel { get; set; } = null!;
+        public Brush OnMainChannelBrush { get; set; } = null!;
         public Visibility MainChannelVisibility { get; set; }
 
-        public string OnReserveChannel { get; set; }
-        public Brush OnReserveChannelBrush { get; set; }
+        public string OnReserveChannel { get; set; } = null!;
+        public Brush OnReserveChannelBrush { get; set; } = null!;
         public Visibility ReserveChannelVisibility { get; set; }
 
 

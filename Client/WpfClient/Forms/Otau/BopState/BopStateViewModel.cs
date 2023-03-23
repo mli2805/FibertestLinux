@@ -18,13 +18,13 @@ namespace Fibertest.WpfClient
         private readonly SoundManager _soundManager;
         private readonly Model _readModel;
         public Guid BopId { get; set; }
-        public string BopIp { get; set; }
-        public string PortRtu { get; set; }
-        public string RtuTitle { get; set; }
-        public string ServerTitle { get; set; }
-        public string StateOn { get; set; }
-        public string BopState { get; set; }
-        public Brush BopStateBrush { get; set; }
+        public string BopIp { get; set; } = null!;
+        public string PortRtu { get; set; } = null!;
+        public string RtuTitle { get; set; } = null!;
+        public string ServerTitle { get; set; } = null!;
+        public string StateOn { get; set; } = null!;
+        public string BopState { get; set; } = null!;
+        public Brush BopStateBrush { get; set; } = null!;
         public bool IsOk { get; set; }
 
         private bool _isSoundForThisVmInstanceOn;

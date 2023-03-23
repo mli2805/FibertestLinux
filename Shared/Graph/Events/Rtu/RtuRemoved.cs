@@ -7,5 +7,5 @@ public class RtuRemoved
 
     // fiberId - traceId 
     // don't use Dictionary  because fiber could conduct more than one trace
-    public List<KeyValuePair<Guid, Guid>>? FibersFromCleanedTraces;
+    public List<KeyValuePair<Guid, Guid>> FibersFromCleanedTraces = null!;
 }

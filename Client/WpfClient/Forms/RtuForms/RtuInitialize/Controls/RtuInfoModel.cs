@@ -7,8 +7,8 @@ namespace Fibertest.WpfClient
 {
     public class RtuInfoModel : PropertyChangedBase
     {
-        private string _maker;
-        public string Maker
+        private string? _maker;
+        public string? Maker
         {
             get => _maker;
             set
@@ -67,8 +67,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _mainOtauModel;
-        public string MainOtauModel
+        private string? _mainOtauModel;
+        public string? MainOtauModel
         {
             get => _mainOtauModel;
             set
@@ -79,8 +79,8 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private string _mainOtauSerial;
-        public string MainOtauSerial
+        private string? _mainOtauSerial;
+        public string? MainOtauSerial
         {
             get => _mainOtauSerial;
             set

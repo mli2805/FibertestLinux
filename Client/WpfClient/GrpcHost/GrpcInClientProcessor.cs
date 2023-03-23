@@ -35,7 +35,7 @@ namespace Fibertest.WpfClient
                     ProcessMeasurementResult(dto);
                     break;
                 case CurrentMonitoringStepDto dto:
-                    Process2(dto);
+                    ProcessCurrentMonitoringStep(dto);
                     break;
                 default: return;
             }
@@ -52,8 +52,9 @@ namespace Fibertest.WpfClient
                 Task.Factory.StartNew(() => _rtuAutoBaseViewModel.WholeRtuMeasurementsExecutor.ProcessMeasurementResult(dto));
         }
 
-        private void Process2(CurrentMonitoringStepDto dto)
+        private void ProcessCurrentMonitoringStep(CurrentMonitoringStepDto dto)
         {
+            _logger.Info(Logs.Client, $"Current monitoring step {dto.Step}");
 
         }
     }

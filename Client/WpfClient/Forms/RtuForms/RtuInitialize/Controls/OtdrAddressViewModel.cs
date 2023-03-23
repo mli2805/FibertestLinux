@@ -6,9 +6,9 @@ namespace Fibertest.WpfClient
     
     public class OtdrAddressViewModel : PropertyChangedBase
     {
-        private string _otdrAddress;
         private int _port;
 
+        private string _otdrAddress = null!;
         public string OtdrAddress
         {
             get => _otdrAddress;
