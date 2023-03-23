@@ -29,15 +29,15 @@ namespace Fibertest.WpfClient
         private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly FailedAutoBasePdfProvider _failedAutoBasePdfProvider;
         private readonly MonitoringSettingsModelFactory _monitoringSettingsModelFactory;
-        private List<RtuAutoBaseProgress> _progress;
+        private List<RtuAutoBaseProgress> _progress = null!;
         public bool IsOpen { get; set; }
-        public IWholeRtuMeasurementsExecutor WholeRtuMeasurementsExecutor { get; set; }
+        public IWholeRtuMeasurementsExecutor WholeRtuMeasurementsExecutor { get; set; } = null!;
         public bool ShouldStartMonitoring { get; set; }
-        private RtuLeaf _rtuLeaf;
-        private Rtu _rtu;
+        private RtuLeaf _rtuLeaf = null!;
+        private Rtu _rtu = null!;
 
-        private List<MeasurementEventArgs> _badResults;
-        private List<Trace> _goodTraces;
+        private List<MeasurementEventArgs> _badResults = null!;
+        private List<Trace> _goodTraces = null!;
 
         private string _buttonName = Resources.SID_Close;
         public string ButtonName
@@ -124,7 +124,7 @@ namespace Fibertest.WpfClient
             return true;
         }
 
-        private WaitCursor _waitCursor;
+        private WaitCursor _waitCursor = null!;
         public void Start()
         {
             _waitCursor = new WaitCursor();
@@ -146,7 +146,7 @@ namespace Fibertest.WpfClient
         {
             var otauLeaf = progressItem.TraceLeaf.Parent as OtauLeaf;
             if (otauLeaf == null) return; // impossible
-            var bopAddress = otauLeaf.OtauNetAddress.Ip4Address;
+            var bopAddress = otauLeaf.OtauNetAddress!.Ip4Address;
             if (_brokenBop != bopAddress)
             {
                 _brokenBop = bopAddress;
@@ -156,7 +156,7 @@ namespace Fibertest.WpfClient
 
             // second time the same problem 
             var thisBopTraces = _progress
-                .Where(i => i.TraceLeaf.Parent is OtauLeaf o && o.OtauNetAddress.Ip4Address == _brokenBop).ToList();
+                .Where(i => i.TraceLeaf.Parent is OtauLeaf o && o.OtauNetAddress!.Ip4Address == _brokenBop).ToList();
             foreach (var item in thisBopTraces)
             {
                 item.MeasurementDone = true;
@@ -325,7 +325,7 @@ namespace Fibertest.WpfClient
             {
                 var dto = monitoringSettingsModel.CreateDto();
                 dto.Ports = _goodTraces
-                    .Select(trace => new PortWithTraceDto(trace.OtauPort, trace.TraceId)).ToList();
+                    .Select(trace => new PortWithTraceDto(trace.OtauPort!, trace.TraceId)).ToList();
                 dto.IsMonitoringOn = true;
 
                 var resultDto = await _commonC2DWcfManager.ApplyMonitoringSettingsAsync(dto);

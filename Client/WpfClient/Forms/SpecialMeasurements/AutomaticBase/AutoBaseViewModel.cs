@@ -22,11 +22,11 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private readonly IDispatcherProvider _dispatcherProvider;
         private readonly ReflectogramManager _reflectogramManager;
-        private TraceLeaf _traceLeaf;
-        private Rtu _rtu;
+        private TraceLeaf _traceLeaf = null!;
+        private Rtu _rtu = null!;
 
         public bool IsOpen { get; set; }
-        public IOneMeasurementExecutor OneMeasurementExecutor { get; set; }
+        public IOneMeasurementExecutor OneMeasurementExecutor { get; set; } = null!;
         public bool IsShowRef { get; set; }
 
         public AutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, Model readModel, 
@@ -84,20 +84,20 @@ namespace Fibertest.WpfClient
             if (result.Code == ReturnCode.BaseRefAssignedSuccessfully)
             {
                 if (IsShowRef)
-                    _reflectogramManager.ShowClientMeasurement(result.SorBytes);
+                    _reflectogramManager.ShowClientMeasurement(result.SorBytes!);
                 await TryCloseAsync();
             }
             else
             {
                 var strings = new List<string>() { result.Code.GetLocalizedString() };
-                if (result.AdditionalErrorLines[0] != "")
+                if (result.AdditionalErrorLines != null)
                     strings.AddRange(result.AdditionalErrorLines);
                 var vm = new MyMessageBoxViewModel(MessageType.Error, strings, 0);
                 await _windowManager.ShowDialogWithAssignedOwner(vm);
             }
         }
 
-        private WaitCursor _waitCursor;
+        private WaitCursor _waitCursor = null!;
         public async void Start()
         {
             _waitCursor = new WaitCursor();

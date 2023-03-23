@@ -38,7 +38,7 @@ public partial class RtuResponseToEventSourcing
             {
                 EventTimestamp = DateTime.Now,
                 RtuId = result.RtuId,
-                Serial = originalRtu.Serial,
+                Serial = originalRtu.Serial ?? "",
                 OtauIp = originalRtu.OtdrNetAddress.Ip4Address,
                 TcpPort = originalRtu.OtdrNetAddress.Port,
                 IsOk = result.MainVeexOtau.connected,
@@ -64,7 +64,7 @@ public partial class RtuResponseToEventSourcing
                     {
                         EventTimestamp = DateTime.Now,
                         RtuId = result.RtuId,
-                        Serial = keyValuePair.Value.Serial ?? bop.Serial,
+                        Serial = keyValuePair.Value.Serial ?? bop.Serial!,
                         OtauIp = keyValuePair.Value.NetAddress.Ip4Address,
                         TcpPort = keyValuePair.Value.NetAddress.Port,
                         IsOk = keyValuePair.Value.IsOk,

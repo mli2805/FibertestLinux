@@ -28,7 +28,7 @@ namespace Fibertest.WpfClient
             {
                 var newLandmark = new OtdrDataFormat.Landmark();
                 newLandmark.Code = model.EquipArray[i].Type.ToLandmarkCode();
-                var landmarkTitle = model.NodeArray[i].Title;
+                var landmarkTitle = model.NodeArray[i].Title ?? "";
                 if (i != 0 && !string.IsNullOrEmpty(model.EquipArray[i].Title))
                     landmarkTitle += $@" / {model.EquipArray[i].Title}";
                 newLandmark.Comment = landmarkTitle;
@@ -36,7 +36,8 @@ namespace Fibertest.WpfClient
                 newLandmark.GpsLongitude = GisLabCalculator.GpsInSorFormat(model.NodeArray[i].Position.Lng);
                 newLandmark.Location = i == 0 
                         ? 0 
-                        : newLandmarks[i - 1].Location + sorData.GetOwtFromMm((int)(model.DistancesMm[i - 1] * ratio));
+                        : newLandmarks[i - 1].Location + 
+                            sorData.GetOwtFromMm((int)(model.DistancesMm![i - 1] * ratio));
                 newLandmarks[i] = newLandmark;
             }
 
@@ -50,7 +51,7 @@ namespace Fibertest.WpfClient
         private double GetRatio(OtdrDataKnownBlocks sorData, TraceModelForBaseRef model)
         {
             var onBaseRef = sorData.GetTraceLengthKm() * 1000000;
-            var onGraph = model.DistancesMm.Sum();
+            var onGraph = model.DistancesMm!.Sum();
             return onBaseRef/onGraph;
         }
     }

@@ -2,8 +2,8 @@
 {
     public class GponRelationInfo
     {
-        public string TceTitle { get; set; }
-        public string TceType { get; set; }
+        public string TceTitle { get; set; } = "";
+        public string TceType { get; set; } = "";
         public int SlotPosition;
         public string SlotPositionStr => string.IsNullOrEmpty(TceType) ? "" : SlotPosition.ToString();
 

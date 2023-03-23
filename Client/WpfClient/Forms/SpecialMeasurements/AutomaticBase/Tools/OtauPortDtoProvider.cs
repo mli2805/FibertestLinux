@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
             return PrepareOtauPortDto(rtu, otau, portOwner, portNumber);
         }
 
-        private static List<OtauPortDto> PrepareOtauPortDto(Rtu rtu, Otau otau, IPortOwner otauLeaf, int portNumber)
+        private static List<OtauPortDto> PrepareOtauPortDto(Rtu rtu, Otau? otau, IPortOwner otauLeaf, int portNumber)
         {
             var otauId = otau == null
                 ? rtu.MainVeexOtau.id

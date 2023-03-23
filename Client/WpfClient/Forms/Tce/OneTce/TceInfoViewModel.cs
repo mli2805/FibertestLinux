@@ -5,8 +5,7 @@ namespace Fibertest.WpfClient
 {
     public class TceInfoViewModel : PropertyChangedBase
     {
-        private string _title;
-
+        private string _title = null!;
         public string Title 
         {
             get => _title;
@@ -18,12 +17,12 @@ namespace Fibertest.WpfClient
             }
         }
 
-        public Ip4InputViewModel Ip4InputViewModel { get; set; }
+        public Ip4InputViewModel Ip4InputViewModel { get; set; } = null!;
 
         public bool ProcessSnmpTraps { get; set; }
-        public string Comment { get; set; }
+        public string Comment { get; set; } = null!;
 
-        public TceS Tce { get; set; }
+        public TceS Tce { get; set; } = null!;
 
         private bool _isEnabled;
         public bool IsEnabled // edit control 

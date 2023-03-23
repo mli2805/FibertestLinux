@@ -8,9 +8,9 @@ namespace Fibertest.WpfClient
 {
     public class TceSlotsViewModel : PropertyChangedBase
     {
-        public List<SlotViewModel> Slots { get; set; }
+        public List<SlotViewModel> Slots { get; set; } = null!;
 
-        private SlotViewModel _selectedSlot;
+        private SlotViewModel _selectedSlot = null!;
         public SlotViewModel SelectedSlot    
         {
             get => _selectedSlot;
