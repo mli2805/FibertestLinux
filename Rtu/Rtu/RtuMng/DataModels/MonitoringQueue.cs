@@ -71,18 +71,25 @@ public class MonitoringQueue
 
     private async Task<List<MonitoringPortOnDisk>> LoadWithMd5()
     {
+        _logger.Info(Logs.RtuManager, "LoadWithMd5 started");
         try
         {
             if (File.Exists(_monitoringSettingsFile))
             {
+                _logger.Info(Logs.RtuManager, $"Queue file {_monitoringSettingsFile} found");
                 if (File.Exists(_monitoringSettingsMd5File))
                 {
+                    _logger.Info(Logs.RtuManager, $"MD5 file {_monitoringSettingsMd5File} found");
                     var md5 = CalculateMd5(_monitoringSettingsFile);
+                    _logger.Info(Logs.RtuManager, $"md5 calculated: {md5}");
                     var md5FromFile = await File.ReadAllTextAsync(_monitoringSettingsMd5File);
+                    _logger.Info(Logs.RtuManager, $"md5 from file: {md5FromFile}");
                     var content =
                         await File.ReadAllTextAsync(md5 == md5FromFile
                             ? _monitoringSettingsFile
                             : _monitoringSettingFileBackup);
+                    _logger.Info(Logs.RtuManager, $"queue file content: {content}");
+
                     return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(content) ?? new List<MonitoringPortOnDisk>();
                 }
             }
