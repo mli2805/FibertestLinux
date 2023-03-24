@@ -90,15 +90,15 @@ public class MonitoringQueue
                             : _monitoringSettingFileBackup);
                     _logger.Info(Logs.RtuManager, $"queue file content: {content}");
 
-                    return JsonConvert
-                        .DeserializeObject<List<MonitoringPortOnDisk>>(content, JsonSerializerSettings) 
-                           ?? new List<MonitoringPortOnDisk>();
+                    var list = JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(content);
+                    _logger.Info(Logs.RtuManager, "deserialized!");
+                    return list ?? new List<MonitoringPortOnDisk>();
                 }
             }
             else if (File.Exists(_monitoringSettingFileBackup))
             {
                 var contentBackup = await File.ReadAllTextAsync(_monitoringSettingFileBackup);
-                return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(contentBackup, JsonSerializerSettings) 
+                return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(contentBackup) 
                        ?? new List<MonitoringPortOnDisk>();
             }
         }
