@@ -1,5 +1,6 @@
 ﻿using Fibertest.Utils;
 using System.Diagnostics;
+using Fibertest.Dto;
 
 namespace Fibertest.Rtu;
 
@@ -26,12 +27,15 @@ public class MonitoringService : BackgroundService
 
     private async Task DoWork(CancellationToken stoppingToken)
     {
-        await _rtuManager.InitializeRtu();
+        var result = await _rtuManager.InitializeRtu();
+        if (result.ReturnCode == ReturnCode.RtuInitializedSuccessfully)
+            await _rtuManager.RunMonitoringCycle();
 
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
-            _logger.Debug(Logs.RtuManager,  "It is a measurement thread ..." + Environment.NewLine);
-        }
+        //
+        // while (!stoppingToken.IsCancellationRequested)
+        // {
+        //     await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+        //     _logger.Debug(Logs.RtuManager,  "It is a measurement thread ..." + Environment.NewLine);
+        // }
     }
 }

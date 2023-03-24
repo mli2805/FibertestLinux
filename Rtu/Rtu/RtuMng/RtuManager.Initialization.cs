@@ -64,14 +64,14 @@ public partial class RtuManager
 
         _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
 
+        // permit to send heartbeats
+        ShouldSendHeartbeat.Enqueue(new object());
+        
         if (!_config.Value.Monitoring.IsMonitoringOn)
         {
             _logger.Info(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
             var unused = _otdrManager.DisconnectOtdr();
         }
-
-        // permit to send heartbeats
-        ShouldSendHeartbeat.Enqueue(new object());
 
         return result2;
     }

@@ -68,7 +68,7 @@ namespace Fibertest.Rtu
             {
                 IsMonitoringOn = true;
                 _wasMonitoringOn = false;
-                RunMonitoringCycle();
+                await RunMonitoringCycle();
             }
             else
             {

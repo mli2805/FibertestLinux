@@ -46,11 +46,12 @@ public partial class RtuManager
 
         _logger.EmptyAndLog(Logs.RtuManager, "RTU is turned into AUTOMATIC mode.");
 
-        _config.Update(c=>c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
-        _config.Update(c=>c.Monitoring.IsMonitoringOn = true);
+        _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
+        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
 
-        RunMonitoringCycle();
+        await Task.Run(RunMonitoringCycle);
+        _logger.Debug(Logs.RtuManager, "Monitoring cycle started in another thread");
     }
 
- 
+
 }

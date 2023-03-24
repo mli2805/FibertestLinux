@@ -6,7 +6,7 @@ namespace Fibertest.Rtu;
 
 public partial class RtuManager
 {
-    private async void RunMonitoringCycle()
+    public async Task RunMonitoringCycle()
     {
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
         _config.Update(c => c.Monitoring.IsMonitoringOn = true);
