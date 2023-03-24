@@ -26,7 +26,7 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
         private readonly GrpcC2DService _grpcC2DService;
-        private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly FailedAutoBasePdfProvider _failedAutoBasePdfProvider;
         private readonly MonitoringSettingsModelFactory _monitoringSettingsModelFactory;
         private List<RtuAutoBaseProgress> _progress = null!;
@@ -66,8 +66,7 @@ namespace Fibertest.WpfClient
 
         public RtuAutoBaseViewModel(ILifetimeScope globalScope, ILogger logger, 
             IDispatcherProvider dispatcherProvider, Model readModel, IWindowManager windowManager,
-            GrpcC2DService grpcC2DService,
-            IWcfServiceCommonC2D commonC2DWcfManager,
+            GrpcC2DService grpcC2DService, GrpcC2RService grpcC2RService,
             FailedAutoBasePdfProvider failedAutoBasePdfProvider,
             MonitoringSettingsModelFactory monitoringSettingsModelFactory)
         {
@@ -77,7 +76,7 @@ namespace Fibertest.WpfClient
             _readModel = readModel;
             _windowManager = windowManager;
             _grpcC2DService = grpcC2DService;
-            _commonC2DWcfManager = commonC2DWcfManager;
+            _grpcC2RService = grpcC2RService;
             _failedAutoBasePdfProvider = failedAutoBasePdfProvider;
             _monitoringSettingsModelFactory = monitoringSettingsModelFactory;
         }
@@ -271,7 +270,7 @@ namespace Fibertest.WpfClient
             _waitCursor.Dispose();
             if (_rtu.RtuMaker == RtuMaker.IIT)
             {
-                var r = await _commonC2DWcfManager.FreeOtdrAsync(
+                var r = await _grpcC2RService.SendAnyC2RRequest<FreeOtdrDto, RequestAnswer>(
                     new FreeOtdrDto(_rtu.Id, _rtu.RtuMaker));
                 _logger.Info(Logs.Client,$@"Free OTDR result is {r.ReturnCode}");
             }
@@ -328,7 +327,7 @@ namespace Fibertest.WpfClient
                     .Select(trace => new PortWithTraceDto(trace.OtauPort!, trace.TraceId)).ToList();
                 dto.IsMonitoringOn = true;
 
-                var resultDto = await _commonC2DWcfManager.ApplyMonitoringSettingsAsync(dto);
+                var resultDto = await _grpcC2RService.SendAnyC2RRequest<ApplyMonitoringSettingsDto, RequestAnswer>(dto);
                 if (resultDto.ReturnCode == ReturnCode.MonitoringSettingsAppliedSuccessfully)
                 {
                     var cmd = dto.CreateCommand();

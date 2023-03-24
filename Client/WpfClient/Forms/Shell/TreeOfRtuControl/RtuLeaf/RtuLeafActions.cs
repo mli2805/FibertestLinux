@@ -23,6 +23,7 @@ namespace Fibertest.WpfClient
         private readonly GraphReadModel _graphReadModel;
         private readonly IWindowManager _windowManager;
         private readonly GrpcC2DService _grpcC2DService;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly RtuRemover _rtuRemover;
         private readonly TabulatorViewModel _tabulatorViewModel;
@@ -32,7 +33,8 @@ namespace Fibertest.WpfClient
 
         public RtuLeafActions(ILifetimeScope globalScope, ILogger logger,
             Model readModel, GraphReadModel graphReadModel,
-            IWindowManager windowManager, GrpcC2DService grpcC2DService, IWcfServiceCommonC2D commonC2DWcfManager,
+            IWindowManager windowManager, GrpcC2DService grpcC2DService, GrpcC2RService grpcC2RService,
+            IWcfServiceCommonC2D commonC2DWcfManager,
             RtuRemover rtuRemover, TabulatorViewModel tabulatorViewModel,
             RtuAutoBaseViewModel rtuAutoBaseViewModel,
             RtuStateViewsManager rtuStateViewsManager, LandmarksViewsManager landmarksViewsManager)
@@ -43,6 +45,7 @@ namespace Fibertest.WpfClient
             _graphReadModel = graphReadModel;
             _windowManager = windowManager;
             _grpcC2DService = grpcC2DService;
+            _grpcC2RService = grpcC2RService;
             _commonC2DWcfManager = commonC2DWcfManager;
             _rtuRemover = rtuRemover;
             _tabulatorViewModel = tabulatorViewModel;
@@ -211,7 +214,7 @@ namespace Fibertest.WpfClient
             RequestAnswer resultDto;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                resultDto = await _commonC2DWcfManager.ApplyMonitoringSettingsAsync(dto);
+                resultDto = await _grpcC2RService.SendAnyC2RRequest<ApplyMonitoringSettingsDto, RequestAnswer>(dto);
             }
 
             if (resultDto.ReturnCode != ReturnCode.MonitoringSettingsAppliedSuccessfully)

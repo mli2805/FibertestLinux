@@ -45,7 +45,8 @@ public partial class RtuResponseApplier
                 return await ApplyOtauDetachmentResult(dto, jsonResult);
             case AssignBaseRefsDto dto:
                 return await ApplyBaseRefsAssignmentResult(dto, jsonResult);
-
+            case ApplyMonitoringSettingsDto dto:
+                return await ApplyMonitoringSettingsResult(dto, jsonResult);
             case AttachTraceDto dto:
                 return await ApplyBaseRefsAssignmentResult(dto, jsonResult);
             default:

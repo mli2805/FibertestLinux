@@ -48,6 +48,7 @@ public class ClientToIitRtuTransmitter
                     new OtauAttachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 case DoClientMeasurementDto _: badResult =
                     new ClientMeasurementStartedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
+                // case ApplyMonitoringSettingsDto _:
                 // case StopMonitoringDto _:
                 // case FreeOtdrDto _:
                 default: badResult = new RequestAnswer(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;

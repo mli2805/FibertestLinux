@@ -20,7 +20,7 @@ namespace Fibertest.WpfClient
         Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto);
         Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto);
         Task<bool> StopMonitoringAsync(StopMonitoringDto dto);
-        Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings);
+        // Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings);
         // Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs);
         // Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd);
         Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs);
@@ -96,10 +96,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         // public Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs)
         // {

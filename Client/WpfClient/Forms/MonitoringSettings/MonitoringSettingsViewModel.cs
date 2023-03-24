@@ -17,7 +17,7 @@ namespace Fibertest.WpfClient
         private readonly CurrentUser _currentUser;
         private readonly Model _readModel;
         private readonly GrpcC2DService _grpcC2DService;
-        private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IWindowManager _windowManager;
         public MonitoringSettingsModel Model { get; set; }
 
@@ -51,15 +51,16 @@ namespace Fibertest.WpfClient
         public bool IsEditEnabled => _currentUser.Role <= Role.Operator && IsButtonsEnabled;
 
         public MonitoringSettingsViewModel(RtuLeaf rtuLeaf, ILifetimeScope globalScope, 
-            CurrentUser currentUser, Model readModel, GrpcC2DService grpcC2DService,
-             IWcfServiceCommonC2D commonC2DWcfManager, IWindowManager windowManager,
+            CurrentUser currentUser, Model readModel, 
+            GrpcC2DService grpcC2DService, GrpcC2RService grpcC2RService,
+             IWindowManager windowManager,
             MonitoringSettingsModelFactory monitoringSettingsModelFactory)
         {
             _globalScope = globalScope;
             _currentUser = currentUser;
             _readModel = readModel;
             _grpcC2DService = grpcC2DService;
-            _commonC2DWcfManager = commonC2DWcfManager;
+            _grpcC2RService = grpcC2RService;
             _windowManager = windowManager;
 
             IsButtonsEnabled = true;
@@ -89,7 +90,9 @@ namespace Fibertest.WpfClient
                     IsButtonsEnabled = true;
                     return;
                 }
-                var resultDto = await _commonC2DWcfManager.ApplyMonitoringSettingsAsync(dto);
+
+                var resultDto = await _grpcC2RService
+                    .SendAnyC2RRequest<ApplyMonitoringSettingsDto, RequestAnswer>(dto);
                 if (resultDto.ReturnCode == ReturnCode.MonitoringSettingsAppliedSuccessfully)
                 {
                     var cmd = dto.CreateCommand();
@@ -132,7 +135,8 @@ namespace Fibertest.WpfClient
                     });
                 }
 
-                var resultDto = await _commonC2DWcfManager.ReSendBaseRefAsync(resendBaseRefDto);
+                var resultDto = await _grpcC2RService
+                    .SendAnyC2RRequest<ReSendBaseRefsDto, RequestAnswer>(resendBaseRefDto);
                 if (resultDto.ReturnCode == ReturnCode.BaseRefAssignedSuccessfully)
                     MessageProp = Resources.SID_Base_refs_are_sent_to_RTU;
                 else
