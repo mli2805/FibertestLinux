@@ -47,6 +47,14 @@ public class MonitoringQueue
             {
                 return File.ReadAllLines(_monitoringSettingFileBackup);
             }
+            else
+            {
+                // first start
+                Queue = new Queue<MonitoringPort>();
+                Save();
+                SaveBackup();
+                return LoadWithMd5();
+            }
         }
         catch (Exception e)
         {
@@ -64,7 +72,6 @@ public class MonitoringQueue
 
         try
         {
-
             var contents = LoadWithMd5();
             var list = contents
                 .Select(s => (MonitoringPortOnDisk?)JsonConvert.DeserializeObject(s, JsonSerializerSettings))

@@ -10,7 +10,7 @@ public partial class RtuManager
     {
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
         _config.Update(c => c.Monitoring.IsMonitoringOn = true);
-        _logger.Info(Logs.RtuManager, Environment.NewLine + "Start monitoring.");
+        _logger.EmptyAndLog(Logs.RtuManager, "Start monitoring.");
         _logger.Info(Logs.RtuManager, $"_mainCharon.Serial = {_mainCharon.Serial}");
 
         if (_monitoringQueue.Count() < 1)

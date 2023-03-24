@@ -1,4 +1,5 @@
-﻿using Fibertest.Dto;
+﻿using System.Globalization;
+using Fibertest.Dto;
 using Fibertest.Utils;
 
 namespace Fibertest.Rtu;
@@ -7,7 +8,6 @@ public partial class RtuManager
 {
     public async Task<RequestAnswer> ApplyMonitoringSettings(ApplyMonitoringSettingsDto dto)
     {
-        await Task.Delay(1);
         var wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
         if (_config.Value.Monitoring.IsMonitoringOn)
             StopMonitoring("Apply monitoring settings");
@@ -44,11 +44,10 @@ public partial class RtuManager
         if (!wasMonitoringOn)
             _monitoringQueue.RaiseMonitoringModeChangedFlag();
 
-        _logger.Info(Logs.RtuManager, Environment.NewLine + "RTU is turned into AUTOMATIC mode.");
+        _logger.EmptyAndLog(Logs.RtuManager, "RTU is turned into AUTOMATIC mode.");
 
-        // с этого начинается цикл мониторинга
-        // _monitoringConfig.Update(c=>c.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
-        // _monitoringConfig.Update(c=>c.IsMonitoringOn = true);
+        _config.Update(c=>c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
+        _config.Update(c=>c.Monitoring.IsMonitoringOn = true);
 
         RunMonitoringCycle();
     }
