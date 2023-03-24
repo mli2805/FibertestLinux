@@ -90,13 +90,16 @@ public class MonitoringQueue
                             : _monitoringSettingFileBackup);
                     _logger.Info(Logs.RtuManager, $"queue file content: {content}");
 
-                    return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(content) ?? new List<MonitoringPortOnDisk>();
+                    return JsonConvert
+                        .DeserializeObject<List<MonitoringPortOnDisk>>(content, JsonSerializerSettings) 
+                           ?? new List<MonitoringPortOnDisk>();
                 }
             }
             else if (File.Exists(_monitoringSettingFileBackup))
             {
                 var contentBackup = await File.ReadAllTextAsync(_monitoringSettingFileBackup);
-                return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(contentBackup) ?? new List<MonitoringPortOnDisk>();
+                return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(contentBackup, JsonSerializerSettings) 
+                       ?? new List<MonitoringPortOnDisk>();
             }
         }
         catch (Exception e)
