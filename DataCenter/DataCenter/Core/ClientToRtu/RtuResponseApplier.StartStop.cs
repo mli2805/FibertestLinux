@@ -24,17 +24,31 @@ namespace Fibertest.DataCenter
 
                 var esResult = await _responseToEventSourcing.SendToEventSourcing(dto.ClientConnectionId, cmd);
                 if (esResult != null)
-                {
-                    result.ReturnCode = ReturnCode.Error;
-                    result.ErrorMessage = esResult;
-                    jsonResult = JsonConvert.SerializeObject(result, JsonSerializerSettings);
-                }
+                    jsonResult = result.TurnInto(ReturnCode.Error, esResult).SerializeToJson();
 
             }
             else
                 _logger.Error(Logs.DataCenter, "Failed to apply monitoring settings!");
 
             return jsonResult;
+        }
+
+        public async Task<string> ApplyStopMonitoringResult(StopMonitoringDto dto, string jsonResult)
+        {
+            var result = Deserialize<RequestAnswer>(jsonResult);
+            if (result.ReturnCode == ReturnCode.Ok)
+            {
+                var cmd = new StopMonitoring() { RtuId = dto.RtuId };
+                var esResult = await _responseToEventSourcing.SendToEventSourcing(dto.ClientConnectionId, cmd);
+                if (esResult != null)
+                    jsonResult = result.TurnInto(ReturnCode.Error, esResult).SerializeToJson();
+
+            }
+            else
+                _logger.Error(Logs.DataCenter, "Failed to stop monitoring!");
+
+            return jsonResult;
+
         }
     }
 }

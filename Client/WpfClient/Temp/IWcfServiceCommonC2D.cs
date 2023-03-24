@@ -19,7 +19,7 @@ namespace Fibertest.WpfClient
         // Task<RtuInitializedDto> InitializeRtuAsync(InitializeRtuDto dto);
         Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto);
         Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto);
-        Task<bool> StopMonitoringAsync(StopMonitoringDto dto);
+        // Task<bool> StopMonitoringAsync(StopMonitoringDto dto);
         // Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings);
         // Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs);
         // Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd);
@@ -46,41 +46,6 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<ClientRegisteredDto> RegisterClientAsync(RegisterClientDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        // public Task<RequestAnswer> SetRtuOccupationState(OccupyRtuDto dto)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
-        public Task<RequestAnswer> RegisterHeartbeat(string connectionId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<int> UnregisterClientAsync(UnRegisterClientDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        // public Task<RequestAnswer> DetachTraceAsync(DetachTraceDto dto)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
-        // public Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
-        // public Task<RtuInitializedDto> InitializeRtuAsync(InitializeRtuDto dto)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
         public Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto)
         {
             throw new System.NotImplementedException();
@@ -91,10 +56,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> StopMonitoringAsync(StopMonitoringDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<bool> StopMonitoringAsync(StopMonitoringDto dto)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
         // public Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings)
         // {

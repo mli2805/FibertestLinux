@@ -138,11 +138,12 @@ namespace Fibertest.WpfClient
 
             if (!_readModel.TryGetRtu(rtuLeaf.Id, out Rtu? rtu)) return;
 
-            bool result;
+            RequestAnswer result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
                 result =
-                    await _commonC2DWcfManager.StopMonitoringAsync(
+                    await _grpcC2RService
+                        .SendAnyC2RRequest<StopMonitoringDto, RequestAnswer>(
                         new StopMonitoringDto(rtuLeaf.Id, rtu!.RtuMaker));
             }
 
