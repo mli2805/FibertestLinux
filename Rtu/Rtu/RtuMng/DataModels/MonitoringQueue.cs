@@ -48,17 +48,17 @@ public class MonitoringQueue
         {
             _logger.Info(Logs.RtuManager, "Queue file not found. Create empty file:");
             _logger.Info(Logs.RtuManager, _monitoringSettingsFile);
-            
+
             await Save();
         }
 
         try
         {
             var list = await LoadWithMd5();
-          
+
             foreach (var port in list)
             {
-                    Queue.Enqueue(new MonitoringPort(port));
+                Queue.Enqueue(new MonitoringPort(port));
             }
         }
         catch (Exception e)
@@ -111,10 +111,10 @@ public class MonitoringQueue
     {
         try
         {
-            var list = Queue.ToList();
+            var list = Queue.Select(p => new MonitoringPortOnDisk(p)).ToList();
             var content = JsonConvert.SerializeObject(list, JsonSerializerSettings);
             await File.WriteAllTextAsync(_monitoringSettingsFile, content);
-            
+
             var md5 = CalculateMd5(_monitoringSettingsFile);
             await File.WriteAllTextAsync(_monitoringSettingsMd5File, md5);
         }
@@ -128,7 +128,7 @@ public class MonitoringQueue
     {
         try
         {
-            var list = Queue.ToList();
+            var list = Queue.Select(p => new MonitoringPortOnDisk(p)).ToList();
             var content = JsonConvert.SerializeObject(list, JsonSerializerSettings);
             await File.WriteAllTextAsync(_monitoringSettingsFile, content);
         }
