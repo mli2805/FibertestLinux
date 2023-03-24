@@ -105,6 +105,10 @@ public class MonitoringQueue
         catch (Exception e)
         {
             _logger.Error(Logs.RtuManager, $"Queue loading: {e.Message}");
+            if (e.InnerException != null)
+            {
+                _logger.Error(Logs.RtuManager, $"Queue loading: {e.InnerException.Message}");
+            }
         }
 
         return new List<MonitoringPortOnDisk>();
