@@ -12,7 +12,7 @@ public class MonitoringQueue
 
     private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
     {
-        // TypeNameHandling = TypeNameHandling.All
+        TypeNameHandling = TypeNameHandling.All
     };
 
     private string _monitoringSettingsFile = null!;
