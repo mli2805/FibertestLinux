@@ -4,7 +4,7 @@ namespace Fibertest.Rtu;
 
 public class MonitoringPortOnDisk
 {
-    public string Serial;
+    public string Serial = null!;
     public int OpticalPort;
     public bool IsPortOnMainCharon;
     public Guid TraceId;
@@ -19,10 +19,10 @@ public class MonitoringPortOnDisk
     public bool IsConfirmationRequired;
        
     // for deserializer
-    // public MonitoringPortOnDisk()
-    // {
-    //     
-    // }
+    public MonitoringPortOnDisk()
+    {
+        
+    }
 
     public MonitoringPortOnDisk(MonitoringPort port)
     {
