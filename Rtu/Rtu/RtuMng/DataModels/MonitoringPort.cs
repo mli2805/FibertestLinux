@@ -1,6 +1,7 @@
 ﻿using Fibertest.CharonLib;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using Fibertest.Utils.Setup;
 
 namespace Fibertest.Rtu;
 
@@ -91,22 +92,27 @@ public class MonitoringPort
 
     public bool HasAdditionalBase()
     {
-        var basefile = AppDomain.CurrentDomain.BaseDirectory + $@"..\PortData\{GetPortFolderName()}\{BaseRefType.Additional.ToBaseFileName()}";
-        return File.Exists(basefile);
+        var fibertestPath = FileOperations.GetMainFolder();
+        var portDataFolder = Path.Combine(fibertestPath, @"PortData");
+        var baseFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}\{BaseRefType.Additional.ToBaseFileName()}");
+        return File.Exists(baseFile);
     }
 
     public byte[]? GetBaseBytes<T>(BaseRefType baseRefType, ILogger<T> logger)
     {
-        var basefile = AppDomain.CurrentDomain.BaseDirectory + $@"..\PortData\{GetPortFolderName()}\{baseRefType.ToBaseFileName()}";
-        if (File.Exists(basefile))
-            return File.ReadAllBytes(basefile);
-        logger.Error(Logs.RtuManager, $"Can't find {basefile}");
+        var fibertestPath = FileOperations.GetMainFolder();
+        var portDataFolder = Path.Combine(fibertestPath, @"PortData");
+        var baseFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}\{baseRefType.ToBaseFileName()}");
+        if (File.Exists(baseFile))
+            return File.ReadAllBytes(baseFile);
+        logger.Error(Logs.RtuManager, $"Can't find {baseFile}");
         return null;
     }
 
     public void SaveSorData<T>(BaseRefType baseRefType, byte[] bytes, SorType sorType, ILogger<T> logger)
     {
-        var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Measurements\");
+        var fibertestPath = FileOperations.GetMainFolder();
+        var folder = Path.Combine(fibertestPath, @"Measurements");
         if (!Directory.Exists(folder))
             Directory.CreateDirectory(folder);
         var filename = Path.Combine(folder, $@"{DateTime.Now:ddMM HHmmss} {baseRefType} {sorType}.sor");
@@ -124,24 +130,25 @@ public class MonitoringPort
 
     public void SaveMeasBytes<T>(BaseRefType baseRefType, byte[] bytes, SorType sorType, ILogger<T> logger)
     {
-        var measfile = AppDomain.CurrentDomain.BaseDirectory + 
-                       $@"..\PortData\{GetPortFolderName()}\{baseRefType.ToFileName(sorType)}";
+        var fibertestPath = FileOperations.GetMainFolder();
+        var portDataFolder = Path.Combine(fibertestPath, @"PortData");
+        var measFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}\{baseRefType.ToFileName(sorType)}");
 
         try
         {
-            if (baseRefType == BaseRefType.Precise && sorType == SorType.Meas && File.Exists(measfile))
+            if (baseRefType == BaseRefType.Precise && sorType == SorType.Meas && File.Exists(measFile))
             {
-                var previousFile = AppDomain.CurrentDomain.BaseDirectory
-                                   + $@"..\PortData\{GetPortFolderName()}\{baseRefType.ToFileName(SorType.Previous)}";
+                var previousFile = Path.Combine(portDataFolder, 
+                    $@"{GetPortFolderName()}\{baseRefType.ToFileName(SorType.Previous)}");
                 if (File.Exists(previousFile))
                     File.Delete(previousFile);
-                File.Move(measfile, previousFile);
+                File.Move(measFile, previousFile);
             }
-            File.WriteAllBytes(measfile, bytes);
+            File.WriteAllBytes(measFile, bytes);
         }
         catch (Exception e)
         {
-            logger.Error(Logs.RtuManager, $"Failed to persist measurement data into {measfile}");
+            logger.Error(Logs.RtuManager, $"Failed to persist measurement data into {measFile}");
             logger.Error(Logs.RtuManager, e.Message);
         }
     }
