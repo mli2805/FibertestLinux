@@ -5,7 +5,6 @@ using System.Linq;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
-using iText.StyledXmlParser.Jsoup.Internal;
 
 namespace Fibertest.WpfClient;
 
@@ -101,16 +100,38 @@ public class AllOpticalEventsReportProvider
         return content;
     }
 
-    private Dictionary<int, DateTime> _closingTimes;
+    private Dictionary<int, DateTime> _closingTimes = null!;
     private string DrawOpticalEvents(string content)
     {
         _closingTimes = _events.GetAccidentsClosingTimes();
         var checkedStatuses = _reportModel.EventStatusViewModel.GetCheckedStatuses();
         foreach (var eventStatus in EventStatusExt.EventStatusesInRightOrder.Where(eventStatus => checkedStatuses.Contains(eventStatus)))
         {
-         //   DrawOpticalEventsWithStatus(section, eventStatus);
+         DrawOpticalEventsWithStatus(content, eventStatus);
         }
 
+        return content;
+    }
+
+    private string DrawOpticalEventsWithStatus(string content, EventStatus eventStatus)
+    {
+        foreach (var state in _reportModel.TraceStateSelectionViewModel.GetCheckedStates())
+        {
+            var events = _events
+                .Where(r => r.EventStatus == eventStatus
+                            && r.TraceState == state
+                            && (r.MeasurementTimestamp.Date >= _reportModel.DateFrom && r.MeasurementTimestamp.Date <= _reportModel.DateTo))
+                .OrderByDescending(e => e.EventRegistrationTimestamp)
+                .ToList();
+            if (events.Any())
+                DrawOpticalEventsWithStatusAndState(content, events);
+        }
+
+        return content;
+    }
+
+    private string DrawOpticalEventsWithStatusAndState(string content, List<OpticalEventModel> events)
+    {
         return content;
     }
 
