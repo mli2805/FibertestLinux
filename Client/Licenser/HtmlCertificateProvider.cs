@@ -13,7 +13,8 @@ public static class HtmlCertificateProvider
     {
         var licenseInFile = licenseInFileModel.ToLicenseInFile();
 
-        var templateFileName = AppDomain.CurrentDomain.BaseDirectory + @"Resources\LicenseCertificateTemplate.html";
+        var templateFileName = AppDomain.CurrentDomain.BaseDirectory + 
+                               @"Resources\LicenseCertificateTemplate.html";
         if (!File.Exists(templateFileName))
             return null;
         var content = File.ReadAllText(templateFileName);
@@ -82,50 +83,19 @@ public static class HtmlCertificateProvider
 
     private static Dictionary<string, string> DefineConstants(LicenseInFile licenseInFile)
     {
-        var result = new Dictionary<string, string>();
-        result.Add("IitTitle", Resources.SID_JS_Institute_of_Information_Technologies);
-        result.Add("IitAddress", Resources.SID_Iit_address);
-        result.Add("OFMSS", Resources.SID_Optical_fiber_monitoring_system_software);
-
-        result.Add("LicenseNumber", Resources.SID_License_number_);
-        result.Add("LicenseKey", licenseInFile.Lk());
-
-        /*
-        if (!licenseInFile.IsIncremental)
-        {
-            result.Add("LicenseType", Resources.SID_License_type);
-            result.Add("LicenseTypeValue", licenseInFile.IsMachineKeyRequired
-                ? Resources.SID_With_user_s_account_to_workstation_linking : Resources.SID_Standart);
-        }
-        result.Add("LicenseKeyType", Resources.SID_License_key_type);
-        result.Add("LicenseKeyTypeValue", licenseInFile.IsIncremental ? Resources.SID_Incremental : Resources.SID_Basic);
-
-        result.Add("LicenseOwner", Resources.SID_License_owner);
-        result.Add("LicenseOwnerValue", licenseInFile.Owner);
-
-        result.Add("RTUCount", Resources.SID_Remote_testing_unit_count);
-        result.Add("RTUCountValue", licenseInFile.RtuCount.ToString());
-
-        result.Add("ClientStationCount", Resources.SID_Client_stations);
-        result.Add("ClientStationCountValue", licenseInFile.ClientStationCount.ToString());
-
-        result.Add("WebClientCount", Resources.SID_Web_clients);
-        result.Add("WebClientCountValue", licenseInFile.WebClientCount.ToString());
-
-        result.Add("SuperClientCount", Resources.SID_SuperClients);
-        result.Add("SuperClientCountValue", licenseInFile.SuperClientStationCount.ToString());
-
-        result.Add("CreationDate", Resources.SID_Creation_date);
-        result.Add("CreationDateValue", licenseInFile.CreationDate.ToString("d"));
-        */
-         
         var bytes = Cryptography.Encode(licenseInFile);
         var code = ByteArrayToString(bytes!);
-        result.Add("DigitalKey", code);
 
-        result.Add("Signature", "     Директор     __________________________     Слесарчик М.В.");
-
-        return result;
+        return new Dictionary<string, string>
+        {
+            { "IitTitle", Resources.SID_JS_Institute_of_Information_Technologies },
+            { "IitAddress", Resources.SID_Iit_address },
+            { "OFMSS", Resources.SID_Optical_fiber_monitoring_system_software },
+            { "LicenseNumber", Resources.SID_License_number_ },
+            { "LicenseKey", licenseInFile.Lk() },
+            { "DigitalKey", code },
+            { "Signature", "     Директор     __________________________     Слесарчик М.В." }
+        };
     }
 
     private static string ByteArrayToString(byte[] ba)

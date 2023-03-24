@@ -87,6 +87,8 @@
 	  <None Remove="Resources\Reports\header.png" />
 	  <None Remove="Resources\Reports\IIT-header-landscape.png" />
 	  <None Remove="Resources\Reports\IIT-header.png" />
+	  <None Remove="Resources\Reports\OpticalEventsTemplate.css" />
+	  <None Remove="Resources\Reports\OpticalEventsTemplate.html" />
 	  <None Remove="Resources\Reports\TraceStateReport.html" />
 	  <None Remove="Resources\Rtu\RtuCritical.png" />
 	  <None Remove="Resources\Rtu\RtuCritical2c.png" />
@@ -150,6 +152,12 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="Resources\Reports\IIT-header.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\OpticalEventsTemplate.css">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Reports\OpticalEventsTemplate.html">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="Resources\Reports\TraceStateReport.html">

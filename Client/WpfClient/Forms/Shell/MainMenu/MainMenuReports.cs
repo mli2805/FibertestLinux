@@ -22,11 +22,16 @@ namespace Fibertest.WpfClient
         {
             _opticalEventsReportViewModel.Initialize();
             await _windowManager.ShowDialogWithAssignedOwner(_opticalEventsReportViewModel);
-            if (_opticalEventsReportViewModel.HtmlReport == null) return;
+            var htmlReport = _opticalEventsReportViewModel.HtmlReport;
+            if (htmlReport == null) return;
 
-            var pdfFileName = 
-                _opticalEventsReportViewModel.HtmlReport.SaveHtmlAsPdf("OpticalEventsReport");
-            Process.Start(new ProcessStartInfo() { FileName = pdfFileName, UseShellExecute = true });
+            var htmlFileName = htmlReport.SaveHtml("OpticalEventsReport");
+            Process.Start(new ProcessStartInfo() { FileName = htmlFileName, UseShellExecute = true });
+
+
+            // var pdfFileName = 
+            //     htmlReport.SaveHtmlAsPdf("OpticalEventsReport");
+            // Process.Start(new ProcessStartInfo() { FileName = pdfFileName, UseShellExecute = true });
         }
 
         public async void LaunchEventLogView()

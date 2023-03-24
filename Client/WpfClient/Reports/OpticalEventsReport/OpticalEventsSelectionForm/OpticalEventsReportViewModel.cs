@@ -39,9 +39,6 @@ namespace Fibertest.WpfClient
                 ? _readModel.Zones 
                 : new List<Zone>() {_readModel.Zones.First(z => z.ZoneId == _currentUser.ZoneId)};
             Model.SelectedZone = Model.Zones.First();
-
-            // Model.DateTo = DateTime.Now;
-            // Model.DateFrom = new DateTime(DateTime.Today.Year, 1, 1);
         }
 
         protected override void OnViewLoaded(object view)
@@ -53,7 +50,7 @@ namespace Fibertest.WpfClient
         public async void CreateReport()
         {
             HtmlReport =  Model.IsCustomReport 
-                ? _allOpticalEventsReportProvider.Create(Model) 
+                ? _allOpticalEventsReportProvider.CreateHtmlReport(Model) 
                 : _actualOpticalEventsReportProvider.Create(Model);
             await TryCloseAsync();
         }

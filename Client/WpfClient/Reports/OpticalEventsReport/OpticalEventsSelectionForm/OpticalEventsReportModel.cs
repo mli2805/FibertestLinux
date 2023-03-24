@@ -20,6 +20,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private bool _isCurrentEventsReport;
         public bool IsCurrentEventsReport
         {
             get => _isCurrentEventsReport;
@@ -31,6 +32,7 @@ namespace Fibertest.WpfClient
             }
         }
 
+        private DateTime _dateFrom;
         public DateTime DateFrom
         {
             get => _dateFrom;
@@ -52,7 +54,6 @@ namespace Fibertest.WpfClient
         public Zone SelectedZone { get; set; }
 
         private bool _isDetailedReport = true;
-
         public bool IsDetailedReport
         {
             get => _isDetailedReport;
@@ -66,9 +67,6 @@ namespace Fibertest.WpfClient
         }
 
         private bool _isAccidentPlaceShown;
-        private bool _isCurrentEventsReport;
-        private DateTime _dateFrom;
-
         public bool IsAccidentPlaceShown
         {
             get { return _isAccidentPlaceShown; }
