@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using Fibertest.Dto;
 using Fibertest.Utils;
 
@@ -49,8 +50,12 @@ public partial class RtuManager
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
         _config.Update(c => c.Monitoring.IsMonitoringOn = true);
 
-        await Task.Run(RunMonitoringCycle);
-        _logger.Debug(Logs.RtuManager, "Monitoring cycle started in another thread");
+        var _ = Task.Run(RunMonitoringCycle);
+
+        var pid = Process.GetCurrentProcess().Id;
+        var tid = Thread.CurrentThread.ManagedThreadId;
+        _logger.Debug(Logs.RtuManager, $"Leaving gRPC thread: process {pid}, thread {tid}");
+
     }
 
 

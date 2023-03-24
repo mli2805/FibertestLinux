@@ -84,7 +84,7 @@ namespace Fibertest.Rtu
                     var buffer = GetLastSorDataBuffer();
                     if (buffer == null)
                         return ReturnCode.MeasurementError;
-                    _logger.Info(Logs.RtuManager, $"  MeasStep #{++step} returned {buffer.Length} bytes");
+                    _logger.Debug(Logs.RtuManager, $"  MeasStep #{++step} returned {buffer.Length} bytes");
 
                     if (result != 0 && result != 10001)
                     {
@@ -128,19 +128,19 @@ namespace Fibertest.Rtu
         public byte[]? ApplyAutoAnalysis(byte[] measBytes)
         {
             var measIntPtr = _interOpWrapper.SetSorData(measBytes);
-            _logger.Info(Logs.RtuManager, "  SetSorData done.");
+            _logger.Debug(Logs.RtuManager, "  SetSorData done.");
 
             if (!_interOpWrapper.MakeAutoAnalysis(ref measIntPtr))
             {
-                _logger.Info(Logs.RtuManager, "  ApplyAutoAnalysis error.");
+                _logger.Debug(Logs.RtuManager, "  ApplyAutoAnalysis error.");
                 return null;
             }
-            _logger.Info(Logs.RtuManager, "  ApplyAutoAnalysis done.");
+            _logger.Debug(Logs.RtuManager, "  ApplyAutoAnalysis done.");
             var size = _interOpWrapper.GetSorDataSize(measIntPtr);
-            _logger.Info(Logs.RtuManager, "  GetSorDataSize done.");
+            _logger.Debug(Logs.RtuManager, "  GetSorDataSize done.");
             byte[] resultBytes = new byte[size];
             _interOpWrapper.GetSordata(measIntPtr, resultBytes, size);
-            _logger.Info(Logs.RtuManager, "  GetSorData done.");
+            _logger.Debug(Logs.RtuManager, "  GetSorData done.");
             _interOpWrapper.FreeSorDataMemory(measIntPtr);
             return resultBytes;
         }

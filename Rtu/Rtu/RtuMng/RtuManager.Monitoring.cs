@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using Fibertest.Dto;
 using Fibertest.Utils;
 
@@ -8,10 +9,14 @@ public partial class RtuManager
 {
     public async Task RunMonitoringCycle()
     {
+        var pid = Process.GetCurrentProcess().Id;
+        var tid = Thread.CurrentThread.ManagedThreadId;
+        _logger.Info(Logs.RtuManager, $"Monitoring cycle is running in process {pid}, thread {tid}");
+
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
         _config.Update(c => c.Monitoring.IsMonitoringOn = true);
         _logger.EmptyAndLog(Logs.RtuManager, "Start monitoring.");
-        _logger.Info(Logs.RtuManager, $"_mainCharon.Serial = {_mainCharon.Serial}");
+        // _logger.Info(Logs.RtuManager, $"_mainCharon.Serial = {_mainCharon.Serial}");
 
         if (_monitoringQueue.Count() < 1)
         {
@@ -128,8 +133,8 @@ public partial class RtuManager
     private async Task<MoniResult> DoSecondMeasurement(MonitoringPort monitoringPort, bool hasFastPerformed,
         BaseRefType baseType, bool isOutOfTurnMeasurement = false)
     {
-        _logger.Info(Logs.RtuManager,
-            Environment.NewLine + $"MEAS. {_measurementNumber}, {baseType}, port {monitoringPort.ToStringB(_mainCharon)}");
+        _logger.EmptyAndLog(Logs.RtuManager,
+            $"MEAS. {_measurementNumber}, {baseType}, port {monitoringPort.ToStringB(_mainCharon)}");
 
         var moniResult = await DoMeasurement(baseType, monitoringPort, !hasFastPerformed);
 
