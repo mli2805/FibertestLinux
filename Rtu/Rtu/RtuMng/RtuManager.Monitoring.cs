@@ -120,7 +120,7 @@ public partial class RtuManager
                 monitoringPort.LastFastSavedTimestamp = DateTime.Now;
             }
 
-            _monitoringQueue.Save();
+            await _monitoringQueue.Save();
         }
         return moniResult;
     }
@@ -160,7 +160,7 @@ public partial class RtuManager
                 monitoringPort.LastPreciseSavedTimestamp = DateTime.Now;
             }
 
-            _monitoringQueue.Save();
+            await _monitoringQueue.Save();
         }
         return moniResult;
     }

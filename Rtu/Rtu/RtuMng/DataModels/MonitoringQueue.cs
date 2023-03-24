@@ -12,7 +12,7 @@ public class MonitoringQueue
 
     private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
     {
-        TypeNameHandling = TypeNameHandling.All
+        // TypeNameHandling = TypeNameHandling.All
     };
 
     private string _monitoringSettingsFile = null!;
@@ -31,16 +31,16 @@ public class MonitoringQueue
     public MonitoringPort Dequeue() { return Queue.Dequeue(); }
     public void Enqueue(MonitoringPort item) { Queue.Enqueue(item); }
 
-    public void Load()
+    public async Task Load()
     {
         _logger.TimestampWithoutMessage(Logs.RtuManager);
         _logger.Info(Logs.RtuManager, "Monitoring queue assembling...");
 
         var fibertestPath = FileOperations.GetMainFolder();
         var queueFolder = Path.Combine(fibertestPath, @"config");
-        _monitoringSettingsFile = Path.Combine(queueFolder, "monitoring.que");
-        _monitoringSettingFileBackup = Path.Combine(queueFolder, "monitoring.que.bac");
-        _monitoringSettingsMd5File = Path.Combine(queueFolder, "monitoring.que.md5");
+        _monitoringSettingsFile = Path.Combine(queueFolder, "queue.json");
+        _monitoringSettingFileBackup = Path.Combine(queueFolder, "queue.json.bac");
+        _monitoringSettingsMd5File = Path.Combine(queueFolder, "queue.json.md5");
 
         Queue = new Queue<MonitoringPort>();
 
@@ -49,19 +49,15 @@ public class MonitoringQueue
             _logger.Info(Logs.RtuManager, "Queue file not found. Create empty file:");
             _logger.Info(Logs.RtuManager, _monitoringSettingsFile);
             
-            Save();
+            await Save();
         }
 
         try
         {
-            var contents = LoadWithMd5();
-            var list = contents
-                .Select(s => (MonitoringPortOnDisk?)JsonConvert.DeserializeObject(s, JsonSerializerSettings))
-                .ToList();
-
+            var list = await LoadWithMd5();
+          
             foreach (var port in list)
             {
-                if (port != null)
                     Queue.Enqueue(new MonitoringPort(port));
             }
         }
@@ -73,7 +69,7 @@ public class MonitoringQueue
         _logger.Info(Logs.RtuManager, $"{Queue.Count} port(s) in queue.");
     }
 
-    private string[] LoadWithMd5()
+    private async Task<List<MonitoringPortOnDisk>> LoadWithMd5()
     {
         try
         {
@@ -82,13 +78,18 @@ public class MonitoringQueue
                 if (File.Exists(_monitoringSettingsMd5File))
                 {
                     var md5 = CalculateMd5(_monitoringSettingsFile);
-                    var md5FromFile = File.ReadAllText(_monitoringSettingsMd5File);
-                    return File.ReadAllLines(md5 == md5FromFile ? _monitoringSettingsFile : _monitoringSettingFileBackup);
+                    var md5FromFile = await File.ReadAllTextAsync(_monitoringSettingsMd5File);
+                    var content =
+                        await File.ReadAllTextAsync(md5 == md5FromFile
+                            ? _monitoringSettingsFile
+                            : _monitoringSettingFileBackup);
+                    return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(content) ?? new List<MonitoringPortOnDisk>();
                 }
             }
             else if (File.Exists(_monitoringSettingFileBackup))
             {
-                return File.ReadAllLines(_monitoringSettingFileBackup);
+                var contentBackup = await File.ReadAllTextAsync(_monitoringSettingFileBackup);
+                return JsonConvert.DeserializeObject<List<MonitoringPortOnDisk>>(contentBackup) ?? new List<MonitoringPortOnDisk>();
             }
         }
         catch (Exception e)
@@ -96,17 +97,19 @@ public class MonitoringQueue
             _logger.Error(Logs.RtuManager, $"Queue loading: {e.Message}");
         }
 
-        return new string[0];
+        return new List<MonitoringPortOnDisk>();
     }
 
-    public void Save()
+    public async Task Save()
     {
         try
         {
-            var list = Queue.Select(p => JsonConvert.SerializeObject(new MonitoringPortOnDisk(p), JsonSerializerSettings)).ToList();
-            File.WriteAllLines(_monitoringSettingsFile, list);
+            var list = Queue.ToList();
+            var content = JsonConvert.SerializeObject(list, JsonSerializerSettings);
+            await File.WriteAllTextAsync(_monitoringSettingsFile, content);
+            
             var md5 = CalculateMd5(_monitoringSettingsFile);
-            File.WriteAllText(_monitoringSettingsMd5File, md5);
+            await File.WriteAllTextAsync(_monitoringSettingsMd5File, md5);
         }
         catch (Exception e)
         {
@@ -114,16 +117,17 @@ public class MonitoringQueue
         }
     }
 
-    public void SaveBackup()
+    public async Task SaveBackup()
     {
         try
         {
-            var list = Queue.Select(p => JsonConvert.SerializeObject(new MonitoringPortOnDisk(p), JsonSerializerSettings)).ToList();
-            File.WriteAllLines(_monitoringSettingFileBackup, list);
+            var list = Queue.ToList();
+            var content = JsonConvert.SerializeObject(list, JsonSerializerSettings);
+            await File.WriteAllTextAsync(_monitoringSettingsFile, content);
         }
         catch (Exception e)
         {
-            _logger.Error(Logs.RtuManager, $"Queue saving: {e.Message}");
+            _logger.Error(Logs.RtuManager, $"Queue backup saving: {e.Message}");
         }
     }
 

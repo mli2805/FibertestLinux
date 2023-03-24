@@ -59,7 +59,7 @@ public partial class RtuManager
         IsRtuInitialized = true;
         _logger.Info(Logs.RtuManager, "RTU initialized successfully!");
 
-        _monitoringQueue.Load();
+        await _monitoringQueue.Load();
         EvaluateFrequencies();
 
         _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
