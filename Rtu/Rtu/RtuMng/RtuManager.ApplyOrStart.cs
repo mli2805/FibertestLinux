@@ -9,6 +9,10 @@ public partial class RtuManager
 {
     public async Task<RequestAnswer> ApplyMonitoringSettings(ApplyMonitoringSettingsDto dto)
     {
+        var pid = Process.GetCurrentProcess().Id;
+        var tid = Thread.CurrentThread.ManagedThreadId;
+        _logger.Info(Logs.RtuManager, $"gRPC command received in process {pid}, thread {tid}");
+
         var wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
         if (_config.Value.Monitoring.IsMonitoringOn)
             StopMonitoring("Apply monitoring settings");
@@ -21,7 +25,7 @@ public partial class RtuManager
 
         if (dto.IsMonitoringOn)
             await StartMonitoring(wasMonitoringOn);
-        return new RequestAnswer(ReturnCode.Ok);
+        return new RequestAnswer(ReturnCode.MonitoringSettingsAppliedSuccessfully);
     }
 
     private void SaveNewFrequenciesInConfig(MonitoringTimespansDto dto)
@@ -55,8 +59,5 @@ public partial class RtuManager
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
         _logger.Debug(Logs.RtuManager, $"Leaving gRPC thread: process {pid}, thread {tid}");
-
     }
-
-
 }

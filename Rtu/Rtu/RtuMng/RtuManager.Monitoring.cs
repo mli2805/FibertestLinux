@@ -176,19 +176,26 @@ public partial class RtuManager
 
         if (shouldChangePort && !await ToggleToPort(monitoringPort))
             return new MoniResult() { MeasurementResult = MeasurementResult.ToggleToPortFailed };
+  
+        if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while port toggling
+            return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
 
         var baseBytes = monitoringPort.GetBaseBytes(baseRefType, _logger);
         if (baseBytes == null)
             return new MoniResult() { MeasurementResult = baseRefType.ToMeasurementResultProblem() };
 
+        if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while getting base
+            return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
+
         SendCurrentMonitoringStep(MonitoringCurrentStep.Measure, monitoringPort, baseRefType);
 
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
 
-        if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while port toggling
+        if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while sending step
             return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
 
-        var result = _otdrManager.MeasureWithBase(_cancellationTokenSource, baseBytes, _mainCharon.GetActiveChildCharon());
+        var result = _otdrManager
+            .MeasureWithBase(_cancellationTokenSource, baseBytes, _mainCharon.GetActiveChildCharon());
 
         if (result == ReturnCode.MeasurementInterrupted)
         {
@@ -265,8 +272,8 @@ public partial class RtuManager
     {
         _otdrManager.DisconnectOtdr();
         var otdrInitializationResult = _otdrManager.InitializeOtdr();
-        _logger.Info(Logs.RtuManager, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");
-        _logger.Info(Logs.RtuService, Environment.NewLine + $"OTDR initialization result - {otdrInitializationResult}");
+        _logger.EmptyAndLog(Logs.RtuManager, $"OTDR initialization result - {otdrInitializationResult}");
+        _logger.EmptyAndLog(Logs.RtuService, $"OTDR initialization result - {otdrInitializationResult}");
     }
 
 

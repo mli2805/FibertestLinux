@@ -46,16 +46,17 @@ namespace Fibertest.Rtu
         {
             if (!_config.Value.Monitoring.IsMonitoringOn)
             {
-                _logger.Info(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
+                _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
                 return;
             }
-
-            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
-            _logger.Info(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
+           
             _cancellationTokenSource?.Cancel();
 
             // if Lmax = 240km and Time = 10min one step lasts 5-6 sec
             Thread.Sleep(TimeSpan.FromSeconds(6));
+
+            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
+            _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
         }
 
     }
