@@ -83,8 +83,8 @@ public partial class RtuManager
 
     private async Task<MoniResult> DoFastMeasurement(MonitoringPort monitoringPort)
     {
-        _logger.Info(Logs.RtuManager,
-            Environment.NewLine + $"MEAS. {_measurementNumber}, Fast, port {monitoringPort.ToStringB(_mainCharon)}");
+        _logger.EmptyAndLog(Logs.RtuManager,
+            $"MEAS. {_measurementNumber}, Fast, port {monitoringPort.ToStringB(_mainCharon)}");
 
         var moniResult = await DoMeasurement(BaseRefType.Fast, monitoringPort);
 

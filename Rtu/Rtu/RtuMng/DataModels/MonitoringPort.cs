@@ -94,7 +94,7 @@ public class MonitoringPort
     {
         var fibertestPath = FileOperations.GetMainFolder();
         var portDataFolder = Path.Combine(fibertestPath, @"PortData");
-        var baseFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}\{BaseRefType.Additional.ToBaseFileName()}");
+        var baseFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}/{BaseRefType.Additional.ToBaseFileName()}");
         return File.Exists(baseFile);
     }
 
@@ -102,7 +102,7 @@ public class MonitoringPort
     {
         var fibertestPath = FileOperations.GetMainFolder();
         var portDataFolder = Path.Combine(fibertestPath, @"PortData");
-        var baseFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}\{baseRefType.ToBaseFileName()}");
+        var baseFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}/{baseRefType.ToBaseFileName()}");
         if (File.Exists(baseFile))
             return File.ReadAllBytes(baseFile);
         logger.Error(Logs.RtuManager, $"Can't find {baseFile}");
@@ -132,14 +132,14 @@ public class MonitoringPort
     {
         var fibertestPath = FileOperations.GetMainFolder();
         var portDataFolder = Path.Combine(fibertestPath, @"PortData");
-        var measFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}\{baseRefType.ToFileName(sorType)}");
+        var measFile = Path.Combine(portDataFolder, $@"{GetPortFolderName()}/{baseRefType.ToFileName(sorType)}");
 
         try
         {
             if (baseRefType == BaseRefType.Precise && sorType == SorType.Meas && File.Exists(measFile))
             {
                 var previousFile = Path.Combine(portDataFolder, 
-                    $@"{GetPortFolderName()}\{baseRefType.ToFileName(SorType.Previous)}");
+                    $@"{GetPortFolderName()}/{baseRefType.ToFileName(SorType.Previous)}");
                 if (File.Exists(previousFile))
                     File.Delete(previousFile);
                 File.Move(measFile, previousFile);
