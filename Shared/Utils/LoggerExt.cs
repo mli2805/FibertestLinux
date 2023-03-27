@@ -36,6 +36,17 @@ public static class LoggerExt
         logger.Log(LogLevel.Error, log.ToInt(), message);
     }
 
+    public static void Exception(this ILogger logger, Logs log, Exception exception, string source = "")
+    {
+        var e = exception;
+
+        while (e != null)
+        {
+            logger.Log(LogLevel.Error, log.ToInt(), $"{source}: {e.Message}");
+            e = e.InnerException;
+        }
+    }
+
     public static void Debug(this ILogger logger, Logs log, string message = "")
     {
         logger.Log(LogLevel.Debug, log.ToInt(), message);
