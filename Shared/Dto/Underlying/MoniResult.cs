@@ -3,6 +3,7 @@
 public class MoniResult
 {
     public MeasurementResult MeasurementResult;
+    public bool IsInterrupted;
     public bool IsNoFiber;
     public bool IsFiberBreak;
 
@@ -16,7 +17,7 @@ public class MoniResult
 
     public FiberState GetAggregatedResult()
     {
-        if (MeasurementResult == MeasurementResult.Interrupted)
+        if (IsInterrupted)
             return FiberState.Unknown;
 
         if (IsNoFiber)

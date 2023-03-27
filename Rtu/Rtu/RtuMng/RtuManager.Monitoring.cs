@@ -32,15 +32,21 @@ public partial class RtuManager
 
             await ProcessOnePort(monitoringPort);
 
-            if (monitoringPort.LastMoniResult!.MeasurementResult != MeasurementResult.Interrupted)
+            if (!monitoringPort.LastMoniResult!.IsInterrupted)
             {
                 var unused = _monitoringQueue.Dequeue();
                 _monitoringQueue.Enqueue(monitoringPort);
             }
 
-
             if (!_config.Value.Monitoring.IsMonitoringOn)
                 break;
+
+            if (monitoringPort.LastMoniResult.IsInterrupted)
+            {
+                _logger.Debug(Logs.RtuManager, "Previous measurement interrupted. Leave monitoring cycle.");
+                break;
+            }
+
         }
 
         _logger.Info(Logs.RtuManager, "Monitoring stopped.");
@@ -129,7 +135,10 @@ public partial class RtuManager
         }
         else
         {
-            _logger.Error(Logs.RtuManager, $"Failed to perform measurement: {moniResult.MeasurementResult}");
+            if (moniResult.IsInterrupted)
+                _logger.Info(Logs.RtuManager, "Measurement interrupted!");
+            else
+                _logger.Error(Logs.RtuManager, $"Failed to perform measurement: {moniResult.MeasurementResult}");
         }
         return moniResult;
     }
@@ -171,6 +180,13 @@ public partial class RtuManager
 
             await _monitoringQueue.Save();
         }
+        else
+        {
+            if (moniResult.IsInterrupted)
+                _logger.Info(Logs.RtuManager, "Measurement interrupted!");
+            else
+                _logger.Error(Logs.RtuManager, $"Failed to perform measurement: {moniResult.MeasurementResult}");
+        }
         return moniResult;
     }
 
@@ -183,23 +199,24 @@ public partial class RtuManager
         {
             if (shouldChangePort && !await ToggleToPort(monitoringPort))
                 return new MoniResult() { MeasurementResult = MeasurementResult.ToggleToPortFailed };
-  
-            if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while port toggling
-                return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
+
+            if (_cancellationTokenSource
+                .IsCancellationRequested) // command to interrupt monitoring came while port toggling
+                return new MoniResult() { IsInterrupted = true };
 
             baseBytes = monitoringPort.GetBaseBytes(baseRefType, _logger);
             if (baseBytes == null)
                 return new MoniResult() { MeasurementResult = baseRefType.ToMeasurementResultProblem() };
 
             if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while getting base
-                return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
+                return new MoniResult() { IsInterrupted = true };
 
             SendCurrentMonitoringStep(MonitoringCurrentStep.Measure, monitoringPort, baseRefType);
 
             _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
 
             if (_cancellationTokenSource.IsCancellationRequested) // command to interrupt monitoring came while sending step
-                return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
+                return new MoniResult() { IsInterrupted = true };
         }
         catch (Exception e)
         {
@@ -214,7 +231,7 @@ public partial class RtuManager
         {
             _config.Update(c => c.Monitoring.IsMonitoringOn = false);
             SendCurrentMonitoringStep(MonitoringCurrentStep.Interrupted);
-            return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
+            return new MoniResult() { IsInterrupted = true };
         }
 
         if (result != ReturnCode.MeasurementEndedNormally)
@@ -263,7 +280,7 @@ public partial class RtuManager
             _logger.Info(Logs.RtuManager, "Start auto analysis.");
             var measBytes = _otdrManager.ApplyAutoAnalysis(buffer);
             if (measBytes == null)
-                return new MoniResult() { MeasurementResult = MeasurementResult.FailedGetSorBuffer }; 
+                return new MoniResult() { MeasurementResult = MeasurementResult.FailedGetSorBuffer };
             if (_config.Value.Monitoring.ShouldSaveSorData)
                 monitoringPort.SaveSorData(baseRefType, buffer, SorType.Analysis, _logger); // for investigations purpose
             monitoringPort.SaveMeasBytes(baseRefType, buffer, SorType.Analysis, _logger); // 
@@ -299,7 +316,7 @@ public partial class RtuManager
     {
         var otauPortDto = new OtauPortDto(monitoringPort.OpticalPort, monitoringPort.IsPortOnMainCharon)
         {
-            Serial =  monitoringPort.CharonSerial
+            Serial = monitoringPort.CharonSerial
         };
         var portWithTraceDto = new PortWithTraceDto(otauPortDto, monitoringPort.TraceId);
         var dto = new MonitoringResultDto(

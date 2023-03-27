@@ -8,7 +8,6 @@ public enum MeasurementResult
     PreciseBaseRefNotFound,
     AdditionalBaseRefNotFound,
     HardwareProblem,
-    Interrupted,
     FailedGetSorBuffer,
     AnalysisFailed,
     ComparisonFailed,
