@@ -2,6 +2,7 @@
 
 public class CharonConfig
 {
+    public bool IsComPortAvailable { get; set; } = true; // set false to debug from other machine
     public string ComPortName { get; set; } = "/dev/ttyS1";
     public int ComPortSpeed { get; set; } = 115200;
 

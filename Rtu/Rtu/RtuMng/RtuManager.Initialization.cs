@@ -28,11 +28,14 @@ public partial class RtuManager
 
         IsRtuInitialized = false;
 
-        var res = _serialPortManager.ResetCharon();
-        if (res != ReturnCode.Ok)
-            return new RtuInitializedDto(res);
+        if (_config.Value.Charon.IsComPortAvailable)
+        {
+            var res = _serialPortManager.ResetCharon();
+            if (res != ReturnCode.Ok)
+                return new RtuInitializedDto(res);
 
-        _serialPortManager.ShowOnLedDisplay(LedDisplayCode.Connecting); // "Connecting..."
+            _serialPortManager.ShowOnLedDisplay(LedDisplayCode.Connecting); // "Connecting..."
+        }
 
         var result = _otdrManager.InitializeOtdr();
         result.RtuId = _config.Value.General.RtuId;
