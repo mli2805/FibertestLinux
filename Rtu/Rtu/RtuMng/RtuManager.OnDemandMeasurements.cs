@@ -158,11 +158,11 @@ namespace Fibertest.Rtu
                 ? null
                 : new Charon(new NetAddress(currentOtauPortDto.NetAddress.Ip4Address, TcpPorts.IitBop),
                     false, _config.Value.Charon, _logger);
-            _cancellationTokenSource = new CancellationTokenSource();
-            var measResult = _otdrManager.DoManualMeasurement(_cancellationTokenSource, true, activeBop);
+            _rtuManagerCts = new CancellationTokenSource();
+            var measResult = _otdrManager.DoManualMeasurement(_rtuManagerCts, true, activeBop);
 
             // во время измерения или прямо сейчас
-            if (measResult == ReturnCode.MeasurementInterrupted || _cancellationTokenSource.IsCancellationRequested)
+            if (measResult == ReturnCode.MeasurementInterrupted || _rtuManagerCts.IsCancellationRequested)
             {
                 _logger.Info(Logs.RtuManager,"Measurement (Client) interrupted.");
                 _wasMonitoringOn = false;

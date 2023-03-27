@@ -3,10 +3,9 @@
 public class MoniResult
 {
     public MeasurementResult MeasurementResult;
-    public bool IsInterrupted;
+
     public bool IsNoFiber;
     public bool IsFiberBreak;
-
     public List<MoniLevel> Levels = new();
 
     public BaseRefType BaseRefType;
@@ -17,7 +16,7 @@ public class MoniResult
 
     public FiberState GetAggregatedResult()
     {
-        if (IsInterrupted)
+        if (MeasurementResult == MeasurementResult.Interrupted) // ? what about other problems during last measurement
             return FiberState.Unknown;
 
         if (IsNoFiber)
@@ -29,24 +28,24 @@ public class MoniResult
         return lvl == null ? FiberState.Ok : (FiberState) (int) lvl.Type;
     }
 
-    public bool IsStateChanged(MoniResult? previous)
-    {
-        if (previous == null) return true;
-        var currentState = GetAggregatedResult();
-        if (previous.GetAggregatedResult() != currentState)
-            return true;
-
-        if (currentState == FiberState.NoFiber || currentState == FiberState.Ok)
-            return false;
-
-        if (previous.Accidents.Count != Accidents.Count)
-            return true;
-
-        for (int i = 0; i < Accidents.Count; i++)
-        {
-            if (!Accidents[i].IsTheSame(previous.Accidents[i])) return true;
-        }
-
-        return false;
-    }
+    // public bool IsStateChanged(MoniResult? previous)
+    // {
+    //     if (previous == null) return true;
+    //     var currentState = GetAggregatedResult();
+    //     if (previous.GetAggregatedResult() != currentState)
+    //         return true;
+    //
+    //     if (currentState == FiberState.NoFiber || currentState == FiberState.Ok)
+    //         return false;
+    //
+    //     if (previous.Accidents.Count != Accidents.Count)
+    //         return true;
+    //
+    //     for (int i = 0; i < Accidents.Count; i++)
+    //     {
+    //         if (!Accidents[i].IsTheSame(previous.Accidents[i])) return true;
+    //     }
+    //
+    //     return false;
+    // }
 }

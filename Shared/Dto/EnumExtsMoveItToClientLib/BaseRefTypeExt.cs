@@ -51,7 +51,7 @@ public static class BaseRefTypeExt
         return ToFileName(baseRefType, SorType.Meas);
     }
 
-    public static MeasurementResult ToMeasurementResultProblem(this BaseRefType baseRefType)
+    public static MeasurementResult GetBaseRefNotFoundProblem(this BaseRefType baseRefType)
     {
         switch (baseRefType)
         {

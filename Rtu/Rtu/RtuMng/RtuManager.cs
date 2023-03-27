@@ -23,7 +23,7 @@ public partial class RtuManager
     private TimeSpan _fastSaveTimespan;
 
     private TreeOfAcceptableMeasParams? _treeOfAcceptableMeasParams;
-    private CancellationTokenSource? _cancellationTokenSource;
+    private CancellationTokenSource? _rtuManagerCts;
     private MonitoringQueue _monitoringQueue;
     public readonly ConcurrentQueue<object> ShouldSendHeartbeat = new ConcurrentQueue<object>();
 

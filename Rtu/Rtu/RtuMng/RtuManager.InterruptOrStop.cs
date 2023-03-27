@@ -8,7 +8,7 @@ namespace Fibertest.Rtu
         public void InterruptMeasurement(InterruptMeasurementDto dto)
         {
             _logger.Info(Logs.RtuManager, $"Client {dto.ClientConnectionId}: Interrupting current measurement...");
-            _cancellationTokenSource?.Cancel();
+            _rtuManagerCts?.Cancel();
         }
 
         private async void StopMonitoringAndConnectOtdrWithRecovering(string customer)
@@ -37,7 +37,7 @@ namespace Fibertest.Rtu
 
         public async Task<RequestAnswer> StopMonitoring()
         {
-            await Task.Delay(1);
+            await Task.Delay(0);
             StopMonitoring("Stop monitoring");
             return new RequestAnswer(ReturnCode.Ok);
         }
@@ -50,13 +50,14 @@ namespace Fibertest.Rtu
                 return;
             }
            
-            _cancellationTokenSource?.Cancel();
+            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
+            _rtuManagerCts?.Cancel();
 
             // if Lmax = 240km and Time = 10min one step lasts 5-6 sec
-            Thread.Sleep(TimeSpan.FromSeconds(6));
+            // Thread.Sleep(TimeSpan.FromSeconds(6));
 
-            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
             _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
+            SendCurrentMonitoringStep(MonitoringCurrentStep.Interrupted);
         }
 
     }
