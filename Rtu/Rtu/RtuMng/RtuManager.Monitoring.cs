@@ -127,6 +127,10 @@ public partial class RtuManager
 
             await _monitoringQueue.Save();
         }
+        else
+        {
+            _logger.Error(Logs.RtuManager, $"Failed to perform measurement: {moniResult.MeasurementResult}");
+        }
         return moniResult;
     }
 
