@@ -25,6 +25,7 @@ public partial class RtuManager
 
         if (dto.IsMonitoringOn)
             await StartMonitoring(wasMonitoringOn);
+        _logger.Debug(Logs.RtuManager, $"Leaving gRPC thread: process {pid}, thread {tid}");
         return new RequestAnswer(ReturnCode.MonitoringSettingsAppliedSuccessfully);
     }
 
@@ -40,6 +41,7 @@ public partial class RtuManager
 
     private async Task StartMonitoring(bool wasMonitoringOn)
     {
+        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
         var rtuInitializationResult = await InitializeRtu();
         if (!rtuInitializationResult.IsInitialized)
         {
@@ -52,12 +54,10 @@ public partial class RtuManager
         _logger.EmptyAndLog(Logs.RtuManager, "RTU is turned into AUTOMATIC mode.");
 
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
-        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
 
         var _ = Task.Run(RunMonitoringCycle);
 
         var pid = Process.GetCurrentProcess().Id;
         var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.Debug(Logs.RtuManager, $"Leaving gRPC thread: process {pid}, thread {tid}");
     }
 }

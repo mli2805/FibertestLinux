@@ -32,9 +32,6 @@ public sealed class Boot : IHostedService
 
         _config.Update(c => c.General.LogEventLevel = LogEventLevel.Debug.ToString());
 
-        var rtuManagerThread = new Thread(() => { _rtuManager.InitializeRtu(); }) { IsBackground = true };
-        rtuManagerThread.Start();
-
         return Task.CompletedTask;
     }
 

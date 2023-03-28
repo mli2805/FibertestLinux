@@ -204,6 +204,7 @@ public partial class RtuManager
                 return prepareResult;
             var baseRefBytes = prepareResult.SorBytes!;
 
+        _logger.Info(Logs.RtuManager, $"base ref size is {baseRefBytes.Length}");
             var result = _otdrManager
                 .MeasureWithBase(_rtuManagerCts, baseRefBytes, _mainCharon.GetActiveChildCharon());
 
