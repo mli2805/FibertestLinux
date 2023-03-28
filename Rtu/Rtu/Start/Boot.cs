@@ -10,11 +10,13 @@ public sealed class Boot : IHostedService
 {
     private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<Boot> _logger;
+    private readonly RtuManager _rtuManager;
 
-    public Boot(IWritableConfig<RtuConfig> config, ILogger<Boot> logger)
+    public Boot(IWritableConfig<RtuConfig> config, ILogger<Boot> logger, RtuManager rtuManager)
     {
         _config = config;
         _logger = logger;
+        _rtuManager = rtuManager;
     }
 
     // Place here all that should be done before start listening to gRPC & Http requests, background workers, etc.
@@ -28,7 +30,10 @@ public sealed class Boot : IHostedService
         _logger.Info(Logs.RtuService, $"Fibertest RTU service {info.FileVersion}");
         _logger.Info(Logs.RtuManager, $"Fibertest RTU service {info.FileVersion}");
 
-        _config.Update(c=>c.General.LogEventLevel = LogEventLevel.Debug.ToString());
+        _config.Update(c => c.General.LogEventLevel = LogEventLevel.Debug.ToString());
+
+        var rtuManagerThread = new Thread(() => { _rtuManager.InitializeRtu(); }) { IsBackground = true };
+        rtuManagerThread.Start();
 
         return Task.CompletedTask;
     }

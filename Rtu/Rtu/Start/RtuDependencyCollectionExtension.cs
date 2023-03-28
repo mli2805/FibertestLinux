@@ -18,12 +18,13 @@ public static class RtuDependencyCollectionExtension
         return services
             .AddSingleton<IWritableConfig<RtuConfig>>(_ => new WritableConfig<RtuConfig>("rtu.json"));
     }
+
     private static IServiceCollection AddBootAndBackgroundServices(this IServiceCollection services)
     {
         services.AddSingleton<Boot>();
         services.AddHostedService(x => x.GetService<Boot>()!);
-        services.AddSingleton<MonitoringService>();
-        services.AddHostedService(x => x.GetService<MonitoringService>()!);
+        //services.AddSingleton<MonitoringService>();
+        //services.AddHostedService(x => x.GetService<MonitoringService>()!);
         services.AddSingleton<HeartbeatService>();
         services.AddHostedService(x => x.GetService<HeartbeatService>()!);
         return services;
