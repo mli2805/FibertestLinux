@@ -42,7 +42,7 @@ public partial class OtdrManager
             return new RtuInitializedDto(ReturnCode.OtdrInitializationCannotInitializeDll);
         }
 
-        if (!_interOpWrapper.InitDll())
+        if (!_interOpWrapper.InitDll(_iitOtdrFolder))
             return new RtuInitializedDto(ReturnCode.OtdrInitializationCannotInitializeDll);
 
         Thread.Sleep(300);

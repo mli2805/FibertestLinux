@@ -17,16 +17,19 @@ public partial class InterOpWrapper
         _logger = logger;
     }
 
-    public bool InitDll()
+    public bool InitDll(string path)
     {
         IntPtr logFile = IntPtr.Zero;
         IntPtr lenUnit = IntPtr.Zero;
 
         try
         {
-            DllInit("./OtdrMeasEngine", logFile, lenUnit); // under VSCode might require absolute path
+            // DllInit("./OtdrMeasEngine", logFile, lenUnit); 
+            DllInit(path, logFile, lenUnit); // under VSCode requires absolute path
 
-            var iitOtdrLib = "./OtdrMeasEngine/iit_otdr.so";
+            // var iitOtdrLib = "./OtdrMeasEngine/iit_otdr.so";
+            var iitOtdrLib = Path.Combine(path, "iit_otdr.so");
+
             FileVersionInfo info = FileVersionInfo.GetVersionInfo(iitOtdrLib);
             var creationTime = File.GetLastWriteTime(iitOtdrLib);
             var version = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
