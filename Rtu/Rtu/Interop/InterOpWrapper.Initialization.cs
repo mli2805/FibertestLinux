@@ -60,7 +60,7 @@ public partial class InterOpWrapper
         int initOtdr;
         try
         {
-            initOtdr = LinuxImportDecl.InitOTDR((int)type, ip, port);
+            initOtdr = CppImportDecl.InitOTDR((int)type, ip, port);
             SetEqualStepsOfMeasurement();
 
             if (initOtdr == 0)

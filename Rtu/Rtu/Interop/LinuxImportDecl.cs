@@ -4,9 +4,10 @@ namespace Fibertest.Rtu
 {
     public static class CppImportDecl
     {
+        // https://blog.magnusmontin.net/2018/11/05/platform-conditional-compilation-in-net-core/
         #if Linux
         private const string LibFileName = "OtdrMeasEngine/iit_otdr.so";
-        #else
+        #elif Windows
         private const string LibFileName = "OtdrMeasEngine/iit_otdr.dll";
         #endif
 
