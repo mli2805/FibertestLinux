@@ -27,10 +27,13 @@ public partial class InterOpWrapper
 
         try
         {
-            if (OperatingSystem.IsWindows())
-                WindowsImportDecl.DllInit(path, logFile, lenUnit);
-            else
-                LinuxImportDecl.DllInit(path, logFile, lenUnit);
+            CppImportDecl.DllInit(path, logFile, lenUnit);
+
+
+            // if (OperatingSystem.IsWindows())
+            //     WindowsImportDecl.DllInit(path, logFile, lenUnit);
+            // else
+            //     LinuxImportDecl.DllInit(path, logFile, lenUnit);
 
             // DllInit(path, logFile, lenUnit); // under VSCode requires absolute path
 
