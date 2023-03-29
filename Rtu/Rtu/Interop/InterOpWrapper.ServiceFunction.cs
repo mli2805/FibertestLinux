@@ -1,12 +1,15 @@
 ﻿using System.Runtime.InteropServices;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Fibertest.Rtu;
 
 public partial class InterOpWrapper
 {
-    [DllImport("OtdrMeasEngine/iit_otdr.so")]
+    private const string LibFileName = "OtdrMeasEngine/iit_otdr.so";
+
+    [DllImport(LibFileName)]
     public static extern int ServiceFunction(int cmd, ref int prm1, ref IntPtr prm2);
 
     public string? GetOtdrInfo(GetOtdrInfo infoType)

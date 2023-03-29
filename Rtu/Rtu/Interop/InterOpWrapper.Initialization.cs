@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using Fibertest.Dto;
 using Fibertest.Utils;
+using OperatingSystem = Fibertest.Utils.OperatingSystem;
 
 namespace Fibertest.Rtu;
 
@@ -9,8 +10,10 @@ public partial class InterOpWrapper
 {
     private readonly ILogger<InterOpWrapper> _logger;
 
-    [DllImport("OtdrMeasEngine/iit_otdr.so")]
-    private static extern void DllInit(string path, IntPtr logFile, IntPtr lenUnit);
+    // [DllImport("OtdrMeasEngine/iit_otdr.dll")]
+    // private static extern void DllInit(string path, IntPtr logFile, IntPtr lenUnit);
+    // [DllImport("OtdrMeasEngine/iit_otdr.so")]
+    // private static extern int InitOTDR(int type, string ip, int port);
 
     public InterOpWrapper(ILogger<InterOpWrapper> logger)
     {
@@ -24,17 +27,21 @@ public partial class InterOpWrapper
 
         try
         {
-            // DllInit("./OtdrMeasEngine", logFile, lenUnit); 
-            DllInit(path, logFile, lenUnit); // under VSCode requires absolute path
+            if (OperatingSystem.IsWindows())
+                WindowsImportDecl.DllInit(path, logFile, lenUnit);
+            else
+                LinuxImportDecl.DllInit(path, logFile, lenUnit);
 
-            // var iitOtdrLib = "./OtdrMeasEngine/iit_otdr.so";
-            var iitOtdrLib = Path.Combine(path, "iit_otdr.so");
+            // DllInit(path, logFile, lenUnit); // under VSCode requires absolute path
+
+            var libFileName = OperatingSystem.IsWindows() ? "iit_otdr.dll" : "iit_otdr.so";
+            var iitOtdrLib = Path.Combine(path, libFileName);
 
             FileVersionInfo info = FileVersionInfo.GetVersionInfo(iitOtdrLib);
             var creationTime = File.GetLastWriteTime(iitOtdrLib);
             var version = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
 
-            _logger.Info(Logs.RtuManager, $"Iit_otdr.so {version} loaded successfully.");
+            _logger.Info(Logs.RtuManager, $"{libFileName} {version} loaded successfully.");
         }
         catch (Exception e)
         {
@@ -44,15 +51,13 @@ public partial class InterOpWrapper
         return true;
     }
 
-    [DllImport("OtdrMeasEngine/iit_otdr.so")]
-    private static extern int InitOTDR(int type, string ip, int port);
-
+  
     public bool InitOtdr(ConnectionTypes type, string ip, int port)
     {
         int initOtdr;
         try
         {
-            initOtdr = InitOTDR((int)type, ip, port);
+            initOtdr = LinuxImportDecl.InitOTDR((int)type, ip, port);
             SetEqualStepsOfMeasurement();
 
             if (initOtdr == 0)

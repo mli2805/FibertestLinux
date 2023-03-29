@@ -14,6 +14,7 @@ public class HeartbeatService : BackgroundService
         new() { TypeNameHandling = TypeNameHandling.All };
     private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<HeartbeatService> _logger;
+    private readonly GrpcR2DService _grpcR2DService;
     private readonly RtuManager _rtuManager;
 
     private string _version = "";
@@ -21,10 +22,11 @@ public class HeartbeatService : BackgroundService
     private bool _initializationInProgress;
 
     public HeartbeatService(IWritableConfig<RtuConfig> config, ILogger<HeartbeatService> logger,
-        RtuManager rtuManager)
+        GrpcR2DService grpcR2DService, RtuManager rtuManager)
     {
         _config = config;
         _logger = logger;
+        _grpcR2DService = grpcR2DService;
         _rtuManager = rtuManager;
     }
 
