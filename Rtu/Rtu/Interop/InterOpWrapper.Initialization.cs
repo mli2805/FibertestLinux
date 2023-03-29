@@ -10,11 +10,6 @@ public partial class InterOpWrapper
 {
     private readonly ILogger<InterOpWrapper> _logger;
 
-    // [DllImport("OtdrMeasEngine/iit_otdr.dll")]
-    // private static extern void DllInit(string path, IntPtr logFile, IntPtr lenUnit);
-    // [DllImport("OtdrMeasEngine/iit_otdr.so")]
-    // private static extern int InitOTDR(int type, string ip, int port);
-
     public InterOpWrapper(ILogger<InterOpWrapper> logger)
     {
         _logger = logger;
@@ -28,14 +23,6 @@ public partial class InterOpWrapper
         try
         {
             CppImportDecl.DllInit(path, logFile, lenUnit);
-
-
-            // if (OperatingSystem.IsWindows())
-            //     WindowsImportDecl.DllInit(path, logFile, lenUnit);
-            // else
-            //     LinuxImportDecl.DllInit(path, logFile, lenUnit);
-
-            // DllInit(path, logFile, lenUnit); // under VSCode requires absolute path
 
             var libFileName = OperatingSystem.IsWindows() ? "iit_otdr.dll" : "iit_otdr.so";
             var iitOtdrLib = Path.Combine(path, libFileName);

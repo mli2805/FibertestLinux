@@ -10,13 +10,11 @@ public sealed class Boot : IHostedService
 {
     private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<Boot> _logger;
-    private readonly RtuManager _rtuManager;
 
-    public Boot(IWritableConfig<RtuConfig> config, ILogger<Boot> logger, RtuManager rtuManager)
+    public Boot(IWritableConfig<RtuConfig> config, ILogger<Boot> logger)
     {
         _config = config;
         _logger = logger;
-        _rtuManager = rtuManager;
     }
 
     // Place here all that should be done before start listening to gRPC & Http requests, background workers, etc.

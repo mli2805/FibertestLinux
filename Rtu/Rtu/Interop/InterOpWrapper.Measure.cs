@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using Fibertest.Dto;
+﻿using Fibertest.Dto;
 using Fibertest.Utils;
 
 namespace Fibertest.Rtu;
@@ -20,15 +19,7 @@ namespace Fibertest.Rtu;
 /// </summary>
 public partial class InterOpWrapper
 {
-    [DllImport("OtdrMeasEngine/iit_otdr.so")]
-    public static extern int MeasPrepare(int measurementMode);
-
-    [DllImport("OtdrMeasEngine/iit_otdr.so")]
-    public static extern int MeasStep(ref IntPtr sorData);
-
-    [DllImport("OtdrMeasEngine/iit_otdr.so")]
-    public static extern int MeasStop(ref IntPtr sorData, int isImmediateStop);
-
+   
     public int ConvertLmaxKmToNs()
     {
         string? lmaxString = GetLineOfVariantsForParam(ServiceFunctionFirstParam.ActiveLmax);
@@ -64,7 +55,7 @@ public partial class InterOpWrapper
 
     public bool PrepareMeasurement(bool isAver)
     {
-        var error = MeasPrepare(isAver ? 601 : 600);
+        var error = CppImportDecl.MeasPrepare(isAver ? 601 : 600);
         if (error != 0)
             _logger.Error(Logs.RtuManager, $"Error {error} in MeasPrepare");
         return error == 0;
@@ -72,13 +63,13 @@ public partial class InterOpWrapper
 
     public int DoMeasurementStep(ref IntPtr sorData)
     {
-        var result = MeasStep(ref sorData);
+        var result = CppImportDecl.MeasStep(ref sorData);
         return result;
     }
 
     public int StopMeasurement(bool isImmediateStop)
     {
         IntPtr sorData = IntPtr.Zero;
-        return MeasStop(ref sorData, isImmediateStop ? 1 : 0);
+        return CppImportDecl.MeasStop(ref sorData, isImmediateStop ? 1 : 0);
     }
 }

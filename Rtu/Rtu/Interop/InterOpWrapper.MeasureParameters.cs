@@ -12,7 +12,7 @@ public partial class InterOpWrapper
         int prm1 = (int)param;
 
         IntPtr unmanagedPointer = IntPtr.Zero;
-        int res = ServiceFunction(cmd, ref prm1, ref unmanagedPointer);
+        int res = CppImportDecl.ServiceFunction(cmd, ref prm1, ref unmanagedPointer);
         if (res != 0)
             return null;
 
@@ -40,7 +40,7 @@ public partial class InterOpWrapper
             int cmd = (int)ServiceFunctionCommand.SetParam;
             int prm1 = (int)param;
             IntPtr prm2 = new IntPtr(indexInLine);
-            var result = ServiceFunction(cmd, ref prm1, ref prm2);
+            var result = CppImportDecl.ServiceFunction(cmd, ref prm1, ref prm2);
             if (result != 0)
             {
                 _logger.Error(Logs.RtuManager, $"Set parameter error={result}!");
@@ -60,7 +60,7 @@ public partial class InterOpWrapper
         int cmd = (int)ServiceFunctionCommand.SetParam;
         int prm1 = (int)ServiceFunctionFirstParam.TuningApdMode;
         IntPtr prm2 = new IntPtr(mode);
-        var result = ServiceFunction(cmd, ref prm1, ref prm2);
+        var result = CppImportDecl.ServiceFunction(cmd, ref prm1, ref prm2);
         if (result != 0)
         {
             _logger.Error(Logs.RtuManager, $"Set TuningAPDMode error={result}!");
@@ -74,7 +74,7 @@ public partial class InterOpWrapper
         int cmd = (int)ServiceFunctionCommand.SetParamFromSor;
         int reserved = 0;
 
-        var result = ServiceFunction(cmd, ref reserved, ref baseSorData);
+        var result = CppImportDecl.ServiceFunction(cmd, ref reserved, ref baseSorData);
         if (result != 0)
             _logger.Error(Logs.RtuManager, $"Set parameters from sor error={result}!");
         return result == 0;
@@ -84,12 +84,11 @@ public partial class InterOpWrapper
     {
         int cmd = (int)ServiceFunctionCommand.ParamMeasLmaxSet;
         IntPtr reserved = IntPtr.Zero;
-        var result = ServiceFunction(cmd, ref lmaxNs, ref reserved);
+        var result = CppImportDecl.ServiceFunction(cmd, ref lmaxNs, ref reserved);
         if (result != 1)
             _logger.Error(Logs.RtuManager, $"Force Lmax {lmaxNs} ns: Error = {result}!");
         else
             _logger.Info(Logs.RtuManager, $"Force Lmax {lmaxNs} ns: Ok");
         return result == 1;
     }
-
 }

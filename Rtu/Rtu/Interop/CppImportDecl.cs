@@ -21,34 +21,26 @@ namespace Fibertest.Rtu
         [DllImport(LibFileName)]
         public static extern int InitOTDR(int type, string ip, int port);
 
-    }
-    public static class LinuxImportDecl
-    {
-        private const string LibFileName = "OtdrMeasEngine/iit_otdr.so";
+        [DllImport(LibFileName)]
+        public static extern int GetSorSize(IntPtr sorData);
 
         [DllImport(LibFileName)]
-        public static extern void DllInit(string path, IntPtr logFile, IntPtr lenUnit);
+        public static extern int GetSorData(IntPtr sorData, byte[] buffer, int bufferLength);
+
 
         [DllImport(LibFileName)]
-        public static extern int ServiceFunction(int cmd, ref int prm1, ref IntPtr prm2);
+        public static extern IntPtr CreateSorPtr(byte[] buffer, int bufferLength);
 
         [DllImport(LibFileName)]
-        public static extern int InitOTDR(int type, string ip, int port);
-
-    }
-
-    public static class WindowsImportDecl
-    {
-        private const string LibFileName = "OtdrMeasEngine/iit_otdr.dll";
+        public static extern void DestroySorPtr(IntPtr sorData);
 
         [DllImport(LibFileName)]
-        public static extern void DllInit(string path, IntPtr logFile, IntPtr lenUnit);
+        public static extern int MeasPrepare(int measurementMode);
 
         [DllImport(LibFileName)]
-        public static extern int ServiceFunction(int cmd, ref int prm1, ref IntPtr prm2);
+        public static extern int MeasStep(ref IntPtr sorData);
 
         [DllImport(LibFileName)]
-        public static extern int InitOTDR(int type, string ip, int port);
-
+        public static extern int MeasStop(ref IntPtr sorData, int isImmediateStop);
     }
 }

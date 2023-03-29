@@ -56,8 +56,5 @@ public partial class RtuManager
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
 
         var _ = Task.Run(RunMonitoringCycle);
-
-        var pid = Process.GetCurrentProcess().Id;
-        var tid = Thread.CurrentThread.ManagedThreadId;
     }
 }

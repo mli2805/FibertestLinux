@@ -1,24 +1,18 @@
 ﻿using System.Runtime.InteropServices;
 using Fibertest.Dto;
 using Fibertest.Utils;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Fibertest.Rtu;
 
 public partial class InterOpWrapper
 {
-    private const string LibFileName = "OtdrMeasEngine/iit_otdr.so";
-
-    [DllImport(LibFileName)]
-    public static extern int ServiceFunction(int cmd, ref int prm1, ref IntPtr prm2);
-
     public string? GetOtdrInfo(GetOtdrInfo infoType)
     {
         int cmd = (int)ServiceFunctionCommand.GetOtdrInfo;
         int prm = (int)infoType;
         IntPtr otdrInfo = IntPtr.Zero;
 
-        var result = ServiceFunction(cmd, ref prm, ref otdrInfo);
+        var result = CppImportDecl.ServiceFunction(cmd, ref prm, ref otdrInfo);
         if (result == 0)
             return Marshal.PtrToStringAnsi(otdrInfo);
 
@@ -32,7 +26,7 @@ public partial class InterOpWrapper
         int prm = 1; // 1 - equal steps, 0 - permanently increasing
         IntPtr prm2 = IntPtr.Zero;
 
-        ServiceFunction(cmd, ref prm, ref prm2);
+        CppImportDecl.ServiceFunction(cmd, ref prm, ref prm2);
     }
 
     public bool SetBaseForComparison(IntPtr baseSorData)
@@ -40,7 +34,7 @@ public partial class InterOpWrapper
         int cmd = (int)ServiceFunctionCommand.SetBase;
         int reserved = 0;
 
-        var result = ServiceFunction(cmd, ref reserved, ref baseSorData);
+        var result = CppImportDecl.ServiceFunction(cmd, ref reserved, ref baseSorData);
         if (result != 0)
             _logger.Info(Logs.RtuManager, $"Set base for comparison error={result}!");
         return result == 0;
@@ -51,7 +45,7 @@ public partial class InterOpWrapper
         int cmd = (int)ServiceFunctionCommand.MonitorEvents;
         int includeBase = 0;
 
-        var result = (ComparisonReturns)ServiceFunction(cmd, ref includeBase, ref measSorData);
+        var result = (ComparisonReturns)CppImportDecl.ServiceFunction(cmd, ref includeBase, ref measSorData);
         return result;
     }
 
@@ -60,7 +54,7 @@ public partial class InterOpWrapper
         int cmd = (int)ServiceFunctionCommand.Auto;
         int reserved = 0;
 
-        var result = ServiceFunction(cmd, ref reserved, ref sorData);
+        var result = CppImportDecl.ServiceFunction(cmd, ref reserved, ref sorData);
         if (result != 0)
             _logger.Error(Logs.RtuManager, $"MakeAutoAnalysis error={result}!");
         return result == 0;
@@ -72,7 +66,7 @@ public partial class InterOpWrapper
         int cmd = (int)ServiceFunctionCommand.Auto2;
         int mode = analysisMode;
 
-        var result = ServiceFunction(cmd, ref mode, ref sorData);
+        var result = CppImportDecl.ServiceFunction(cmd, ref mode, ref sorData);
         if (result != 0)
             _logger.Error(Logs.RtuManager, $"Analyze error={result}!");
         return result == 0;
@@ -84,7 +78,7 @@ public partial class InterOpWrapper
         int cmd = (int)ServiceFunctionCommand.InsertIitEvents;
         int reserved = 0;
 
-        var result = ServiceFunction(cmd, ref reserved, ref sorData);
+        var result = CppImportDecl.ServiceFunction(cmd, ref reserved, ref sorData);
         if (result != 0)
             _logger.Error(Logs.RtuManager, $"InsertIitEvents error={result}!");
         return result == 0;
@@ -100,7 +94,7 @@ public partial class InterOpWrapper
 
         try
         {
-            var result = ServiceFunction(cmd, ref prm1, ref prm2);
+            var result = CppImportDecl.ServiceFunction(cmd, ref prm1, ref prm2);
             if (result != 1)
             {
                 _logger.Error(Logs.RtuManager, $"GetLinkCharacteristics error={result}!");
