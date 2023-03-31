@@ -365,13 +365,20 @@ public partial class RtuManager
         return dto;
     }
 
-    private void SendByMsmq(MonitoringResultDto dto)
+    private async Task SendByMsmq(MonitoringResultDto dto)
     {
         _logger.Error(Logs.RtuManager, $"SendByMsmq is not implemented yet! RTU: {dto.RtuId.First6()}");
+
+        _logger.Info(Logs.RtuManager, "Send by gRPC");
+
+        var _ = await _grpcR2DService.SendAnyR2DRequest<MonitoringResultDto, RequestAnswer>(dto);
     }
 
-    private void SendByMsmq(BopStateChangedDto dto)
+    private async Task SendByMsmq(BopStateChangedDto dto)
     {
         _logger.Error(Logs.RtuManager, $"SendByMsmq is not implemented yet! RTU: {dto.RtuId.First6()}");
-    }
+
+        _logger.Info(Logs.RtuManager, "Send by gRPC");
+
+        var _ = await _grpcR2DService.SendAnyR2DRequest<BopStateChangedDto, RequestAnswer>(dto); }
 }

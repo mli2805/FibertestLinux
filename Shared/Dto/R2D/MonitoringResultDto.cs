@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
-public class MonitoringResultDto
+public class MonitoringResultDto : BaseRequest
 {
     public MeasurementResult MeasurementResult;
     public Guid RtuId;
@@ -30,4 +30,7 @@ public class MonitoringResultDto
         BaseRefType = baseRefType;
         TraceState = traceState;
     }
+
+    public override string What => "MonitoringResult";
+
 }

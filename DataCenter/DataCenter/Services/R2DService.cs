@@ -70,10 +70,10 @@ public class R2DService : R2D.R2DBase
     {
         await Task.Delay(1);
         var result = await _grpcToClient.SendRequest(dto);
-        if (result.ReturnCode == ReturnCode.Ok) 
-            _logger.Debug(Logs.DataCenter, $"Current monitoring step from RTU {dto.RtuId.First6()} sent to client successfully!");
-        else
-            _logger.Error(Logs.DataCenter, $"Failed to send current monitoring step from RTU {dto.RtuId.First6()} to client");
+        // if (result.ReturnCode == ReturnCode.Ok) 
+        //     _logger.Debug(Logs.DataCenter, $"Current monitoring step from RTU {dto.RtuId.First6()} sent to client successfully!");
+        // else
+        //     _logger.Error(Logs.DataCenter, $"Failed to send current monitoring step from RTU {dto.RtuId.First6()} to client");
         return result;
     }
 }
