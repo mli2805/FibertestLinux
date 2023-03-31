@@ -13,4 +13,7 @@ public class ClientMeasurementResultDto : BaseRequest
     {
         ReturnCode = returnCode;
     }
+
+    public override string What => "ClientMeasurementResult";
+
 }

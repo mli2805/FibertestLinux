@@ -78,23 +78,19 @@ public class HeartbeatService : BackgroundService
     {
         try
         {
-            var serverAddress = _config.Value.General.ServerAddress;
-
             var dto = new RtuChecksChannelDto(_config.Value.General.RtuId, _version, true);
-            var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
-            var dcUri = $"http://{serverAddress.Main.ToStringA()}";
-            _logger.Info(Logs.RtuService, "SendHeartbeat: " + dcUri);
-            using var grpcChannelDc = GrpcChannel.ForAddress(dcUri);
-            var grpcClient = new R2D.R2DClient(grpcChannelDc);
+            var result = await _grpcR2DService.SendAnyR2DRequest<RtuChecksChannelDto, RequestAnswer>(dto);
 
-            R2DGrpcResponse response = await grpcClient.SendCommandAsync(command);
-            if (!_isLastAttemptSuccessful)
-                _logger.Info(Logs.RtuService, $"Got gRPC response {response.Json} from Data Center");
-            else
-                _logger.Info(Logs.RtuService, $"RTU heartbeat sent by gRPC channel {dcUri}");
+            if (_isLastAttemptSuccessful != (result.ReturnCode == ReturnCode.Ok))
+            {
+                if (result.ReturnCode == ReturnCode.Ok)
+                 _logger.Info(Logs.RtuService, "Heartbeat successfully sent to Data Center");
+                else
+                 _logger.Error(Logs.RtuService, "Failed to send heartbeat to Data Center");
+            }
 
-            return true;
+            return result.ReturnCode == ReturnCode.Ok;
         }
         catch (Exception e)
         {

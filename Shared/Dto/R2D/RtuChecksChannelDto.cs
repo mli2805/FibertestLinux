@@ -1,6 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
-public class RtuChecksChannelDto
+public class RtuChecksChannelDto : BaseRequest
 {
     public Guid RtuId;
     public string Version;
@@ -12,4 +12,6 @@ public class RtuChecksChannelDto
         Version = version;
         IsMainChannel = isMainChannel;
     }
+
+    public override string What => "RtuChecksChannelDto (Heartbeat)";
 }

@@ -4,7 +4,7 @@
     {
         public string? ClientIp;
 
-        public override string What => "Heartbeat";
+        public override string What => "ClientHeartbeat";
 
     }
 }
