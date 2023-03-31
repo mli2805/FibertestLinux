@@ -28,7 +28,7 @@ namespace Fibertest.Rtu
             {
                 var command = new R2DGrpcCommand() { Json = JsonConvert.SerializeObject(dto, JsonSerializerSettings) };
 
-                if (!(dto is RtuChecksChannelDto))
+                if (!(dto is RtuChecksChannelDto || dto is CurrentMonitoringStepDto))
                     _logger.Info(Logs.RtuService, $"{dto.What}");
 
                 using var grpcChannelDc = GrpcChannel.ForAddress(ServerUri);
