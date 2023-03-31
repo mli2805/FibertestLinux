@@ -86,6 +86,10 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<BaseRefLandmarksTool>();
         services.AddSingleton<TraceModelBuilder>();
 
+        services.AddSingleton<AccidentLineModelFactory>();
+        services.AddSingleton<SorDataParsingReporter>();
+        services.AddSingleton<AccidentPlaceLocator>();
+        services.AddSingleton<AccidentsFromSorExtractor>();
         services.AddSingleton<CommonBopProcessor>();
         services.AddSingleton<MeasurementFactory>();
         services.AddSingleton<IitRtuMessagesProcessor>();

@@ -8,7 +8,7 @@ echo "сервис остановлен"
 sleep 1s
 
 cp -r * /var/fibertest/datacenter/
-cd /var/fibertest/datacenter
+cd /var/fibertest/config
 sudo chmod a+rw dc.json
 echo "файлы скопированы"
 
