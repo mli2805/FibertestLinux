@@ -58,7 +58,6 @@ namespace Fibertest.DataCenter
         {
             var clientUri = $"http://{clientIp}:{(int)TcpPorts.ClientListenTo}";
             using var grpcChannelToClient = GrpcChannel.ForAddress(clientUri);
-            _logger.Debug(Logs.DataCenter, $"GrpcChannel to client {clientUri}");
             var grpcClientToClient = new toClient.toClientClient(grpcChannelToClient);
 
             var clientCommand = new toClientCommand { Json = commandContent };
@@ -66,7 +65,6 @@ namespace Fibertest.DataCenter
             try
             {
                 toClientResponse response = await grpcClientToClient.SendCommandAsync(clientCommand);
-                _logger.Debug(Logs.DataCenter, $"Got gRPC response from client: {response.Json}");
                 var result = JsonConvert.DeserializeObject<RequestAnswer>(response.Json, JsonSerializerSettings);
                 return result ?? new RequestAnswer(ReturnCode.FailedDeserializeJson);
             }

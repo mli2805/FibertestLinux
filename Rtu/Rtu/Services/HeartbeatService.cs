@@ -1,17 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using Fibertest.DataCenter;
 using Fibertest.Dto;
 using Fibertest.Utils;
-using Grpc.Net.Client;
-using Newtonsoft.Json;
 
 namespace Fibertest.Rtu;
 
 public class HeartbeatService : BackgroundService
 {
-    private static readonly JsonSerializerSettings JsonSerializerSettings =
-        new() { TypeNameHandling = TypeNameHandling.All };
     private readonly IWritableConfig<RtuConfig> _config;
     private readonly ILogger<HeartbeatService> _logger;
     private readonly GrpcR2DService _grpcR2DService;

@@ -130,7 +130,7 @@ public partial class RtuManager
             if (message != "")
             {
                 _logger.Info(Logs.RtuManager, "Send by MSMQ:  " + message);
-                SendByMsmq(CreateDto(moniResult, monitoringPort));
+                await SendByMsmq(CreateDto(moniResult, monitoringPort));
                 monitoringPort.LastFastSavedTimestamp = DateTime.Now;
             }
 
@@ -177,7 +177,7 @@ public partial class RtuManager
             if (message != "")
             {
                 _logger.Info(Logs.RtuManager, "Send by MSMQ:  " + message);
-                SendByMsmq(CreateDto(moniResult, monitoringPort));
+                await SendByMsmq(CreateDto(moniResult, monitoringPort));
                 monitoringPort.LastPreciseSavedTimestamp = DateTime.Now;
             }
 

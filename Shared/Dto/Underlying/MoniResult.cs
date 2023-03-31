@@ -27,25 +27,4 @@ public class MoniResult
         var lvl = Levels.LastOrDefault(l => l.IsLevelFailed);
         return lvl == null ? FiberState.Ok : (FiberState) (int) lvl.Type;
     }
-
-    // public bool IsStateChanged(MoniResult? previous)
-    // {
-    //     if (previous == null) return true;
-    //     var currentState = GetAggregatedResult();
-    //     if (previous.GetAggregatedResult() != currentState)
-    //         return true;
-    //
-    //     if (currentState == FiberState.NoFiber || currentState == FiberState.Ok)
-    //         return false;
-    //
-    //     if (previous.Accidents.Count != Accidents.Count)
-    //         return true;
-    //
-    //     for (int i = 0; i < Accidents.Count; i++)
-    //     {
-    //         if (!Accidents[i].IsTheSame(previous.Accidents[i])) return true;
-    //     }
-    //
-    //     return false;
-    // }
 }

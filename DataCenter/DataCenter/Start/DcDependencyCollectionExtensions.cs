@@ -86,6 +86,10 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<BaseRefLandmarksTool>();
         services.AddSingleton<TraceModelBuilder>();
 
+        services.AddSingleton<CommonBopProcessor>();
+        services.AddSingleton<MeasurementFactory>();
+        services.AddSingleton<IitRtuMessagesProcessor>();
+
         services.AddSingleton<TrapParser>();
         services.AddSingleton<OutOfTurnData>();
         services.AddSingleton<OutOfTurnRequestBuilder>();
