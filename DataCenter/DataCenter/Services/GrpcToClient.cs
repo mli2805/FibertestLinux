@@ -46,10 +46,7 @@ namespace Fibertest.DataCenter
         {
             var commandContent = JsonConvert.SerializeObject(dto, JsonSerializerSettings);
             foreach (var clientStation in _clientCollection.Clients.Values)
-            {
-                var transferResult = await TransferToClient(clientStation.ClientIp, commandContent);
-                _logger.Info(Logs.DataCenter, $"transfer result is {transferResult.ReturnCode.GetLocalizedString()}");
-            }
+                await TransferToClient(clientStation.ClientIp, commandContent);
 
             return new RequestAnswer(ReturnCode.Ok);
         }
