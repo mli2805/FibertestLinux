@@ -54,7 +54,8 @@ namespace Fibertest.Rtu
             _rtuManagerCts?.Cancel();
 
             // if Lmax = 240km and Time = 10min one step lasts 5-6 sec
-            // Thread.Sleep(TimeSpan.FromSeconds(6));
+            // important - OTDR is busy until current measurement really stops
+            Thread.Sleep(TimeSpan.FromSeconds(6));
 
             _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
             SendCurrentMonitoringStep(MonitoringCurrentStep.Interrupted);
