@@ -15,7 +15,7 @@ public partial class RtuManager
         if (IsMonitoringOn || _wasMonitoringOn)
         {
             _wasMonitoringOn = IsMonitoringOn;
-            StopMonitoring("Initialize");
+            await StopMonitoring("Initialize");
         }
 
         if (dto != null)

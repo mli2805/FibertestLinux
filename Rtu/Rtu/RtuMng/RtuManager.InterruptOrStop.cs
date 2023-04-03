@@ -11,11 +11,14 @@ namespace Fibertest.Rtu
             _rtuManagerCts?.Cancel();
         }
 
-        private async void StopMonitoringAndConnectOtdrWithRecovering(string customer)
+        private async Task StopMonitoringAndConnectOtdrWithRecovering(string customer)
         {
             _wasMonitoringOn = IsMonitoringOn;
             if (IsMonitoringOn)
-                StopMonitoring(customer);
+            {
+                _logger.Debug(Logs.RtuManager, "StopMonitoring");
+                await StopMonitoring(customer);
+            }
 
             _logger.EmptyAndLog(Logs.RtuManager, $"Start {customer}.");
 
@@ -35,14 +38,14 @@ namespace Fibertest.Rtu
             }
         }
 
+
         public async Task<RequestAnswer> StopMonitoring()
         {
-            await Task.Delay(0);
-            StopMonitoring("Stop monitoring");
+            await StopMonitoring("Stop monitoring");
             return new RequestAnswer(ReturnCode.Ok);
         }
 
-        private void StopMonitoring(string caller)
+        private async Task StopMonitoring(string caller)
         {
             if (!_config.Value.Monitoring.IsMonitoringOn)
             {
@@ -55,7 +58,7 @@ namespace Fibertest.Rtu
 
             // if Lmax = 240km and Time = 10min one step lasts 5-6 sec
             // important - OTDR is busy until current measurement really stops
-            Thread.Sleep(TimeSpan.FromSeconds(6));
+            await Task.Delay(TimeSpan.FromSeconds(6));
 
             _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: Interrupting current measurement...");
             SendCurrentMonitoringStep(MonitoringCurrentStep.Interrupted);

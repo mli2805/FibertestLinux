@@ -49,7 +49,6 @@ public partial class RtuManager
                 _logger.Debug(Logs.RtuManager, "Previous measurement interrupted. Leave monitoring cycle.");
                 break;
             }
-
         }
 
         _logger.Info(Logs.RtuManager, "Monitoring stopped.");

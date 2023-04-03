@@ -15,7 +15,7 @@ public partial class RtuManager
 
         var wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
         if (_config.Value.Monitoring.IsMonitoringOn)
-            StopMonitoring("Apply monitoring settings");
+            await StopMonitoring("Apply monitoring settings");
 
         SaveNewFrequenciesInConfig(dto.Timespans);
         _monitoringQueue.ComposeNewQueue(dto.Ports);

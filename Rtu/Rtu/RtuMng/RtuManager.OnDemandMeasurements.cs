@@ -25,7 +25,10 @@ namespace Fibertest.Rtu
             _logger.EmptyAndLog(Logs.RtuManager, "DoClientMeasurement command received");
 
             if (!KeepOtdrConnection)
-                StopMonitoringAndConnectOtdrWithRecovering(dto.IsForAutoBase ? "Auto base measurement" : "Measurement (Client)");
+            {
+                _logger.Debug(Logs.RtuManager, "StopMonitoringAndConnectOtdrWithRecovering");
+                await StopMonitoringAndConnectOtdrWithRecovering(dto.IsForAutoBase ? "Auto base measurement" : "Measurement (Client)");
+            }
 
             KeepOtdrConnection = dto.KeepOtdrConnection;
             _config.Update(c => c.Monitoring.KeepOtdrConnection = KeepOtdrConnection);
@@ -39,7 +42,6 @@ namespace Fibertest.Rtu
 
             _logger.Info(Logs.RtuService, "Start Measurement in another thread");
             // await Task.Factory.StartNew(() => { MeasureWrapped(dto); }); // blocking call
-            await Task.Delay(0);
             var unused = Task.Run(() => { MeasureWrapped(dto); }); 
             _logger.Info(Logs.RtuService, "Measurement TASK started, return this fact to client");
 
