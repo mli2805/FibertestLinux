@@ -41,12 +41,12 @@ public partial class RtuManager
 
     private async Task StartMonitoring(bool wasMonitoringOn)
     {
-        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
-        var rtuInitializationResult = await InitializeRtu();
+        var rtuInitializationResult = await InitializeRtu(); // will corrupt IsMonitoringOn
         if (!rtuInitializationResult.IsInitialized)
         {
             while (await RunMainCharonRecovery() != ReturnCode.Ok) { }
         }
+        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
 
         if (!wasMonitoringOn)
             _monitoringQueue.RaiseMonitoringModeChangedFlag();

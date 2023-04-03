@@ -227,6 +227,7 @@ public partial class RtuManager
         }
         finally
         {
+            _logger.Debug(Logs.RtuManager, "_rtuManagerCts disposed");
             _rtuManagerCts?.Dispose();
         }
     }
