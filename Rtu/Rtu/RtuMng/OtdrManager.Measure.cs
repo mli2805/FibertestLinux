@@ -7,7 +7,7 @@ namespace Fibertest.Rtu
 {
     public partial class OtdrManager
     {
-        public ReturnCode MeasureWithBase(CancellationToken token, byte[] buffer, Charon? bopCharonToShowPortOnDisplay)
+        public ReturnCode MeasureWithBase(CancellationToken[] tokens, byte[] buffer, Charon? bopCharonToShowPortOnDisplay)
         {
             var result = ReturnCode.Error;
 
@@ -18,7 +18,7 @@ namespace Fibertest.Rtu
             if (_interOpWrapper.SetMeasurementParametersFromSor(ref baseSorData))
             {
                 _interOpWrapper.ForceLmaxNs(_interOpWrapper.ConvertLmaxOwtToNs(buffer));
-                result = Measure(token, bopCharonToShowPortOnDisplay);
+                result = Measure(tokens, bopCharonToShowPortOnDisplay);
             }
 
             // free memory where was base sor data
@@ -26,12 +26,12 @@ namespace Fibertest.Rtu
             return result;
         }
 
-        public ReturnCode DoManualMeasurement(CancellationToken token, bool shouldForceLmax, Charon? bopCharonToShowPortOnDisplay)
+        public ReturnCode DoManualMeasurement(CancellationToken[] tokens, bool shouldForceLmax, Charon? bopCharonToShowPortOnDisplay)
         {
             if (shouldForceLmax)
                 _interOpWrapper.ForceLmaxNs(_interOpWrapper.ConvertLmaxKmToNs());
 
-            return Measure(token, bopCharonToShowPortOnDisplay);
+            return Measure(tokens, bopCharonToShowPortOnDisplay);
         }
 
         private IntPtr _sorData = IntPtr.Zero;
@@ -40,7 +40,7 @@ namespace Fibertest.Rtu
         /// after Measure() use GetLastSorData() to obtain measurement result
         /// </summary>
         /// <returns></returns>
-        private ReturnCode Measure(CancellationToken token, Charon? bopCharonToShowPortOnDisplay)
+        private ReturnCode Measure(CancellationToken[] tokens, Charon? bopCharonToShowPortOnDisplay)
         {
             _logger.Info(Logs.RtuManager, "Measurement begin.");
 
@@ -58,14 +58,14 @@ namespace Fibertest.Rtu
                 return ReturnCode.MeasurementPreparationError;
             }
 
-            var result = MeasureSteps(token);
+            var result = MeasureSteps(tokens);
 
             bopCharonToShowPortOnDisplay?.ShowOnDisplayMessageReady();
 
             return result;
         }
 
-        private ReturnCode MeasureSteps(CancellationToken token)
+        private ReturnCode MeasureSteps(CancellationToken[] tokens)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Fibertest.Rtu
                 int step = 0;
                 do
                 {
-                    if (token.IsCancellationRequested)
+                    if (tokens.IsCancellationRequested())
                     {
                         _interOpWrapper.StopMeasurement(true);
                         _logger.Info(Logs.RtuManager, "Measurement interrupted.");

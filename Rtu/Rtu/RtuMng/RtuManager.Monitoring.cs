@@ -198,15 +198,15 @@ public partial class RtuManager
         try
         {
             _rtuManagerCts = new CancellationTokenSource();
-            var token = _rtuManagerCts.Token;
+            var tokens = new[] { _rtuManagerCts.Token, RtuServiceCancellationToken };
 
-            var prepareResult = await PrepareMeasurement(baseRefType, monitoringPort, shouldChangePort);
+            var prepareResult = await PrepareMeasurement(tokens, baseRefType, monitoringPort, shouldChangePort);
             if (prepareResult.MeasurementResult != MeasurementResult.Success)
                 return prepareResult;
             var baseRefBytes = prepareResult.SorBytes!;
 
             var result = _otdrManager
-                .MeasureWithBase(token, baseRefBytes, _mainCharon.GetActiveChildCharon());
+                .MeasureWithBase(tokens, baseRefBytes, _mainCharon.GetActiveChildCharon());
 
             if (result == ReturnCode.MeasurementInterrupted)
                 return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
@@ -232,7 +232,8 @@ public partial class RtuManager
         }
     }
 
-    private async Task<MoniResult> PrepareMeasurement(BaseRefType baseRefType, MonitoringPort monitoringPort, bool shouldChangePort = true)
+    private async Task<MoniResult> PrepareMeasurement(CancellationToken[] tokens, 
+        BaseRefType baseRefType, MonitoringPort monitoringPort, bool shouldChangePort = true)
     {
         byte[]? baseRefBytes;
         try
@@ -240,14 +241,14 @@ public partial class RtuManager
             if (shouldChangePort && !await ToggleToPort(monitoringPort))
                 return new MoniResult() { MeasurementResult = MeasurementResult.ToggleToPortFailed };
 
-            if (IsCancellationRequested()) // command to interrupt monitoring came while port toggling
+            if (tokens.IsCancellationRequested()) // command to interrupt monitoring came while port toggling
                 return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
 
             baseRefBytes = monitoringPort.GetBaseBytes(baseRefType, _logger);
             if (baseRefBytes == null)
                 return new MoniResult() { MeasurementResult = baseRefType.GetBaseRefNotFoundProblem() };
 
-            if (IsCancellationRequested()) // command to interrupt monitoring came while getting base
+            if (tokens.IsCancellationRequested()) // command to interrupt monitoring came while getting base
                 return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
 
             SendCurrentMonitoringStep(MonitoringCurrentStep.Measure, monitoringPort, baseRefType);
@@ -255,7 +256,7 @@ public partial class RtuManager
             _config.Update(c =>
                 c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
 
-            if (IsCancellationRequested()) // command to interrupt monitoring came while sending step
+            if (tokens.IsCancellationRequested()) // command to interrupt monitoring came while sending step
                 return new MoniResult() { MeasurementResult = MeasurementResult.Interrupted };
         }
         catch (Exception e)
@@ -266,12 +267,6 @@ public partial class RtuManager
 
         return new MoniResult() { MeasurementResult = MeasurementResult.Success, SorBytes = baseRefBytes };
     }
-
-    private bool IsCancellationRequested()
-    {
-        return _rtuManagerCts!.IsCancellationRequested || RtuServiceCancellationToken.IsCancellationRequested;
-    }
-
 
     private MoniResult GetLastSorData(MonitoringPort monitoringPort, BaseRefType baseRefType)
     {
