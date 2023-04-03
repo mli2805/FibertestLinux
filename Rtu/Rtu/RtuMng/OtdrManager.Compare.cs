@@ -77,6 +77,7 @@ namespace Fibertest.Rtu
             var levelCount = baseSorData.RftsParameters.LevelsCount;
             _logger.Info(Logs.RtuManager, $"Comparison begin. Level count = {levelCount}");
 
+            OtdrDataKnownBlocks measSorData = cleanMeasSorData;
             for (int i = 0; i < levelCount; i++)
             {
                 var rftsLevel = baseSorData.RftsParameters.Levels[i];
@@ -85,15 +86,14 @@ namespace Fibertest.Rtu
                     baseSorData.RftsParameters.ActiveLevelIndex = i;
 
                     var measBytes = cleanMeasSorData.ToBytes();
-                    var measSorData = SorData.FromBytes(measBytes);
+                    measSorData = SorData.FromBytes(measBytes);
 
                     CompareOneLevel(baseSorData, ref measSorData, GetMoniLevelType(rftsLevel.LevelName), moniResult);
                     rftsEventsList.Add(measSorData.RftsEventsToEmbeddedData());
 
-                    if (i == levelCount - 1)
-                        cleanMeasSorData = measSorData;
                 }
             }
+            cleanMeasSorData = measSorData;
 
             return moniResult;
         }
