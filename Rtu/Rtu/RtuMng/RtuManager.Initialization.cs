@@ -21,7 +21,6 @@ public partial class RtuManager
         if (dto != null)
              SaveParametersAndStates(dto);
 
-        IsAutoBaseMeasurementInProgress = false;
         _config.Update(c=>c.Monitoring.IsAutoBaseMeasurementInProgress = false);
 
         var version = LogInitializationStart();

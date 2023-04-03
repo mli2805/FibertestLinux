@@ -30,13 +30,7 @@ public partial class RtuManager
 
     private bool _wasMonitoringOn;
 
-    // private readonly object _keepOtdrConnectionLocker = new object();
-    // private bool _keepOtdrConnection;
-    // public bool KeepOtdrConnection
-    // {
-    //     get { lock (_keepOtdrConnectionLocker) { return _keepOtdrConnection; } }
-    //     set { lock (_keepOtdrConnectionLocker) { _keepOtdrConnection = value; } }
-    // }
+   
     private readonly object _lastSuccessfulMeasTimestampLocker = new object();
     private DateTime _lastSuccessfulMeasTimestamp;
     public DateTime LastSuccessfulMeasTimestamp
@@ -51,14 +45,6 @@ public partial class RtuManager
     {
         get { lock (_isRtuInitializedLocker) { return _isRtuInitialized; } }
         set { lock (_isRtuInitializedLocker) { _isRtuInitialized = value; } }
-    }
-
-    private readonly object _isAutoBaseMeasurementInProgressLocker = new object();
-    private bool _isAutoBaseMeasurementInProgress;
-    public bool IsAutoBaseMeasurementInProgress
-    {
-        get { lock (_isAutoBaseMeasurementInProgressLocker) { return _isAutoBaseMeasurementInProgress; } }
-        set { lock (_isAutoBaseMeasurementInProgressLocker) { _isAutoBaseMeasurementInProgress = value; } }
     }
 
     public RtuManager(IWritableConfig<RtuConfig> config,
