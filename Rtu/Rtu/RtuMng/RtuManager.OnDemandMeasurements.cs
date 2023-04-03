@@ -164,7 +164,7 @@ namespace Fibertest.Rtu
 
             var measResult = _otdrManager.DoManualMeasurement(tokens, true, activeBop);
 
-            // во время измерения или прямо сейчас
+            // during measurement or right now
             if (measResult == ReturnCode.MeasurementInterrupted)
             {
                 _logger.Info(Logs.RtuManager,"Measurement (Client) interrupted.");

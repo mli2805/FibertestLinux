@@ -54,9 +54,9 @@ public partial class RtuManager
 
         _logger.Info(Logs.RtuManager, "Monitoring stopped.");
 
-        _config.Update(c => c.Monitoring.IsMonitoringOn = false);
+        // _config.Update(c => c.Monitoring.IsMonitoringOn = false);
         _otdrManager.DisconnectOtdr();
-        _logger.Info(Logs.RtuManager, "Rtu is turned into MANUAL mode.");
+        // _logger.Info(Logs.RtuManager, "Rtu is turned into MANUAL mode.");
     }
 
     private async Task ProcessOnePort(MonitoringPort monitoringPort)
