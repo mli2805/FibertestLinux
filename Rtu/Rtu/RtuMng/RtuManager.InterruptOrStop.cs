@@ -13,8 +13,8 @@ namespace Fibertest.Rtu
 
         private async Task StopMonitoringAndConnectOtdrWithRecovering(string customer)
         {
-            _wasMonitoringOn = IsMonitoringOn;
-            if (IsMonitoringOn)
+            _wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
+            if (_config.Value.Monitoring.IsMonitoringOn)
             {
                 _logger.Debug(Logs.RtuManager, "StopMonitoring");
                 await StopMonitoring(customer);

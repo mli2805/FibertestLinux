@@ -16,7 +16,7 @@ namespace Fibertest.Rtu
                 return new ClientMeasurementStartedDto(ReturnCode.RtuInitializationInProgress);
             }
 
-            if (IsAutoBaseMeasurementInProgress)
+            if (_config.Value.Monitoring.IsAutoBaseMeasurementInProgress)
             {
                 _logger.Info(Logs.RtuService, "Auto Base Measurement In Progress. Ignore command.");
                 return new ClientMeasurementStartedDto(ReturnCode.RtuAutoBaseMeasurementInProgress);
@@ -24,17 +24,15 @@ namespace Fibertest.Rtu
 
             _logger.EmptyAndLog(Logs.RtuManager, "DoClientMeasurement command received");
 
-            if (!KeepOtdrConnection)
+            if (!_config.Value.Monitoring.KeepOtdrConnection)
             {
                 _logger.Debug(Logs.RtuManager, "StopMonitoringAndConnectOtdrWithRecovering");
                 await StopMonitoringAndConnectOtdrWithRecovering(dto.IsForAutoBase ? "Auto base measurement" : "Measurement (Client)");
             }
 
-            KeepOtdrConnection = dto.KeepOtdrConnection;
-            _config.Update(c => c.Monitoring.KeepOtdrConnection = KeepOtdrConnection);
+            _config.Update(c => c.Monitoring.KeepOtdrConnection = dto.KeepOtdrConnection);
             if (dto.IsForAutoBase)
             {
-                IsAutoBaseMeasurementInProgress = true;
                 _config.Update(c => c.Monitoring.IsAutoBaseMeasurementInProgress = true);
                 _config.Update(c => c.Monitoring.LastMeasurementTimestamp =
                     DateTime.Now.ToString(CultureInfo.CurrentCulture));
@@ -61,20 +59,19 @@ namespace Fibertest.Rtu
 
             if (dto.IsForAutoBase)
             {
-                IsAutoBaseMeasurementInProgress = false;
                 _config.Update(c => c.Monitoring.IsAutoBaseMeasurementInProgress = false);
             }
             _logger.Info(Logs.RtuManager);
 
             if (_wasMonitoringOn)
             {
-                IsMonitoringOn = true;
+                _config.Value.Monitoring.IsMonitoringOn = true;
                 _wasMonitoringOn = false;
                 await RunMonitoringCycle();
             }
             else
             {
-                if (!KeepOtdrConnection)
+                if (!_config.Value.Monitoring.KeepOtdrConnection)
                 {
                     _otdrManager.DisconnectOtdr();
                     _logger.Info(Logs.RtuManager, "RTU is in MANUAL mode.");
@@ -171,8 +168,7 @@ namespace Fibertest.Rtu
             {
                 _logger.Info(Logs.RtuManager,"Measurement (Client) interrupted.");
                 _wasMonitoringOn = false;
-                KeepOtdrConnection = false;
-                _config.Update(c=>c.Monitoring.KeepOtdrConnection = KeepOtdrConnection);
+                _config.Update(c=>c.Monitoring.KeepOtdrConnection = false);
                 return result.Set(currentOtauPortDto, ReturnCode.MeasurementInterrupted);
             }
 

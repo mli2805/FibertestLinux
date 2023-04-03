@@ -12,9 +12,9 @@ public partial class RtuManager
         // prohibit to send heartbeats
         ShouldSendHeartbeat.TryDequeue(out _);
 
-        if (IsMonitoringOn || _wasMonitoringOn)
+        if (_config.Value.Monitoring.IsMonitoringOn || _wasMonitoringOn)
         {
-            _wasMonitoringOn = IsMonitoringOn;
+            _wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
             await StopMonitoring("Initialize");
         }
 
@@ -104,7 +104,6 @@ public partial class RtuManager
         _config.Update(c => c.General.RtuId = dto.RtuId);
         _config.Update(c => c.General.ServerAddress = dto.ServerAddresses!);
 
-        IsMonitoringOn = false;
         _wasMonitoringOn = false;
         _config.Update(c => c.Monitoring.IsMonitoringOn = false);
 

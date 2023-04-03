@@ -28,22 +28,15 @@ public partial class RtuManager
     private MonitoringQueue _monitoringQueue;
     public readonly ConcurrentQueue<object> ShouldSendHeartbeat = new ConcurrentQueue<object>();
 
-    private readonly object _isMonitoringOnLocker = new object();
-    private bool _isMonitoringOn;
-    public bool IsMonitoringOn
-    {
-        get { lock (_isMonitoringOnLocker) { return _isMonitoringOn; } }
-        set { lock (_isMonitoringOnLocker) { _isMonitoringOn = value; } }
-    }
     private bool _wasMonitoringOn;
 
-    private readonly object _keepOtdrConnectionLocker = new object();
-    private bool _keepOtdrConnection;
-    public bool KeepOtdrConnection
-    {
-        get { lock (_keepOtdrConnectionLocker) { return _keepOtdrConnection; } }
-        set { lock (_keepOtdrConnectionLocker) { _keepOtdrConnection = value; } }
-    }
+    // private readonly object _keepOtdrConnectionLocker = new object();
+    // private bool _keepOtdrConnection;
+    // public bool KeepOtdrConnection
+    // {
+    //     get { lock (_keepOtdrConnectionLocker) { return _keepOtdrConnection; } }
+    //     set { lock (_keepOtdrConnectionLocker) { _keepOtdrConnection = value; } }
+    // }
     private readonly object _lastSuccessfulMeasTimestampLocker = new object();
     private DateTime _lastSuccessfulMeasTimestamp;
     public DateTime LastSuccessfulMeasTimestamp
