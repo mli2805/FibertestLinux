@@ -18,7 +18,7 @@ public partial class RtuManager
             case RecoveryStep.Ok:
                 _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.ResetArpAndCharon);
                 RestoreFunctions.ClearArp(_logger);
-                var recoveryResult = await InitializeRtu();
+                var recoveryResult = await InitializeRtu(null, true);
                 if (recoveryResult.IsInitialized)
                     _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
                 return recoveryResult.ReturnCode; // Reset Charon
@@ -45,7 +45,7 @@ public partial class RtuManager
                 {
                     _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.ResetArpAndCharon);
                     RestoreFunctions.ClearArp(_logger);
-                    var recoveryResult1 = await InitializeRtu();
+                    var recoveryResult1 = await InitializeRtu(null, true);
                     if (recoveryResult1.IsInitialized)
                         _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
                     return recoveryResult1.ReturnCode;
@@ -53,7 +53,7 @@ public partial class RtuManager
             case RecoveryStep.RebootPc:
                 _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.ResetArpAndCharon);
                 RestoreFunctions.ClearArp(_logger);
-                var recoveryResult2 = await InitializeRtu();
+                var recoveryResult2 = await InitializeRtu(null, true);
                 if (recoveryResult2.IsInitialized)
                     _config.Update(c => c.Recovery.RecoveryStep = RecoveryStep.Ok);
                 return recoveryResult2.ReturnCode;

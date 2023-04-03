@@ -38,7 +38,7 @@ namespace Fibertest.Rtu
             }
         }
 
-
+        // user request
         public async Task<RequestAnswer> StopMonitoring()
         {
             await StopMonitoring("Stop monitoring");

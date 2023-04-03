@@ -7,7 +7,7 @@ namespace Fibertest.Rtu;
 
 public partial class RtuManager
 {
-    public async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto? dto = null)
+    public async Task<RtuInitializedDto> InitializeRtu(InitializeRtuDto? dto, bool disconnectOtdr)
     {
         // prohibit to send heartbeats
         ShouldSendHeartbeat.TryDequeue(out _);
@@ -15,7 +15,7 @@ public partial class RtuManager
         if (_config.Value.Monitoring.IsMonitoringOn || _wasMonitoringOn)
         {
             _wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
-            await StopMonitoring("Initialize");
+            await StopMonitoring("Initialization");
         }
 
         if (dto != null)
@@ -69,7 +69,7 @@ public partial class RtuManager
         // permit to send heartbeats
         ShouldSendHeartbeat.Enqueue(new object());
         
-        if (!_config.Value.Monitoring.IsMonitoringOn)
+        if (disconnectOtdr)
         {
             _logger.Info(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
             var unused = _otdrManager.DisconnectOtdr();

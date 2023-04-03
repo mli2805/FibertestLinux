@@ -8,6 +8,19 @@ namespace Fibertest.Rtu
 {
     public partial class RtuManager
     {
+        public async Task<RequestAnswer> StartOutOfTurnMeasurement(DoOutOfTurnPreciseMeasurementDto dto)
+        {
+            await StopMonitoringAndConnectOtdrWithRecovering("Out of turn precise measurement");
+            var _ = Task.Run(() => DoOutOfTurn(dto));
+
+            return new RequestAnswer(ReturnCode.Ok);
+        }
+
+        private async Task DoOutOfTurn(DoOutOfTurnPreciseMeasurementDto dto)
+        {
+            await Task.Delay(1);
+        }
+
         public async Task<ClientMeasurementStartedDto> DoClientMeasurement(DoClientMeasurementDto dto)
         {
             if (!IsRtuInitialized)

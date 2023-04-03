@@ -33,7 +33,7 @@ public class RtuGrpcService : d2r.d2rBase
         {
             case CheckRtuConnectionDto dto: 
                 result = new RtuConnectionCheckedDto(ReturnCode.Ok) { NetAddress = dto.NetAddress.Clone() }; break;
-            case InitializeRtuDto dto: result = await _rtuManager.InitializeRtu(dto); break;
+            case InitializeRtuDto dto: result = await _rtuManager.InitializeRtu(dto, true); break;
             case ApplyMonitoringSettingsDto dto: result = await _rtuManager.ApplyMonitoringSettings(dto); break;
             case StopMonitoringDto _: result = await _rtuManager.StopMonitoring(); break;
             case AttachOtauDto dto: result = await _rtuManager.AttachOtau(dto); break;

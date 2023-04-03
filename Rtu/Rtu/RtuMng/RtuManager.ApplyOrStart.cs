@@ -41,7 +41,7 @@ public partial class RtuManager
 
     private async Task StartMonitoring(bool wasMonitoringOn)
     {
-        var rtuInitializationResult = await InitializeRtu(); // will corrupt IsMonitoringOn
+        var rtuInitializationResult = await InitializeRtu(null, false); // will corrupt IsMonitoringOn
         if (!rtuInitializationResult.IsInitialized)
         {
             while (await RunMainCharonRecovery() != ReturnCode.Ok) { }
