@@ -16,7 +16,6 @@ public partial class RtuManager
         _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
         _config.Update(c => c.Monitoring.IsMonitoringOn = true);
         _logger.EmptyAndLog(Logs.RtuManager, "Start monitoring.");
-        // _logger.Info(Logs.RtuManager, $"_mainCharon.Serial = {_mainCharon.Serial}");
 
         if (_monitoringQueue.Count() < 1)
         {
@@ -51,11 +50,9 @@ public partial class RtuManager
             }
         }
 
-        _logger.Info(Logs.RtuManager, "Monitoring stopped.");
+        _logger.Info(Logs.RtuManager, "Monitoring stopped. (Cycle broken)");
 
-        // _config.Update(c => c.Monitoring.IsMonitoringOn = false);
-        _otdrManager.DisconnectOtdr();
-        // _logger.Info(Logs.RtuManager, "Rtu is turned into MANUAL mode.");
+        // _otdrManager.DisconnectOtdr();
     }
 
     private async Task ProcessOnePort(MonitoringPort monitoringPort)

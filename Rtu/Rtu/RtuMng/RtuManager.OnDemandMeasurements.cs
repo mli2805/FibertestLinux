@@ -10,7 +10,9 @@ namespace Fibertest.Rtu
     {
         public async Task<RequestAnswer> StartOutOfTurnMeasurement(DoOutOfTurnPreciseMeasurementDto dto)
         {
-            await StopMonitoringAndConnectOtdrWithRecovering("Out of turn precise measurement");
+            await StopMonitoring("Out of turn precise measurement");
+            if (!_wasMonitoringOn)
+                await ConnectOtdrWithRecovering();
             var _ = Task.Run(() => DoOutOfTurn(dto));
 
             return new RequestAnswer(ReturnCode.Ok);
@@ -37,10 +39,11 @@ namespace Fibertest.Rtu
 
             _logger.EmptyAndLog(Logs.RtuManager, "DoClientMeasurement command received");
 
+            await StopMonitoring(dto.IsForAutoBase ? "Auto base measurement" : "Measurement (Client)");
             if (!_config.Value.Monitoring.KeepOtdrConnection)
             {
-                _logger.Debug(Logs.RtuManager, "StopMonitoringAndConnectOtdrWithRecovering");
-                await StopMonitoringAndConnectOtdrWithRecovering(dto.IsForAutoBase ? "Auto base measurement" : "Measurement (Client)");
+                if (!_wasMonitoringOn)
+                    await ConnectOtdrWithRecovering();
             }
 
             _config.Update(c => c.Monitoring.KeepOtdrConnection = dto.KeepOtdrConnection);
@@ -53,7 +56,7 @@ namespace Fibertest.Rtu
 
             _logger.Info(Logs.RtuService, "Start Measurement in another thread");
             // await Task.Factory.StartNew(() => { MeasureWrapped(dto); }); // blocking call
-            var unused = Task.Run(() => { MeasureWrapped(dto); }); 
+            var unused = Task.Run(() => { MeasureWrapped(dto); });
             _logger.Info(Logs.RtuService, "Measurement TASK started, return this fact to client");
 
             return new ClientMeasurementStartedDto(ReturnCode.MeasurementClientStartedSuccessfully)
@@ -98,7 +101,7 @@ namespace Fibertest.Rtu
             var toggleResult = ToggleToPort2(dto.OtauPortDto[0]);
             if (toggleResult != CharonOperationResult.Ok)
                 return result.Set(dto.OtauPortDto[0],
-                    toggleResult == CharonOperationResult.MainOtauError 
+                    toggleResult == CharonOperationResult.MainOtauError
                         ? ReturnCode.RtuToggleToPortError : ReturnCode.RtuToggleToBopPortError);
 
             var prepareResult = dto.IsAutoLmax
@@ -116,7 +119,7 @@ namespace Fibertest.Rtu
             var lmax = _interOpWrapper.GetLinkCharacteristics(out ConnectionParams cp);
             if (lmax.Equals(-1.0))
             {
-                _logger.Error(Logs.RtuManager,"Failed to get link characteristics");
+                _logger.Error(Logs.RtuManager, "Failed to get link characteristics");
                 return ReturnCode.MeasurementPreparationError;
             }
 
@@ -136,30 +139,30 @@ namespace Fibertest.Rtu
             var values = AutoBaseParams.GetPredefinedParamsForLmax(lmax, "IIT MAK-100");
             if (values == null)
             {
-                _logger.Error(Logs.RtuManager,"Lmax is out of valid range");
+                _logger.Error(Logs.RtuManager, "Lmax is out of valid range");
                 return ReturnCode.InvalidValueOfLmax;
             }
 
-            var positions = 
+            var positions =
                 _interOpWrapper.ValuesToPositions(dto.SelectedMeasParams!, values, _treeOfAcceptableMeasParams!);
             if (!_interOpWrapper.SetMeasParamsByPosition(positions!))
             {
-                _logger.Error(Logs.RtuManager,"Failed to set measurement parameters");
+                _logger.Error(Logs.RtuManager, "Failed to set measurement parameters");
                 return ReturnCode.MeasurementPreparationError;
             }
-            _logger.Info(Logs.RtuManager,"Auto measurement parameters applied");
+            _logger.Info(Logs.RtuManager, "Auto measurement parameters applied");
             return ReturnCode.Ok;
         }
 
         private ReturnCode PrepareClientMeasurement(DoClientMeasurementDto dto)
         {
-            _logger.Debug(Logs.RtuManager,"PrepareClientMeasurement ...");
+            _logger.Debug(Logs.RtuManager, "PrepareClientMeasurement ...");
             if (!_interOpWrapper.SetMeasParamsByPosition(dto.SelectedMeasParams!))
             {
-                _logger.Error(Logs.RtuManager,"Failed to set measurement parameters");
+                _logger.Error(Logs.RtuManager, "Failed to set measurement parameters");
                 return ReturnCode.MeasurementPreparationError;
             }
-            _logger.Info(Logs.RtuManager,"User's measurement parameters applied");
+            _logger.Info(Logs.RtuManager, "User's measurement parameters applied");
             return ReturnCode.Ok;
         }
 
@@ -179,9 +182,9 @@ namespace Fibertest.Rtu
             // during measurement or right now
             if (measResult == ReturnCode.MeasurementInterrupted)
             {
-                _logger.Info(Logs.RtuManager,"Measurement (Client) interrupted.");
+                _logger.Info(Logs.RtuManager, "Measurement (Client) interrupted.");
                 _wasMonitoringOn = false;
-                _config.Update(c=>c.Monitoring.KeepOtdrConnection = false);
+                _config.Update(c => c.Monitoring.KeepOtdrConnection = false);
                 return result.Set(currentOtauPortDto, ReturnCode.MeasurementInterrupted);
             }
 
