@@ -32,7 +32,7 @@ namespace Fibertest.WpfClient
             builder.RegisterType<WindowManager>().As<IWindowManager>().InstancePerLifetimeScope();
             builder.RegisterType<Model>().InstancePerLifetimeScope();
 
-            builder.RegisterType<WaitCursor>().As<IWaitCursor>().InstancePerLifetimeScope();
+            builder.RegisterType<WaitCursor>().As<IWaitCursor>();
 
             builder.RegisterType<GrpcC2DService>().InstancePerLifetimeScope();
             builder.RegisterType<GrpcC2RService>().InstancePerLifetimeScope();
