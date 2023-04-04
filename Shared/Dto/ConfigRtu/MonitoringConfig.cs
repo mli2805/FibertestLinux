@@ -2,7 +2,7 @@
 
 public class MonitoringConfig
 {
-    public bool IsMonitoringOn { get; set; }
+    public bool IsMonitoringOnPersisted { get; set; }
     public bool KeepOtdrConnection { get; set; }
     public bool IsAutoBaseMeasurementInProgress { get; set; }
 

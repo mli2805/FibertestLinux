@@ -9,14 +9,14 @@ public partial class RtuManager
 {
     public async Task<RequestAnswer> ApplyMonitoringSettings(ApplyMonitoringSettingsDto dto)
     {
-        var pid = Process.GetCurrentProcess().Id;
-        var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.Info(Logs.RtuManager, $"gRPC command received in process {pid}, thread {tid}");
+        var isMonitoringModeChanged = IsMonitoringOn != dto.IsMonitoringOn;
+        if (IsMonitoringOn)
+        {
+            await BreakMonitoringCycle("Apply monitoring settings");
+            _otdrManager.DisconnectOtdr();
+        }
 
-        var wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
-        if (_config.Value.Monitoring.IsMonitoringOn)
-            await StopMonitoring("Apply monitoring settings");
-
+        _config.Update(c=>c.Monitoring.IsMonitoringOnPersisted = dto.IsMonitoringOn);
         SaveNewFrequenciesInConfig(dto.Timespans);
         _monitoringQueue.ComposeNewQueue(dto.Ports);
         _logger.Info(Logs.RtuManager, $"Queue merged. {_monitoringQueue.Count()} port(s) in queue");
@@ -24,8 +24,7 @@ public partial class RtuManager
         await _monitoringQueue.SaveBackup();
 
         if (dto.IsMonitoringOn)
-            await StartMonitoring(wasMonitoringOn);
-        _logger.Debug(Logs.RtuManager, $"Leaving gRPC thread: process {pid}, thread {tid}");
+            await StartMonitoring(isMonitoringModeChanged);
         return new RequestAnswer(ReturnCode.MonitoringSettingsAppliedSuccessfully);
     }
 
@@ -39,16 +38,17 @@ public partial class RtuManager
         _fastSaveTimespan = dto.FastSave;
     }
 
-    private async Task StartMonitoring(bool wasMonitoringOn)
+    private async Task StartMonitoring(bool isMonitoringModeChanged)
     {
         var rtuInitializationResult = await InitializeRtu(null, false); // will corrupt IsMonitoringOn
         if (!rtuInitializationResult.IsInitialized)
         {
             while (await RunMainCharonRecovery() != ReturnCode.Ok) { }
         }
-        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
+        _config.Update(c => c.Monitoring.IsMonitoringOnPersisted = true);
+        IsMonitoringOn = true;
 
-        if (!wasMonitoringOn)
+        if (isMonitoringModeChanged)
             _monitoringQueue.RaiseMonitoringModeChangedFlag();
 
         _logger.EmptyAndLog(Logs.RtuManager, "RTU is turned into AUTOMATIC mode.");

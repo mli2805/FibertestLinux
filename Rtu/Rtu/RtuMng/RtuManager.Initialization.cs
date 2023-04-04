@@ -12,10 +12,9 @@ public partial class RtuManager
         // prohibit to send heartbeats
         ShouldSendHeartbeat.TryDequeue(out _);
 
-        if (_config.Value.Monitoring.IsMonitoringOn || _wasMonitoringOn)
+        if (IsMonitoringOn)
         {
-            _wasMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
-            await StopMonitoring("Initialization");
+            await BreakMonitoringCycle("Initialization");
         }
 
         if (dto != null)
@@ -53,7 +52,7 @@ public partial class RtuManager
             return result2;
         }
 
-        result2.IsMonitoringOn = _config.Value.Monitoring.IsMonitoringOn;
+        result2.IsMonitoringOn = _config.Value.Monitoring.IsMonitoringOnPersisted;
 
         _treeOfAcceptableMeasParams = _interOpWrapper.GetTreeOfAcceptableMeasParams();
         result2.AcceptableMeasParams = _treeOfAcceptableMeasParams;
@@ -69,6 +68,7 @@ public partial class RtuManager
         // permit to send heartbeats
         ShouldSendHeartbeat.Enqueue(new object());
         
+        IsMonitoringOn = _config.Value.Monitoring.IsMonitoringOnPersisted;
         if (disconnectOtdr)
         {
             _logger.Info(Logs.RtuManager, "RTU is in MANUAL mode, disconnect OTDR");
@@ -103,8 +103,9 @@ public partial class RtuManager
         _config.Update(c => c.General.RtuId = dto.RtuId);
         _config.Update(c => c.General.ServerAddress = dto.ServerAddresses!);
 
-        _wasMonitoringOn = false;
-        _config.Update(c => c.Monitoring.IsMonitoringOn = false);
+        //_wasMonitoringOn = false;
+        IsMonitoringOn = false;
+        _config.Update(c => c.Monitoring.IsMonitoringOnPersisted = false);
 
         _logger.EmptyAndLog(Logs.RtuManager, "Initialization by the USER puts RTU into MANUAL mode.");
     }

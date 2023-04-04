@@ -30,10 +30,10 @@ public class MonitoringService : BackgroundService
     private async Task DoWork(CancellationToken stoppingToken)
     {
         _rtuManager.RtuServiceCancellationToken = stoppingToken;
-        var result = await _rtuManager.InitializeRtu(null, !_config.Value.Monitoring.IsMonitoringOn);
+        var result = await _rtuManager.InitializeRtu(null, !_config.Value.Monitoring.IsMonitoringOnPersisted);
         if (result.ReturnCode != ReturnCode.RtuInitializedSuccessfully)
             return;
-        if (_config.Value.Monitoring.IsMonitoringOn)
+        if (_config.Value.Monitoring.IsMonitoringOnPersisted)
             await _rtuManager.RunMonitoringCycle();
 
     }

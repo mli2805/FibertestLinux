@@ -10,8 +10,8 @@ namespace Fibertest.Rtu
     {
         public async Task<RequestAnswer> StartOutOfTurnMeasurement(DoOutOfTurnPreciseMeasurementDto dto)
         {
-            await StopMonitoring("Out of turn precise measurement");
-            if (!_wasMonitoringOn)
+            await BreakMonitoringCycle("Out of turn precise measurement");
+            if (!IsMonitoringOn)
                 await ConnectOtdrWithRecovering();
             var _ = Task.Run(() => DoOutOfTurn(dto));
 
@@ -39,11 +39,11 @@ namespace Fibertest.Rtu
 
             _logger.EmptyAndLog(Logs.RtuManager, "DoClientMeasurement command received");
 
-            await StopMonitoring(dto.IsForAutoBase ? "Auto base measurement" : "Measurement (Client)");
-            if (!_config.Value.Monitoring.KeepOtdrConnection)
+            await BreakMonitoringCycle(dto.IsForAutoBase ? "Auto base measurement" : "Measurement (Client)");
+
+            if (!(_config.Value.Monitoring.KeepOtdrConnection || _config.Value.Monitoring.IsMonitoringOnPersisted))
             {
-                if (!_wasMonitoringOn)
-                    await ConnectOtdrWithRecovering();
+                await ConnectOtdrWithRecovering();
             }
 
             _config.Update(c => c.Monitoring.KeepOtdrConnection = dto.KeepOtdrConnection);
@@ -79,10 +79,10 @@ namespace Fibertest.Rtu
             }
             _logger.Info(Logs.RtuManager);
 
-            if (_wasMonitoringOn)
+            if (_config.Value.Monitoring.IsMonitoringOnPersisted)
             {
-                _config.Value.Monitoring.IsMonitoringOn = true;
-                _wasMonitoringOn = false;
+                IsMonitoringOn = true;
+                //_wasMonitoringOn = false;
                 await RunMonitoringCycle();
             }
             else
@@ -183,7 +183,7 @@ namespace Fibertest.Rtu
             if (measResult == ReturnCode.MeasurementInterrupted)
             {
                 _logger.Info(Logs.RtuManager, "Measurement (Client) interrupted.");
-                _wasMonitoringOn = false;
+                // _wasMonitoringOn = false;
                 _config.Update(c => c.Monitoring.KeepOtdrConnection = false);
                 return result.Set(currentOtauPortDto, ReturnCode.MeasurementInterrupted);
             }

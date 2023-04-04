@@ -9,20 +9,18 @@ public partial class RtuManager
 {
     public async Task RunMonitoringCycle()
     {
-        var pid = Process.GetCurrentProcess().Id;
-        var tid = Thread.CurrentThread.ManagedThreadId;
-        _logger.Info(Logs.RtuManager, $"Monitoring cycle is running in process {pid}, thread {tid}");
-
-        _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
-        _config.Update(c => c.Monitoring.IsMonitoringOn = true);
-        _logger.EmptyAndLog(Logs.RtuManager, "Start monitoring.");
+        _logger.EmptyAndLog(Logs.RtuManager, "Run monitoring cycle.");
 
         if (_monitoringQueue.Count() < 1)
         {
             _logger.Info(Logs.RtuManager, "There are no ports in queue for monitoring.");
-            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
+            IsMonitoringOn = false;
+            _config.Update(c => c.Monitoring.IsMonitoringOnPersisted = false);
             return;
         }
+        _config.Update(c => c.Monitoring.LastMeasurementTimestamp = DateTime.Now.ToString(CultureInfo.CurrentCulture));
+        _config.Update(c => c.Monitoring.IsMonitoringOnPersisted = true);
+        IsMonitoringOn = true;
 
         while (true)
         {
@@ -37,7 +35,7 @@ public partial class RtuManager
                 _monitoringQueue.Enqueue(monitoringPort);
             }
 
-            if (!_config.Value.Monitoring.IsMonitoringOn)
+            if (!IsMonitoringOn)
             {
                 _logger.Debug(Logs.RtuManager, "IsMonitoringOn is FALSE. Leave monitoring cycle.");
                 break;
@@ -135,7 +133,7 @@ public partial class RtuManager
         else
         {
             if (moniResult.MeasurementResult == MeasurementResult.Interrupted)
-                _logger.Info(Logs.RtuManager, "Measurement interrupted!");
+                _logger.Info(Logs.RtuManager, "Fast measurement interrupted!");
             else
                 _logger.Error(Logs.RtuManager, $"Failed to perform measurement: {moniResult.MeasurementResult}");
         }
@@ -182,7 +180,7 @@ public partial class RtuManager
         else
         {
             if (moniResult.MeasurementResult == MeasurementResult.Interrupted)
-                _logger.Info(Logs.RtuManager, "Measurement interrupted!");
+                _logger.Info(Logs.RtuManager, "Second measurement interrupted!");
             else
                 _logger.Error(Logs.RtuManager, $"Failed to perform measurement: {moniResult.MeasurementResult}");
         }
@@ -224,7 +222,6 @@ public partial class RtuManager
         }
         finally
         {
-            _logger.Debug(Logs.RtuManager, "_rtuManagerCts disposed");
             _rtuManagerCts?.Dispose();
         }
     }

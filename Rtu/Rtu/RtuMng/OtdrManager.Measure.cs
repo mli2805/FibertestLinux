@@ -76,7 +76,7 @@ namespace Fibertest.Rtu
                     if (tokens.IsCancellationRequested())
                     {
                         _interOpWrapper.StopMeasurement(true);
-                        _logger.Info(Logs.RtuManager, "Measurement interrupted.");
+                        _logger.Info(Logs.RtuManager, "Measurement interrupted between steps.");
                         return ReturnCode.MeasurementInterrupted;
                     }
 

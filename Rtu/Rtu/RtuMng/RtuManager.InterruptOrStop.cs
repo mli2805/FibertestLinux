@@ -51,29 +51,30 @@ namespace Fibertest.Rtu
         // user request
         public async Task<RequestAnswer> StopMonitoring()
         {
-            await StopMonitoring("Stop monitoring");
+            _config.Update(c => c.Monitoring.IsMonitoringOnPersisted = false);
+            await BreakMonitoringCycle("Stop monitoring");
             _otdrManager.DisconnectOtdr();
             return new RequestAnswer(ReturnCode.Ok);
         }
 
-        private async Task StopMonitoring(string caller)
+        private async Task BreakMonitoringCycle(string caller)
         {
-            if (!_config.Value.Monitoring.IsMonitoringOn)
+            if (!IsMonitoringOn)
             {
                 _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: RTU is in MANUAL mode already");
                 return;
             }
 
             _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: Interrupt measurement requested...");
-            _wasMonitoringOn = true;
-            _config.Update(c => c.Monitoring.IsMonitoringOn = false);
+            //_wasMonitoringOn = IsMonitoringOn;
+            IsMonitoringOn = false;
             _rtuManagerCts?.Cancel();
 
             // if Lmax = 240km and Time = 10min one step lasts 5-6 sec
             // important - OTDR is busy until current measurement really stops
             await Task.Delay(TimeSpan.FromSeconds(6));
 
-            _logger.EmptyAndLog(Logs.RtuManager, "Monitoring stopped");
+            _logger.EmptyAndLog(Logs.RtuManager, $"{caller}: Monitoring stopped");
             SendCurrentMonitoringStep(MonitoringCurrentStep.Interrupted);
         }
 

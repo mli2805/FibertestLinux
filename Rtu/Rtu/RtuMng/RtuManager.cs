@@ -28,8 +28,8 @@ public partial class RtuManager
     private MonitoringQueue _monitoringQueue;
     public readonly ConcurrentQueue<object> ShouldSendHeartbeat = new ConcurrentQueue<object>();
 
-    private bool _wasMonitoringOn;
-
+    //private bool _wasMonitoringOn;
+    public bool IsMonitoringOn;
    
     private readonly object _lastSuccessfulMeasTimestampLocker = new object();
     private DateTime _lastSuccessfulMeasTimestamp;
