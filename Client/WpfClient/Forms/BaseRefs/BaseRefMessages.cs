@@ -75,7 +75,8 @@ namespace Fibertest.WpfClient
         private async void DisplayEdgeLandmarksAreWrong(BaseRefAssignedDto dto)
         {
             var baseRefHeader = dto.BaseRefType.GetLocalizedFemaleString() + Resources.SID__base_;
-            var message = Resources.SID_First_and_last_landmarks_should_be_associated_with_key_events_;
+            // var message = Resources.SID_First_and_last_landmarks_should_be_associated_with_key_events_;
+            var message = Resources.SID_Events_corresponding_to_the_beginning_and_end_of_the_trace_must_be_associated_with_landmarks;
             var vm = new MyMessageBoxViewModel(MessageType.Error, new List<string>() { baseRefHeader, "", message }, 2);
             await _windowManager.ShowDialogWithAssignedOwner(vm);
         }

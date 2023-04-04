@@ -3196,6 +3196,16 @@ namespace Fibertest.StringResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Events corresponding to the beginning and end of the trace must be associated with landmarks.
+        /// </summary>
+        public static string SID_Events_corresponding_to_the_beginning_and_end_of_the_trace_must_be_associated_with_landmarks {
+            get {
+                return ResourceManager.GetString("SID_Events_corresponding_to_the_beginning_and_end_of_the_trace_must_be_associated" +
+                        "_with_landmarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Every 12 hours.
         /// </summary>
         public static string SID_Every_12_hours {
