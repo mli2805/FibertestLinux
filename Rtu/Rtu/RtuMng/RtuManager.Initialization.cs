@@ -87,6 +87,7 @@ public partial class RtuManager
 
         var versionRtuManager = $"{info.FileVersion} built {creationTime:dd/MM/yyyy}";
         _logger.EmptyAndLog(Logs.RtuManager, $"RtuManager {versionRtuManager}");
+        _logger.Info(Logs.RtuManager, $"RtuId {_config.Value.General.RtuId}");
 
         return version;
     }

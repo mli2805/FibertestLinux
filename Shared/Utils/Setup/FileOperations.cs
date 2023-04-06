@@ -30,8 +30,9 @@ public static class FileOperations
 
     public static string GetReflectInClient()
     {
-        var rootPath = GetMainFolder();
-        return rootPath + @"\RftsReflect\Reflect.exe";
+        var clientPath = GetParentFolder(AppDomain.CurrentDomain.BaseDirectory);
+        var iitPath = GetParentFolder(clientPath);
+        return iitPath + @"\RftsReflect\Reflect.exe";
     }
 
 

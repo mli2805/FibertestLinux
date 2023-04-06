@@ -99,8 +99,8 @@ namespace Fibertest.WpfClient
                 Directory.CreateDirectory(clientPath + @"\temp");
             var filename = clientPath + $@"\temp\meas-{DateTime.Now:yyyy-MM-dd-hh-mm-ss}.sor";
             File.WriteAllBytes(filename, sorBytes);
-            var iitPath = FileOperations.GetParentFolder(clientPath);
-            Process.Start(iitPath + @"\RftsReflect\Reflect.exe", filename);
+
+            OpenSorInReflect(filename);
         }
 
         public async void ShowRftsEvents(int sorFileId, string traceTitle)

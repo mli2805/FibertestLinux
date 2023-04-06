@@ -65,8 +65,7 @@ namespace Fibertest.WpfClient
             var prepareResult = await PrepareRtuForMeasurementReflect(parent, GetPortNumber(param));
             if (prepareResult == null) return;
 
-            var rootPath = FileOperations.GetParentFolder(AppDomain.CurrentDomain.BaseDirectory);
-            System.Diagnostics.Process.Start(rootPath + @"\RftsReflect\Reflect.exe",
+            System.Diagnostics.Process.Start(FileOperations.GetReflectInClient(),
                 $@"-fnw -n {prepareResult.Ip4Address} -p {prepareResult.Port}");
         }
 
