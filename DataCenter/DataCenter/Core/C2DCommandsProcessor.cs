@@ -1,13 +1,17 @@
-﻿using Fibertest.Graph;
+﻿using Fibertest.Dto;
+using Fibertest.Graph;
 using Fibertest.Utils;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace Fibertest.DataCenter
 {
     public partial class C2DCommandsProcessor
     {
+        private readonly IWritableConfig<DataCenterConfig> _config;
         private readonly ILogger<C2DCommandsProcessor> _logger;
         private readonly Model _writeModel;
+        private readonly DiskSpaceProvider _diskSpaceProvider;
+        private readonly ClientCollection _clientCollection;
+        private readonly RtuOccupations _rtuOccupations;
         private readonly EventStoreService _eventStoreService;
         private readonly IFtSignalRClient _ftSignalRClient;
         private readonly BaseRefLandmarksTool _baseRefLandmarksTool;
@@ -15,13 +19,19 @@ namespace Fibertest.DataCenter
         private readonly SorFileRepository _sorFileRepository;
         private readonly RtuStationsRepository _rtuStationsRepository;
 
-        public C2DCommandsProcessor(ILogger<C2DCommandsProcessor> logger, Model writeModel,
-            EventStoreService eventStoreService, IFtSignalRClient ftSignalRClient, 
+        public C2DCommandsProcessor(IWritableConfig<DataCenterConfig> config, ILogger<C2DCommandsProcessor> logger,
+            Model writeModel, DiskSpaceProvider diskSpaceProvider,
+            ClientCollection clientCollection, RtuOccupations rtuOccupations,
+            EventStoreService eventStoreService, IFtSignalRClient ftSignalRClient,
             BaseRefLandmarksTool baseRefLandmarksTool, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
             SorFileRepository sorFileRepository, RtuStationsRepository rtuStationsRepository)
         {
+            _config = config;
             _logger = logger;
             _writeModel = writeModel;
+            _diskSpaceProvider = diskSpaceProvider;
+            _clientCollection = clientCollection;
+            _rtuOccupations = rtuOccupations;
             _eventStoreService = eventStoreService;
             _ftSignalRClient = ftSignalRClient;
             _baseRefLandmarksTool = baseRefLandmarksTool;
@@ -65,6 +75,40 @@ namespace Fibertest.DataCenter
 
             return await PostProcessing(cmd);
 
+        }
+
+        public async Task<RequestAnswer> ExecuteRequest(object o)
+        {
+            switch (o)
+            {
+                case CheckServerConnectionDto _:
+                    return new RequestAnswer(ReturnCode.Ok);
+                case RegisterClientDto dto:
+                    return await _clientCollection.RegisterClientAsync(dto);
+                case UnRegisterClientDto dto:
+                    return await _clientCollection.UnRegisterClientAsync(dto);
+                case ClientHeartbeatDto dto:
+                    return await _clientCollection.RegisterHeartbeat(dto);
+                case SetRtuOccupationDto dto:
+                    return await _rtuOccupations.SetRtuOccupationState(dto);
+
+                case GetDiskSpaceDto _:
+                    return await _diskSpaceProvider.GetDiskSpaceGb();
+                case GetEventsDto dto:
+                    return _eventStoreService.GetEvents(dto.Revision);
+                case GetSerializedModelParamsDto _:
+                    return await GetModelDownloadParams();
+
+                case ChangeDcConfigDto dto:
+                    _config.Update(cfg => cfg.FillIn(dto.NewConfig));
+                    return new RequestAnswer(ReturnCode.Ok);
+
+                case GetSorBytesDto dto:
+                    var bytes = await _sorFileRepository.GetSorBytesAsync(dto.SorFileId);
+                    return new SorBytesDto() { ReturnCode = bytes == null ? ReturnCode.Error : ReturnCode.Ok, SorBytes = bytes };
+
+                default: return new RequestAnswer(ReturnCode.Error);
+            }
         }
 
         private async Task<string?> PostProcessing(object cmd)

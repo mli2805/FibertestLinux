@@ -5,7 +5,7 @@ using NEventStore;
 
 namespace Fibertest.DataCenter
 {
-    public partial class ClientGrpcRequestExecutor
+    public partial class C2DCommandsProcessor
     {
         public byte[]? SerializedModel;
         private const int PortionSize = 2 * 1024 * 1024;

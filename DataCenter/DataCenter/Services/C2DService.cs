@@ -12,21 +12,16 @@ public class C2DService : c2d.c2dBase
     private readonly ILogger<C2DService> _logger;
     private readonly ClientCollection _clientCollection;
     private readonly Model _writeModel;
-    private readonly ClientGrpcRequestExecutor _clientGrpcRequestExecutor;
     private readonly C2DCommandsProcessor _c2DCommandsProcessor;
-    private readonly EventStoreService _eventStoreService;
     private const int PortionSize2Mb = 2 * 1024 * 1024;
 
     public C2DService(ILogger<C2DService> logger, ClientCollection clientCollection, Model writeModel,
-        ClientGrpcRequestExecutor clientGrpcRequestExecutor, C2DCommandsProcessor c2DCommandsProcessor,
-        EventStoreService eventStoreService)
+        C2DCommandsProcessor c2DCommandsProcessor)
     {
         _logger = logger;
         _clientCollection = clientCollection;
         _writeModel = writeModel;
-        _clientGrpcRequestExecutor = clientGrpcRequestExecutor;
         _c2DCommandsProcessor = c2DCommandsProcessor;
-        _eventStoreService = eventStoreService;
     }
 
     private static readonly JsonSerializerSettings JsonSerializerSettings =
@@ -88,7 +83,7 @@ public class C2DService : c2d.c2dBase
             if (request.What != "GetEvents" && request.What != "ClientHeartbeat")
                 _logger.Info(Logs.DataCenter, $"Client {client?.UserName ?? ""} sent {request.What} request");
 
-            var response = await _clientGrpcRequestExecutor.ExecuteRequest(request);
+            var response = await _c2DCommandsProcessor.ExecuteRequest(request);
             return new c2dResponse { Json = JsonConvert.SerializeObject(response, JsonSerializerSettings) };
         }
         catch (Exception e)
@@ -110,12 +105,12 @@ public class C2DService : c2d.c2dBase
 
             do
             {
-                currentPortionSize = PortionSize2Mb * (portionOrdinal + 1) < _clientGrpcRequestExecutor.SerializedModel!.Length
+                currentPortionSize = PortionSize2Mb * (portionOrdinal + 1) < _c2DCommandsProcessor.SerializedModel!.Length
                     ? PortionSize2Mb
-                    : _clientGrpcRequestExecutor.SerializedModel.Length - PortionSize2Mb * (portionOrdinal);
+                    : _c2DCommandsProcessor.SerializedModel.Length - PortionSize2Mb * (portionOrdinal);
 
                  ByteString bs2 = ByteString
-                    .CopyFrom(_clientGrpcRequestExecutor.SerializedModel, PortionSize2Mb * portionOrdinal, currentPortionSize);
+                    .CopyFrom(_c2DCommandsProcessor.SerializedModel, PortionSize2Mb * portionOrdinal, currentPortionSize);
 
                 await responseStream.WriteAsync(new serializedModelPortion() { Portion = bs2 });
 

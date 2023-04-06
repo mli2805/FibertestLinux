@@ -25,12 +25,12 @@ namespace Fibertest.WpfClient
     {
         public IWcfServiceCommonC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         #region VEEX
@@ -50,13 +50,13 @@ namespace Fibertest.WpfClient
         
         public Task<RequestAnswer> InterruptMeasurementAsync(InterruptMeasurementDto dto)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         //WEB
         public Task<string> UpdateMeasurement(string username, UpdateMeasurementDto dto)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Fibertest.DataCenter;
 
-public partial class EventStoreService
+public class EventStoreService
 {
     const string Timestamp = @"Timestamp";
     private readonly IWritableConfig<DataCenterConfig> _config;

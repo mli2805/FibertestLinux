@@ -11,10 +11,10 @@ namespace Fibertest.DataCenter
         private static readonly JsonSerializerSettings JsonSerializerSettings =
             new() { TypeNameHandling = TypeNameHandling.All };
 
-        private readonly ILogger<ClientGrpcRequestExecutor> _logger;
+        private readonly ILogger<GrpcToClient> _logger;
         private readonly ClientCollection _clientCollection;
 
-        public GrpcToClient(ILogger<ClientGrpcRequestExecutor> logger,
+        public GrpcToClient(ILogger<GrpcToClient> logger,
             ClientCollection clientCollection)
         {
             _logger = logger;

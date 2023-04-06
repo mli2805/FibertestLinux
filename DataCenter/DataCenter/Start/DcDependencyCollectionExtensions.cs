@@ -68,7 +68,6 @@ public static class DcDependencyCollectionExtensions
     }
     private static IServiceCollection AddOther(this IServiceCollection services)
     {
-        services.AddSingleton<ClientGrpcRequestExecutor>();
         services.AddSingleton<IDbInitializer, MySqlDbInitializer>();
 
         services.AddSingleton<MySerializer>();
