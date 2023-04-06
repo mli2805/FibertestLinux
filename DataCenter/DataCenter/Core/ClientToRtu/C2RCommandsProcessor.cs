@@ -210,6 +210,7 @@ public class C2RCommandsProcessor
 
         switch (command)
         {
+            // for not logging sor bytes
             case AssignBaseRefsDto dto:
                 var print = JsonConvert.SerializeObject(dto.ShallowCopy(), JsonSerializerSettings);
                 _logger.Debug(Logs.DataCenter, $"Command content {print}");

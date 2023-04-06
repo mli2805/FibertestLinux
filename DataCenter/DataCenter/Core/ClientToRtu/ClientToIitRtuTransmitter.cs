@@ -50,6 +50,8 @@ public class ClientToIitRtuTransmitter
                     new OtauDetachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 case DoClientMeasurementDto _: badResult =
                     new ClientMeasurementStartedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
+                case AssignBaseRefsDto _: badResult =
+                    new BaseRefAssignedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 // case ApplyMonitoringSettingsDto _:
                 // case DoOutOfTurnPreciseMeasurementDto _:
                 // case StopMonitoringDto _:

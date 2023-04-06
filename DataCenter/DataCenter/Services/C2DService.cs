@@ -62,7 +62,7 @@ public class C2DService : c2d.c2dBase
                     clientIp = client.ClientIp;
                 }
 
-                var res = await _eventStoreService.SendCommand(cmd, username, clientIp);
+                var res = await _eventStoreService.SendCommandWrapped(cmd, username, clientIp);
                 var answer = new RequestAnswer(string.IsNullOrEmpty(res) ? ReturnCode.Ok : ReturnCode.Error);
                 return new c2dResponse { Json = JsonConvert.SerializeObject(answer, JsonSerializerSettings) };
             }
