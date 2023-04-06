@@ -17,13 +17,13 @@ namespace Fibertest.WpfClient
         // C2D2R
         // Task<RtuConnectionCheckedDto> CheckRtuConnectionAsync(CheckRtuConnectionDto rtuAddress);
         // Task<RtuInitializedDto> InitializeRtuAsync(InitializeRtuDto dto);
-        Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto);
-        Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto);
+        //Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto);
+        //Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto);
         // Task<bool> StopMonitoringAsync(StopMonitoringDto dto);
         // Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings);
         // Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs);
         // Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd);
-        Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs);
+        //Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs);
         Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs);
         // Task<ClientMeasurementStartedDto> StartClientMeasurementAsync(DoClientMeasurementDto dto);
         Task<ClientMeasurementVeexResultDto> GetClientMeasurementAsync(GetClientMeasurementDto dto);
@@ -36,7 +36,7 @@ namespace Fibertest.WpfClient
 
         // C2Database
         // Task<byte[]?> GetSorBytes(int sorFileId);
-        Task<RftsEventsDto> GetRftsEvents(int sorFileId);
+        //Task<RftsEventsDto> GetRftsEvents(int sorFileId);
     }
 
     public class WcfServiceCommonC2D : IWcfServiceCommonC2D
@@ -46,40 +46,20 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<OtauAttachedDto> AttachOtauAsync(AttachOtauDto dto)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<OtauDetachedDto> DetachOtauAsync(DetachOtauDto dto)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        // public Task<bool> StopMonitoringAsync(StopMonitoringDto dto)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
-        // public Task<RequestAnswer> ApplyMonitoringSettingsAsync(ApplyMonitoringSettingsDto settings)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
-        // public Task<BaseRefAssignedDto> AssignBaseRefAsync(AssignBaseRefsDto baseRefs)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
-        // public Task<RequestAnswer> AttachTraceAndSendBaseRefs(AttachTraceDto cmd)
-        // {
-        //     throw new System.NotImplementedException();
-        // }
-
-        public Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<BaseRefAssignedDto> AssignBaseRefAsyncFromMigrator(AssignBaseRefsDto baseRefs)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
         public Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs)
         {
@@ -126,14 +106,14 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<byte[]?> GetSorBytes(int sorFileId)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<byte[]?> GetSorBytes(int sorFileId)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public Task<RftsEventsDto> GetRftsEvents(int sorFileId)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<RftsEventsDto> GetRftsEvents(int sorFileId)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 }

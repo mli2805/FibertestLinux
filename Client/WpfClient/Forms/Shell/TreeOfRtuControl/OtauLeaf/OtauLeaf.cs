@@ -5,6 +5,7 @@ using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
 
@@ -13,7 +14,7 @@ namespace Fibertest.WpfClient
     public class OtauLeaf : Leaf, IPortOwner
     {
         private readonly ILifetimeScope _globalScope;
-        private readonly IWcfServiceCommonC2D _c2RWcfManager;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IWindowManager _windowManager;
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
@@ -47,10 +48,10 @@ namespace Fibertest.WpfClient
         public int TraceCount => ChildrenImpresario.Children.Count(c => c is TraceLeaf);
 
         public OtauLeaf(ILifetimeScope globalScope, Model readModel, FreePorts freePorts, CurrentUser currentUser,
-            IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager)
+            GrpcC2RService grpcC2RService, IWindowManager windowManager)
         {
             _globalScope = globalScope;
-            _c2RWcfManager = c2RWcfManager;
+            _grpcC2RService = grpcC2RService;
             _windowManager = windowManager;
             _readModel = readModel;
             _currentUser = currentUser;
@@ -85,7 +86,8 @@ namespace Fibertest.WpfClient
             OtauDetachedDto result;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                result = await _c2RWcfManager.DetachOtauAsync(dto);
+                //result = await _c2RWcfManager.DetachOtauAsync(dto);
+                result = await _grpcC2RService.SendAnyC2RRequest<DetachOtauDto, OtauDetachedDto>(dto);
             }
 
             if (!result.IsDetached)

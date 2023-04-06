@@ -46,6 +46,8 @@ public class ClientToIitRtuTransmitter
                     new RtuInitializedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 case AttachOtauDto _: badResult = 
                     new OtauAttachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
+               case DetachOtauDto _: badResult = 
+                    new OtauDetachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 case DoClientMeasurementDto _: badResult =
                     new ClientMeasurementStartedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 // case ApplyMonitoringSettingsDto _:
@@ -57,6 +59,4 @@ public class ClientToIitRtuTransmitter
             return JsonConvert.SerializeObject(badResult, JsonSerializerSettings);
         }
     }
-
-
 }

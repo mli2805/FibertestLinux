@@ -6,6 +6,7 @@ using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
 
@@ -17,7 +18,7 @@ namespace Fibertest.WpfClient
         private int _portNumberForAttachment;
         private readonly ILifetimeScope _globalScope;
         private readonly Model _readModel;
-        private readonly IWcfServiceCommonC2D _c2RWcfManager;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IWindowManager _windowManager;
 
         public string RtuTitle { get; set; } = null!;
@@ -84,11 +85,11 @@ namespace Fibertest.WpfClient
         }
 
         public OtauToAttachViewModel(ILifetimeScope globalScope, Model readModel, 
-            IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager)
+            GrpcC2RService grpcC2RService, IWindowManager windowManager)
         {
             _globalScope = globalScope;
             _readModel = readModel;
-            _c2RWcfManager = c2RWcfManager;
+            _grpcC2RService = grpcC2RService;
             _windowManager = windowManager;
         }
 
@@ -170,7 +171,8 @@ namespace Fibertest.WpfClient
                 NetAddress = netAddress,
                 OpticalPort = _portNumberForAttachment
             };
-            var result = await _c2RWcfManager.AttachOtauAsync(dto);
+
+            var result = await _grpcC2RService.SendAnyC2RRequest<AttachOtauDto, OtauAttachedDto>(dto);
             return result;
         }
 
