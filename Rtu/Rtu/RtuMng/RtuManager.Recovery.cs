@@ -72,7 +72,7 @@ public partial class RtuManager
         if (damagedOtau.RebootAttempts == mikrotikRebootAttemptsBeforeNotification)
             MessageQueue.Send(new BopStateChangedDto()
             {
-                RtuId = _id,
+                RtuId = _config.Value.General.RtuId,
                 OtauIp = damagedOtau.Ip,
                 TcpPort = damagedOtau.TcpPort,
                 Serial = damagedOtau.Serial,

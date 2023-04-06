@@ -50,7 +50,7 @@ public partial class RtuManager
                             _logger.Info(Logs.RtuManager, "Send notification to server.");
                             var dto = new BopStateChangedDto()
                             {
-                                RtuId = _id,
+                                RtuId = _config.Value.General.RtuId,
                                 Serial = monitoringPort.CharonSerial,
                                 OtauIp = cha.NetAddress.Ip4Address,
                                 TcpPort = cha.NetAddress.Port,

@@ -45,7 +45,7 @@ public partial class RtuManager
     {
         return new CurrentMonitoringStepDto()
         {
-            RtuId = _id,
+            RtuId = _config.Value.General.RtuId,
             Step = currentStep,
             PortWithTraceDto = monitoringPort == null
                 ? null

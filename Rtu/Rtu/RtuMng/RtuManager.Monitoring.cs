@@ -354,7 +354,7 @@ public partial class RtuManager
         };
         var portWithTraceDto = new PortWithTraceDto(otauPortDto, monitoringPort.TraceId);
         var dto = new MonitoringResultDto(
-                _id, DateTime.Now, portWithTraceDto, moniResult.BaseRefType, moniResult.GetAggregatedResult())
+                _config.Value.General.RtuId, DateTime.Now, portWithTraceDto, moniResult.BaseRefType, moniResult.GetAggregatedResult())
         { SorBytes = moniResult.SorBytes };
         return dto;
     }

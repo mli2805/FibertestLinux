@@ -15,7 +15,6 @@ public partial class RtuManager
     private readonly OtdrManager _otdrManager;
     private readonly GrpcR2DService _grpcR2DService;
 
-    private Guid _id;
     private Charon _mainCharon = null!;
     private int _measurementNumber;
     private TimeSpan _preciseMakeTimespan;
@@ -61,7 +60,5 @@ public partial class RtuManager
         _interOpWrapper = interOpWrapper;
         _otdrManager = otdrManager;
         _grpcR2DService = grpcR2DService;
-
-        _id = config.Value.General.RtuId;
     }
 }
