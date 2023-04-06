@@ -75,7 +75,6 @@ namespace Fibertest.WpfClient
         private async void DisplayEdgeLandmarksAreWrong(BaseRefAssignedDto dto)
         {
             var baseRefHeader = dto.BaseRefType.GetLocalizedFemaleString() + Resources.SID__base_;
-            // var message = Resources.SID_First_and_last_landmarks_should_be_associated_with_key_events_;
             var message = Resources.SID_Events_corresponding_to_the_beginning_and_end_of_the_trace_must_be_associated_with_landmarks;
             var vm = new MyMessageBoxViewModel(MessageType.Error, new List<string>() { baseRefHeader, "", message }, 2);
             await _windowManager.ShowDialogWithAssignedOwner(vm);
@@ -83,16 +82,15 @@ namespace Fibertest.WpfClient
 
         private async void DisplayLandmarkCountDoesnotMatch(BaseRefAssignedDto dto, Trace trace)
         {
-            var messageStrings = new List<string>() {
+            var messageStrings = new List<string>
+            {
                 string.Format(Resources.SID__0__base_is_not_compatible_with_trace, dto.BaseRefType.GetLocalizedFemaleString()),
-                trace.Title, "", ""
+                trace.Title, "", "",
+                string.Format(Resources.SID_Landmarks_count_in_reflectogram_is__0_, dto.Landmarks) + Environment.NewLine +
+                string.Format(Resources.SID_Trace_s_equipment_count__excluding_Cable_reserve__is__0_, dto.Equipments) + Environment.NewLine +
+                Environment.NewLine +
+                string.Format(Resources.SID_Trace_s_node_count_is__0_, dto.Nodes)
             };
-
-            messageStrings
-                .Add(string.Format(Resources.SID_Landmarks_count_in_reflectogram_is__0_, dto.Landmarks) + Environment.NewLine +
-                     string.Format(Resources.SID_Trace_s_equipment_count__excluding_Cable_reserve__is__0_, dto.Equipments) + Environment.NewLine +
-                     Environment.NewLine +
-                     string.Format(Resources.SID_Trace_s_node_count_is__0_, dto.Nodes));
 
             var vm = new MyMessageBoxViewModel(MessageType.Error, messageStrings, 4);
             await _windowManager.ShowDialogWithAssignedOwner(vm);
@@ -103,16 +101,18 @@ namespace Fibertest.WpfClient
             var line = string.Format(Resources.SID_Trace_length_on_map_is__0__km, gpsDistance) +
                           Environment.NewLine + string.Format(Resources.SID_Optical_length_is__0__km, opticalLength);
 
-            var message = new List<MyMessageBoxLineModel>();
-            message.Add(new MyMessageBoxLineModel() { Line = BaseRefType.Precise.GetLocalizedFemaleString() + Resources.SID__base_ });
-            message.Add(new MyMessageBoxLineModel() { Line = "" });
-            message.Add(new MyMessageBoxLineModel() { Line = "" });
-            message.Add(new MyMessageBoxLineModel() { Line = line, FontWeight = FontWeights.Bold });
-            message.Add(new MyMessageBoxLineModel() { Line = "" });
-            message.Add(new MyMessageBoxLineModel() { Line = "" });
-            message.Add(new MyMessageBoxLineModel() { Line = Resources.SID_Assign_base_reflectogram_ });
+            var lineModels = new List<MyMessageBoxLineModel>
+            {
+                new() { Line = BaseRefType.Precise.GetLocalizedFemaleString() + Resources.SID__base_ },
+                new() { Line = "" },
+                new() { Line = "" },
+                new() { Line = line, FontWeight = FontWeights.Bold },
+                new() { Line = "" },
+                new() { Line = "" },
+                new() { Line = Resources.SID_Assign_base_reflectogram_ }
+            };
 
-            var vmc = new MyMessageBoxViewModel(MessageType.Confirmation, message);
+            var vmc = new MyMessageBoxViewModel(MessageType.Confirmation, lineModels);
             await _windowManager.ShowDialogWithAssignedOwner(vmc);
             return vmc.IsAnswerPositive;
         }
