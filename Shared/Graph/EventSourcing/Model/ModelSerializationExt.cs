@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization.Formatters.Binary;
+using Fibertest.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Fibertest.Graph;
@@ -15,12 +16,12 @@ public static class ModelSerializationExt
             var binaryFormatter = new BinaryFormatter();
             binaryFormatter.Serialize(stream, model);
             var buf = stream.ToArray();
-            logger.Log(LogLevel.Information, $@"Model serialization: data size = {buf.Length:0,0.#}");
+            logger.Info(Logs.DataCenter, $@"Model serialization: data size = {buf.Length:0,0.#}");
             return buf;
         }
         catch (Exception e)
         {
-            logger.Log(LogLevel.Error, @"Model serialization: " + e.Message);
+            logger.Exception(Logs.DataCenter, e, @"Model serialization: ");
             return null;
         }
     }
@@ -34,14 +35,14 @@ public static class ModelSerializationExt
             await Task.Delay(1);
             var binaryFormatter = new BinaryFormatter();
             var model2 = (Model)binaryFormatter.Deserialize(stream);
-            logger.Log(LogLevel.Information, @"Model deserialized successfully!");
+            logger.Info(Logs.DataCenter, @"Model deserialized successfully!");
             model.CopyFrom(model2);
 
             return model2.Rtus.Count == model.Rtus.Count;
         }
         catch (Exception e)
         {
-            logger.Log(LogLevel.Error, @"Model deserialization: " + e.Message);
+            logger.Exception(Logs.DataCenter, e, @"Model deserialization: ");
             return false;
         }
     }

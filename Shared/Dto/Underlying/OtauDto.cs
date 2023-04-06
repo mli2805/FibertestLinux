@@ -1,5 +1,6 @@
 ﻿namespace Fibertest.Dto;
 
+[Serializable]
 public class OtauDto
 {
     public string? Serial;
