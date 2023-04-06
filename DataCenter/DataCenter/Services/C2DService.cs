@@ -140,6 +140,7 @@ public class C2DService : c2d.c2dBase
             GetModelPortionDto dto => dto,
 
             ChangeDcConfigDto dto => dto,
+            GetSorBytesDto dto => dto,
             _ => null
         };
     }

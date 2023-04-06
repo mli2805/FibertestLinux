@@ -13,11 +13,13 @@ public partial class ClientGrpcRequestExecutor
     private readonly RtuOccupations _rtuOccupations;
     private readonly EventStoreService _eventStoreService;
     private readonly DiskSpaceProvider _diskSpaceProvider;
+    private readonly SorFileRepository _sorFileRepository;
 
     public ClientGrpcRequestExecutor(IWritableConfig<DataCenterConfig> config, 
         ILogger<ClientGrpcRequestExecutor> logger, Model writeModel,
         ClientCollection clientCollection, RtuOccupations rtuOccupations,
-        EventStoreService eventStoreService, DiskSpaceProvider diskSpaceProvider)
+        EventStoreService eventStoreService, DiskSpaceProvider diskSpaceProvider,
+        SorFileRepository sorFileRepository)
     {
         _config = config;
         _logger = logger;
@@ -26,6 +28,7 @@ public partial class ClientGrpcRequestExecutor
         _rtuOccupations = rtuOccupations;
         _eventStoreService = eventStoreService;
         _diskSpaceProvider = diskSpaceProvider;
+        _sorFileRepository = sorFileRepository;
     }
 
     public async Task<RequestAnswer> ExecuteRequest(object o)
@@ -53,6 +56,10 @@ public partial class ClientGrpcRequestExecutor
             case ChangeDcConfigDto dto:
                 _config.Update(cfg=>cfg.FillIn(dto.NewConfig));
                 return new RequestAnswer(ReturnCode.Ok);
+
+            case GetSorBytesDto  dto:
+                var bytes = await _sorFileRepository.GetSorBytesAsync(dto.SorFileId);
+                return new SorBytesDto() { ReturnCode = bytes == null ? ReturnCode.Error : ReturnCode.Ok, SorBytes = bytes };
          
             default: return new RequestAnswer(ReturnCode.Error);
         }

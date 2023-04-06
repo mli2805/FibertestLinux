@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Fibertest.Dto;
+using Fibertest.GrpcClientLib;
 using Fibertest.OtdrDataFormat;
 using Fibertest.Utils;
 using Fibertest.Utils.Setup;
@@ -17,17 +18,17 @@ namespace Fibertest.WpfClient
     {
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger;
-        private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly IWindowManager _windowManager;
 
         private string _tempSorFile = string.Empty;
 
         public ReflectogramManager(IWritableConfig<ClientConfig> config, ILogger logger, 
-             IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)
+             GrpcC2DService grpcC2DService, IWindowManager windowManager)
         {
             _config = config;
             _logger = logger;
-            _c2DWcfCommonManager = c2DWcfCommonManager;
+            _grpcC2DService = grpcC2DService;
             _windowManager = windowManager;
         }
 
@@ -122,13 +123,14 @@ namespace Fibertest.WpfClient
         //------------------------------------------------------------------------------------------------
         public async Task<byte[]> GetSorBytes(int sorFileId)
         {
-            var sorbytes = await _c2DWcfCommonManager.GetSorBytes(sorFileId);
-            if (sorbytes == null)
+            var sorBytesDto = await _grpcC2DService
+                .SendAnyC2DRequest<GetSorBytesDto, SorBytesDto>(new GetSorBytesDto(){SorFileId = sorFileId});
+            if (sorBytesDto.ReturnCode == ReturnCode.Error)
             {
-                _logger.Error(Logs.Client, $@"Cannot get reflectogram for measurement {sorFileId}");
-                return new byte[0];
+                _logger.Error(Logs.Client, $@"Cannot get sor bytes for measurement {sorFileId}");
+                return Array.Empty<byte>();
             }
-            return sorbytes;
+            return sorBytesDto.SorBytes!;
         }
 
         private void OpenSorInReflect(string sorFilename, string options = "")

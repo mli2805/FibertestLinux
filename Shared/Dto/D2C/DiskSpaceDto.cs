@@ -8,4 +8,9 @@
         public double DataSize;
         public double FreeSpaceThreshold;
     }
+
+    public class SorBytesDto : RequestAnswer
+    {
+        public byte[]? SorBytes;
+    }
 }

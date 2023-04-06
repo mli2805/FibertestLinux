@@ -23,7 +23,6 @@ namespace Fibertest.WpfClient
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
         private readonly GrpcC2DService _grpcC2DService;
-        private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
         private readonly CurrentGis _currentGis;
         private readonly GraphGpsCalculator _graphGpsCalculator;
@@ -66,14 +65,13 @@ namespace Fibertest.WpfClient
         public bool IsCreatedSuccessfully { get; set; }
 
         public TraceInfoViewModel(ILifetimeScope globalScope, Model readModel, CurrentUser currentUser,
-            GrpcC2DService grpcC2DService, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager,
+            GrpcC2DService grpcC2DService, IWindowManager windowManager,
             CurrentGis currentGis, GraphGpsCalculator graphGpsCalculator)
         {
             _globalScope = globalScope;
             _readModel = readModel;
             _currentUser = currentUser;
             _grpcC2DService = grpcC2DService;
-            _c2DWcfCommonManager = c2DWcfCommonManager;
             _windowManager = windowManager;
             _currentGis = currentGis;
             _graphGpsCalculator = graphGpsCalculator;
@@ -179,9 +177,9 @@ namespace Fibertest.WpfClient
             if (baseRef == null)
                 return null;
 
-            var sorBytes = await _c2DWcfCommonManager.GetSorBytes(baseRef.SorFileId);
-            if (sorBytes == null) return null;
-            return SorData.FromBytes(sorBytes);
+            var sorBytesDto = await _grpcC2DService
+                .SendAnyC2DRequest<GetSorBytesDto, SorBytesDto>(new GetSorBytesDto(){SorFileId = baseRef.SorFileId});
+            return sorBytesDto.ReturnCode == ReturnCode.Ok ? SorData.FromBytes(sorBytesDto.SorBytes!) : null;
         }
 
         protected override void OnViewLoaded(object view)

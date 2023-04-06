@@ -6,6 +6,7 @@ using Autofac;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.WpfCommonViews;
 
 namespace Fibertest.WpfClient
@@ -17,7 +18,7 @@ namespace Fibertest.WpfClient
         private readonly TraceStateModelFactory _traceStateModelFactory;
         private readonly OutOfTurnPreciseMeasurementViewModel _outOfTurnPreciseMeasurementViewModel;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly Model _readModel;
         private readonly CurrentUser _currentUser;
         private readonly CurrentClientConfiguration _currentClientConfiguration;
@@ -26,7 +27,7 @@ namespace Fibertest.WpfClient
         private List<TraceStateViewModel> LaunchedViews { get; } = new List<TraceStateViewModel>();
 
         public TraceStateViewsManager(ILifetimeScope globalScope, IWindowManager windowManager,
-            IWcfServiceCommonC2D commonC2DWcfManager, Model readModel, 
+            GrpcC2DService grpcC2DService, Model readModel, 
             CurrentUser currentUser, CurrentClientConfiguration currentClientConfiguration,
             ChildrenViews childrenViews, TraceStateModelFactory traceStateModelFactory,
             OutOfTurnPreciseMeasurementViewModel outOfTurnPreciseMeasurementViewModel)
@@ -35,7 +36,7 @@ namespace Fibertest.WpfClient
             _traceStateModelFactory = traceStateModelFactory;
             _outOfTurnPreciseMeasurementViewModel = outOfTurnPreciseMeasurementViewModel;
             _windowManager = windowManager;
-            _commonC2DWcfManager = commonC2DWcfManager;
+            _grpcC2DService = grpcC2DService;
             _readModel = readModel;
             _currentUser = currentUser;
             _currentClientConfiguration = currentClientConfiguration;
@@ -143,8 +144,9 @@ namespace Fibertest.WpfClient
         // User clicked on line in TraceStatistics (maybe not on the last line - see parameter)
         public async void ShowTraceState(Measurement measurement, bool isLastMeasurementOnThisTrace, bool isLastAccident)
         {
-            var sorBytes = await _commonC2DWcfManager.GetSorBytes(measurement.SorFileId);
-            if (sorBytes == null)
+            var sorBytesDto = await _grpcC2DService
+                .SendAnyC2DRequest<GetSorBytesDto, SorBytesDto>(new GetSorBytesDto(){SorFileId = measurement.SorFileId});
+            if (sorBytesDto.ReturnCode == ReturnCode.Error)
                 return;
 
             var traceStateModel = _traceStateModelFactory.CreateModel(measurement, isLastMeasurementOnThisTrace, isLastAccident);

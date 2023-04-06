@@ -64,8 +64,11 @@ namespace Fibertest.WpfClient
 
         private ObservableCollection<LandmarkRow> LandmarksToRows()
         {
-            var temp = _isFilterOn ? _landmarks.Where(l => l.EquipmentType != EquipmentType.EmptyNode) : _landmarks;
-            return new ObservableCollection<LandmarkRow>(temp.Select(l =>  new LandmarkRow().FromLandmark(l, _selectedGpsInputMode.Mode)));
+            var temp = _isFilterOn 
+                ? _landmarks.Where(l => l.EquipmentType != EquipmentType.EmptyNode) 
+                : _landmarks;
+            return new ObservableCollection<LandmarkRow>(temp
+                .Select(l =>  new LandmarkRow().FromLandmark(l, _selectedGpsInputMode.Mode)));
         }
 
         private bool _isFilterOn;
@@ -85,7 +88,6 @@ namespace Fibertest.WpfClient
         private readonly LandmarksBaseParser _landmarksBaseParser;
         private readonly LandmarksGraphParser _landmarksGraphParser;
         private readonly GrpcC2DService _grpcC2DService;
-        private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly IWindowManager _windowManager;
         private List<Landmark> _landmarks = null!;
 
@@ -150,7 +152,7 @@ namespace Fibertest.WpfClient
 
         public LandmarksViewModel(ILifetimeScope globalScope, Model readModel, CurrentGis currentGis,
             LandmarksBaseParser landmarksBaseParser, LandmarksGraphParser landmarksGraphParser,
-             GrpcC2DService grpcC2DService, IWcfServiceCommonC2D c2DWcfCommonManager, IWindowManager windowManager)
+             GrpcC2DService grpcC2DService, IWindowManager windowManager)
         {
             CurrentGis = currentGis;
             _globalScope = globalScope;
@@ -158,7 +160,6 @@ namespace Fibertest.WpfClient
             _landmarksBaseParser = landmarksBaseParser;
             _landmarksGraphParser = landmarksGraphParser;
             _grpcC2DService = grpcC2DService;
-            _c2DWcfCommonManager = c2DWcfCommonManager;
             _windowManager = windowManager;
             _selectedGpsInputMode = GpsInputModes.First(i => i.Mode == CurrentGis.GpsInputMode);
             GisVisibility = currentGis.IsGisOn ? Visibility.Visible : Visibility.Collapsed;
@@ -229,8 +230,9 @@ namespace Fibertest.WpfClient
             var baseRef = _readModel.BaseRefs.First(b => b.Id == baseId);
             OneLandmarkViewModel.SorFileId = baseRef.SorFileId;
             OneLandmarkViewModel.PreciseTimestamp = baseRef.SaveTimestamp;
-            var sorBytes = await _c2DWcfCommonManager.GetSorBytes(baseRef.SorFileId);
-            return sorBytes != null ? SorData.FromBytes(sorBytes) : null;
+            var sorBytesDto = await _grpcC2DService
+                .SendAnyC2DRequest<GetSorBytesDto, SorBytesDto>(new GetSorBytesDto(){SorFileId = baseRef.SorFileId});
+            return sorBytesDto.ReturnCode == ReturnCode.Ok ? SorData.FromBytes(sorBytesDto.SorBytes!) : null;
         }
 
         public async Task<int> RefreshOrChangeTrace() // button
