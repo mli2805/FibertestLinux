@@ -11,7 +11,7 @@ namespace Fibertest.Rtu
         public async Task<RequestAnswer> StartOutOfTurnMeasurement(DoOutOfTurnPreciseMeasurementDto dto)
         {
             await BreakMonitoringCycle("Out of turn precise measurement");
-            if (!IsMonitoringOn)
+            if (!_config.Value.Monitoring.IsMonitoringOnPersisted)
                 await ConnectOtdrWithRecovering();
             var _ = Task.Run(() => DoOutOfTurn(dto));
 
@@ -20,7 +20,26 @@ namespace Fibertest.Rtu
 
         private async Task DoOutOfTurn(DoOutOfTurnPreciseMeasurementDto dto)
         {
-            await Task.Delay(1);
+            var moniResult = await DoSecondMeasurement(
+                new MonitoringPort(dto.PortWithTraceDto!), false, BaseRefType.Precise, true);
+
+            var monitoringPort = _monitoringQueue.Queue.FirstOrDefault(p =>
+                p.CharonSerial == dto.PortWithTraceDto!.OtauPort.Serial
+                && p.OpticalPort == dto.PortWithTraceDto.OtauPort.OpticalPort);
+
+            if (monitoringPort != null)
+            {
+                monitoringPort.LastMoniResult = moniResult;
+                monitoringPort.LastTraceState = moniResult.GetAggregatedResult();
+            }
+
+            if (_config.Value.Monitoring.IsMonitoringOnPersisted)
+            {
+                IsMonitoringOn = true;
+                await RunMonitoringCycle();
+            }
+            else
+                _otdrManager.DisconnectOtdr();
         }
 
         public async Task<ClientMeasurementStartedDto> DoClientMeasurement(DoClientMeasurementDto dto)

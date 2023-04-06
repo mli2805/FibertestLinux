@@ -14,16 +14,16 @@ namespace Fibertest.WpfClient
         Task<int> ExportEvents();
 
         #region Event sourcing
-        Task<int> SendCommands(List<string> jsons, string username, string clientIp); // especially for Migrator.exe
+        //Task<int> SendCommands(List<string> jsons, string username, string clientIp); // especially for Migrator.exe
         Task<int> SendCommandsAsObjs(List<object> cmds);
         // Task<string> SendCommandAsObj(object cmd);
-        Task<string> SendCommand(string json, string username, string clientIp);
-        Task<string[]> GetEvents(GetEventsDto dto);
+        //Task<string> SendCommand(string json, string username, string clientIp);
+        //Task<string[]> GetEvents(GetEventsDto dto);
         // Task<SerializedModelDto> GetModelDownloadParams(GetSerializedModelParamsDto dto);
-        Task<byte[]> GetModelPortion(int portionOrdinal);
+        //Task<byte[]> GetModelPortion(int portionOrdinal);
         #endregion
         
-        Task<bool> RemoveUnused();
+        //Task<bool> RemoveUnused();
 
         #region Settings
         // Task<bool> SaveSmtpSettings(SmtpConfig dto);
@@ -61,10 +61,10 @@ namespace Fibertest.WpfClient
             throw new System.NotImplementedException();
         }
 
-        public Task<int> SendCommands(List<string> jsons, string username, string clientIp)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<int> SendCommands(List<string> jsons, string username, string clientIp)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
         public Task<int> SendCommandsAsObjs(List<object> cmds)
         {
@@ -76,30 +76,30 @@ namespace Fibertest.WpfClient
         //     throw new System.NotImplementedException();
         // }
 
-        public Task<string> SendCommand(string json, string username, string clientIp)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<string> SendCommand(string json, string username, string clientIp)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public Task<string[]> GetEvents(GetEventsDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<string[]> GetEvents(GetEventsDto dto)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
         // public Task<SerializedModelDto> GetModelDownloadParams(GetSerializedModelParamsDto dto)
         // {
         //     throw new System.NotImplementedException();
         // }
 
-        public Task<byte[]> GetModelPortion(int portionOrdinal)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<byte[]> GetModelPortion(int portionOrdinal)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public Task<bool> RemoveUnused()
-        {
-            throw new System.NotImplementedException();
-        }
+        //public Task<bool> RemoveUnused()
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
         // public Task<bool> SaveSmtpSettings(SmtpConfig dto)
         // {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.StringResources;
 using Fibertest.WpfCommonViews;
 
@@ -17,7 +18,7 @@ namespace Fibertest.WpfClient
         private Rtu _rtu = null!;
         private readonly Model _readModel;
         private readonly MeasurementInterrupter _measurementInterrupter;
-        private readonly IWcfServiceCommonC2D _c2RWcfManager;
+        private readonly GrpcC2RService _grpcC2RService;
         private readonly IWindowManager _windowManager;
 
         public bool IsOpen { get; set; }
@@ -47,11 +48,11 @@ namespace Fibertest.WpfClient
         }
 
         public OutOfTurnPreciseMeasurementViewModel(Model readModel, MeasurementInterrupter measurementInterrupter, 
-            IWcfServiceCommonC2D c2RWcfManager, IWindowManager windowManager)
+            GrpcC2RService grpcC2RService, IWindowManager windowManager)
         {
             _readModel = readModel;
             _measurementInterrupter = measurementInterrupter;
-            _c2RWcfManager = c2RWcfManager;
+            _grpcC2RService = grpcC2RService;
             _windowManager = windowManager;
         }
 
@@ -104,7 +105,7 @@ namespace Fibertest.WpfClient
                     },
                     TraceLeaf.Id)
             };
-            return await _c2RWcfManager.DoOutOfTurnPreciseMeasurementAsync(dto);
+            return await _grpcC2RService.SendAnyC2RRequest<DoOutOfTurnPreciseMeasurementDto, RequestAnswer>(dto);
         }
 
         public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())

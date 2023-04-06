@@ -40,6 +40,7 @@ public class RtuGrpcService : d2r.d2rBase
             case DetachOtauDto dto: result = await _rtuManager.DetachOtau(dto); break;
             case AssignBaseRefsDto dto: result = await _rtuManager.SaveBaseRefs(dto); break;
             case DoClientMeasurementDto dto: result = await _rtuManager.DoClientMeasurement(dto); break;
+            case DoOutOfTurnPreciseMeasurementDto dto: result = await _rtuManager.StartOutOfTurnMeasurement(dto); break;
             case InterruptMeasurementDto dto: result = await _rtuManager.InterruptMeasurement(dto); break;
             case FreeOtdrDto _: result = _rtuManager.FreeOtdr(); break;
             default: result = new RequestAnswer(ReturnCode.Error); break;

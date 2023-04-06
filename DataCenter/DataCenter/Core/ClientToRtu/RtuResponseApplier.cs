@@ -35,6 +35,7 @@ public partial class RtuResponseApplier
         {
             case CheckRtuConnectionDto _:
             case DoClientMeasurementDto _:
+            case DoOutOfTurnPreciseMeasurementDto _:
                 return jsonResult;
 
             case InitializeRtuDto dto:
@@ -57,7 +58,7 @@ public partial class RtuResponseApplier
                         JsonSerializerSettings);
         }
     }
-  
+
     private TResult Deserialize<TResult>(string jsonResult) where TResult : RequestAnswer, new()
     {
         var result = JsonConvert.DeserializeObject<TResult>(jsonResult, JsonSerializerSettings);

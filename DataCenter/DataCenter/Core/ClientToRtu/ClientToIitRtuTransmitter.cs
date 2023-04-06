@@ -46,11 +46,12 @@ public class ClientToIitRtuTransmitter
                     new RtuInitializedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 case AttachOtauDto _: badResult = 
                     new OtauAttachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
-               case DetachOtauDto _: badResult = 
+                case DetachOtauDto _: badResult = 
                     new OtauDetachedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 case DoClientMeasurementDto _: badResult =
                     new ClientMeasurementStartedDto(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
                 // case ApplyMonitoringSettingsDto _:
+                // case DoOutOfTurnPreciseMeasurementDto _:
                 // case StopMonitoringDto _:
                 // case FreeOtdrDto _:
                 default: badResult = new RequestAnswer(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
