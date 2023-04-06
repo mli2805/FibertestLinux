@@ -13,16 +13,19 @@ public class C2DService : c2d.c2dBase
     private readonly ClientCollection _clientCollection;
     private readonly Model _writeModel;
     private readonly ClientGrpcRequestExecutor _clientGrpcRequestExecutor;
+    private readonly C2DCommandsProcessor _c2DCommandsProcessor;
     private readonly EventStoreService _eventStoreService;
     private const int PortionSize2Mb = 2 * 1024 * 1024;
 
     public C2DService(ILogger<C2DService> logger, ClientCollection clientCollection, Model writeModel,
-        ClientGrpcRequestExecutor clientGrpcRequestExecutor, EventStoreService eventStoreService)
+        ClientGrpcRequestExecutor clientGrpcRequestExecutor, C2DCommandsProcessor c2DCommandsProcessor,
+        EventStoreService eventStoreService)
     {
         _logger = logger;
         _clientCollection = clientCollection;
         _writeModel = writeModel;
         _clientGrpcRequestExecutor = clientGrpcRequestExecutor;
+        _c2DCommandsProcessor = c2DCommandsProcessor;
         _eventStoreService = eventStoreService;
     }
 
@@ -62,7 +65,7 @@ public class C2DService : c2d.c2dBase
                     clientIp = client.ClientIp;
                 }
 
-                var res = await _eventStoreService.SendCommandWrapped(cmd, username, clientIp);
+                var res = await _c2DCommandsProcessor.SendCommandWrapped(cmd, username, clientIp);
                 var answer = new RequestAnswer(string.IsNullOrEmpty(res) ? ReturnCode.Ok : ReturnCode.Error);
                 return new c2dResponse { Json = JsonConvert.SerializeObject(answer, JsonSerializerSettings) };
             }

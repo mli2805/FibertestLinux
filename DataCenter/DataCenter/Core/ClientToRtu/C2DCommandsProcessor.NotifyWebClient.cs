@@ -5,7 +5,7 @@ using Fibertest.Utils;
 
 namespace Fibertest.DataCenter
 {
-    public partial class EventStoreService
+    public partial class C2DCommandsProcessor
     {
         private static readonly IMapper Mapper = new MapperConfiguration(
             cfg => cfg.AddProfile<MappingWebApiProfile>()).CreateMapper();

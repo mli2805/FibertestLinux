@@ -1,10 +1,35 @@
 ﻿using Fibertest.Graph;
 using Fibertest.Utils;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace Fibertest.DataCenter
 {
-    public partial class EventStoreService
+    public partial class C2DCommandsProcessor
     {
+        private readonly ILogger<C2DCommandsProcessor> _logger;
+        private readonly Model _writeModel;
+        private readonly EventStoreService _eventStoreService;
+        private readonly IFtSignalRClient _ftSignalRClient;
+        private readonly BaseRefLandmarksTool _baseRefLandmarksTool;
+        private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
+        private readonly SorFileRepository _sorFileRepository;
+        private readonly RtuStationsRepository _rtuStationsRepository;
+
+        public C2DCommandsProcessor(ILogger<C2DCommandsProcessor> logger, Model writeModel,
+            EventStoreService eventStoreService, IFtSignalRClient ftSignalRClient, 
+            BaseRefLandmarksTool baseRefLandmarksTool, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
+            SorFileRepository sorFileRepository, RtuStationsRepository rtuStationsRepository)
+        {
+            _logger = logger;
+            _writeModel = writeModel;
+            _eventStoreService = eventStoreService;
+            _ftSignalRClient = ftSignalRClient;
+            _baseRefLandmarksTool = baseRefLandmarksTool;
+            _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
+            _sorFileRepository = sorFileRepository;
+            _rtuStationsRepository = rtuStationsRepository;
+        }
+
         public async Task<string?> SendCommandWrapped(object cmd, string username, string clientIp)
         {
             if (cmd is RemoveEventsAndSors removeEventsAndSors)
@@ -32,7 +57,7 @@ namespace Fibertest.DataCenter
                 if (!string.IsNullOrEmpty(res)) return res;
             }
 
-            var resultInGraph = await SendCommand(cmd, username, clientIp);
+            var resultInGraph = await _eventStoreService.SendCommand(cmd, username, clientIp);
             if (resultInGraph != null)
                 return resultInGraph;
 
@@ -69,5 +94,6 @@ namespace Fibertest.DataCenter
 
             return null;
         }
+
     }
 }

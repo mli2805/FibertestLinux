@@ -11,19 +11,13 @@ public partial class EventStoreService
     const string Timestamp = @"Timestamp";
     private readonly IWritableConfig<DataCenterConfig> _config;
     private readonly ILogger<EventStoreService> _logger;
-    private readonly FtSignalRClient _ftSignalRClient;
     private readonly IDbInitializer _dbInitializer;
-    private readonly SorFileRepository _sorFileRepository;
-    private readonly RtuStationsRepository _rtuStationsRepository;
     private readonly SnapshotRepository _snapshotRepository;
     private readonly EventLogComposer _eventLogComposer;
     public IStoreEvents? StoreEvents;
     private readonly CommandAggregator _commandAggregator;
     private readonly EventsQueue _eventsQueue;
-    private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
-    private readonly BaseRefLandmarksTool _baseRefLandmarksTool;
     private readonly Model _writeModel;
-    private readonly C2RCommandsProcessor _c2RCommandsProcessor;
 
     public Guid StreamIdOriginal;
 
@@ -34,28 +28,20 @@ public partial class EventStoreService
     private static readonly JsonSerializerSettings JsonSerializerSettings = 
         new () { TypeNameHandling = TypeNameHandling.All };
 
-    public EventStoreService(IWritableConfig<DataCenterConfig> config,
-        ILogger<EventStoreService> logger, FtSignalRClient ftSignalRClient, IDbInitializer dbInitializer, 
-        SorFileRepository sorFileRepository, RtuStationsRepository rtuStationsRepository,
+    public EventStoreService(IWritableConfig<DataCenterConfig> config, Model writeModel,
+        ILogger<EventStoreService> logger, IDbInitializer dbInitializer, 
         SnapshotRepository snapshotRepository, EventLogComposer eventLogComposer,
-        CommandAggregator commandAggregator, EventsQueue eventsQueue, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
-        BaseRefLandmarksTool baseRefLandmarksTool, Model writeModel, C2RCommandsProcessor c2RCommandsProcessor)
+        CommandAggregator commandAggregator, EventsQueue eventsQueue)
     {
         _eventsPortion = config.Value.EventSourcing.EventSourcingPortion;
         _config = config;
         _logger = logger;
-        _ftSignalRClient = ftSignalRClient;
         _dbInitializer = dbInitializer;
-        _sorFileRepository = sorFileRepository;
-        _rtuStationsRepository = rtuStationsRepository;
         _snapshotRepository = snapshotRepository;
         _eventLogComposer = eventLogComposer;
         _commandAggregator = commandAggregator;
         _eventsQueue = eventsQueue;
-        _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
-        _baseRefLandmarksTool = baseRefLandmarksTool;
         _writeModel = writeModel;
-        _c2RCommandsProcessor = c2RCommandsProcessor;
     }
 
 

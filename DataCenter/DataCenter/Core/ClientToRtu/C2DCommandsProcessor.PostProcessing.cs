@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Fibertest.DataCenter
 {
-    public partial class EventStoreService
+    public partial class C2DCommandsProcessor
     {
         private async Task<string?> AmendForTracesWhichUseThisNode(Guid nodeId)
         {

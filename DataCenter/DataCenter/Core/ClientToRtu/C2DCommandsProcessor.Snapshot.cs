@@ -2,7 +2,7 @@
 
 namespace Fibertest.DataCenter
 {
-    public partial class EventStoreService
+    public partial class C2DCommandsProcessor
     {
         private async Task MakeSnapshot(MakeSnapshot cmd, string username, string clientIp)
         {

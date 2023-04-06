@@ -99,6 +99,7 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<OutOfTurnRequestBuilder>();
         services.AddSingleton<SnmpEngine2>();
 
+        services.AddSingleton<C2DCommandsProcessor>();
         services.AddSingleton<C2RCommandsProcessor>();
         services.AddSingleton<ClientToIitRtuTransmitter>();
         services.AddSingleton<RtuResponseApplier>();
