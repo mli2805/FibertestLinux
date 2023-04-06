@@ -21,7 +21,7 @@ public class ClientToIitRtuTransmitter
     {
         var rtuUri = $"http://{rtuAddress}";
         using var grpcChannelRtu = GrpcChannel.ForAddress(rtuUri);
-        _logger.Debug(Logs.DataCenter, $"GrpcChannel for {rtuUri}");
+        //_logger.Debug(Logs.DataCenter, $"GrpcChannel for {rtuUri}");
         var grpcClientRtu = new d2r.d2rClient(grpcChannelRtu);
         // _logger.Debug(Logs.DataCenter, $"Command content {commandContent}");
 

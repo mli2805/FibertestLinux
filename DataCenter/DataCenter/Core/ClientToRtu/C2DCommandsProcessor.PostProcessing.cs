@@ -132,6 +132,8 @@ namespace Fibertest.DataCenter
             }
         }
 
+        private static readonly JsonSerializerSettings JsonSerializerSettings =
+            new() { TypeNameHandling = TypeNameHandling.All };
         private async Task<BaseRefAssignedDto> SendAmendedBaseRefsToRtu(Graph.Rtu rtu, Trace trace, List<BaseRefDto> baseRefDtos)
         {
             var dto = new AssignBaseRefsDto(rtu.Id, rtu.RtuMaker, trace.TraceId, baseRefDtos, new List<int>())
@@ -152,8 +154,8 @@ namespace Fibertest.DataCenter
             if (rtuAddress == null) return new BaseRefAssignedDto(ReturnCode.RtuNotFound);
 
             var jsonResponse = await _clientToIitRtuTransmitter
-                .TransferCommand(rtuAddress, JsonConvert.SerializeObject(dto));
-            var result = JsonConvert.DeserializeObject<BaseRefAssignedDto>(jsonResponse);
+                .TransferCommand(rtuAddress, JsonConvert.SerializeObject(dto, JsonSerializerSettings));
+            var result = JsonConvert.DeserializeObject<BaseRefAssignedDto>(jsonResponse, JsonSerializerSettings);
             if (result == null) return new BaseRefAssignedDto(ReturnCode.FailedDeserializeJson);
             return result;
         }
@@ -161,10 +163,8 @@ namespace Fibertest.DataCenter
         private async Task<string?> GetRtuAddress(Guid rtuId)
         {
             var rtuStation = await _rtuStationsRepository.GetRtuStation(rtuId);
-            if (rtuStation == null)
-                return null;
 
-            return rtuStation.GetRtuAvailableAddress();
+            return rtuStation?.GetRtuAvailableAddress();
         }
     }
 }
