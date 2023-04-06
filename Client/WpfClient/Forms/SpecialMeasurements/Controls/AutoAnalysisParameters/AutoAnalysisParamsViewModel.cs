@@ -84,7 +84,7 @@ namespace Fibertest.WpfClient
             var clientPath = FileOperations.GetParentFolder(AppDomain.CurrentDomain.BaseDirectory);
             for (int i = 1; i <= 4; i++)
             {
-              var templateFileName = clientPath + $@"\ini\RftsParamsDefaultTemplate#{i}.rft";
+              var templateFileName = clientPath + $@"/config/RftsParamsDefaultTemplate#{i}.rft";
 
               if (RftsParamsParser.TryLoad(templateFileName, out RftsParams? result, out Exception? _))
               {
@@ -98,7 +98,7 @@ namespace Fibertest.WpfClient
         public RftsParams LoadFromTemplate(int i)
         {
             var clientPath = FileOperations.GetParentFolder(AppDomain.CurrentDomain.BaseDirectory);
-            var templateFileName = clientPath + $@"\ini\RftsParamsDefaultTemplate#{i}.rft";
+            var templateFileName = clientPath + $@"/config/RftsParamsDefaultTemplate#{i}.rft";
 
             if (!RftsParamsParser.TryLoad(templateFileName, out RftsParams? result, out Exception? exception))
             {

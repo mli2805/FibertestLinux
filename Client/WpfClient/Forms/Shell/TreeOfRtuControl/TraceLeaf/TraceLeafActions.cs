@@ -211,8 +211,6 @@ namespace Fibertest.WpfClient
             if (!(param is TraceLeaf traceLeaf))
                 return;
 
-            await Task.Delay(0);
-
             var rtuId = _readModel.Traces.First(t => t.TraceId == traceLeaf.Id).RtuId;
             var rtu = _readModel.Rtus.First(r => r.Id == rtuId);
             if (!await _globalScope.Resolve<IRtuHolder>().SetRtuOccupationState(rtuId, rtu.Title, RtuOccupation.DoAutoBaseMeasurement))

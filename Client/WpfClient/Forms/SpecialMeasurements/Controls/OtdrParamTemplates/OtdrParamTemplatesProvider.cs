@@ -6,6 +6,7 @@ using System.Linq;
 using Fibertest.Dto;
 using Fibertest.Graph;
 using Fibertest.StringResources;
+using Fibertest.Utils.Setup;
 
 namespace Fibertest.WpfClient
 {
@@ -57,8 +58,10 @@ namespace Fibertest.WpfClient
         // временно для экспериментов Хазанова
         private static List<string> TempGetTps(string acceptableTps)
         {
+            var rrr = FileOperations.GetMainFolder();
+
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            var filename = basePath + "..\\ini\\temp_tps.txt";
+            var filename = basePath + @"..\config\temp_tps.txt";
             if (!File.Exists(filename))
                 File.WriteAllLines(filename, new List<string>(){"Допустимые значения: "+acceptableTps, "25", "100", "100", "300"});
             var content = File.ReadAllLines(filename);
