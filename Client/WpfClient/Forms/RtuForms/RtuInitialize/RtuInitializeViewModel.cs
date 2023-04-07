@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -23,8 +22,8 @@ namespace Fibertest.WpfClient
         private readonly DataCenterConfig _currentDatacenterParameters;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
+        private readonly GrpcC2DService _grpcC2DService;
         private readonly GrpcC2RService _grpcC2RService;
-        private readonly IWcfServiceDesktopC2D _wcfServiceDesktopC2D;
         private readonly ILogger _logger; 
         private readonly CommonStatusBarViewModel _commonStatusBarViewModel;
 
@@ -57,8 +56,7 @@ namespace Fibertest.WpfClient
 
         public RtuInitializeViewModel(ILifetimeScope globalScope, CurrentUser currentUser, 
             DataCenterConfig currentDatacenterParameters, Model readModel,
-            IWindowManager windowManager, GrpcC2RService grpcC2RService,
-            IWcfServiceDesktopC2D wcfServiceDesktopC2D,
+            IWindowManager windowManager, GrpcC2DService grpcC2DService, GrpcC2RService grpcC2RService,
             ILogger logger, RtuLeaf rtuLeaf, CommonStatusBarViewModel commonStatusBarViewModel)
         {
             _globalScope = globalScope;
@@ -68,8 +66,8 @@ namespace Fibertest.WpfClient
             IsIdle = true;
             IsCloseEnabled = true;
             _windowManager = windowManager;
+            _grpcC2DService = grpcC2DService;
             _grpcC2RService = grpcC2RService;
-            _wcfServiceDesktopC2D = wcfServiceDesktopC2D;
             _logger = logger;
             _commonStatusBarViewModel = commonStatusBarViewModel;
 
@@ -157,15 +155,18 @@ namespace Fibertest.WpfClient
 
         private async Task SynchronizeBaseRefs()
         {
-            var commands = new List<object>();
-            foreach (var veexTest in _readModel.VeexTests)
+            if (FullModel.OriginalRtu.RtuMaker == RtuMaker.VeEX)
             {
-                var trace = _readModel.Traces.FirstOrDefault(t => t.TraceId == veexTest.TraceId);
-                if (trace != null && trace.RtuId == FullModel.OriginalRtu.Id)
-                    commands.Add(new RemoveVeexTest() { TestId = veexTest.TestId });
+                foreach (var veexTest in _readModel.VeexTests)
+                {
+                    var trace = _readModel.Traces.FirstOrDefault(t => t.TraceId == veexTest.TraceId);
+                    if (trace != null && trace.RtuId == FullModel.OriginalRtu.Id)
+                    {
+                        var cmd = new RemoveVeexTest() { TestId = veexTest.TestId };
+                        var _ = await _grpcC2DService.SendEventSourcingCommand(cmd);
+                    }
+                }
             }
-            await _wcfServiceDesktopC2D.SendCommandsAsObjs(commands);
-
 
             using (_globalScope.Resolve<IWaitCursor>())
             {
