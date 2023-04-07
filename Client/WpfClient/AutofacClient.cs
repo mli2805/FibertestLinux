@@ -40,7 +40,6 @@ namespace Fibertest.WpfClient
             builder.RegisterType<GrpcInClientProcessor>().InstancePerLifetimeScope();
             builder.RegisterType<ClientGrpcServiceHost>().As<IGrpcHost>().InstancePerLifetimeScope();
 
-            builder.RegisterType<WcfServiceCommonC2D>().As<IWcfServiceCommonC2D>().InstancePerLifetimeScope();
             builder.RegisterType<WcfServiceInSuperClient>().As<IWcfServiceInSuperClient>().InstancePerLifetimeScope();
             // builder.RegisterType<WcfServiceInClient>().InstancePerLifetimeScope();
 

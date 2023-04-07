@@ -24,7 +24,6 @@ namespace Fibertest.WpfClient
         private readonly IWindowManager _windowManager;
         private readonly GrpcC2DService _grpcC2DService;
         private readonly GrpcC2RService _grpcC2RService;
-        private readonly IWcfServiceCommonC2D _commonC2DWcfManager;
         private readonly RtuRemover _rtuRemover;
         private readonly TabulatorViewModel _tabulatorViewModel;
         private readonly RtuAutoBaseViewModel _rtuAutoBaseViewModel;
@@ -34,7 +33,6 @@ namespace Fibertest.WpfClient
         public RtuLeafActions(ILifetimeScope globalScope, ILogger logger,
             Model readModel, GraphReadModel graphReadModel,
             IWindowManager windowManager, GrpcC2DService grpcC2DService, GrpcC2RService grpcC2RService,
-            IWcfServiceCommonC2D commonC2DWcfManager,
             RtuRemover rtuRemover, TabulatorViewModel tabulatorViewModel,
             RtuAutoBaseViewModel rtuAutoBaseViewModel,
             RtuStateViewsManager rtuStateViewsManager, LandmarksViewsManager landmarksViewsManager)
@@ -46,7 +44,6 @@ namespace Fibertest.WpfClient
             _windowManager = windowManager;
             _grpcC2DService = grpcC2DService;
             _grpcC2RService = grpcC2RService;
-            _commonC2DWcfManager = commonC2DWcfManager;
             _rtuRemover = rtuRemover;
             _tabulatorViewModel = tabulatorViewModel;
             _rtuAutoBaseViewModel = rtuAutoBaseViewModel;

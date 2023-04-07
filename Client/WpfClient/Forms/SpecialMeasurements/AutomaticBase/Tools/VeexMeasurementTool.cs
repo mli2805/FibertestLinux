@@ -16,16 +16,14 @@ namespace Fibertest.WpfClient
         private readonly IWritableConfig<ClientConfig> _config;
         private readonly ILogger _logger; 
         private readonly Model _readModel;
-        private readonly IWcfServiceCommonC2D _c2DWcfCommonManager;
         private readonly GrpcC2RService _grpcC2RService;
 
         public VeexMeasurementTool(IWritableConfig<ClientConfig> config, ILogger logger, 
-            Model readModel, IWcfServiceCommonC2D c2DWcfCommonManager,  GrpcC2RService grpcC2RService)
+            Model readModel, GrpcC2RService grpcC2RService)
         {
             _config = config;
             _logger = logger;
             _readModel = readModel;
-            _c2DWcfCommonManager = c2DWcfCommonManager;
             _grpcC2RService = grpcC2RService;
         }
 
@@ -53,7 +51,9 @@ namespace Fibertest.WpfClient
                 {
                     VeexMeasurementId = startResult.ClientMeasurementId.ToString(),
                 };  
-                lineCheckResult = await _c2DWcfCommonManager.GetClientMeasurementAsync(getDto);
+
+                lineCheckResult = await _grpcC2RService
+                    .SendAnyC2RRequest<GetClientMeasurementDto, ClientMeasurementVeexResultDto>(getDto);
                 _logger.Info(Logs.Client,$@"lineCheckResult: {lineCheckResult.ReturnCode}");
                 if (lineCheckResult.ReturnCode != ReturnCode.Ok)
                 {
@@ -79,7 +79,8 @@ namespace Fibertest.WpfClient
             };
             while (!cts.IsCancellationRequested)
             {
-                var measResult = await _c2DWcfCommonManager.GetClientMeasurementAsync(getDto);
+                var measResult = await _grpcC2RService
+                    .SendAnyC2RRequest<GetClientMeasurementDto, ClientMeasurementVeexResultDto>(getDto);
 
                 if (measResult.ReturnCode != ReturnCode.Ok || measResult.VeexMeasurementStatus == @"failed")
                 {
@@ -100,7 +101,8 @@ namespace Fibertest.WpfClient
 
                 if (measResult.ReturnCode == ReturnCode.Ok && measResult.VeexMeasurementStatus == @"finished")
                 {
-                    var measResultWithSorBytes = await _c2DWcfCommonManager.GetClientMeasurementSorBytesAsync(getDto);
+                    var measResultWithSorBytes = await _grpcC2RService
+                        .SendAnyC2RRequest<GetClientMeasurementDto, ClientMeasurementVeexResultDto>(getDto);
                     _logger.Info(Logs.Client,$@"Fetched measurement {clientMeasurementId.First6()} from VEEX RTU");
                     return new MeasurementEventArgs(
                         ReturnCode.MeasurementEndedNormally, trace, measResultWithSorBytes.SorBytes);

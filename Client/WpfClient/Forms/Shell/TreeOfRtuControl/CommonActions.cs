@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -7,6 +6,7 @@ using Caliburn.Micro;
 using Fibertest.CharonLib;
 using Fibertest.Dto;
 using Fibertest.Graph;
+using Fibertest.GrpcClientLib;
 using Fibertest.Utils;
 using Fibertest.Utils.Setup;
 using Fibertest.WpfCommonViews;
@@ -24,11 +24,11 @@ namespace Fibertest.WpfClient
         private readonly ClientMeasurementViewModel _clientMeasurementViewModel;
         private readonly Model _readModel;
         private readonly IWindowManager _windowManager;
-        private readonly IWcfServiceCommonC2D _c2RWcfManager;
+        private readonly GrpcC2RService _grpcC2RService;
 
-        public CommonActions(ILifetimeScope globalScope, IWritableConfig<ClientConfig> config, 
-            ILogger logger, CurrentUser currentUser,
-            Model readModel, IWindowManager windowManager, IWcfServiceCommonC2D c2RWcfManager,
+        public CommonActions(ILifetimeScope globalScope, CurrentUser currentUser, 
+            IWritableConfig<ClientConfig> config, ILogger logger, Model readModel, 
+            IWindowManager windowManager, GrpcC2RService grpcC2RService,
             ClientMeasurementViewModel clientMeasurementViewModel)
         {
             _globalScope = globalScope;
@@ -38,7 +38,7 @@ namespace Fibertest.WpfClient
             _clientMeasurementViewModel = clientMeasurementViewModel;
             _readModel = readModel;
             _windowManager = windowManager;
-            _c2RWcfManager = c2RWcfManager;
+            _grpcC2RService = grpcC2RService;
         }
 
         public async Task MeasurementClientAction(object param)
@@ -218,7 +218,7 @@ namespace Fibertest.WpfClient
             RequestAnswer answer;
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                answer = await _c2RWcfManager.PrepareReflectMeasurementAsync(dto);
+                answer = await _grpcC2RService.SendAnyC2RRequest<PrepareReflectMeasurementDto, RequestAnswer>(dto);
             }
             if (answer.ReturnCode == ReturnCode.Ok)
                 return true;
