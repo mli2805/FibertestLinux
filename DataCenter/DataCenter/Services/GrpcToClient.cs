@@ -14,8 +14,7 @@ namespace Fibertest.DataCenter
         private readonly ILogger<GrpcToClient> _logger;
         private readonly ClientCollection _clientCollection;
 
-        public GrpcToClient(ILogger<GrpcToClient> logger,
-            ClientCollection clientCollection)
+        public GrpcToClient(ILogger<GrpcToClient> logger, ClientCollection clientCollection)
         {
             _logger = logger;
             _clientCollection = clientCollection;
@@ -25,23 +24,29 @@ namespace Fibertest.DataCenter
         {
             switch (o)
             {
-                case ClientMeasurementResultDto dto: return await SendClientMeasurementResult(dto);
-                case CurrentMonitoringStepDto dto: return await SendCurrentMeasurementStep(dto);
-                default: return new RequestAnswer(ReturnCode.Error);
+                case ClientMeasurementResultDto dto: 
+                    return await SendClientMeasurementResult(dto);
+                case CurrentMonitoringStepDto dto: 
+                    return await SendToAllDesktopClients(dto);
+                case DbOptimizationProgressDto dto: 
+                    return await SendToAllDesktopClients(dto);
+                default: 
+                    return new RequestAnswer(ReturnCode.Error);
             }
-
         }
 
         private async Task<RequestAnswer> SendClientMeasurementResult(ClientMeasurementResultDto dto)
         {
-            var clientStation = _clientCollection.Get(dto.ClientConnectionId);
-            if (clientStation == null) return new RequestAnswer(ReturnCode.Error);
-
             var commandContent = JsonConvert.SerializeObject(dto, JsonSerializerSettings);
+
+            var clientStation = _clientCollection.Get(dto.ClientConnectionId);
+            if (clientStation == null) 
+                return new RequestAnswer(ReturnCode.Error);
+
             return await TransferToClient(clientStation.ClientIp, commandContent);
         }
 
-        private async Task<RequestAnswer> SendCurrentMeasurementStep(CurrentMonitoringStepDto dto)
+        private async Task<RequestAnswer> SendToAllDesktopClients(object dto)
         {
             var commandContent = JsonConvert.SerializeObject(dto, JsonSerializerSettings);
             foreach (var clientStation in _clientCollection.Clients.Values)

@@ -47,6 +47,7 @@ namespace Fibertest.WpfClient
         private readonly ILogger _logger; 
         private readonly EventArrivalNotifier _eventArrivalNotifier;
         private readonly int _pollingRate;
+        public CancellationTokenSource CancellationTokenSource = null!;
 
         private int _currentEventNumber;
         public int CurrentEventNumber
@@ -104,19 +105,20 @@ namespace Fibertest.WpfClient
             _exceptionCountLimit = config.Value.General.FailedPollsLimit;
         }
 
-        public void Start(CancellationToken token)
+        public void Start(CancellationTokenSource cts)
         {
+            CancellationTokenSource = cts;
             _logger.Info(Logs.Client,$@"Polling started from {_currentEventNumber + 1}");
             _eventLogComposer.Initialize();
-            var pollerThread = new Thread(() => DoPolling(token)) { IsBackground = true };
+            var pollerThread = new Thread(() => DoPolling()) { IsBackground = true };
             pollerThread.Start();
         }
 
-        private async void DoPolling(CancellationToken token)
+        private async void DoPolling()
         {
             if (_commandLineParameters.IsUnderSuperClientStart)
                 _systemState.PropertyChanged += _systemState_PropertyChanged;
-            while (!token.IsCancellationRequested)
+            while (!CancellationTokenSource.IsCancellationRequested)
             {
                 await EventSourcingTick();
                 Thread.Sleep(TimeSpan.FromMilliseconds(_pollingRate));

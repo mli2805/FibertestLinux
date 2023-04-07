@@ -239,7 +239,7 @@ namespace Fibertest.WpfClient
         {
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                _heartbeater.Start(_heartbeaterCts.Token);
+                _heartbeater.Start(_heartbeaterCts);
             }
         }
 
@@ -247,7 +247,7 @@ namespace Fibertest.WpfClient
         {
             using (_globalScope.Resolve<IWaitCursor>())
             {
-                _clientPoller.Start(_clientPollerCts.Token); // graph events including monitoring results events
+                _clientPoller.Start(_clientPollerCts); // graph events including monitoring results events
 
                 // Accepts only monitoring step messages and client's measurement results
                 Task.Run(() => _clientGrpcServiceHost.Start());
@@ -255,10 +255,10 @@ namespace Fibertest.WpfClient
             }
         }
 
-        private void ClientGrpcData_GrpcMessageReceived(object sender, string json)
+        private async void ClientGrpcData_GrpcMessageReceived(object sender, string json)
         {
             _logger.Info(Logs.Client, "gRPC message received");
-            _grpcInClientProcessor.Apply(json);
+            await _grpcInClientProcessor.Apply(json);
         }
 
         public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = new CancellationToken())

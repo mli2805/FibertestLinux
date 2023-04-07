@@ -8,38 +8,49 @@ namespace Fibertest.DataCenter
     {
         private readonly IWritableConfig<DataCenterConfig> _config;
         private readonly ILogger<C2DCommandsProcessor> _logger;
+        private readonly GlobalState _globalState;
         private readonly Model _writeModel;
         private readonly DiskSpaceProvider _diskSpaceProvider;
         private readonly TestNotificationSender _testNotificationSender;
         private readonly ClientCollection _clientCollection;
         private readonly RtuOccupations _rtuOccupations;
+        private readonly IDbInitializer _mySqlDbInitializer;
         private readonly EventStoreService _eventStoreService;
         private readonly IFtSignalRClient _ftSignalRClient;
+        private readonly GrpcToClient _grpcToClient;
         private readonly BaseRefLandmarksTool _baseRefLandmarksTool;
         private readonly ClientToIitRtuTransmitter _clientToIitRtuTransmitter;
         private readonly SorFileRepository _sorFileRepository;
         private readonly RtuStationsRepository _rtuStationsRepository;
+        private readonly SnapshotRepository _snapshotRepository;
 
         public C2DCommandsProcessor(IWritableConfig<DataCenterConfig> config, ILogger<C2DCommandsProcessor> logger,
-            Model writeModel, DiskSpaceProvider diskSpaceProvider, TestNotificationSender testNotificationSender,
+            GlobalState globalState, Model writeModel, DiskSpaceProvider diskSpaceProvider, 
+            TestNotificationSender testNotificationSender,
             ClientCollection clientCollection, RtuOccupations rtuOccupations,
-            EventStoreService eventStoreService, IFtSignalRClient ftSignalRClient,
+            IDbInitializer mySqlDbInitializer, EventStoreService eventStoreService, 
+            IFtSignalRClient ftSignalRClient, GrpcToClient grpcToClient,
             BaseRefLandmarksTool baseRefLandmarksTool, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
-            SorFileRepository sorFileRepository, RtuStationsRepository rtuStationsRepository)
+            SorFileRepository sorFileRepository, RtuStationsRepository rtuStationsRepository, 
+            SnapshotRepository snapshotRepository)
         {
             _config = config;
             _logger = logger;
+            _globalState = globalState;
             _writeModel = writeModel;
             _diskSpaceProvider = diskSpaceProvider;
             _testNotificationSender = testNotificationSender;
             _clientCollection = clientCollection;
             _rtuOccupations = rtuOccupations;
+            _mySqlDbInitializer = mySqlDbInitializer;
             _eventStoreService = eventStoreService;
             _ftSignalRClient = ftSignalRClient;
+            _grpcToClient = grpcToClient;
             _baseRefLandmarksTool = baseRefLandmarksTool;
             _clientToIitRtuTransmitter = clientToIitRtuTransmitter;
             _sorFileRepository = sorFileRepository;
             _rtuStationsRepository = rtuStationsRepository;
+            _snapshotRepository = snapshotRepository;
         }
 
         public async Task<string?> SendCommandWrapped(object cmd, string username, string clientIp)

@@ -13,7 +13,7 @@ namespace Fibertest.WpfClient
         private readonly GrpcC2DService _grpcC2DService;
         private readonly CurrentUser _currentUser;
         private readonly int _heartbeatRate;
-        private CancellationToken _token;
+        public CancellationTokenSource CancellationTokenSource = null!;
 
         public Heartbeater(IWritableConfig<ClientConfig> config, ILogger logger, GrpcC2DService grpcC2DService,
              CurrentUser currentUser)
@@ -24,9 +24,9 @@ namespace Fibertest.WpfClient
             _heartbeatRate = config.Value.General.ClientHeartbeatRateMs;
         }
 
-        public void Start(CancellationToken token)
+        public void Start(CancellationTokenSource cts)
         {
-            _token = token;
+            CancellationTokenSource = cts;
             _logger.Info(Logs.Client, @"Heartbeats started");
             var heartbeaterThread = new Thread(SendHeartbeats) { IsBackground = true };
             heartbeaterThread.Start();
@@ -34,7 +34,7 @@ namespace Fibertest.WpfClient
 
         private async void SendHeartbeats()
         {
-            while (!_token.IsCancellationRequested)
+            while (!CancellationTokenSource.IsCancellationRequested)
             {
                 var dto = new ClientHeartbeatDto { ClientConnectionId = _currentUser.ConnectionId };
 
