@@ -13,17 +13,20 @@ namespace Fibertest.WpfClient
         private readonly ClientMeasurementViewModel _clientMeasurementViewModel;
         private readonly AutoBaseViewModel _autoBaseViewModel;
         private readonly RtuAutoBaseViewModel _rtuAutoBaseViewModel;
+        private readonly RtuStateViewsManager _rtuStateViewsManager;
 
         private static readonly JsonSerializerSettings JsonSerializerSettings =
             new() { TypeNameHandling = TypeNameHandling.All };
 
         public GrpcInClientProcessor(ILogger logger, ClientMeasurementViewModel clientMeasurementViewModel,
-            AutoBaseViewModel autoBaseViewModel, RtuAutoBaseViewModel rtuAutoBaseViewModel)
+            AutoBaseViewModel autoBaseViewModel, RtuAutoBaseViewModel rtuAutoBaseViewModel,
+            RtuStateViewsManager rtuStateViewsManager)
         {
             _logger = logger;
             _clientMeasurementViewModel = clientMeasurementViewModel;
             _autoBaseViewModel = autoBaseViewModel;
             _rtuAutoBaseViewModel = rtuAutoBaseViewModel;
+            _rtuStateViewsManager = rtuStateViewsManager;
         }
 
         public void Apply(string json)
@@ -55,7 +58,7 @@ namespace Fibertest.WpfClient
         private void ProcessCurrentMonitoringStep(CurrentMonitoringStepDto dto)
         {
             _logger.Info(Logs.Client, $"Current monitoring step {dto.Step}");
-
+            _rtuStateViewsManager.NotifyUserRtuCurrentMonitoringStep(dto);
         }
     }
 }
