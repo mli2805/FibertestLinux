@@ -29,10 +29,11 @@ public class SmtpNotifier
         _config.Update(c=>c.Smtp.FillIn(dto));
     }
 
-    public async Task<bool> SendTest(string address)
+    public async Task<RequestAnswer> SendTest(string address)
     {
         var mailTo = new List<string> { address };
-        return await SendEmail(TestEmailSubj, TestEmailMessage, null, mailTo);
+        var result = await SendEmail(TestEmailSubj, TestEmailMessage, null, mailTo);
+        return new RequestAnswer(result ? ReturnCode.Ok : ReturnCode.Error);
     }
 
     public async Task<bool> SendOpticalEvent(MonitoringResultDto dto, AddMeasurement addMeasurement)

@@ -63,7 +63,8 @@ public static class DcDependencyCollectionExtensions
         services.AddSingleton<SmtpNotifier>();
         services.AddSingleton<SnmpAgent>();
         services.AddSingleton<SnmpNotifier>();
-
+        services.AddSingleton<TestNotificationSender>();
+        
         return services;
     }
     private static IServiceCollection AddOther(this IServiceCollection services)

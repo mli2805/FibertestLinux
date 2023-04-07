@@ -131,6 +131,7 @@ public class C2DService : c2d.c2dBase
             UnRegisterClientDto dto => dto,
             ClientHeartbeatDto dto => dto,
             SetRtuOccupationDto dto => dto,
+            SendTestNotificationDto dto => dto,
 
             GetDiskSpaceDto dto => dto,
             GetEventsDto dto => dto,

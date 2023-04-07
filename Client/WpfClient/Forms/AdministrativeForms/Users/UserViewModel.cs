@@ -18,7 +18,6 @@ namespace Fibertest.WpfClient
         private readonly ILifetimeScope _globalScope;
         private readonly IWindowManager _windowManager;
         private readonly GrpcC2DService _grpcC2DService;
-        private readonly IWcfServiceDesktopC2D _c2DWcfManager;
         private bool _isInCreationMode;
 
         private readonly Model _readModel;
@@ -88,12 +87,11 @@ namespace Fibertest.WpfClient
         public Visibility ChangePasswordVisibility { get; set; }
 
         public UserViewModel(ILifetimeScope globalScope, IWindowManager windowManager, GrpcC2DService grpcC2DService,
-            IWcfServiceDesktopC2D c2DWcfManager, Model readModel, CurrentUser currentUser)
+            Model readModel, CurrentUser currentUser)
         {
             _globalScope = globalScope;
             _windowManager = windowManager;
             _grpcC2DService = grpcC2DService;
-            _c2DWcfManager = c2DWcfManager;
             _readModel = readModel;
             _currentUser = currentUser;
 
@@ -121,7 +119,10 @@ namespace Fibertest.WpfClient
             bool res;
             using (new WaitCursor())
             {
-                res = await _c2DWcfManager.SendTest(UserInWork.SmsReceiverVm.PhoneNumber, NotificationType.Sms);
+                var dto = new SendTestNotificationDto()
+                    { NotificationType = NotificationType.Sms, PhoneNumber = UserInWork.SmsReceiverVm.PhoneNumber };
+                var result = await _grpcC2DService.SendAnyC2DRequest<SendTestNotificationDto, RequestAnswer>(dto);
+                res = result.ReturnCode == ReturnCode.Ok;
             }
 
             var header = res ? MessageType.Information : MessageType.Error;
@@ -135,7 +136,10 @@ namespace Fibertest.WpfClient
             bool res;
             using (new WaitCursor())
             {
-                res = await _c2DWcfManager.SendTest(UserInWork.EmailAddress!, NotificationType.Email);
+                var dto = new SendTestNotificationDto()
+                    { NotificationType = NotificationType.Email, Email = UserInWork.EmailAddress! };
+                var result = await _grpcC2DService.SendAnyC2DRequest<SendTestNotificationDto, RequestAnswer>(dto);
+                res = result.ReturnCode == ReturnCode.Ok;
             }
 
             var header = res ? MessageType.Information : MessageType.Error;

@@ -10,6 +10,7 @@ namespace Fibertest.DataCenter
         private readonly ILogger<C2DCommandsProcessor> _logger;
         private readonly Model _writeModel;
         private readonly DiskSpaceProvider _diskSpaceProvider;
+        private readonly TestNotificationSender _testNotificationSender;
         private readonly ClientCollection _clientCollection;
         private readonly RtuOccupations _rtuOccupations;
         private readonly EventStoreService _eventStoreService;
@@ -20,7 +21,7 @@ namespace Fibertest.DataCenter
         private readonly RtuStationsRepository _rtuStationsRepository;
 
         public C2DCommandsProcessor(IWritableConfig<DataCenterConfig> config, ILogger<C2DCommandsProcessor> logger,
-            Model writeModel, DiskSpaceProvider diskSpaceProvider,
+            Model writeModel, DiskSpaceProvider diskSpaceProvider, TestNotificationSender testNotificationSender,
             ClientCollection clientCollection, RtuOccupations rtuOccupations,
             EventStoreService eventStoreService, IFtSignalRClient ftSignalRClient,
             BaseRefLandmarksTool baseRefLandmarksTool, ClientToIitRtuTransmitter clientToIitRtuTransmitter,
@@ -30,6 +31,7 @@ namespace Fibertest.DataCenter
             _logger = logger;
             _writeModel = writeModel;
             _diskSpaceProvider = diskSpaceProvider;
+            _testNotificationSender = testNotificationSender;
             _clientCollection = clientCollection;
             _rtuOccupations = rtuOccupations;
             _eventStoreService = eventStoreService;
@@ -91,6 +93,8 @@ namespace Fibertest.DataCenter
                     return await _clientCollection.RegisterHeartbeat(dto);
                 case SetRtuOccupationDto dto:
                     return await _rtuOccupations.SetRtuOccupationState(dto);
+                case SendTestNotificationDto dto:
+                    return await _testNotificationSender.Send(dto);
 
                 case GetDiskSpaceDto _:
                     return await _diskSpaceProvider.GetDiskSpaceGb();
