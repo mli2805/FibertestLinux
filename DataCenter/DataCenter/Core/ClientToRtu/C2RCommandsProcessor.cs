@@ -67,31 +67,51 @@ public class C2RCommandsProcessor
         if (command is CheckRtuConnectionDto checkDto)
             return await CheckRtuConnection(checkDto, rtuAddressTuple.Item2!);
 
-        string jsonToTransmit;
-        if (command is AttachTraceDto attachTraceDto)
+        string? jsonToTransmit = await ConvertAndSerialize(command);
+        if (jsonToTransmit == null)
         {
-            var assignBaseRefsDto = await _writeModel.CreateAssignBaseRefsDto(attachTraceDto, _sorFileRepository);
-            if (assignBaseRefsDto == null)
-            {
-                var result = new BaseRefAssignedDto() { ReturnCode = ReturnCode.Error, ErrorMessage = "RTU or trace not found!" };
-                return JsonConvert.SerializeObject(result, JsonSerializerSettings);
-            }
-
-            jsonToTransmit = LogCommandReturnJson(assignBaseRefsDto);
+            var result = new BaseRefAssignedDto() { ReturnCode = ReturnCode.Error, ErrorMessage = "RTU or trace not found!" };
+            return JsonConvert.SerializeObject(result, JsonSerializerSettings);
         }
-        else
-            jsonToTransmit = LogCommandReturnJson(command);
 
         var resultJson = command.RtuMaker == RtuMaker.IIT
-            ? await _clientToIitRtuTransmitter
-                .TransferCommand(rtuAddressTuple.Item2!, jsonToTransmit)
-            : JsonConvert
-                .SerializeObject(new RequestAnswer(ReturnCode.NotImplementedYet), JsonSerializerSettings);
+                 ? await _clientToIitRtuTransmitter
+                     .TransferCommand(rtuAddressTuple.Item2!, jsonToTransmit)
+                 : JsonConvert
+                     .SerializeObject(new RequestAnswer(ReturnCode.NotImplementedYet), JsonSerializerSettings);
         ///////////////////////////////////////////////////////////////////
 
         // resultJson could be changed while post processing
         return await _rtuResponseApplier.ApplyResponse(command, resultJson);
     }
+
+    /// <summary>
+    /// If commands are AttachTraceDto || ReSendBaseRefsDto
+    /// we need to fetch sor files from DB
+    /// and send them to RTU in AssignBaseRefsDto
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    private async Task<string?> ConvertAndSerialize<T>(T command)
+    {
+        if (command is AttachTraceDto attachTraceDto)
+        {
+            var assignBaseRefsDto = await _writeModel
+                .CreateAssignBaseRefsDto(attachTraceDto.TraceId, attachTraceDto.OtauPortDto,
+                    attachTraceDto.MainOtauPortDto, _sorFileRepository);
+            return LogCommandReturnJson(assignBaseRefsDto);
+        }
+        if (command is ReSendBaseRefsDto reSendBaseRefsDto)
+        {
+            var assignBaseRefsDto = await _writeModel
+                .CreateAssignBaseRefsDto(reSendBaseRefsDto.TraceId, reSendBaseRefsDto.OtauPortDto,
+                    reSendBaseRefsDto.MainOtauPortDto, _sorFileRepository);
+            return LogCommandReturnJson(assignBaseRefsDto);
+        }
+        return LogCommandReturnJson(command);
+    }
+
 
     /// <summary>
     /// 
@@ -204,8 +224,15 @@ public class C2RCommandsProcessor
         return JsonConvert.SerializeObject(result, JsonSerializerSettings);
     }
 
-    private string LogCommandReturnJson<T>(T command)
+    /// If command contains SOR we should not log bytes array
+    private string? LogCommandReturnJson<T>(T? command)
     {
+        if (command == null)
+        {
+            _logger.Error(Logs.DataCenter, "Failed to create AssignBaseRefsDto");
+            return null;
+        }
+
         var jsonToTransmit = JsonConvert.SerializeObject(command, JsonSerializerSettings);
 
         switch (command)

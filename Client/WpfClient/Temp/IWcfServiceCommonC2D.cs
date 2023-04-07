@@ -8,7 +8,7 @@ namespace Fibertest.WpfClient
     {
         IWcfServiceCommonC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp);
 
-        Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs);
+        //Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs);
 
         #region VEEX
         Task<ClientMeasurementVeexResultDto> GetClientMeasurementAsync(GetClientMeasurementDto dto);
@@ -28,10 +28,10 @@ namespace Fibertest.WpfClient
             throw new NotImplementedException();
         }
 
-        public Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         #region VEEX
         public Task<ClientMeasurementVeexResultDto> GetClientMeasurementAsync(GetClientMeasurementDto dto)
