@@ -55,6 +55,7 @@ public class ClientToIitRtuTransmitter
                 // case ApplyMonitoringSettingsDto _:
                 // case DoOutOfTurnPreciseMeasurementDto _:
                 // case StopMonitoringDto _:
+                // case InterruptMeasurementDto _:
                 // case FreeOtdrDto _:
                 default: badResult = new RequestAnswer(ReturnCode.D2RGrpcOperationError) { ErrorMessage = e.Message }; break;
             }

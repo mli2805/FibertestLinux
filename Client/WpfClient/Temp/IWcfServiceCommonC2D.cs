@@ -8,15 +8,11 @@ namespace Fibertest.WpfClient
     {
         IWcfServiceCommonC2D SetServerAddresses(DoubleAddress newServerAddress, string username, string clientIp);
 
-        //Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs);
-
         #region VEEX
         Task<ClientMeasurementVeexResultDto> GetClientMeasurementAsync(GetClientMeasurementDto dto);
         Task<ClientMeasurementVeexResultDto> GetClientMeasurementSorBytesAsync(GetClientMeasurementDto dto);
         Task<RequestAnswer> PrepareReflectMeasurementAsync(PrepareReflectMeasurementDto dto);
         #endregion
-        Task<RequestAnswer> InterruptMeasurementAsync(InterruptMeasurementDto dto);
-
         //WEB
         Task<string> UpdateMeasurement(string username, UpdateMeasurementDto dto);
     }
@@ -27,11 +23,6 @@ namespace Fibertest.WpfClient
         {
             throw new NotImplementedException();
         }
-
-        //public Task<BaseRefAssignedDto> ReSendBaseRefAsync(ReSendBaseRefsDto baseRefs)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         #region VEEX
         public Task<ClientMeasurementVeexResultDto> GetClientMeasurementAsync(GetClientMeasurementDto dto)
@@ -48,11 +39,6 @@ namespace Fibertest.WpfClient
         }
         #endregion
         
-        public Task<RequestAnswer> InterruptMeasurementAsync(InterruptMeasurementDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
         //WEB
         public Task<string> UpdateMeasurement(string username, UpdateMeasurementDto dto)
         {
