@@ -13,8 +13,6 @@ namespace Fibertest.WpfClient
         Task<ClientMeasurementVeexResultDto> GetClientMeasurementSorBytesAsync(GetClientMeasurementDto dto);
         Task<RequestAnswer> PrepareReflectMeasurementAsync(PrepareReflectMeasurementDto dto);
         #endregion
-        //WEB
-        Task<string> UpdateMeasurement(string username, UpdateMeasurementDto dto);
     }
 
     public class WcfServiceCommonC2D : IWcfServiceCommonC2D
@@ -39,10 +37,5 @@ namespace Fibertest.WpfClient
         }
         #endregion
         
-        //WEB
-        public Task<string> UpdateMeasurement(string username, UpdateMeasurementDto dto)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
