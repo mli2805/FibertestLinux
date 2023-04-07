@@ -244,7 +244,6 @@ namespace Fibertest.WpfClient
 
             builder.RegisterType<TraceStateReportProvider>().InstancePerLifetimeScope();
             builder.RegisterType<ModelLoader>().InstancePerLifetimeScope();
-            builder.RegisterType<ModelFromFileExporter>().InstancePerLifetimeScope();
 
             builder.RegisterType<TceTypeViewModel>();
             builder.RegisterType<OneTceViewModel>();

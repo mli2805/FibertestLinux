@@ -26,8 +26,6 @@
                 <MenuItem Header="{x:Static stringResources:Resources.SID_Database_optimization}" cal:Message.Attach="LaunchCleaningView"/>
                 <MenuItem Header="{x:Static stringResources:Resources.SID_Graph_of_traces_optimization}" cal:Message.Attach="LaunchGraphOptimizationView"/>
                 <Separator Visibility="{Binding ToolsMenuVisibility}"/>
-                <MenuItem Header="Export events to file" cal:Message.Attach="ExportEvents" Visibility="{Binding ToolsMenuVisibility}"/>
-                <MenuItem Header="Import RTU from folder" cal:Message.Attach="ImportRtuFromFolder" Visibility="{Binding ToolsMenuVisibility}"/>
                 <MenuItem Header="{x:Static stringResources:Resources.SID_Telecommunications_equipment}" 
                           cal:Message.Attach="LaunchTcesView"/>
             </MenuItem>
