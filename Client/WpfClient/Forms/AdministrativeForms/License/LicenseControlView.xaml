@@ -25,7 +25,7 @@
                 <TextBlock Text="{x:Static stringResources:Resources.SID_License_type}" TextAlignment="Right" Margin="0,0,10,0"/>
 
                 <RadioButton GroupName="LicType" Width="110" Height="18" Content="{x:Static stringResources:Resources.SID_Standart}" 
-                             IsChecked="{Binding IsStandart, Mode=OneWay}"/>
+                             IsChecked="{Binding IsStandard, Mode=OneWay}"/>
                 <RadioButton GroupName="LicType" Width="160" Height="18" Content="{x:Static stringResources:Resources.SID_With_workstation_linking}" 
                              IsChecked="{Binding License.IsMachineKeyRequired, Mode=OneWay}"/>
                 <TextBlock Width="15"/>

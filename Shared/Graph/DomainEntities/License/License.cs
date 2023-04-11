@@ -14,18 +14,18 @@ public class License
         return $@"FT020-{id}-{licType}{RtuCount.Value:D2}{stations}-{CreationDate:yyMMdd}";
     }
         
-    public bool IsIncremental; // by default = false -> Main license
-    public string Owner = string.Empty;
+    public bool IsIncremental { get; set; } // by default = false -> Main license
+    public string Owner { get; set; } = string.Empty;
 
-    public LicenseParameter RtuCount = new();
-    public LicenseParameter ClientStationCount = new();
-    public LicenseParameter WebClientCount = new();
-    public LicenseParameter SuperClientStationCount = new();
+    public LicenseParameter RtuCount { get; set; } = new();
+    public LicenseParameter ClientStationCount { get; set; } = new();
+    public LicenseParameter WebClientCount { get; set; } = new();
+    public LicenseParameter SuperClientStationCount { get; set; } = new();
 
-    public bool IsMachineKeyRequired;
+    public bool IsMachineKeyRequired { get; set; }
     public string? SecurityAdminPassword;
 
-    public DateTime CreationDate; // Used in LicenseKey string
+    public DateTime CreationDate { get; set; } // Used in LicenseKey string
     public DateTime LoadingDate; // for evaluations
     public string Version = @"2.0.0.0";
 
