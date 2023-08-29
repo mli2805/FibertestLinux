@@ -121,6 +121,23 @@ public class ClientCollection
         return commands;
     }
 
+    public async Task<bool> ChangeGuidWithSignalrConnectionId(string oldGuid, string connId)
+    {
+        await Task.Delay(1);
+        if (!Clients.ContainsKey(connId)) return false;
+
+        if (Clients.TryRemove(oldGuid, out ClientStation? oldStation))
+        {
+            oldStation.ConnectionId = connId;
+            oldStation.LastConnectionTimestamp = DateTime.Now;
+            Clients.GetOrAdd(connId, oldStation);
+        }
+
+        LogStations();
+        return true;
+    }
+
+
     private void LogStations()
     {
         Logger.HyphenLine(Logs.DataCenter);

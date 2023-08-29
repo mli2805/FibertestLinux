@@ -17,6 +17,9 @@ namespace Fibertest.DataCenter
             lock (LockObj)
             {
                 SerializedModel = _writeModel.Serialize(_logger).Result;
+                //
+                // var nnn = new Model();
+                // var r = nnn.Deserialize(_logger, SerializedModel!).Result;
             }
 
             if (SerializedModel == null)

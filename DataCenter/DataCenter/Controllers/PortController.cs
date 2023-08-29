@@ -10,12 +10,12 @@ namespace Fibertest.DataCenter;
 [Route("[controller]")]
 public class PortController : ControllerBase
 {
-    private readonly ILogger<MiscController> _logger;
+    private readonly ILogger<PortController> _logger;
     private readonly C2RCommandsProcessor _c2RCommandsProcessor;
     private static readonly JsonSerializerSettings JsonSerializerSettings =
         new() { TypeNameHandling = TypeNameHandling.All };
 
-    public PortController(ILogger<MiscController> logger, C2RCommandsProcessor c2RCommandsProcessor)
+    public PortController(ILogger<PortController> logger, C2RCommandsProcessor c2RCommandsProcessor)
     {
         _logger = logger;
         _c2RCommandsProcessor = c2RCommandsProcessor;

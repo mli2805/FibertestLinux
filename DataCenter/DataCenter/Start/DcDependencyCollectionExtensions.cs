@@ -101,6 +101,7 @@ public static class DcDependencyCollectionExtensions
 
         services.AddSingleton<C2DCommandsProcessor>();
         services.AddSingleton<C2RCommandsProcessor>();
+        services.AddSingleton<Web2DCommandsProcessor>();
         services.AddSingleton<ClientToIitRtuTransmitter>();
         services.AddSingleton<RtuResponseApplier>();
         services.AddSingleton<RtuResponseToEventSourcing>();
