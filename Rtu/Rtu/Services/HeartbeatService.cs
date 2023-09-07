@@ -52,7 +52,7 @@ public class HeartbeatService : BackgroundService
                         _logger.Info(Logs.RtuService, "Heartbeats are suspended during RTU initialization.");
 
                     _initializationInProgress = true;
-                    Thread.Sleep(3000);
+                    await Task.Delay(3000, stoppingToken);
                 }
 
                 _initializationInProgress = false;

@@ -182,7 +182,7 @@ public class C2RCommandsProcessor
     private async Task<string> CheckRtuConnection(CheckRtuConnectionDto dto, string rtuAddress)
     {
         RtuConnectionCheckedDto? result = null;
-        if (dto.NetAddress.Port == (int)TcpPorts.RtuListenTo)
+        if (dto.NetAddress.Port == (int)TcpPorts.RtuListenToGrpc)
         {
             string res = await _clientToIitRtuTransmitter.TransferCommand(rtuAddress,
                 JsonConvert.SerializeObject(dto, JsonSerializerSettings));
@@ -197,14 +197,14 @@ public class C2RCommandsProcessor
 
         if (dto.NetAddress.Port == -1)
         {
-            dto.NetAddress.Port = (int)TcpPorts.RtuListenTo;
+            dto.NetAddress.Port = (int)TcpPorts.RtuListenToGrpc;
             rtuAddress = dto.NetAddress.ToStringA();
             string res = await _clientToIitRtuTransmitter.TransferCommand(rtuAddress,
                 JsonConvert.SerializeObject(dto, JsonSerializerSettings));
             result = JsonConvert.DeserializeObject<RtuConnectionCheckedDto>(res);
             if (result != null && !result.IsConnectionSuccessful)
             {
-                dto.NetAddress.Port = (int)TcpPorts.RtuListenTo;
+                dto.NetAddress.Port = (int)TcpPorts.RtuListenToGrpc;
                 rtuAddress = dto.NetAddress.ToStringA();
                 //TODO check veex
                 _logger.Error(Logs.DataCenter, $"Check for VEEX RTU {rtuAddress} is not implemented yet");

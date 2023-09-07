@@ -104,7 +104,7 @@ namespace Fibertest.WpfClient
                 {
                     if (!await FullModel.CheckConnectionBeforeInitialization())
                         return;
-                    var rtuMaker = FullModel.MainChannelTestViewModel.NetAddressInputViewModel.Port == (int)TcpPorts.RtuListenTo
+                    var rtuMaker = FullModel.MainChannelTestViewModel.NetAddressInputViewModel.Port == (int)TcpPorts.RtuListenToGrpc
                         ? RtuMaker.IIT
                         : RtuMaker.VeEX;
                     _commonStatusBarViewModel.StatusBarMessage2 = Resources.SID_RTU_is_being_initialized___;

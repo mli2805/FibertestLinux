@@ -13,8 +13,9 @@ public enum TcpPorts
     WebApiListenTo = 11080,
 
     // RTU
-    RtuListenTo = 11942,
+    RtuListenToGrpc = 11942,
     RtuVeexListenTo = 80,
+    RtuListenToHttp = 11900,
 
     // Client
     ClientListenTo = 11943, // when started under SuperClient: 11943 + _commandLineParameters.ClientOrdinal

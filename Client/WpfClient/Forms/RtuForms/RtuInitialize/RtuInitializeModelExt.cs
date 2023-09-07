@@ -12,12 +12,12 @@ namespace Fibertest.WpfClient
         {
             if (fullModel.IsReserveChannelEnabled && fullModel.ReserveChannelTestViewModel.NetAddressInputViewModel.Port == -1)
                 fullModel.ReserveChannelTestViewModel.NetAddressInputViewModel.Port = rtuMaker == RtuMaker.IIT
-                    ? (int)TcpPorts.RtuListenTo
+                    ? (int)TcpPorts.RtuListenToGrpc
                 : (int)TcpPorts.RtuVeexListenTo;
 
             if (fullModel.MainChannelTestViewModel.NetAddressInputViewModel.Port == -1)
                 fullModel.MainChannelTestViewModel.NetAddressInputViewModel.Port = rtuMaker == RtuMaker.IIT
-                    ? (int)TcpPorts.RtuListenTo
+                    ? (int)TcpPorts.RtuListenToGrpc
                     : (int)TcpPorts.RtuVeexListenTo;
             var initializeRtuDto = new InitializeRtuDto(fullModel.OriginalRtu.Id, rtuMaker)
             {

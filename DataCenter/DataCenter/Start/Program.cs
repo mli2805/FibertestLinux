@@ -46,6 +46,7 @@ public class Program
         {
             o.Interceptors.Add<DcLoggerInterceptor>();
         });
+
         builder.Services.AddControllers();
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -102,9 +103,6 @@ public class Program
 
         app.UseEndpoints(endpoints =>
         {
-            // endpoints.MapGrpcService<C2DService>();
-            // endpoints.MapGrpcService<C2RService>();
-            // endpoints.MapGrpcService<R2DService>();
             endpoints.MapControllers(); // check it: http://localhost:11080/misc/checkapi
         });
 
